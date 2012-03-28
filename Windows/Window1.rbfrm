@@ -46,7 +46,6 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "File:"
       TextAlign       =   0
       TextColor       =   0
@@ -81,7 +80,6 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "MD5:"
       TextAlign       =   0
       TextColor       =   0
@@ -116,7 +114,6 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -151,7 +148,6 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -179,9 +175,7 @@ Begin Window Window1
       LockTop         =   True
       Maximum         =   5
       Scope           =   0
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   32
       Value           =   0
       Visible         =   True
@@ -226,9 +220,7 @@ Begin Window Window1
       Mode            =   1
       Period          =   100
       Scope           =   0
-      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -6
       Width           =   32
    End
@@ -275,7 +267,6 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Version 0.86"
       TextAlign       =   0
       TextColor       =   8421504
@@ -296,9 +287,7 @@ Begin Window Window1
       Mode            =   2
       Period          =   300
       Scope           =   0
-      TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   94
       Width           =   32
    End
@@ -326,10 +315,15 @@ End
 		  Timer2.Mode = Timer.ModeOff
 		  
 		  If VTAPIKey = "" Then
-		    editAPI.ShowModal
+		    VTAPIKey = editAPI.ShowMe
+		    If VTAPIKey = "" Then
+		      Quit(1)
+		    Else
+		      
+		    End If
 		  end if
 		Exception err As NilObjectException
-		  editAPI.ShowModalWithin(self)
+		  editAPI.ShowModal
 		End Sub
 	#tag EndMethod
 
@@ -348,7 +342,9 @@ End
 	#tag Method, Flags = &h0
 		Function isValidFile() As Boolean
 		  If toBeHashed.AbsolutePath = App.ExecutableFile.Parent.AbsolutePath Then
-		    Call MsgBox("You Must Specify A File.", 16, "File Read Error")
+		    Self.Visible = False
+		    settswin.ShowMe
+		    'Call MsgBox("You Must Specify A File.", 16, "File Read Error")
 		    Return False
 		  End If
 		  path.Text = pretifyPath(toBeHashed.AbsolutePath)
@@ -369,7 +365,7 @@ End
 		  End Select
 		  if toBeHashed.Length > 33554432 then
 		    Call MsgBox("File Exceeds 32MB and therefore will not be found in Virus Total's Database.", 16, "File Too Large")
-		    #If Not DebugBuild Then 
+		    #If Not DebugBuild Then
 		      Return False
 		    #Else
 		      Return True

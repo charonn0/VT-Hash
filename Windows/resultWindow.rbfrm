@@ -7,14 +7,14 @@ Begin Window resultWindow
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   505
+   Height          =   5.05e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   800
-   MenuBar         =   1895413759
+   MenuBar         =   10858495
    MenuBarVisible  =   True
    MinHeight       =   100
    MinimizeButton  =   False
@@ -23,7 +23,7 @@ Begin Window resultWindow
    Resizeable      =   True
    Title           =   "Virus Total Report"
    Visible         =   True
-   Width           =   491
+   Width           =   4.96e+2
    Begin Listbox Listbox1
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
@@ -70,7 +70,7 @@ Begin Window resultWindow
       Underline       =   ""
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   491
+      Width           =   496
       _ScrollWidth    =   -1
    End
    Begin PushButton closeButton
@@ -117,7 +117,7 @@ Begin Window resultWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   248
+      Left            =   253
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   False
@@ -135,40 +135,6 @@ Begin Window resultWindow
       Visible         =   True
       Width           =   126
    End
-   Begin Label Label1
-      AutoDeactivate  =   True
-      Bold            =   ""
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   7
-      LockBottom      =   ""
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   True
-      Multiline       =   ""
-      Scope           =   0
-      Selectable      =   False
-      TabIndex        =   3
-      TabPanelIndex   =   0
-      Text            =   "0 reporting; 0 reported threats"
-      TextAlign       =   0
-      TextColor       =   0
-      TextFont        =   "System"
-      TextSize        =   11
-      TextUnit        =   0
-      Top             =   0
-      Transparent     =   False
-      Underline       =   ""
-      Visible         =   True
-      Width           =   381
-   End
    Begin Label saved
       AutoDeactivate  =   True
       Bold            =   ""
@@ -180,7 +146,7 @@ Begin Window resultWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   386
+      Left            =   391
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   False
@@ -203,6 +169,60 @@ Begin Window resultWindow
       Visible         =   False
       Width           =   101
    End
+   Begin Timer TridTimer
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   -141
+      LockedInPosition=   False
+      Mode            =   0
+      Period          =   2500
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   -6
+      Width           =   32
+   End
+   Begin ProgBar ProgBar1
+      AcceptFocus     =   ""
+      AcceptTabs      =   ""
+      AutoDeactivate  =   True
+      barColor        =   &h0000FF00
+      barWell         =   "&cC0C0C0"
+      bold            =   False
+      boxColor        =   "&c000000"
+      DoubleBuffer    =   ""
+      Enabled         =   True
+      EraseBackground =   ""
+      gradientEnd     =   &h00004000
+      hasBox          =   True
+      hasGradient     =   True
+      hasText         =   True
+      Height          =   26
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      italic          =   False
+      Left            =   0
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      maximum         =   100
+      Scope           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      textColor       =   "&c000000"
+      textFont        =   "System"
+      textFormat      =   "###.0\\%"
+      textSize        =   0
+      Top             =   0
+      underline       =   False
+      UseFocusRing    =   True
+      value           =   ""
+      Visible         =   True
+      Width           =   495
+   End
 End
 #tag EndWindow
 
@@ -210,6 +230,7 @@ End
 	#tag MenuHandler
 		Function csvmenu() As Boolean Handles csvmenu.Action
 			savedAs = saveAs(Mode_CSV)
+			saved.Visible = (savedAs <> Nil)
 			Return True
 			
 		End Function
@@ -218,6 +239,7 @@ End
 	#tag MenuHandler
 		Function jsonmenu() As Boolean Handles jsonmenu.Action
 			savedAs = saveAs(Mode_Org_JSON)
+			saved.Visible = (savedAs <> Nil)
 			Return True
 			
 		End Function
@@ -226,6 +248,17 @@ End
 	#tag MenuHandler
 		Function textmenu() As Boolean Handles textmenu.Action
 			savedAs = saveAs(Mode_Text)
+			saved.Visible = (savedAs <> Nil)
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function tridmenu() As Boolean Handles tridmenu.Action
+			waitplease.ShowWithin(Self)
+			waitplease.Refresh()
+			TridTimer.Mode = Timer.ModeSingle
 			Return True
 			
 		End Function
@@ -234,6 +267,7 @@ End
 	#tag MenuHandler
 		Function unpackedmenu() As Boolean Handles unpackedmenu.Action
 			savedAs = saveAs(Mode_Unp_JSON)
+			saved.Visible = (savedAs <> Nil)
 			Return True
 			
 		End Function
@@ -243,7 +277,7 @@ End
 	#tag Method, Flags = &h0
 		Sub showList(results As JSONItem)
 		  Me.Show
-		  Me.Title = pretifyPath(toBeHashed.AbsolutePath)
+		  Me.Title = pretifyPath(toBeHashed.AbsolutePath, 60)
 		  theresults = results
 		  permalink = results.Value("permalink")
 		  Dim resCount, threatCount As Integer
@@ -269,12 +303,20 @@ End
 		  Dim total, positives As Integer
 		  total = results.Value("total")
 		  positives = results.Value("positives")
-		  Label1.Text = Str(positives) + " of " + Str(total) + " (" + Format(positives * 100 / total, "##0.00") + "%) found threats; Last Scan: " + lastScan
+		  ProgBar1.Text = Str(positives) + " of " + Str(total) + " found threats; Last Scan: " + lastScan  ' (" + Format(positives * 100 / total, "##0.00") + "%)
 		  If autosave Then
-		    savedAs = saveAs(defaultFormat)
+		    Dim d As New Date
+		    Dim f As FolderItem = autosavePath.Child(toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		    Dim bs As BinaryStream
+		    bs = BinaryStream.Create(f, True)
+		    bs.Close
+		    savedAs = saveAs(defaultFormat, f)
 		    saved.Visible = True
 		  End If
 		  
+		  ProgBar1.value = positives * 100 / total
+		  ProgBar1.HelpTag = Format(positives * 100 / total, "##0.00") + "% dangerous"
+		  Me.ShowModal
 		  
 		End Sub
 	#tag EndMethod
@@ -302,12 +344,29 @@ End
 		    end if
 		    g.FillRect 0,0,g.width,g.height
 		  End If
+		  'Return True
+		  
 		End Function
 	#tag EndEvent
 	#tag Event
 		Sub DoubleClick()
 		  If Me.Cell(Me.ListIndex, 2) <> "" Then ShowURL("https://encrypted.google.com/search?q=" + Me.Cell(Me.ListIndex, 2))
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  Dim cp As New MenuItem("Copy to clipboard")
+		  base.Append(cp)
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  Select Case hitItem.Text
+		  Case "Copy to clipboard"
+		    Dim cb As New Clipboard
+		    cb.Text = Me.Cell(Me.ListIndex, 0) + " " + Me.Cell(Me.ListIndex, 1) + " " + Me.Cell(Me.ListIndex, 2)
+		  End Select
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events closeButton
@@ -328,7 +387,7 @@ End
 #tag Events saved
 	#tag Event
 		Sub MouseEnter()
-		  If Me.Visible Then 
+		  If Me.Visible Then
 		    Me.MouseCursor = System.Cursors.FingerPointer
 		    Me.Underline = True
 		  End If
@@ -336,7 +395,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
-		  If Me.Visible And Me.Text = "Report Saved" Then savedAs.Launch
+		  savedAs.ShowInExplorer()
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -345,6 +404,15 @@ End
 		    Me.MouseCursor = System.Cursors.StandardPointer
 		    Me.Underline = False
 		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events TridTimer
+	#tag Event
+		Sub Action()
+		  Dim s As String = Trid(toBeHashed)
+		  waitplease.Close
+		  Call MsgBox(s, 64, "Trid Says:")
 		End Sub
 	#tag EndEvent
 #tag EndEvents

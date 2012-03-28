@@ -1,95 +1,34 @@
 #tag Module
 Protected Module Config
 	#tag Method, Flags = &h0
-		Function isFound(Extends f As FolderItem) As Integer
-		  Declare Function CloseHandle Lib "Kernel32"(HWND As Integer) As Boolean
-		  Declare Function CreateFileW Lib "Kernel32"(name As WString, access As Integer, sharemode As Integer, SecAtrribs As Integer, _
-		  CreateDisp As Integer, flags As Integer, template As Integer) As Integer
-		  
-		  Dim HWND As Integer = CreateFileW(f.AbsolutePath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0)
-		  If HWND = -1 Then
-		    HWND = GetLastError()
-		    Select Case HWND
-		    Case 5
-		      Return ACCESS_DENIED
-		    Case 2
-		      Return FILE_NOT_FOUND
-		    Else
-		      Return ERROR_OTHER
-		    End Select
-		    
+		Sub SaveSettings()
+		  Dim s As New JSONItem
+		  s.Value("Use SSL") = useSSL
+		  s.Value("Use SHA1") = algorithm <> "MD5"
+		  s.Value("Autosave Results") = autosave
+		  s.Value("Default Save Format") = defaultFormat
+		  If autosavePath <> Nil Then
+		    s.Value("Default Save Directory") = autosavePath.AbsolutePath
 		  Else
-		    Call CloseHandle(HWND)
-		    Return ERROR_NO_ERROR
+		    s.Value("Default Save Directory") = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans").AbsolutePath
 		  End If
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function saveAs(mode As Integer) As FolderItem
-		  Dim f As FolderItem = autosavePath
-		  If Not f.Exists Then f.CreateAsFolder
-		  If Not f.Directory Then
-		    resultWindow.saved.Text = "Invalid Save Path"
-		    resultWindow.saved.TextColor = &cFF0000
-		    Return Nil
-		  End If
-		  Dim d As New Date
-		  f = f.Child(toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000") + ".txt")
+		  s.Value("API Key") = VTAPIKey
+		  s.Compact = False
+		  Dim t As String = s.ToString
 		  Dim tos As TextOutputStream
-		  
-		  Select Case Mode
-		  Case Mode_Text
-		    tos = tos.Create(f)
-		    tos.WriteLine("VirusTotal Scan Results")
-		    tos.WriteLine("Report retrieved: " + d.ShortDate + "; " + d.ShortTime + " " + Timezone)
-		    tos.WriteLine("Report Date: " + theresults.Value("scan_date"))
-		    tos.WriteLine("")
-		    For i As Integer = 0 To resultWindow.ListBox1.LastIndex
-		      tos.WriteLine(resultWindow.ListBox1.Cell(i, 0) + " " + resultWindow.ListBox1.Cell(i, 1) + ": " + Chr(9) + resultWindow.ListBox1.Cell(i, 2))
-		    Next
-		  Case Mode_Org_JSON
-		    tos = tos.Create(f)
-		    tos.Write(theresults.ToString)
-		  Case Mode_Unp_JSON
-		    tos = tos.Create(f)
-		    theresults.Compact = False
-		    tos.Write(theresults.ToString)
-		  Case Mode_CSV
-		    tos = tos.Create(f)
-		    For i As Integer = 0 To resultWindow.ListBox1.LastIndex
-		      tos.WriteLine(resultWindow.ListBox1.Cell(i, 0) + "," + resultWindow.ListBox1.Cell(i, 1) + "," + resultWindow.ListBox1.Cell(i, 2))
-		    Next
-		  End Select
+		  Dim f As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software")
+		  If Not f.Exists Then
+		    f.CreateAsFolder()
+		  End If
+		  f = f.Child("VT Hash")
+		  If Not f.Exists Then
+		    f.CreateAsFolder()
+		  End If
+		  f = f.Child("config.dat")
+		  tos = tos.Create(f)
+		  tos.Write(t)
 		  tos.Close
-		  Return f
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function Timezone() As String
-		  //This function returns a string representing the name of the current time zone. e.g. "EST" or "Pacific Daylight Time." This name
-		  //is localized and may be up to 32 characters long.
-		  //On error, returns an empty string.
-		  
-		  #If TargetWin32 Then 
-		    Declare Function GetTimeZoneInformation Lib "Kernel32" (ByRef TZInfo As TIME_ZONE_INFORMATION) As Integer
-		    
-		    Const daylightSavingsOn = 2
-		    Const daylightSavingsOff = 1
-		    Const daylightSavingsUnknown = 0
-		    Const invalidTimeZone = &hFFFFFFFF
-		    
-		    Dim TZInfo As TIME_ZONE_INFORMATION
-		    Dim dlsStatus As Integer = GetTimeZoneInformation(TZInfo)
-		    
-		    If dlsStatus = daylightSavingsOn Or dlsStatus = daylightSavingsOff Or dlsStatus = daylightSavingsUnknown Then
-		      Return TZInfo.StandardName
-		    Else
-		      Return ""
-		    End If
-		  #endif
-		End Function
+		End Sub
 	#tag EndMethod
 
 
@@ -108,7 +47,10 @@ Protected Module Config
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mautosavePath = Nil Then mautosavePath = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans")
+			  If mautosavePath = Nil Then 
+			    mautosavePath = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans")
+			    If Not mautosavePath.Exists Then mautosavePath.CreateAsFolder
+			  End If
 			  return mautosavePath
 			End Get
 		#tag EndGetter
@@ -141,7 +83,7 @@ Protected Module Config
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mversion As Double = 0.99
+		Private mversion As Double = 1.00
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -200,7 +142,7 @@ Protected Module Config
 	#tag Constant, Name = Mode_Text, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = OPEN_EXISTING, Type = Double, Dynamic = False, Default = \"3", Scope = Public

@@ -46,7 +46,6 @@ Begin Window editAPI
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "In order to use the Virus Total database from outside the Virus Total website, you must have an API key. API keys are free and you can get one by signing up for a Virus Total Community account."
       TextAlign       =   0
       TextColor       =   0
@@ -78,7 +77,6 @@ Begin Window editAPI
       Scope           =   0
       TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
@@ -258,6 +256,19 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h0
+		Function ShowMe() As String
+		  Me.ShowModal
+		  Return api
+		End Function
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h1
+		Protected api As String
+	#tag EndProperty
+
+
 #tag EndWindowCode
 
 #tag Events TextField1
@@ -270,23 +281,16 @@ End
 		  end if
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  Me.Text = VTAPIKey
+		End Sub
+	#tag EndEvent
 #tag EndEvents
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  if SpecialFolder.ApplicationData.Child("Boredom Software").isFound = FILE_NOT_FOUND Or SpecialFolder.ApplicationData.Child("Boredom Software") = Nil Then
-		    SpecialFolder.ApplicationData.Child("Boredom Software").CreateAsFolder
-		  end if
-		  if SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").isFound = FILE_NOT_FOUND Or SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash") = Nil Then
-		    SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").CreateAsFolder
-		  end if
-		  Dim keyFile As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("api.key")
-		  Dim tos As TextOutputStream
-		  tos = tos.Create(keyFile)
-		  tos.Write(TextField1.Text)
-		  tos.Close
-		  VTAPIKey = TextField1.Text
-		  Window1.Timer2.Mode = Timer.ModeMultiple
+		  API = TextField1.Text
 		  self.Close
 		End Sub
 	#tag EndEvent
@@ -294,22 +298,23 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
-		  ShowURL("http://www.virustotal.com/vt-community/register.html")
+		  ShowURL("https://www.virustotal.com/documentation/virustotal-community/#getting-started")
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events PushButton3
 	#tag Event
 		Sub Action()
-		  showurl("http://www.virustotal.com/vt-community/inbox.html")
+		  showurl("https://www.virustotal.com/documentation/virustotal-community/#retrieve-api-key")
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events PushButton4
 	#tag Event
 		Sub Action()
-		  MsgBox("Without an API Key, you won't be able to use the Virus Total database with this program.")
-		  Quit(1)
+		  If TextField1.Text.Len <> 64 Then MsgBox("Without an API Key, you won't be able to use the Virus Total database with this program.")
+		  'Quit(1)
+		  Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

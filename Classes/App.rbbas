@@ -3,6 +3,22 @@ Protected Class App
 Inherits Application
 	#tag Event
 		Sub Open()
+		  '#If DebugBuild Then
+		  'toBeHashed = App.ExecutableFile.Parent.Parent.Child("sampleresult.json")
+		  'Dim tis As TextInputStream
+		  'Dim js As JSONItem
+		  'Dim s As String
+		  'tis = tis.Open(toBeHashed)
+		  's = tis.ReadAll
+		  'tis.Close
+		  'js = New JSONItem(s)
+		  'resultWindow.showList(js)
+		  'Quit(0)
+		  '#endif
+		  
+		  
+		  
+		  
 		  Dim args() As String = Split(System.CommandLine.Uppercase)
 		  Dim path As String = System.CommandLine
 		  
@@ -43,7 +59,7 @@ Inherits Application
 		  path = path.Trim
 		  
 		  #if DebugBuild Then
-		    toBeHashed = GetFolderItem("C:\Users\Andrew\Desktop\udp.pl")
+		    toBeHashed = GetFolderItem("F:\Projects\Git Repository\VT Hash\eicar.com")
 		  #Else
 		    if Not aboutSwitch then
 		      toBeHashed = GetFolderItem(path)
@@ -74,16 +90,18 @@ Inherits Application
 		  If Not f.Exists Then Return
 		  
 		  Dim keyfile As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("api.key")
+		  If keyfile = Nil Then Return
 		  if keyfile.isFound = ERROR_NO_ERROR Then
 		    Dim tis As TextInputStream
 		    tis = tis.Open(keyfile)
 		    VTAPIKey = tis.ReadAll.Trim
 		    tis.Close
+		    keyfile.Delete
 		    if VTAPIKey.Len <> 64 Then
 		      MsgBox("Bad Virus Total API Key!")
-		      editAPI.ShowModal
+		      settswin.ShowMe
 		    end if
-		    keyfile.Delete
+		    
 		  end if
 		End Sub
 	#tag EndMethod
@@ -122,19 +140,7 @@ Inherits Application
 		    autosave = j.Value("Autosave Results")
 		    VTAPIKey = j.Value("API Key")
 		  Else
-		    Dim s As New JSONItem
-		    s.Value("Use SSL") = True
-		    s.Value("Use SHA1") = True
-		    s.Value("Autosave Results") = False
-		    s.Value("Default Save Format") = 0
-		    s.Value("Default Save Directory") = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans").AbsolutePath
-		    s.Value("API Key") = VTAPIKey
-		    s.Compact = False
-		    Dim t As String = s.ToString
-		    Dim tos As TextOutputStream
-		    tos = tos.Create(f)
-		    tos.Write(t)
-		    tos.Close
+		    SaveSettings()
 		    LoadConf
 		  End If
 		End Sub

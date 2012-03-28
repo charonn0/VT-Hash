@@ -2,7 +2,7 @@
 Begin Menu MenuBar1
    Begin MenuItem FileMenu
       SpecialMenu = 0
-      Text = "&File"
+      Text = "&Tools"
       Index = -2147483648
       AutoEnable = True
       Begin MenuItem exportmenu
@@ -35,6 +35,12 @@ Begin Menu MenuBar1
             Index = -2147483648
             AutoEnable = True
          End
+      End
+      Begin MenuItem tridmenu
+         SpecialMenu = 0
+         Text = "Analyze with TrID..."
+         Index = -2147483648
+         AutoEnable = True
       End
    End
 End
