@@ -70,15 +70,15 @@ Inherits HTTPSecureSocket
 	#tag Method, Flags = &h0
 		Sub unexpectedResponse(error As Integer)
 		  Select Case error
-		  Case 429
+		  Case 204
 		    Call MsgBox("You have exceeded the maximum number of requests permitted by VirusTotal." + EndOfLine + "Wait 10 minutes and try again.", 16, "Request Rate Limit Exceeded!")
 		    Quit(1)
-		  Case 500
+		  Case 403
 		    If MsgBox("Your Virus Total API key is invalid or was refused by Virus Total for some other reason." + EndOfLine + "Click OK to edit your API key or Cancel to quit.", 17, "Invalid API Key") = 1 Then
 		      settswin.ShowMe
 		    End If
 		  Else
-		    Call MsgBox("VirusTotal returned an undefined error (" + Str(error) + ") rather than a scan report." + EndOfLine + "Please try again later.", 16, "Unknown Error")
+		    Call MsgBox("VirusTotal returned an undefined error (" + StatusCodeText(error) + ") rather than a scan report." + EndOfLine + "Please try again later.", 16, "Unknown Error")
 		  End Select
 		  
 		  self.Close

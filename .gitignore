@@ -1,0 +1,29 @@
+############
+## Windows
+############
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Mac crap
+.DS_Store
+
+# Build results:
+
+Builds*
+*.debug
+*.debug.app
+Debug*.exe
+Debug*/Debug*.exe
+Debug*/Debug*\ Libs
+
+# REAL Studio window state file:
+
+*.rbuistate
+
+# Obsolete class files:
+
+*.obsolete

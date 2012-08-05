@@ -180,6 +180,153 @@ Protected Module tools
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function StatusCodeText(StatusCode As Integer) As String
+		  Select Case StatusCode
+		  Case 100
+		    Return "Continue"
+		  Case 101
+		    Return "Switching Protocols"
+		  Case 102
+		    Return "Processing"
+		  Case 200
+		    Return "OK"
+		  Case 201
+		    Return "Created"
+		  Case 202
+		    Return "Accepted"
+		  Case 203
+		    Return "Non-Authoritative"
+		  Case 204
+		    Return "No Content"
+		  Case 205
+		    Return "Reset Content"
+		  Case 206
+		    Return "Partial Content"
+		  Case 207
+		    Return "Multi-Status"
+		  Case 208
+		    Return "Already Reported"
+		  Case 209
+		    Return "IM Used"
+		  Case 300
+		    Return "Multiple Choices"
+		  Case 301
+		    Return "Moved Permanently"
+		  Case 302
+		    Return "Found"
+		  Case 303
+		    Return "See Other"
+		  Case 304
+		    Return "Not Modified"
+		  Case 305
+		    Return "Use Proxy"
+		  Case 306
+		    Return "Switch Proxy"
+		  Case 307
+		    Return "Temporary Redirect"
+		  Case 308
+		    Return "Permanent Redirect"
+		  Case 400
+		    Return "Bad Request"
+		  Case 401
+		    Return "Unauthorized"
+		  Case 402
+		    Return "Payment Required"
+		  Case 403
+		    Return "Forbidden"
+		  Case 404
+		    Return "Not Found"
+		  Case 405
+		    Return "Method Not Allowed"
+		  Case 406
+		    Return "Not Acceptable"
+		  Case 407
+		    Return "Proxy Authentication Required"
+		  Case 408
+		    Return "Request Timeout"
+		  Case 409
+		    Return "Conflict"
+		  Case 410
+		    Return "Gone"
+		  Case 411
+		    Return "Length Required"
+		  Case 412
+		    Return "Precondition Failed"
+		  Case 413
+		    Return "Request Entity Too Large"
+		  Case 414
+		    Return "Request-URI Too Long"
+		  Case 415
+		    Return "Unsupported Media Type"
+		  Case 416
+		    Return "Requested Range Not Satisfiable"
+		  Case 417
+		    Return "Expectation Failed"
+		  Case 418
+		    Return "I'm A Teapot"
+		  Case 420
+		    Return "Enhance Your Calm"
+		  Case 422
+		    Return "Unprocessable Entity"
+		  Case 423
+		    Return "Locked"
+		  Case 424
+		    Return "Failed Dependency or Method Failure"
+		  Case 425
+		    Return "Unordered Collection"
+		  Case 426
+		    Return "Upgrade Required"
+		  Case 428
+		    Return "Precondition Required"
+		  Case 429
+		    Return "Too Many Requests"
+		  Case 431
+		    Return "Request Header Fields Too Large"
+		  Case 444
+		    Return "No Response"
+		  Case 449
+		    Return "Retry With"
+		  Case 450
+		    Return "Blocked by Windows Parental Controls"
+		  Case 451
+		    Return "Unavailable For Legal Reasons"
+		  Case 499
+		    Return "Client Closed Request"
+		  Case 500
+		    Return "Internal Server Error"
+		  Case 501
+		    Return "Not Implemented"
+		  Case 502
+		    Return "Bad Gateway"
+		  Case 503
+		    Return "Service Unavailabe"
+		  Case 504
+		    Return "Gateway Timeout"
+		  Case 505
+		    Return "HTTP Version Not Supported"
+		  Case 506
+		    Return "Variant Also Negotiates"
+		  Case 507
+		    Return "Insufficient Storage"
+		  Case 508
+		    Return "Loop Detected"
+		  Case 509
+		    Return "Bandwidth Limit Exceeded"
+		  Case 510
+		    Return "Not Extended"
+		  Case 511
+		    Return "Network Authentication Required"
+		  Case 598
+		    Return "Network Read Timeout"
+		  Case 599
+		    Return "Network Connect Timeout"
+		  Else
+		    Return "Not HTTP"
+		  End Select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function StringToHex(src as string) As string
 		  //Hexify a string of binary data, e.g. from RB's built-in MD5 function
 		  
@@ -218,6 +365,42 @@ Protected Module tools
 		      Return ""
 		    End If
 		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Tokenize(ByVal Input As String) As String()
+		  //Returns a String array containing the space-delimited members of the Input string.
+		  //Like `String.Split(" ")` but honoring quotes; good for command line arguments and other parsing.
+		  //For example, this string:
+		  '                     MyApp.exe --foo "C:\My Dir\"
+		  //Would become:
+		  '                     s(0) = MyApp.exe
+		  '                     s(1) = --foo
+		  '                     s(2) = "C:\My Dir\"
+		  
+		  
+		  #If TargetWin32 Then
+		    Declare Function PathGetArgsW Lib "Shlwapi" (path As WString) As WString
+		    Dim ret() As String
+		    Dim cmdLine As String = Input
+		    While cmdLine.Len > 0
+		      Dim tmp As String
+		      Dim args As String = PathGetArgsW(cmdLine)
+		      If Len(args) = 0 Then
+		        tmp = ReplaceAll(cmdLine.Trim, Chr(34), "")
+		        ret.Append(tmp)
+		        Exit While
+		      Else
+		        tmp = Left(cmdLine, cmdLine.Len - args.Len).Trim
+		        tmp = ReplaceAll(tmp, Chr(34), "")
+		        ret.Append(tmp)
+		        cmdLine = args
+		      End If
+		    Wend
+		    Return ret
+		  #endif
+		  
 		End Function
 	#tag EndMethod
 

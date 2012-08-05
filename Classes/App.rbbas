@@ -17,9 +17,7 @@ Inherits Application
 		  '#endif
 		  
 		  
-		  
-		  
-		  Dim args() As String = Split(System.CommandLine.Uppercase)
+		  Dim args() As String = Tokenize(System.CommandLine)
 		  Dim path As String = System.CommandLine
 		  
 		  For Each arg As String In args
@@ -101,7 +99,6 @@ Inherits Application
 		      MsgBox("Bad Virus Total API Key!")
 		      settswin.ShowMe
 		    end if
-		    
 		  end if
 		End Sub
 	#tag EndMethod
