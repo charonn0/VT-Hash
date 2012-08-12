@@ -1,0 +1,44 @@
+Non-binding abstract:
+You may:
+
+    Use the software as it is intended to be used.
+    Use the software in perverse and immoral ways.
+    Use software released under this license in a commercial enterprise. Go nuts: install it twice on every PC and server in your company; sneak into your employee's homes late at night and install it three times on their home PCs.
+    Distribute software under this license far and wide to all persons, places, things, and immaterial beings. If there's a gopher that might like the software, burn him a copy.
+    Send me notes, ideas, complaints, love/hate mail and/or large sums of money.
+    Enjoy tasty TexMex food.
+
+You may not:
+
+    Be an asshole.
+    Claim the software as your own product.
+    Sell the software or charge for access to it.
+    Blame anyone but yourself if things blow up in your face.
+    Make fun of my glasses.
+
+ 
+
+ 
+
+Binding Software Licensing Agreement:
+
+ 
+
+PROGRAM UTILITIES. The program contains certain design, processing utilities, tools and other resources for use with Personal Computer Systems. All use of such materials is at your own risk. The use of this program is subject to the following additional license restrictions:
+
+    EXTENT OF LICENSE. You may download, use, and redistribute this program, free of charge, without limitation except for the following:
+        You may not alter, change, damage, omit, or modify any part of the program.
+        The readme.txt and License.txt files must be included, without change, with any copy of this program.
+        You may not charge any fee or mandatory remuneration of any kind, nor restrict access based on lack of payment of the same, without providing a prominent and working hyperlink to the download page on the Boredom Software website.
+        You may not include any additional media with the program which tends to indicate, imply, or otherwise cause an end user to believe that said media originated from Boredom Software or that Boredom Software endorses said media. This includes, but is not limited to, advertisements, pictures, software tools, and/or additional documentation. These additional media are not prohibited, but their provenance must be clear.
+    LIMITATION ON DAMAGES. IN NO EVENT WILL BOREDOM SOFTWARE OR THOSE PERSONS ASSOCIATED WITH BOREDOM SOFTWARE BE LIABLE FOR SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES RESULTING FROM POSSESSION, USE OR MALFUNCTION OF THE PROGRAM OR PROGRAM UTILITIES, INCLUDING DAMAGES TO PROPERTY, LOSS OF GOODWILL, COMPUTER FAILURE OR MALFUNCTION AND, TO THE EXTENT PERMITTED BY LAW, DAMAGES FOR PERSONAL INJURIES, EVEN IF BOREDOM SOFTWARE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. Use of the software or software utilities is entirely at your own risk; you acknowledge and accept this risk or you may not use the software or software utilities.
+    WARRANTY. No warranty, expressed or implied, exists including warranties of merchantability, fitness for a particular purpose, and non-infringement.  The software, software utilities, and any accompanying materials and media are provided strictly "as is". To the maximum extent permitted by law, these and all other warranties are expressly disclaimed.
+    TERMINATION. Without prejudice to any other rights of Boredom Software, this Agreement will terminate automatically if you fail to comply with its terms and conditions. In such event, you must destroy all copies of the Program Utilities and all of its component parts.
+    INJUNCTION. Because Boredom Software would be irreparably damaged if the terms of this Agreement were not specifically enforced, you agree that Boredom Software shall be entitled, without bond, other security or proof of damages, to appropriate equitable remedies with respect to breaches of this Agreement, in addition to such other remedies as Boredom Software may otherwise have under applicable laws.
+    INDEMNITY. You agree to indemnify, defend and hold Boredom Software, its partners, licensees, affiliates, contractors, employees and agents harmless from all damages, losses and expenses arising directly or indirectly from your acts and omissions to act in using the Product pursuant to the terms of this Agreement.
+    MISCELLANEOUS. This Agreement represents the complete agreement concerning this license between the parties and supersedes all prior agreements and representations between them. It may be amended at any time by Boredom Software. Such amendments as may from time to time be issued take effect immediately after being published at http://www.boredomsoft.org/boredom-software-freeware-license.bs and apply to all media issued under previous versions of this license for all persons acquiring such media from that date. If any provision of this Agreement is held to be unenforceable for any reason, such provision shall be reformed only to the extent necessary to make it enforceable and the remaining provisions of this Agreement shall not be affected. This Agreement shall be construed under California law as such law is applied to agreements between California residents entered into and to be performed within California, except as governed by federal law and you consent to the exclusive jurisdiction of the state and federal courts in San Francisco, California.
+    If you have read this far then I commend you for your fortitude. You are entitled to one (1) free taco. Tacos may be claimed by walking up to me in a Taquería or other taco-serving establishment and requesting your free taco. Tacos have no cash value and may not be claimed except for in person as described above. You may request a burrito instead if you prefer burritos. Quesadillas are not an option. Ok, fine; you can have a quesadilla if you really want one. Or nachos.
+
+Users who have need to use the software in a way which is not allowed under this license are encouraged to contact Boredom Software with their request.
+
+If you have any questions concerning this license, you may contact me at http://www.boredomsoft.org/contactus.bs
