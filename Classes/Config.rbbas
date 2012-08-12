@@ -47,7 +47,7 @@ Protected Module Config
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mautosavePath = Nil Then 
+			  If mautosavePath = Nil Then
 			    mautosavePath = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans")
 			    If Not mautosavePath.Exists Then mautosavePath.CreateAsFolder
 			  End If
@@ -83,7 +83,11 @@ Protected Module Config
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mversion As Double = 1.00
+		Private mversion As Double = 1.01
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		TheHash As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

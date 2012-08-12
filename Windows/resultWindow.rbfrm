@@ -16,7 +16,7 @@ Begin Window resultWindow
    MaxWidth        =   800
    MenuBar         =   10858495
    MenuBarVisible  =   True
-   MinHeight       =   100
+   MinHeight       =   400
    MinimizeButton  =   False
    MinWidth        =   491
    Placement       =   2
@@ -42,7 +42,7 @@ Begin Window resultWindow
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   453
+      Height          =   399
       HelpTag         =   ""
       Hierarchical    =   ""
       Index           =   -2147483648
@@ -223,6 +223,185 @@ Begin Window resultWindow
       Visible         =   True
       Width           =   495
    End
+   Begin TextField FilePath
+      AcceptTabs      =   ""
+      Alignment       =   0
+      AutoDeactivate  =   True
+      AutomaticallyCheckSpelling=   False
+      BackColor       =   &hFFFFFF
+      Bold            =   ""
+      Border          =   True
+      CueText         =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Format          =   ""
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      Italic          =   ""
+      Left            =   49
+      LimitText       =   0
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   False
+      Mask            =   ""
+      Password        =   ""
+      ReadOnly        =   True
+      Scope           =   0
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   ""
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   429
+      Underline       =   ""
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   427
+   End
+   Begin Label Label1
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   0
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   False
+      Multiline       =   ""
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   8
+      TabPanelIndex   =   0
+      Text            =   "Path:"
+      TextAlign       =   2
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   428
+      Transparent     =   False
+      Underline       =   ""
+      Visible         =   True
+      Width           =   47
+   End
+   Begin TextField FileHash
+      AcceptTabs      =   ""
+      Alignment       =   0
+      AutoDeactivate  =   True
+      AutomaticallyCheckSpelling=   False
+      BackColor       =   &hFFFFFF
+      Bold            =   ""
+      Border          =   True
+      CueText         =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Format          =   ""
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      Italic          =   ""
+      Left            =   49
+      LimitText       =   0
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   False
+      Mask            =   ""
+      Password        =   ""
+      ReadOnly        =   True
+      Scope           =   0
+      TabIndex        =   9
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   ""
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   451
+      Underline       =   ""
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   443
+   End
+   Begin Label Label2
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   0
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   False
+      Multiline       =   ""
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   10
+      TabPanelIndex   =   0
+      Text            =   "Hash:"
+      TextAlign       =   2
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   450
+      Transparent     =   False
+      Underline       =   ""
+      Visible         =   True
+      Width           =   47
+   End
+   Begin Canvas Canvas1
+      AcceptFocus     =   ""
+      AcceptTabs      =   ""
+      AutoDeactivate  =   True
+      Backdrop        =   ""
+      DoubleBuffer    =   False
+      Enabled         =   True
+      EraseBackground =   True
+      Height          =   16
+      HelpTag         =   "Open parent directory"
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   477
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   False
+      LockRight       =   True
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   11
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   431
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   16
+   End
 End
 #tag EndWindow
 
@@ -305,15 +484,21 @@ End
 		  positives = results.Value("positives")
 		  ProgBar1.Text = Str(positives) + " of " + Str(total) + " found threats; Last Scan: " + lastScan  ' (" + Format(positives * 100 / total, "##0.00") + "%)
 		  If autosave Then
-		    Dim d As New Date
-		    Dim f As FolderItem = autosavePath.Child(toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
-		    Dim bs As BinaryStream
-		    bs = BinaryStream.Create(f, True)
-		    bs.Close
-		    savedAs = saveAs(defaultFormat, f)
-		    saved.Visible = True
+		    Try
+		      Dim d As New Date
+		      Dim f As FolderItem = autosavePath.Child(toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		      Dim bs As BinaryStream
+		      bs = BinaryStream.Create(f, True)
+		      bs.Close
+		      savedAs = saveAs(defaultFormat, f)
+		      saved.Visible = True
+		    Catch err
+		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
+		      System.DebugLog("VT Hash: Unable to save report! (" + CurrentMethodName + "->" + t.Name + ")")
+		    End Try
 		  End If
-		  
+		  FileHash.Text = algorithm + ": " + TheHash
+		  FilePath.Text = toBeHashed.AbsolutePath
 		  ProgBar1.value = positives * 100 / total
 		  ProgBar1.HelpTag = Format(positives * 100 / total, "##0.00") + "% dangerous"
 		  Me.ShowModal
@@ -414,5 +599,27 @@ End
 		  waitplease.Close
 		  Call MsgBox(s, 64, "Trid Says:")
 		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Canvas1
+	#tag Event
+		Sub Paint(g As Graphics)
+		  g.DrawPicture(explore, 0, 0)
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseEnter()
+		  Me.MouseCursor = System.Cursors.FingerPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  Me.MouseCursor = System.Cursors.StandardPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  toBeHashed.ShowInExplorer()
+		End Function
 	#tag EndEvent
 #tag EndEvents

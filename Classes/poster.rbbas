@@ -54,11 +54,7 @@ Inherits HTTPSocket
 		    formData.Value("resource") = hash
 		    formData.Value("key") = VTAPIKey
 		    me.SetFormData(formData)
-		    #If DebugBuild Then
-		      me.SetRequestHeader("User-Agent", "VT Hash Check " + version + " debug mode (www.boredomsoft.org)")
-		    #Else
-		      me.SetRequestHeader("User-Agent", "VT Hash Check " + version + " (www.boredomsoft.org)")
-		    #endif
+		    me.SetRequestHeader("User-Agent", "VTHash/" + version + " (Not at all like Mozilla)")
 		    Window1.ProgressBar1.Value = 5
 		    me.Post("http://www.virustotal.com/vtapi/v2/file/report")
 		  else

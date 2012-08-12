@@ -1,6 +1,80 @@
 #tag Module
 Protected Module tools
 	#tag Method, Flags = &h0
+		Function FindDefaultApp(Extends documentFile As FolderItem) As FolderItem
+		  //Given a documentFile FolderItem, will return a FolderItem corresponding to the application currently
+		  //associated with the file (e.g. a .doc file might return C:\Program Files\Microsoft Office\winword.exe)
+		  //If no application is associated with the documentFile, the documentFile doesn't exist, or is inaccessble
+		  //then this function returns Nil.
+		  //If the documentFile is itself an application (.exe, .scr, etc.) then this function returns a FolderItem
+		  //corresponding to the documentFile itself (e.g. "C:\foo\bar.exe" is associated with itself.)
+		  
+		  #If TargetWin32 Then
+		    Dim mb As New MemoryBlock(260)
+		    If FindExecutable(documentFile.AbsolutePath, Nil, mb) > 32 Then
+		      Return GetFolderItem(mb.WString(0))
+		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function FindExecutable Lib "Shell32" Alias "FindExecutableW" (file As WString, directory As WString, result As Ptr) As Integer
+	#tag EndExternalMethod
+
+	#tag Method, Flags = &h0
+		Function FormatBytes(bytes As UInt64, precision As Integer = 2) As String
+		  //Converts raw byte counts into SI formatted strings. 1KB = 1024 bytes.
+		  //Optionally pass an integer representing the number of decimal places to return. The default is two decimal places. You may specify
+		  //between 0 and 16 decimal places. Specifying more than 16 will append extra zeros to make up the length. Passing 0
+		  //shows no decimal places and no decimal point.
+		  
+		  Const kilo = 1024
+		  Static mega As UInt64 = kilo * kilo
+		  Static giga As UInt64 = kilo * mega
+		  Static tera As UInt64 = kilo * giga
+		  Static peta As UInt64 = kilo * tera
+		  Static exab As UInt64 = kilo * peta
+		  
+		  Dim suffix, precisionZeros As String
+		  Dim strBytes As Double
+		  
+		  
+		  If bytes < kilo Then
+		    strbytes = bytes
+		    suffix = "bytes"
+		  ElseIf bytes >= kilo And bytes < mega Then
+		    strbytes = bytes / kilo
+		    suffix = "KB"
+		  ElseIf bytes >= mega And bytes < giga Then
+		    strbytes = bytes / mega
+		    suffix = "MB"
+		  ElseIf bytes >= giga And bytes < tera Then
+		    strbytes = bytes / giga
+		    suffix = "GB"
+		  ElseIf bytes >= tera And bytes < peta Then
+		    strbytes = bytes / tera
+		    suffix = "TB"
+		  ElseIf bytes >= tera And bytes < exab Then
+		    strbytes = bytes / peta
+		    suffix = "PB"
+		  ElseIf bytes >= exab Then
+		    strbytes = bytes / exab
+		    suffix = "EB"
+		  End If
+		  
+		  
+		  While precisionZeros.Len < precision
+		    precisionZeros = precisionZeros + "0"
+		  Wend
+		  If precisionZeros.Trim <> "" Then precisionZeros = "." + precisionZeros
+		  
+		  Return Format(strBytes, "#,###0" + precisionZeros) + " " + suffix
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function isFound(Extends f As FolderItem) As Integer
 		  Declare Function CloseHandle Lib "Kernel32"(HWND As Integer) As Boolean
 		  Declare Function CreateFileW Lib "Kernel32"(name As WString, access As Integer, sharemode As Integer, SecAtrribs As Integer, _

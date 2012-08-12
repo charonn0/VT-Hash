@@ -57,7 +57,7 @@ Inherits Application
 		  path = path.Trim
 		  
 		  #if DebugBuild Then
-		    toBeHashed = GetFolderItem("F:\Projects\Git Repository\VT Hash\eicar.com")
+		    DryRun()
 		  #Else
 		    if Not aboutSwitch then
 		      toBeHashed = GetFolderItem(path)
@@ -73,14 +73,39 @@ Inherits Application
 		    Quit(1)
 		  Else
 		    errorHandler.Show
+		    Dim t as Introspection.TypeInfo = Introspection.GetType(error)
 		    Dim theStack As String = Join(error.CleanStack, EndOfLine)
-		    errorHandler.errorStack.Text = error.Message + "(" + Str(error.ErrorNumber) + ")" + EndOfLine + theStack
+		    errorHandler.errorStack.Text = t.Name + ": " + error.Message + "(" + Str(error.ErrorNumber) + ")" + EndOfLine + theStack
 		    Return True
 		    
 		  End If
 		End Function
 	#tag EndEvent
 
+
+	#tag Method, Flags = &h21
+		Private Sub DryRun()
+		  toBeHashed = GetFolderItem("F:\Projects\Git Repository\VT Hash\eicar.com")
+		  dim makeHash As new hasher
+		  Select Case algorithm
+		  case "MD5"
+		    theHash = makeHash.hashIt(toBeHashed, "MD5")
+		  case "SHA1"
+		    theHash = makeHash.hashIt(toBeHashed, "SHA1")
+		  end Select
+		  Dim f As FolderItem = App.ExecutableFile.Parent.Parent.Child("sampleresult.json")
+		  If f.Exists Then
+		    Dim s As String
+		    Dim tis As TextInputStream
+		    Dim js As JSONItem
+		    tis = tis.Open(f)
+		    s = tis.ReadAll
+		    tis.Close
+		    js = New JSONItem(s)
+		    resultWindow.showList(js)
+		  End If
+		End Sub
+	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub KillApiKeyFile()
@@ -103,8 +128,8 @@ Inherits Application
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub LoadConf()
+	#tag Method, Flags = &h21
+		Private Sub LoadConf()
 		  Dim f As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software")
 		  If Not f.Exists Then
 		    f.CreateAsFolder()
