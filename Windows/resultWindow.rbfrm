@@ -456,7 +456,7 @@ End
 	#tag Method, Flags = &h0
 		Sub showList(results As JSONItem)
 		  Me.Show
-		  Me.Title = pretifyPath(toBeHashed.AbsolutePath, 60)
+		  'Me.Title = pretifyPath(toBeHashed.AbsolutePath, 60)
 		  theresults = results
 		  permalink = results.Value("permalink")
 		  Dim resCount, threatCount As Integer
