@@ -5,6 +5,15 @@ Begin Menu MenuBar1
       Text = "&Tools"
       Index = -2147483648
       AutoEnable = True
+      Begin MenuItem RescanMenu
+         SpecialMenu = 0
+         Text = "Request Rescan..."
+         Index = -2147483648
+         ShortcutKey = "R"
+         Shortcut = "Cmd+R"
+         MenuModifier = True
+         AutoEnable = True
+      End
       Begin MenuItem exportmenu
          SpecialMenu = 0
          Text = "Export Results"
@@ -40,6 +49,9 @@ Begin Menu MenuBar1
          SpecialMenu = 0
          Text = "Analyze with TrID..."
          Index = -2147483648
+         ShortcutKey = "T"
+         Shortcut = "Cmd+T"
+         MenuModifier = True
          AutoEnable = True
       End
    End
