@@ -42,7 +42,7 @@ Inherits HTTPSocket
 
 	#tag Event
 		Sub PageReceived(url as string, httpStatus as integer, headers as internetHeaders, content as string)
-		  'parseResponse(content)
+		  parseResponse(content)
 		End Sub
 	#tag EndEvent
 
@@ -100,11 +100,30 @@ Inherits HTTPSocket
 			InheritedFrom="TCPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="BytesAvailable"
+			Group="Behavior"
+			Type="Integer"
+			InheritedFrom="TCPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="BytesLeftToSend"
+			Group="Behavior"
+			Type="Integer"
+			InheritedFrom="TCPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="defaultPort"
 			Group="Behavior"
 			InitialValue="0"
 			Type="integer"
 			InheritedFrom="HTTPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Handle"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="SocketCore"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="httpProxyAddress"
@@ -128,10 +147,31 @@ Inherits HTTPSocket
 			InheritedFrom="TCPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="IsConnected"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Boolean"
+			InheritedFrom="SocketCore"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastErrorCode"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="SocketCore"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InheritedFrom="TCPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LocalAddress"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+			InheritedFrom="SocketCore"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -152,6 +192,12 @@ Inherits HTTPSocket
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="RemoteAddress"
+			Group="Behavior"
+			Type="String"
+			InheritedFrom="TCPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="retry"

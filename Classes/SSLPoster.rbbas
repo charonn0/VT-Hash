@@ -42,7 +42,7 @@ Inherits HTTPSecureSocket
 
 	#tag Event
 		Sub PageReceived(url as string, httpStatus as integer, headers as internetHeaders, content as string)
-		  'parseResponse(content)
+		  parseResponse(content)
 		End Sub
 	#tag EndEvent
 

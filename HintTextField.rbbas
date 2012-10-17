@@ -2,30 +2,19 @@
 Protected Class HintTextField
 Inherits TextField
 	#tag Event
-		Sub DropObject(obj As DragItem, action As Integer)
-		  If Not HasText Then
-		    Me.TextColor = &c000000
-		    Me.Italic = False
-		  End If
-		  
-		  RaiseEvent DropObject(Obj, action)
-		End Sub
-	#tag EndEvent
-
-	#tag Event
-		Function KeyDown(Key As String) As Boolean
-		  If Not HasText Then
+		Sub GotFocus()
+		  If Me.Text = HintText Then
 		    Me.TextColor = &c000000
 		    Me.Italic = False
 		    Me.Text = ""
 		  End If
-		  Return RaiseEvent KeyDown(Key) Or False
-		End Function
+		  GotFocus()
+		End Sub
 	#tag EndEvent
 
 	#tag Event
 		Sub LostFocus()
-		  If Not HasText Or Me.Text = "" Then
+		  If Me.Text.Trim = "" Then
 		    Me.TextColor = &c838383
 		    Me.Text = HintText
 		    Me.Italic = True
@@ -39,7 +28,7 @@ Inherits TextField
 
 	#tag Event
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
-		  If Not HasText Then
+		  If Me.Text = HintText Then 
 		    Me.TextColor = &c000000
 		    Me.Text = ""
 		    Me.Italic = False
@@ -58,21 +47,8 @@ Inherits TextField
 	#tag EndEvent
 
 
-	#tag Method, Flags = &h0
-		Sub SetText(Text As String)
-		  Me.TextColor = &c000000
-		  Me.Italic = False
-		  Me.Text = Text
-		End Sub
-	#tag EndMethod
-
-
 	#tag Hook, Flags = &h0
-		Event DropObject(Obj As DragItem, action As Integer)
-	#tag EndHook
-
-	#tag Hook, Flags = &h0
-		Event KeyDown(Key As String) As Boolean
+		Event GotFocus()
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
@@ -87,15 +63,6 @@ Inherits TextField
 		Event Open()
 	#tag EndHook
 
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  Return Me.Text <> Me.HintText
-			End Get
-		#tag EndGetter
-		HasText As Boolean
-	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
 		HintText As String
@@ -202,11 +169,6 @@ Inherits TextField
 			Group="Appearance"
 			Type="String"
 			InheritedFrom="TextField"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HasText"
-			Group="Behavior"
-			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Height"

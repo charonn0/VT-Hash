@@ -134,8 +134,9 @@ Protected Module tools
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub parseResponse(js As JSONItem)
-		  'Dim js As New JSONItem(content)
+		Sub parseResponse(content As String)
+		  Dim js As New JSONItem(content)
+		  
 		  Select Case js.Value("response_code")
 		  Case 0  //Not Found
 		    If MsgBox("Hash Not Found!" + EndOfLine + "Would you like to upload this file?", 36, "File Not In Database") <> 6 Then
@@ -148,8 +149,7 @@ Protected Module tools
 		    Call MsgBox("This file has been uploaded to VirusTotal but is still being processed." + EndOfLine + "Please try again later.", 36, "File Not Yet Processed")
 		    Quit(0)
 		  Case 1 //Found and ready to go
-		    resultWindows.Append(New resultWindow)
-		    resultWindows(0).showList(js)
+		    resultWindow.showList(js)
 		  End Select
 		End Sub
 	#tag EndMethod
@@ -192,6 +192,49 @@ Protected Module tools
 		  End If
 		  
 		  Return ret
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
+		  Dim d As New Date
+		  If f = Nil Then f = GetSaveFolderItem(FileTypes1.All, toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		  'If Not f.Exists Then f.CreateAsFolder
+		  If f = Nil Then Return Nil
+		  If f.Directory Then
+		    resultWindow.saved.Text = "Invalid Save Path"
+		    resultWindow.saved.TextColor = &cFF0000
+		    Return Nil
+		  End If
+		  
+		  Dim tos As TextOutputStream
+		  
+		  Select Case Mode
+		  Case Mode_Text
+		    tos = tos.Create(f)
+		    tos.WriteLine("VirusTotal Scan Results")
+		    tos.WriteLine("Report retrieved: " + d.ShortDate + "; " + d.ShortTime + " " + Timezone)
+		    tos.WriteLine("Report Date: " + theresults.Value("scan_date"))
+		    tos.WriteLine("")
+		    For i As Integer = 0 To resultWindow.ListBox1.LastIndex
+		      tos.WriteLine(resultWindow.ListBox1.Cell(i, 0) + " " + resultWindow.ListBox1.Cell(i, 1) + ": " + Chr(9) + resultWindow.ListBox1.Cell(i, 2))
+		    Next
+		  Case Mode_Org_JSON
+		    tos = tos.Create(f)
+		    tos.Write(theresults.ToString)
+		  Case Mode_Unp_JSON
+		    tos = tos.Create(f)
+		    theresults.Compact = False
+		    Dim tmp As String = theresults.ToString
+		    tos.Write(tmp)
+		  Case Mode_CSV
+		    tos = tos.Create(f)
+		    For i As Integer = 0 To resultWindow.ListBox1.LastIndex
+		      tos.WriteLine(resultWindow.ListBox1.Cell(i, 0) + "," + resultWindow.ListBox1.Cell(i, 1) + "," + resultWindow.ListBox1.Cell(i, 2))
+		    Next
+		  End Select
+		  tos.Close
+		  Return f
 		End Function
 	#tag EndMethod
 
@@ -373,8 +416,8 @@ Protected Module tools
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function Timezone() As String
+	#tag Method, Flags = &h1
+		Protected Function Timezone() As String
 		  //This function returns a string representing the name of the current time zone. e.g. "EST" or "Pacific Daylight Time." This name
 		  //is localized and may be up to 32 characters long.
 		  //On error, returns an empty string.
@@ -464,11 +507,6 @@ Protected Module tools
 		  Return ret
 		End Function
 	#tag EndMethod
-
-
-	#tag Property, Flags = &h0
-		ResultWindows() As resultWindow
-	#tag EndProperty
 
 
 	#tag ViewBehavior

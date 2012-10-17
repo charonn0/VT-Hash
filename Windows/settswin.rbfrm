@@ -63,7 +63,6 @@ Begin Window settswin
          DataSource      =   ""
          Enabled         =   True
          Format          =   ""
-         HasText         =   ""
          Height          =   22
          HelpTag         =   ""
          HintText        =   "Default Save Folder"

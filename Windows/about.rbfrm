@@ -17,10 +17,10 @@ Begin Window about
    MenuBar         =   ""
    MenuBarVisible  =   True
    MinHeight       =   64
-   MinimizeButton  =   False
+   MinimizeButton  =   True
    MinWidth        =   64
    Placement       =   2
-   Resizeable      =   False
+   Resizeable      =   True
    Title           =   "About VT Hash Check"
    Visible         =   True
    Width           =   402
@@ -28,7 +28,7 @@ Begin Window about
       AcceptFocus     =   ""
       AcceptTabs      =   ""
       AutoDeactivate  =   True
-      Backdrop        =   ""
+      Backdrop        =   261013503
       DoubleBuffer    =   False
       Enabled         =   True
       EraseBackground =   True
@@ -73,6 +73,7 @@ Begin Window about
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -107,11 +108,12 @@ Begin Window about
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
-      Text            =   "Copyright ©2009-12 Boredom Software, All Rights Reserved.\r\n\r\nBoredom Software is not affiliated with VirusTotal.com, though we use their service a great deal and recommend it highly. :-)"
+      TabStop         =   True
+      Text            =   "Copyright ©2009-11 Boredom Software, All Rights Reserved.\r\n\r\nBoredom Software is not affiliated with VirusTotal.com, though we use their service a great deal and recommend it highly. :-)"
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"
-      TextSize        =   10
+      TextSize        =   11
       TextUnit        =   0
       Top             =   45
       Transparent     =   True
@@ -123,9 +125,9 @@ Begin Window about
       AutoDeactivate  =   True
       Bold            =   ""
       ButtonStyle     =   0
-      Cancel          =   True
+      Cancel          =   ""
       Caption         =   "OK"
-      Default         =   True
+      Default         =   ""
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
@@ -150,83 +152,75 @@ Begin Window about
       Visible         =   True
       Width           =   80
    End
-   Begin LinkLabel LinkLabel1
-      ActiveColor     =   "&cFF0000"
-      AltText         =   "Visit Boredom Software"
+   Begin Label StaticText3
       AutoDeactivate  =   True
       Bold            =   ""
       DataField       =   ""
       DataSource      =   ""
-      Draggable       =   False
       Enabled         =   True
       Height          =   20
-      HilightColor    =   "&c00FFFF"
-      HoverPeriod     =   250
+      HelpTag         =   "Visit Virus Total"
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   247
+      Left            =   11
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
       LockTop         =   True
       Multiline       =   ""
-      ResetPeriod     =   1000
       Scope           =   0
-      Selectable      =   ""
-      TabIndex        =   6
+      Selectable      =   False
+      TabIndex        =   4
       TabPanelIndex   =   0
-      Text            =   "www.boredomsoft.org"
-      TextAlign       =   2
-      TextColor       =   "&c0000FF"
-      TextFont        =   "System"
-      TextSize        =   0
-      TextUnit        =   0
-      Top             =   120
-      Transparent     =   True
-      Underline       =   ""
-      Visible         =   True
-      Width           =   151
-   End
-   Begin LinkLabel LinkLabel2
-      ActiveColor     =   "&cFF0000"
-      AltText         =   "Visit Virus Total"
-      AutoDeactivate  =   True
-      Bold            =   ""
-      DataField       =   ""
-      DataSource      =   ""
-      Draggable       =   False
-      Enabled         =   True
-      Height          =   20
-      HilightColor    =   "&c00FFFF"
-      HoverPeriod     =   250
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   2
-      LockBottom      =   ""
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   True
-      Multiline       =   ""
-      ResetPeriod     =   1000
-      Scope           =   0
-      Selectable      =   ""
-      TabIndex        =   7
-      TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "www.virustotal.com"
       TextAlign       =   0
-      TextColor       =   "&c0000FF"
+      TextColor       =   255
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   11
       TextUnit        =   0
-      Top             =   120
+      Top             =   107
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   151
+      Width           =   104
+   End
+   Begin Label StaticText4
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   "Visit Boredomsoft"
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   284
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "www.boredomsoft.org"
+      TextAlign       =   0
+      TextColor       =   255
+      TextFont        =   "System"
+      TextSize        =   11
+      TextUnit        =   0
+      Top             =   107
+      Transparent     =   True
+      Underline       =   ""
+      Visible         =   True
+      Width           =   112
    End
 End
 #tag EndWindow
@@ -234,14 +228,6 @@ End
 #tag WindowCode
 #tag EndWindowCode
 
-#tag Events Canvas1
-	#tag Event
-		Sub Paint(g As Graphics)
-		  vt_small.Transparent = 1
-		  g.DrawPicture(vt_small, 0, 0)
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events StaticText1
 	#tag Event
 		Sub Open()
@@ -256,17 +242,41 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events LinkLabel1
+#tag Events StaticText3
 	#tag Event
-		Sub Action()
-		  ShowURL(Me.Text)
+		Sub MouseEnter()
+		  me.MouseCursor = System.Cursors.FingerPointer
+		  me.Underline = True
 		End Sub
 	#tag EndEvent
-#tag EndEvents
-#tag Events LinkLabel2
 	#tag Event
-		Sub Action()
-		  ShowURL(Me.Text)
+		Sub MouseExit()
+		  me.MouseCursor = System.Cursors.StandardPointer
+		  me.Underline = False
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  ShowURL("http://www.virustotal.com")
+		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events StaticText4
+	#tag Event
+		Sub MouseEnter()
+		  me.MouseCursor = System.Cursors.FingerPointer
+		  me.Underline = True
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  me.MouseCursor = System.Cursors.StandardPointer
+		  me.Underline = False
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  ShowURL("http://www.boredomsoft.org")
+		End Function
 	#tag EndEvent
 #tag EndEvents

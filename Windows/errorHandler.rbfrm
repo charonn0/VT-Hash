@@ -11,9 +11,9 @@ Begin Window errorHandler
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
-   MaxHeight       =   200
+   MaxHeight       =   32000
    MaximizeButton  =   False
-   MaxWidth        =   500
+   MaxWidth        =   32000
    MenuBar         =   ""
    MenuBarVisible  =   True
    MinHeight       =   148
@@ -30,12 +30,12 @@ Begin Window errorHandler
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
-      Height          =   35
+      Height          =   48
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   41
+      Left            =   69
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -46,13 +46,14 @@ Begin Window errorHandler
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
-      Text            =   "An unhandled error has caused VT Hash to crash. \r\nCall stack follows:"
+      TabStop         =   True
+      Text            =   "An unhandled error has caused VT Hash to crash. Sorry about that! Below is some gobbledegook that might be helpful to Andrew, you should send it to him!"
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"
       TextSize        =   11
       TextUnit        =   0
-      Top             =   5
+      Top             =   8
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
@@ -70,7 +71,7 @@ Begin Window errorHandler
       DataSource      =   ""
       Enabled         =   True
       Format          =   ""
-      Height          =   62
+      Height          =   58
       HelpTag         =   ""
       HideSelection   =   True
       Index           =   -2147483648
@@ -97,7 +98,7 @@ Begin Window errorHandler
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   46
+      Top             =   50
       Underline       =   ""
       UseFocusRing    =   True
       Visible         =   True
@@ -107,9 +108,9 @@ Begin Window errorHandler
       AutoDeactivate  =   True
       Bold            =   ""
       ButtonStyle     =   0
-      Cancel          =   True
+      Cancel          =   ""
       Caption         =   "Quit"
-      Default         =   True
+      Default         =   ""
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
@@ -204,7 +205,7 @@ Begin Window errorHandler
       DoubleBuffer    =   False
       Enabled         =   True
       EraseBackground =   True
-      Height          =   35
+      Height          =   40
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -221,7 +222,7 @@ Begin Window errorHandler
       Top             =   5
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   35
+      Width           =   58
    End
    Begin PushButton PushButton4
       AutoDeactivate  =   True
