@@ -3,6 +3,7 @@ Protected Class VTSocket
 Inherits HTTPSecureSocket
 	#tag Method, Flags = &h0
 		Function SendRequest(URL As String, Request As JSONItem) As JSONItem
+		  Me.Secure = useSSL
 		  dim formData As New Dictionary
 		  For Each Name As String In Request.Names
 		    formData.Value(Name) = Request.Value(Name)

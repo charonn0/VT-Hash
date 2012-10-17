@@ -46,6 +46,7 @@ Begin Window errorHandler
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "An unhandled error has caused VT Hash to crash. \r\nCall stack follows:"
       TextAlign       =   0
       TextColor       =   0

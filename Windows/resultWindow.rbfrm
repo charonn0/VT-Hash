@@ -425,9 +425,18 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function OpenFileMenu() As Boolean Handles OpenFileMenu.Action
+			toBeHashed.Launch
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
-			Dim sock As New VTSocket
-			Dim results As JSONItem = VTAPI.Rescan(theresults)
+			Dim sock As New HTTPSecureSocket
+			
+			Dim results As JSONItem = VTAPI.RequestRescan(theresults.Value("resource"), VTAPIKey)
 			If results = Nil Then
 			Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
 			Else

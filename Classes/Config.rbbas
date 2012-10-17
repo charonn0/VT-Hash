@@ -244,6 +244,7 @@ Protected Module Config
 			Name="TheHash"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"

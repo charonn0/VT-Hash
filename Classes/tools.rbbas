@@ -1,23 +1,5 @@
 #tag Module
 Protected Module tools
-	#tag Method, Flags = &h0
-		Function FindDefaultApp(Extends documentFile As FolderItem) As FolderItem
-		  //Given a documentFile FolderItem, will return a FolderItem corresponding to the application currently
-		  //associated with the file (e.g. a .doc file might return C:\Program Files\Microsoft Office\winword.exe)
-		  //If no application is associated with the documentFile, the documentFile doesn't exist, or is inaccessble
-		  //then this function returns Nil.
-		  //If the documentFile is itself an application (.exe, .scr, etc.) then this function returns a FolderItem
-		  //corresponding to the documentFile itself (e.g. "C:\foo\bar.exe" is associated with itself.)
-		  
-		  #If TargetWin32 Then
-		    Dim mb As New MemoryBlock(260)
-		    If FindExecutable(documentFile.AbsolutePath, Nil, mb) > 32 Then
-		      Return GetFolderItem(mb.WString(0))
-		    End If
-		  #endif
-		End Function
-	#tag EndMethod
-
 	#tag ExternalMethod, Flags = &h0
 		Declare Function FindExecutable Lib "Shell32" Alias "FindExecutableW" (file As WString, directory As WString, result As Ptr) As Integer
 	#tag EndExternalMethod
@@ -141,8 +123,11 @@ Protected Module tools
 		    If MsgBox("Hash Not Found!" + EndOfLine + "Would you like to upload this file?", 36, "File Not In Database") <> 6 Then
 		      Quit(0)
 		    else
-		      ShowURL("http://www.virustotal.com/")
-		      Quit(0)
+		      'ShowURL("http://www.virustotal.com/")
+		      'Quit(0)
+		      Dim response As JSONItem = VTAPI.SubmitFile(toBeHashed, VTAPIKey)
+		      Break
+		      
 		    end if
 		  Case -2  //Still Processing
 		    Call MsgBox("This file has been uploaded to VirusTotal but is still being processed." + EndOfLine + "Please try again later.", 36, "File Not Yet Processed")

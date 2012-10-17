@@ -351,7 +351,7 @@ End
 		    path.Text = pretifyPath(toBeHashed.AbsolutePath)
 		    checkSum.Text = theHash
 		    
-		    Dim js As JSONItem = VTAPI.ScanReport(TheHash)
+		    Dim js As JSONItem = VTAPI.GetReport(TheHash, VTAPIKey)
 		    ProgressBar1.Value = 5
 		    If js <> Nil Then parseResponse(js)
 		  end if
@@ -400,6 +400,11 @@ End
 	#tag EndMethod
 
 
+	#tag Property, Flags = &h0
+		TitleText As String
+	#tag EndProperty
+
+
 #tag EndWindowCode
 
 #tag Events PushButton1
@@ -435,16 +440,16 @@ End
 	#tag Event
 		Sub Action()
 		  Select Case Self.Title
-		  case "Sending Hash"
-		    self.Title = "Sending Hash."
-		  case "Sending Hash."
-		    self.Title = "Sending Hash.."
-		  case "Sending Hash.."
-		    self.Title = "Sending Hash..."
+		  case TitleText + ""
+		    self.Title = TitleText + "."
+		  case TitleText + "."
+		    self.Title = TitleText + ".."
+		  case TitleText + ".."
+		    self.Title = TitleText + "..."
 		  case "Uh Oh!"
 		    me.Mode = me.ModeOff
 		  else
-		    self.Title = "Sending Hash"
+		    self.Title = TitleText + ""
 		  End Select
 		End Sub
 	#tag EndEvent

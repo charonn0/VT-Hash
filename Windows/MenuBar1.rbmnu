@@ -54,6 +54,15 @@ Begin Menu MenuBar1
          MenuModifier = True
          AutoEnable = True
       End
+      Begin MenuItem OpenFileMenu
+         SpecialMenu = 0
+         Text = "Run Target File"
+         Index = -2147483648
+         ShortcutKey = "K"
+         Shortcut = "Cmd+K"
+         MenuModifier = True
+         AutoEnable = True
+      End
    End
 End
 #tag EndMenu

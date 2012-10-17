@@ -46,6 +46,7 @@ Begin Window editAPI
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "In order to use the Virus Total API you must have an API key. API keys are free and you can get one by signing up for a Virus Total Community account."
       TextAlign       =   0
       TextColor       =   0
