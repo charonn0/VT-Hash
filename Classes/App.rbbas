@@ -3,20 +3,6 @@ Protected Class App
 Inherits Application
 	#tag Event
 		Sub Open()
-		  '#If DebugBuild Then
-		  'toBeHashed = App.ExecutableFile.Parent.Parent.Child("sampleresult.json")
-		  'Dim tis As TextInputStream
-		  'Dim js As JSONItem
-		  'Dim s As String
-		  'tis = tis.Open(toBeHashed)
-		  's = tis.ReadAll
-		  'tis.Close
-		  'js = New JSONItem(s)
-		  'resultWindow.showList(js)
-		  'Quit(0)
-		  '#endif
-		  
-		  
 		  Dim args() As String = Tokenize(System.CommandLine)
 		  Dim path As String = System.CommandLine
 		  
@@ -56,13 +42,10 @@ Inherits Application
 		  path = path.Replace("--SSL", "")
 		  path = path.Trim
 		  
-		  #if DebugBuild Then
-		    DryRun()
-		  #Else
-		    if Not aboutSwitch then
-		      toBeHashed = GetFolderItem(path)
-		    end if
-		  #endif
+		  if Not aboutSwitch then
+		    toBeHashed = GetFolderItem(path)
+		  end if
+		  
 		End Sub
 	#tag EndEvent
 
@@ -82,30 +65,6 @@ Inherits Application
 		End Function
 	#tag EndEvent
 
-
-	#tag Method, Flags = &h21
-		Private Sub DryRun()
-		  toBeHashed = GetFolderItem("F:\Projects\Git Repository\VT Hash\eicar.com")
-		  dim makeHash As new hasher
-		  Select Case algorithm
-		  case "MD5"
-		    theHash = makeHash.hashIt(toBeHashed, "MD5")
-		  case "SHA1"
-		    theHash = makeHash.hashIt(toBeHashed, "SHA1")
-		  end Select
-		  Dim f As FolderItem = App.ExecutableFile.Parent.Parent.Child("sampleresult.json")
-		  If f.Exists Then
-		    Dim s As String
-		    Dim tis As TextInputStream
-		    Dim js As JSONItem
-		    tis = tis.Open(f)
-		    s = tis.ReadAll
-		    tis.Close
-		    js = New JSONItem(s)
-		    resultWindow.showList(js)
-		  End If
-		End Sub
-	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub KillApiKeyFile()

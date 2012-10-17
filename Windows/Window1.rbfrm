@@ -282,13 +282,13 @@ Begin Window Window1
    Begin Timer Timer2
       Height          =   32
       Index           =   -2147483648
-      Left            =   177
+      Left            =   408
       LockedInPosition=   False
       Mode            =   2
       Period          =   300
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   94
+      Top             =   -6
       Width           =   32
    End
 End
@@ -329,13 +329,32 @@ End
 
 	#tag Method, Flags = &h0
 		Sub initiate()
-		  If useSSL Then
-		    Dim sendPoster As New SSLposter
-		    sendIt(sendPoster)
-		  Else
-		    Dim sendPoster As New poster
-		    sendIt(sendPoster)
-		  End If
+		  ProgressBar1.Value = 1
+		  if isValidFile = False Then
+		    self.Close
+		  else
+		    If VTAPIKey = "" Then getKey()
+		    
+		    dim makeHash As  new hasher
+		    ProgressBar1.Value = 2
+		    Select Case algorithm
+		    case "MD5"
+		      theHash = makeHash.hashIt(toBeHashed, "MD5")
+		    case "SHA1"
+		      'StaticText2.Text = "SHA1"
+		      theHash = makeHash.hashIt(toBeHashed, "SHA1")
+		    else
+		      MsgBox("Unknown algorithm specified!")
+		      self.Close
+		    end Select
+		    ProgressBar1.Value = 4
+		    path.Text = pretifyPath(toBeHashed.AbsolutePath)
+		    checkSum.Text = theHash
+		    
+		    Dim js As JSONItem = VTAPI.ScanReport(TheHash)
+		    ProgressBar1.Value = 5
+		    If js <> Nil Then parseResponse(js)
+		  end if
 		End Sub
 	#tag EndMethod
 
@@ -380,63 +399,6 @@ End
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub sendIt(sock As poster)
-		  
-		  if isValidFile = False Then
-		    self.Close
-		  else
-		    If VTAPIKey = "" Then getKey()
-		    
-		    dim makeHash As  new hasher
-		    
-		    Select Case algorithm
-		    case "MD5"
-		      theHash = makeHash.hashIt(toBeHashed, "MD5")
-		    case "SHA1"
-		      'StaticText2.Text = "SHA1"
-		      theHash = makeHash.hashIt(toBeHashed, "SHA1")
-		    else
-		      MsgBox("Unknown algorithm specified!")
-		      self.Close
-		    end Select
-		    
-		    path.Text = pretifyPath(toBeHashed.AbsolutePath)
-		    checkSum.Text = theHash
-		    sock.sendTheHash(theHash)
-		    
-		  end if
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub sendIt(sock As SSLPoster)
-		  if isValidFile = False Then
-		    self.Close
-		  else
-		    if VTAPIKey = "" Then getKey()
-		    
-		    dim makeHash As  new hasher
-		    
-		    Select Case algorithm
-		    case "MD5"
-		      theHash = makeHash.hashIt(toBeHashed, "MD5")
-		    case "SHA1"
-		      StaticText2.Text = "SHA1"
-		      theHash = makeHash.hashIt(toBeHashed, "SHA1")
-		    else
-		      MsgBox("Unknown algorithm specified!")
-		      self.Close
-		    end Select
-		    
-		    path.Text = pretifyPath(toBeHashed.AbsolutePath)
-		    checkSum.Text = theHash
-		    sock.sendTheHash(theHash)
-		    
-		  end if
-		End Sub
-	#tag EndMethod
-
 
 #tag EndWindowCode
 
@@ -451,7 +413,7 @@ End
 #tag Events Timer1
 	#tag Event
 		Sub Action()
-		  If DebugBuild Then Return
+		  'If DebugBuild Then Return
 		  if aboutSwitch = True then
 		    self.Hide
 		    about.Show

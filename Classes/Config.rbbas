@@ -83,15 +83,11 @@ Protected Module Config
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mversion As Double = 1.01
+		Private mversion As Double = 1.1
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		TheHash As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		theresults As JSONItem
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -105,7 +101,7 @@ Protected Module Config
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return Format(mversion, "0.00")
+			  Return Format(mversion, "0.0#")
 			End Get
 		#tag EndGetter
 		version As String
@@ -243,6 +239,11 @@ Protected Module Config
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TheHash"
+			Group="Behavior"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"

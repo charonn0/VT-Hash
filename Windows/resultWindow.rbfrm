@@ -8,7 +8,7 @@ Begin Window resultWindow
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   5.05e+2
-   ImplicitInstance=   True
+   ImplicitInstance=   False
    LiveResize      =   True
    MacProcID       =   0
    MaxHeight       =   32000
@@ -341,7 +341,7 @@ Begin Window resultWindow
       Visible         =   True
       Width           =   443
    End
-   Begin Label Label2
+   Begin Label HashType
       AutoDeactivate  =   True
       Bold            =   ""
       DataField       =   ""
@@ -425,6 +425,24 @@ End
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function RescanMenu() As Boolean Handles RescanMenu.Action
+			Dim sock As New VTSocket
+			Dim results As JSONItem = VTAPI.Rescan(theresults)
+			If results = Nil Then
+			Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
+			Else
+			If results.Value("response_code").IntegerValue = 1 Then
+			Call MsgBox("Your request was accepted and added to the queue.", 64, "Rescan Accepted")
+			Else
+			Call MsgBox("VirusTotal said: " + results.Value("response_code").StringValue, 16, "Rescan Error")
+			End If
+			End If
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function textmenu() As Boolean Handles textmenu.Action
 			savedAs = saveAs(Mode_Text)
 			saved.Visible = (savedAs <> Nil)
@@ -452,6 +470,49 @@ End
 		End Function
 	#tag EndMenuHandler
 
+
+	#tag Method, Flags = &h0
+		Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
+		  Dim d As New Date
+		  If f = Nil Then f = GetSaveFolderItem(FileTypes1.All, toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		  'If Not f.Exists Then f.CreateAsFolder
+		  If f = Nil Then Return Nil
+		  If f.Directory Then
+		    Me.saved.Text = "Invalid Save Path"
+		    Me.saved.TextColor = &cFF0000
+		    Return Nil
+		  End If
+		  
+		  Dim tos As TextOutputStream
+		  
+		  Select Case Mode
+		  Case Mode_Text
+		    tos = tos.Create(f)
+		    tos.WriteLine("VirusTotal Scan Results")
+		    tos.WriteLine("Report retrieved: " + d.ShortDate + "; " + d.ShortTime + " " + Timezone)
+		    tos.WriteLine("Report Date: " + theresults.Value("scan_date"))
+		    tos.WriteLine("")
+		    For i As Integer = 0 To Me.ListBox1.LastIndex
+		      tos.WriteLine(Me.ListBox1.Cell(i, 0) + " " + Me.ListBox1.Cell(i, 1) + ": " + Chr(9) + Me.ListBox1.Cell(i, 2))
+		    Next
+		  Case Mode_Org_JSON
+		    tos = tos.Create(f)
+		    tos.Write(theresults.ToString)
+		  Case Mode_Unp_JSON
+		    tos = tos.Create(f)
+		    theresults.Compact = False
+		    Dim tmp As String = theresults.ToString
+		    tos.Write(tmp)
+		  Case Mode_CSV
+		    tos = tos.Create(f)
+		    For i As Integer = 0 To Me.ListBox1.LastIndex
+		      tos.WriteLine(Me.ListBox1.Cell(i, 0) + "," + Me.ListBox1.Cell(i, 1) + "," + Me.ListBox1.Cell(i, 2))
+		    Next
+		  End Select
+		  tos.Close
+		  Return f
+		End Function
+	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub showList(results As JSONItem)
@@ -497,10 +558,11 @@ End
 		      System.DebugLog("VT Hash: Unable to save report! (" + CurrentMethodName + "->" + t.Name + ")")
 		    End Try
 		  End If
-		  FileHash.Text = algorithm + ": " + TheHash
+		  FileHash.Text = TheHash
 		  FilePath.Text = toBeHashed.AbsolutePath
 		  ProgBar1.value = positives * 100 / total
 		  ProgBar1.HelpTag = Format(positives * 100 / total, "##0.00") + "% dangerous"
+		  HashType.Text = algorithm + ":"
 		  Me.ShowModal
 		  
 		End Sub
@@ -513,6 +575,10 @@ End
 
 	#tag Property, Flags = &h0
 		savedAs As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		theresults As JSONItem
 	#tag EndProperty
 
 
