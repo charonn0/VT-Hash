@@ -402,6 +402,45 @@ Begin Window resultWindow
       Visible         =   True
       Width           =   16
    End
+   Begin LinkLabel LinkLabel1
+      ActiveColor     =   "&cFF0000"
+      AltText         =   ""
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Draggable       =   False
+      Enabled         =   True
+      Height          =   20
+      HilightColor    =   "&c00FFFF"
+      HoverPeriod     =   250
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   4
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      ResetPeriod     =   1000
+      Scope           =   0
+      Selectable      =   ""
+      TabIndex        =   12
+      TabPanelIndex   =   0
+      Text            =   "Add a comment..."
+      TextAlign       =   0
+      TextColor       =   "&c0000FF"
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   484
+      Transparent     =   True
+      Underline       =   ""
+      Visible         =   True
+      Width           =   109
+   End
 End
 #tag EndWindow
 
@@ -696,5 +735,20 @@ End
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
 		  toBeHashed.ShowInExplorer()
 		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events LinkLabel1
+	#tag Event
+		Sub Action()
+		  Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
+		  If comment <> "" Then
+		    Dim js As JSONItem = VTAPI.AddComment(TheHash, VTAPIKey, comment)
+		    If js <> Nil Then
+		      MsgBox(js.Value("verbose_msg"))
+		    Else
+		      MsgBox("Invalid response from Virus Total.")
+		    End If
+		  End If
+		End Sub
 	#tag EndEvent
 #tag EndEvents

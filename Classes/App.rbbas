@@ -3,6 +3,9 @@ Protected Class App
 Inherits Application
 	#tag Event
 		Sub Open()
+		  Dim rw As New resultWindow
+		  rw.showmodal
+		  Quit
 		  Dim args() As String = Tokenize(System.CommandLine)
 		  Dim path As String = System.CommandLine
 		  
