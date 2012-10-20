@@ -135,14 +135,19 @@ Begin Window resultWindow
       Visible         =   True
       Width           =   126
    End
-   Begin Label saved
+   Begin LinkLabel saved
+      ActiveColor     =   "&cFF0000"
+      AltText         =   ""
       AutoDeactivate  =   True
       Bold            =   ""
       DataField       =   ""
       DataSource      =   ""
+      Draggable       =   False
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
+      HilightColor    =   "&c00FFFF"
+      HoverPeriod     =   250
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
@@ -153,6 +158,7 @@ Begin Window resultWindow
       LockRight       =   True
       LockTop         =   False
       Multiline       =   ""
+      ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   False
       TabIndex        =   4
@@ -166,7 +172,7 @@ Begin Window resultWindow
       Top             =   483
       Transparent     =   True
       Underline       =   ""
-      Visible         =   False
+      Visible         =   True
       Width           =   101
    End
    Begin Timer TridTimer
@@ -418,11 +424,11 @@ Begin Window resultWindow
       InitialParent   =   ""
       Italic          =   ""
       Left            =   4
-      LockBottom      =   ""
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
-      LockTop         =   True
+      LockTop         =   False
       Multiline       =   ""
       ResetPeriod     =   1000
       Scope           =   0
@@ -564,7 +570,6 @@ End
 
 	#tag Method, Flags = &h0
 		Sub showList(results As JSONItem)
-		  Me.Show
 		  'Me.Title = pretifyPath(toBeHashed.AbsolutePath, 60)
 		  theresults = results
 		  permalink = results.Value("permalink")
@@ -693,16 +698,16 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function MouseDown(X As Integer, Y As Integer) As Boolean
-		  savedAs.ShowInExplorer()
-		End Function
-	#tag EndEvent
-	#tag Event
 		Sub MouseExit()
 		  If Me.Visible Then
 		    Me.MouseCursor = System.Cursors.StandardPointer
 		    Me.Underline = False
 		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  savedAs.ShowInExplorer()
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -748,6 +753,22 @@ End
 		    Else
 		      MsgBox("Invalid response from Virus Total.")
 		    End If
+		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseEnter()
+		  If Me.Visible Then
+		    Me.MouseCursor = System.Cursors.FingerPointer
+		    Me.Underline = True
+		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  If Me.Visible Then
+		    Me.MouseCursor = System.Cursors.StandardPointer
+		    Me.Underline = False
 		  End If
 		End Sub
 	#tag EndEvent

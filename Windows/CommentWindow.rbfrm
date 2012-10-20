@@ -21,7 +21,7 @@ Begin Window CommentWindow
    MinWidth        =   64
    Placement       =   0
    Resizeable      =   True
-   Title           =   "Comment Editor"
+   Title           =   "VirusTotal Community - Comment On This Result"
    Visible         =   True
    Width           =   3.31e+2
    Begin TextArea TextArea1
@@ -138,7 +138,7 @@ End
 	#tag Method, Flags = &h0
 		Function GetComment(X As Integer, Y As Integer) As String
 		  Me.Left = X
-		  Me.Top = Y
+		  Me.Top = Y - 0.5 * Me.Height
 		  Me.ShowModal
 		  Return Comment
 		End Function

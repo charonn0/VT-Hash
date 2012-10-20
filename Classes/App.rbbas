@@ -4,7 +4,15 @@ Inherits Application
 	#tag Event
 		Sub Open()
 		  Dim rw As New resultWindow
-		  rw.showmodal
+		  Dim tis As TextInputStream
+		  Dim s As String
+		  Dim f As FolderItem = GetFolderItem("F:\Projects\Git Repository\VT-Hash\sampleresult.json")
+		  toBeHashed = f
+		  tis = tis.Open(f)
+		  s = tis.ReadAll
+		  tis.Close
+		  
+		  rw.showList(New JSONItem(s))
 		  Quit
 		  Dim args() As String = Tokenize(System.CommandLine)
 		  Dim path As String = System.CommandLine
