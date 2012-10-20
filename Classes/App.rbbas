@@ -3,60 +3,26 @@ Protected Class App
 Inherits Application
 	#tag Event
 		Sub Open()
-		  Dim rw As New resultWindow
-		  Dim tis As TextInputStream
-		  Dim s As String
-		  Dim f As FolderItem = GetFolderItem("F:\Projects\Git Repository\VT-Hash\sampleresult.json")
-		  toBeHashed = f
-		  tis = tis.Open(f)
-		  s = tis.ReadAll
-		  tis.Close
-		  
-		  rw.showList(New JSONItem(s))
-		  Quit
 		  Dim args() As String = Tokenize(System.CommandLine)
-		  Dim path As String = System.CommandLine
-		  
-		  For Each arg As String In args
-		    if InStr(arg, "/") > 0 Or Instr(arg, chr(34)) > 0 Or Instr(arg, "\") > 0 Then Continue
-		    
-		    if arg = "--ABOUT" Then
-		      aboutSwitch = True
-		      Exit For
-		    end if
-		    
-		    if arg = "--SSL" Then
-		      useSSL = True
-		      Continue
-		    end if
-		    
-		    If arg = "--SHA1" Then
-		      algorithm = "SHA1"
-		      Continue
-		    End If
-		    
-		    if instr(arg, "--API=") > 0 And NthField(arg, "=", 2).Len = 64 Then
-		      VTAPIKey = NthField(arg, "=", 2)
-		    end if
-		    
-		  Next
+		  ParseArgs(args)
 		  
 		  KillApiKeyFile()
 		  LoadConf()
 		  
-		  path = Replace(path, "--SHA1", "")
-		  path = Replace(path, "--ABOUT", "")
-		  path = path.ReplaceAll(chr(34), "")
-		  path = NthField(path, "EXE" + " ", 2)
-		  path = path.Replace(VTAPIKey, "")
-		  path = path.Replace("--API=", "")
-		  path = path.Replace("--SSL", "")
-		  path = path.Trim
 		  
-		  if Not aboutSwitch then
-		    toBeHashed = GetFolderItem(path)
-		  end if
 		  
+		  
+		  'Dim rw As New resultWindow
+		  'Dim tis As TextInputStream
+		  'Dim s As String
+		  'Dim f As FolderItem = GetFolderItem("F:\Projects\Git Repository\VT-Hash\sampleresult.json")
+		  'toBeHashed = f
+		  'tis = tis.Open(f)
+		  's = tis.ReadAll
+		  'tis.Close
+		  '
+		  'rw.showList(New JSONItem(s))
+		  'Quit11
 		End Sub
 	#tag EndEvent
 
@@ -135,6 +101,38 @@ Inherits Application
 		    SaveSettings()
 		    LoadConf
 		  End If
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ParseArgs(Args() As String)
+		  For i As Integer = 0 To UBound(Args)
+		    Select Case Args(i)
+		    Case "--about"
+		      about.ShowModal()
+		      Quit()
+		      
+		    Case "--ssl"
+		      useSSL = True
+		      
+		    Case "--sha1"
+		      algorithm = "SHA1"
+		      
+		    Else
+		      if Left(Args(i), 6) = "--API=" Then
+		        Dim s As String = NthField(Args(i), "=", 2)
+		        If s.Len = 64 Then
+		          VTAPIKey = s
+		        Else
+		          MsgBox("An invalid API key was specified on the command line.")
+		        End If
+		      Else
+		        toBeHashed = GetFolderItem(Args(i))
+		      end if
+		    End Select
+		    
+		    
+		  Next
 		End Sub
 	#tag EndMethod
 

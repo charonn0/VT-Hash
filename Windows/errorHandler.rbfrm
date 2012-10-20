@@ -261,7 +261,6 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  debug(True, "An unhandled runtime exception has occured! Exception handler dialog invoked.")
 		  Me.Top = Window1.Top + 111
 		  Me.Left = Window1.Left + 87
 		End Sub
@@ -273,24 +272,7 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  //Forcibly terminate ourselves :o
-		  //From Windows Functionality Suite
-		  debug("Mayday! Mayday! We are going down!")
-		  Declare Function MyGetCurrentProcessId Lib "Kernel32" AliAs "GetCurrentProcessId" () As Integer
-		  Declare Sub TerminateProcess Lib "Kernel32" (handle As Integer, exitCode As Integer)
-		  Declare Function OpenProcess Lib "Kernel32" (access As Integer, inheritHandle As Boolean, processId As Integer) As Integer
-		  Declare Sub CloseHandle Lib "Kernel32" (handle As Integer)
-		  
-		  // Open the process up For termination
-		  Const PROCESS_TERMINATE = &h1
-		  Dim processHandle As Integer = OpenProcess(PROCESS_TERMINATE, False, MyGetCurrentProcessID)
-		  If processHandle <> 0 then
-		    // Terminate the process
-		    TerminateProcess(processHandle, 0)
-		    
-		    // Close our handle to the process
-		    CloseHandle(processHandle)
-		  End If
+		  Quit()
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -320,7 +302,6 @@ End
 	#tag Event
 		Sub Action()
 		  If MsgBox("Continuing May Result In Unexpected Behavior.", 52, "Are You Sure?") = 6 Then
-		    debug("Unhandled exception has been ignored by the user. Here be dragons!")
 		    Self.Close
 		  End If
 		End Sub

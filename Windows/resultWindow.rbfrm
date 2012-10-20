@@ -452,6 +452,14 @@ End
 
 #tag WindowCode
 	#tag MenuHandler
+		Function AboutMenu() As Boolean Handles AboutMenu.Action
+			about.ShowModal
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function csvmenu() As Boolean Handles csvmenu.Action
 			savedAs = saveAs(Mode_CSV)
 			saved.Visible = (savedAs <> Nil)

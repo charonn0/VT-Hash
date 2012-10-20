@@ -33,10 +33,6 @@ Protected Module Config
 
 
 	#tag Property, Flags = &h0
-		aboutSwitch As Boolean = False
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
 		algorithm As String = "MD5"
 	#tag EndProperty
 
@@ -83,7 +79,7 @@ Protected Module Config
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mversion As Double = 1.1
+		Private mversion As Double = 1.2
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

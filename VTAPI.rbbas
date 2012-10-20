@@ -70,6 +70,7 @@ Protected Module VTAPI
 	#tag Method, Flags = &h1
 		Protected Function SendRequest(URL As String, Request As JSONItem, VTSock As HTTPSecureSocket = Nil) As JSONItem
 		  If VTSock = Nil Then VTSock = New HTTPSecureSocket
+		  VTSock.SetRequestHeader("User-Agent", "VT-Hash-Check/" + version + " (Not at all like Mozilla)")
 		  VTSock.Secure = True
 		  dim formData As New Dictionary
 		  For Each Name As String In Request.Names

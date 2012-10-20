@@ -212,18 +212,6 @@ Begin Window Window1
       Visible         =   True
       Width           =   80
    End
-   Begin Timer Timer1
-      Height          =   32
-      Index           =   -2147483648
-      Left            =   364
-      LockedInPosition=   False
-      Mode            =   1
-      Period          =   100
-      Scope           =   0
-      TabPanelIndex   =   0
-      Top             =   -6
-      Width           =   32
-   End
    Begin ProgressWheel ProgressWheel1
       AutoDeactivate  =   True
       Enabled         =   True
@@ -291,6 +279,18 @@ Begin Window Window1
       Top             =   -6
       Width           =   32
    End
+   Begin Timer Timer1
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   364
+      LockedInPosition=   False
+      Mode            =   1
+      Period          =   100
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   -6
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -335,14 +335,13 @@ End
 		  else
 		    If VTAPIKey = "" Then getKey()
 		    
-		    dim makeHash As  new hasher
 		    ProgressBar1.Value = 2
 		    Select Case algorithm
 		    case "MD5"
-		      theHash = makeHash.hashIt(toBeHashed, "MD5")
+		      theHash = hashIt(toBeHashed, "MD5")
 		    case "SHA1"
 		      'StaticText2.Text = "SHA1"
-		      theHash = makeHash.hashIt(toBeHashed, "SHA1")
+		      theHash = hashIt(toBeHashed, "SHA1")
 		    else
 		      MsgBox("Unknown algorithm specified!")
 		      self.Close
@@ -415,20 +414,6 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Timer1
-	#tag Event
-		Sub Action()
-		  'If DebugBuild Then Return
-		  if aboutSwitch = True then
-		    self.Hide
-		    about.Show
-		  else
-		    initiate()
-		  end if
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events StaticText3
 	#tag Event
 		Sub Open()
@@ -451,6 +436,14 @@ End
 		  else
 		    self.Title = TitleText + ""
 		  End Select
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Timer1
+	#tag Event
+		Sub Action()
+		  initiate()
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -63,6 +63,12 @@ Begin Menu MenuBar1
          MenuModifier = True
          AutoEnable = True
       End
+      Begin MenuItem AboutMenu
+         SpecialMenu = 0
+         Text = "About..."
+         Index = -2147483648
+         AutoEnable = True
+      End
    End
 End
 #tag EndMenu
