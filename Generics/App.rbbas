@@ -11,10 +11,8 @@ Inherits Application
 		  LoadConf()
 		  
 		  If toBeHashed = Nil Then
-		    settswin.ShowMe
-		    Quit()
+		    toBeHashed = App.ExecutableFile
 		  End If
-		  
 		  
 		  'Dim rw As New resultWindow
 		  'Dim tis As TextInputStream
@@ -62,7 +60,7 @@ Inherits Application
 		    keyfile.Delete
 		    if VTAPIKey.Len <> 64 Then
 		      MsgBox("Bad Virus Total API Key!")
-		      settswin.ShowMe
+		      settswin.ShowModal
 		    end if
 		  end if
 		End Sub

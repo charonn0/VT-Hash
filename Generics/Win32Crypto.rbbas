@@ -5,16 +5,14 @@ Protected Module Win32Crypto
 		  //Hashes the data string using the specified hash algorithm (see the constants for this Module for available algorithms.)
 		  //Returns a hex-formatted string of the binary hash
 		  
-		  Declare Sub CryptDestroyHash Lib "AdvApi32" (hashHandle as Integer )
-		  
 		  Dim hashHandle As Integer
 		  Dim hashPtr As MemoryBlock
-		  Select Case algorithm
-		  Case CALG_SHA256
-		    hashPtr = HashData(RSAProvider, data, hashHandle, algorithm)
-		  Else
-		    hashPtr = HashData(baseCryptoProvider, data, hashHandle, algorithm)
-		  End Select
+		  'Select Case algorithm
+		  'Case CALG_SHA256
+		  'hashPtr = HashData(RSAProvider, data, hashHandle, algorithm)
+		  'Else
+		  hashPtr = HashData(baseCryptoProvider, data, hashHandle, algorithm)
+		  'End Select
 		  If hashPtr = Nil Then Return ""
 		  Dim ret As String = StringToHex(hashPtr.StringValue(0, hashPtr.Size))
 		  CryptDestroyHash(hashHandle)
@@ -24,16 +22,6 @@ Protected Module Win32Crypto
 
 	#tag Method, Flags = &h21
 		Private Function HashData(provider as Integer, data as String, ByRef handle as Integer, algorithm As Integer) As MemoryBlock
-		  Declare Function CryptCreateHash Lib "AdvApi32" (provider as Integer, algorithm as Integer, key as Integer, flags as Integer, _
-		  ByRef hashHandle as Integer) as Boolean
-		  Declare Function CryptHashData Lib "AdvApi32" (hashHandle as Integer, data as Ptr, length as Integer, flags as Integer) as Boolean
-		  Declare Function CryptGetHashParam Lib "AdvApi32" (hashHandle as Integer, type as Integer, value as Ptr, ByRef length as Integer, _
-		  flags as Integer) as Boolean
-		  Declare Function GetLastError Lib "Kernel32" () As Integer
-		  
-		  Const HP_HASHVAL = &h0002  // Hash value
-		  Const HP_HASHSIZE = &h0004  // Hash value size
-		  
 		  Dim hashHandle as Integer
 		  Dim xxx As UInt64
 		  If Not CryptCreateHash(provider, algorithm, 0, 0, hashHandle) Then
@@ -44,16 +32,22 @@ Protected Module Win32Crypto
 		  Dim dataPtr As New MemoryBlock(Len(data))
 		  dataPtr = data
 		  If Not CryptHashData(hashHandle, dataPtr, dataPtr.Size, 0) Then
+		    xxx = GetLastError
+		    Break
 		    Return Nil
 		  End If
 		  Dim size as Integer = 4
 		  Dim toss As New MemoryBlock(4)
 		  If Not CryptGetHashParam(hashHandle, HP_HASHSIZE, toss, size, 0) Then
+		    xxx = GetLastError
+		    Break
 		    Return Nil
 		  End If
 		  size = toss.UInt32Value(0)
 		  Dim hashValue As New MemoryBlock(size)
 		  If Not CryptGetHashParam(hashHandle, HP_HASHVAL, hashValue, size, 0) Then
+		    xxx = GetLastError
+		    Break
 		    Return Nil
 		  End If
 		  handle = hashHandle
@@ -73,15 +67,8 @@ Protected Module Win32Crypto
 			  Static provider As Integer
 			  
 			  If provider = 0 Then
-			    Declare Function CryptAcquireContextW Lib "AdvApi32" (ByRef provider as Integer, container as Integer, providerName as WString, _
-			    providerType as Integer, flags as Integer) as Boolean
-			    
-			    Const MS_DEF_PROV = "Microsoft Enhanced RSA and AES Cryptogrphic Provider"
-			    Const PROV_RSA_FULL = 1
-			    Const CRYPT_NEWKEYSET = &h00000008
-			    
-			    If Not CryptAcquireContextW(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, 0) Then
-			      If Not CryptAcquireContextW(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
+			    If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, 0) Then
+			      If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
 			        Return 0
 			      End If
 			    End If
@@ -99,27 +86,23 @@ Protected Module Win32Crypto
 			  //Returns 0 on error, positive integer on success
 			  
 			  Static provider As Integer
-			  
+			  Dim lasterr As Integer
+			  Dim s As String
 			  If provider = 0 Then
-			    Declare Function CryptAcquireContextW Lib "AdvApi32" (ByRef provider as Integer, container as Integer, providerName as WString, _
-			    providerType as Integer, flags as Integer) as Boolean
-			    
-			    Const MS_DEF_PROV = "Microsoft Base Cryptographic Provider v1.0"
-			    Const PROV_RSA_FULL = 1
-			    Const CRYPT_NEWKEYSET = &h00000008
-			    
-			    If Not CryptAcquireContextW(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, 0) Then
-			      If Not CryptAcquireContextW(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
+			    If Not CryptAcquireContext(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, 0) Then
+			      lasterr = GetLastError
+			      s = Hex(lasterr)
+			      Break
+			      If Not CryptAcquireContext(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
+			        lasterr = GetLastError
+			        s = Hex(lasterr)
+			        Break
 			        Return 0
 			      End If
 			    End If
 			  end if
 			  
 			  Return provider
-			  
-			  'Dim mCryptoAlgorithm, mHashAlgorithm As Integer
-			  'mCryptoAlgorithm = kCryptoTypeRC4
-			  'mHashAlgorithm = kHashTypeMD5
 			End Get
 		#tag EndGetter
 		Private baseCryptoProvider As Integer
@@ -134,15 +117,8 @@ Protected Module Win32Crypto
 			  Static provider As Integer
 			  
 			  If provider = 0 Then
-			    Declare Function CryptAcquireContextW Lib "AdvApi32" (ByRef provider as Integer, container as Integer, providerName as WString, _
-			    providerType as Integer, flags as Integer) as Boolean
-			    
-			    Const MS_DEF_PROV = "Microsoft RSA Schannel Cryptographic Provider"
-			    Const PROV_RSA_FULL = 1
-			    Const CRYPT_NEWKEYSET = &h00000008
-			    
-			    If Not CryptAcquireContextW(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, 0) Then
-			      If Not CryptAcquireContextW(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
+			    If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, 0) Then
+			      If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
 			        Return 0
 			      End If
 			    End If

@@ -7,6 +7,7 @@ Protected Module VTAPI
 		  js.Value("resource") = ResourceID
 		  js.Value("comment") = Comment
 		  Return SendRequest(CommentPut_URL, js)
+		  
 		End Function
 	#tag EndMethod
 

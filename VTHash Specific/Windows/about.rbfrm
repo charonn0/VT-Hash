@@ -43,7 +43,7 @@ Begin Window about
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   2
@@ -71,7 +71,7 @@ Begin Window about
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   1
+      TabIndex        =   5
       TabPanelIndex   =   0
       Text            =   ""
       TextAlign       =   0
@@ -105,7 +105,7 @@ Begin Window about
       Multiline       =   True
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   2
+      TabIndex        =   6
       TabPanelIndex   =   0
       Text            =   "Copyright ©2009-12 Boredom Software, All Rights Reserved.\r\n\r\nBoredom Software is not affiliated with VirusTotal.com, though we use their service a great deal and recommend it highly. :-)"
       TextAlign       =   0
@@ -124,7 +124,7 @@ Begin Window about
       Bold            =   ""
       ButtonStyle     =   0
       Cancel          =   True
-      Caption         =   "OK"
+      Caption         =   "Close"
       Default         =   True
       Enabled         =   True
       Height          =   22
@@ -132,23 +132,23 @@ Begin Window about
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   161
+      Left            =   202
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   3
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
       TextSize        =   11
       TextUnit        =   0
-      Top             =   107
+      Top             =   111
       Underline       =   ""
       Visible         =   True
-      Width           =   80
+      Width           =   60
    End
    Begin LinkLabel LinkLabel1
       ActiveColor     =   "&cFF0000"
@@ -165,7 +165,7 @@ Begin Window about
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   247
+      Left            =   274
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -175,7 +175,7 @@ Begin Window about
       ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   ""
-      TabIndex        =   6
+      TabIndex        =   2
       TabPanelIndex   =   0
       Text            =   "www.boredomsoft.org"
       TextAlign       =   2
@@ -187,7 +187,7 @@ Begin Window about
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   151
+      Width           =   124
    End
    Begin LinkLabel LinkLabel2
       ActiveColor     =   "&cFF0000"
@@ -214,7 +214,7 @@ Begin Window about
       ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   ""
-      TabIndex        =   7
+      TabIndex        =   3
       TabPanelIndex   =   0
       Text            =   "www.virustotal.com"
       TextAlign       =   0
@@ -226,12 +226,50 @@ Begin Window about
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   151
+      Width           =   126
+   End
+   Begin PushButton PushButton2
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   False
+      Caption         =   "Update"
+      Default         =   False
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   140
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   1
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   11
+      TextUnit        =   0
+      Top             =   111
+      Underline       =   ""
+      Visible         =   True
+      Width           =   60
    End
 End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h0
+		Sub ShowMe()
+		  Me.ShowModal
+		End Sub
+	#tag EndMethod
+
+
 #tag EndWindowCode
 
 #tag Events Canvas1
@@ -267,6 +305,14 @@ End
 	#tag Event
 		Sub Action()
 		  ShowURL(Me.Text)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton2
+	#tag Event
+		Sub Action()
+		  updateWin.Show()
+		  Me.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

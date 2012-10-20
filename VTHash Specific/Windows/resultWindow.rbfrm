@@ -172,7 +172,7 @@ Begin Window resultWindow
       Top             =   483
       Transparent     =   True
       Underline       =   ""
-      Visible         =   True
+      Visible         =   False
       Width           =   101
    End
    Begin Timer TridTimer
@@ -479,7 +479,9 @@ End
 
 	#tag MenuHandler
 		Function OpenFileMenu() As Boolean Handles OpenFileMenu.Action
+			If MsgBox("Are you sure you want to run this file?", 52, "Execution Confirmation") = 6 Then
 			toBeHashed.Launch
+			End If
 			Return True
 			
 		End Function
@@ -499,6 +501,14 @@ End
 			Call MsgBox("VirusTotal said: " + results.Value("response_code").StringValue, 16, "Rescan Error")
 			End If
 			End If
+			Return True
+			
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function SettsMenu() As Boolean Handles SettsMenu.Action
+			settswin.Show
 			Return True
 			
 		End Function
@@ -625,7 +635,7 @@ End
 		  ProgBar1.HelpTag = Format(positives * 100 / total, "##0.00") + "% dangerous"
 		  HashType.Text = algorithm + ":"
 		  Me.ShowModal
-		  
+		  Quit()
 		End Sub
 	#tag EndMethod
 
@@ -684,7 +694,7 @@ End
 #tag Events closeButton
 	#tag Event
 		Sub Action()
-		  Quit(0)
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -1,6 +1,34 @@
 #tag Module
 Protected Module VTHash
 	#tag ExternalMethod, Flags = &h0
+		Declare Function CloseHandle Lib "Kernel32" (handle As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function CreateFile Lib "Kernel32" Alias "CreateFileW" (name As WString, access As Integer, sharemode As Integer, SecAtrribs As Integer, CreateDisp As Integer, flags As Integer, template As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function CryptAcquireContext Lib "AdvApi32" Alias "CryptAcquireContextW" (ByRef provider as Integer, container as Integer, providerName as WString, providerType as Integer, flags as Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function CryptCreateHash Lib "AdvApi32" (provider as Integer, algorithm as Integer, key as Integer, flags as Integer, ByRef hashHandle as Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Sub CryptDestroyHash Lib "AdvApi32" (HashHandle As Integer)
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function CryptGetHashParam Lib "AdvApi32" (hashHandle as Integer, type as Integer, value as Ptr, ByRef length as Integer, flags as Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function CryptHashData Lib "AdvApi32" (hashHandle as Integer, data as Ptr, length as Integer, flags as Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
 		Declare Function FindExecutable Lib "Shell32" (file As WString, directory As WString, result As Ptr) As Integer
 	#tag EndExternalMethod
 
@@ -61,34 +89,8 @@ Protected Module VTHash
 	#tag EndExternalMethod
 
 	#tag Method, Flags = &h0
-		Function hashIt(input As FolderItem, algorithm As String) As string
-		  if not cancel then
-		    dim hash As String
-		    dim tis As TextInputStream
-		    Window1.ProgressBar1.Value = 1
-		    tis = tis.Open(input)
-		    fileData = tis.ReadAll
-		    tis.Close
-		    Window1.ProgressBar1.Value = 2
-		    
-		    Select Case algorithm
-		    case "SHA1"
-		      Return Win32Crypto.Hash(fileData, Win32Crypto.CALG_SHA1)
-		    case "MD5"
-		      Return MD5Hash(toBeHashed, 1048576)
-		    end Select
-		  else
-		  end if
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function isFound(Extends f As FolderItem) As Integer
-		  Declare Function CloseHandle Lib "Kernel32"(HWND As Integer) As Boolean
-		  Declare Function CreateFileW Lib "Kernel32"(name As WString, access As Integer, sharemode As Integer, SecAtrribs As Integer, _
-		  CreateDisp As Integer, flags As Integer, template As Integer) As Integer
-		  
-		  Dim HWND As Integer = CreateFileW(f.AbsolutePath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0)
+		  Dim HWND As Integer = CreateFile(f.AbsolutePath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0)
 		  If HWND = -1 Then
 		    HWND = GetLastError()
 		    Select Case HWND
@@ -104,40 +106,6 @@ Protected Module VTHash
 		    Call CloseHandle(HWND)
 		    Return ERROR_NO_ERROR
 		  End If
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function MD5Hash(target As FolderItem, sizeCutoff As UInt64 = 52428800, readSize As Integer = 4096) As String
-		  //If the target is less than sizeCutoff in bytes (default is 50MB) this function uses the MD5() function to hash the file
-		  //If greater than sizeCutoff this function processes the file through the MD5Digest function. MD5Digest is preferable when
-		  //hashing large files since the entire file will not be loaded into memory at once. This prevents OutOfMemoryException's and
-		  //other bad things.
-		  //If using MD5Digest, the readSize parameter dictates how much of the file to read at a time. Default is 4096 bytes
-		  //Returns the Hex representation of the hash
-		  //
-		  //See Win32Crypto.Hash for additional hashing functionality
-		  
-		  Dim s As String
-		  If target.Length < sizeCutoff Then
-		    Dim tis As TextInputStream
-		    tis = tis.Open(target)
-		    s = tis.ReadAll
-		    tis.Close
-		    s = StringToHex(MD5(s))
-		  Else
-		    Dim bs As BinaryStream
-		    bs = bs.Open(target)
-		    Dim m5 As New MD5Digest
-		    While Not bs.EOF
-		      s = bs.Read(readSize)
-		      m5.Process(s)
-		    Wend
-		    bs.Close
-		    s = StringToHex(m5.Value)
-		  End If
-		  
-		  Return s
 		End Function
 	#tag EndMethod
 
@@ -166,28 +134,6 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function pretifyPath(path As String, tolen As Integer = 45) As String
-		  if path.Len < 45 then
-		    Return path
-		  else
-		    dim shortPath, snip As String
-		    dim start As Integer
-		    shortPath = path
-		    
-		    While shortPath.len > tolen
-		      start = shortPath.Len / 3
-		      snip = mid(shortPath, start, 5)
-		      shortPath = Replace(shortPath, snip, "...")
-		    Wend
-		    Return shortPath
-		  end if
-		  
-		Exception err
-		  Return path
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function RegExFind(Extends source As String, pattern As String) As String()
 		  //Returns a string array of all subexpressions
 		  
@@ -203,6 +149,62 @@ Protected Module VTHash
 		  End If
 		  
 		  Return ret
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub SaveSettings()
+		  Dim s As New JSONItem
+		  s.Value("Use SSL") = useSSL
+		  s.Value("Use SHA1") = algorithm <> "MD5"
+		  s.Value("Autosave Results") = autosave
+		  s.Value("Default Save Format") = defaultFormat
+		  If autosavePath <> Nil Then
+		    s.Value("Default Save Directory") = autosavePath.AbsolutePath
+		  Else
+		    s.Value("Default Save Directory") = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans").AbsolutePath
+		  End If
+		  s.Value("API Key") = VTAPIKey
+		  s.Compact = False
+		  Dim t As String = s.ToString
+		  Dim tos As TextOutputStream
+		  Dim f As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software")
+		  If Not f.Exists Then
+		    f.CreateAsFolder()
+		  End If
+		  f = f.Child("VT Hash")
+		  If Not f.Exists Then
+		    f.CreateAsFolder()
+		  End If
+		  f = f.Child("config.dat")
+		  tos = tos.Create(f)
+		  tos.Write(t)
+		  tos.Close
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Shorten(Extends data As String, maxLength As Integer = 45) As String
+		  //Replaces characters from the middle of a string with a single ellipsis ("...") until data.Len is less than the specified length.
+		  //Useful for showing long paths by omitting the middle part of the data, though not limited to this use.
+		  
+		  If data.Len <= maxLength then
+		    Return data
+		  Else
+		    Dim shortdata, snip As String
+		    Dim start As Integer
+		    shortdata = data
+		    
+		    While shortdata.len > maxLength
+		      start = shortdata.Len / 3
+		      snip = mid(shortdata, start, 5)
+		      shortdata = Replace(shortdata, snip, "...")
+		    Wend
+		    Return shortdata
+		  End If
+		  
+		Exception err
+		  Return data
 		End Function
 	#tag EndMethod
 
@@ -370,7 +372,7 @@ Protected Module VTHash
 
 	#tag Method, Flags = &h0
 		Function StringToHex(src as string) As string
-		  //Hexify a string of binary data, e.g. from RB's built-in MD5 function
+		  //Hexify a string of binary data
 		  
 		  Dim hexvalue As Integer
 		  Dim hexedInt As String
@@ -478,11 +480,193 @@ Protected Module VTHash
 
 
 	#tag Property, Flags = &h0
+		algorithm As String = """MD5"""
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		autosave As Boolean = False
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If mautosavePath = Nil Then
+			    mautosavePath = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans")
+			    If Not mautosavePath.Exists Then mautosavePath.CreateAsFolder
+			  End If
+			  return mautosavePath
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mautosavePath = value
+			End Set
+		#tag EndSetter
+		autosavePath As FolderItem
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		cancel As Boolean = false
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		defaultFormat As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		errorMessage As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		fileData As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mautosavePath As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected mversion As Double = 1.2
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		ResultWindows() As resultWindow
 	#tag EndProperty
 
+	#tag Property, Flags = &h0
+		TheHash As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		toBeHashed As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		useSSL As Boolean = False
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Return Format(mversion, "0.0#")
+			End Get
+		#tag EndGetter
+		version As String
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		VTAPIKey As String
+	#tag EndProperty
+
+
+	#tag Constant, Name = ACCESS_DENIED, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = ERROR_NO_ERROR, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = ERROR_OTHER, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = FILE_NOT_FOUND, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = FILE_READ_ACCESS, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = FILE_SHARE_READ, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = GENERIC_READ, Type = Double, Dynamic = False, Default = \"&h80000000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = HP_HASHSIZE, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = HP_HASHVAL, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = Mode_CSV, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = Mode_Org_JSON, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = Mode_Text, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Cryptographic Provider v1.0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = OPEN_EXISTING, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+
+	#tag Structure, Name = SYSTEMTIME, Flags = &h0
+		Year As UInt16
+		  Month As UInt16
+		  DOW As UInt16
+		  Day As UInt16
+		  Hour As UInt16
+		  Minute As UInt16
+		  Second As UInt16
+		MS As UInt16
+	#tag EndStructure
+
+	#tag Structure, Name = TIME_ZONE_INFORMATION, Flags = &h0
+		Bias As Integer
+		  StandardName As Wstring*32
+		  StandardDate As SYSTEMTIME
+		  StandardBias As Integer
+		  DaylightName As WString*32
+		  DaylightDate As SYSTEMTIME
+		DaylightBias As Integer
+	#tag EndStructure
+
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="algorithm"
+			Group="Behavior"
+			InitialValue="""""MD5"""""
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="autosave"
+			Group="Behavior"
+			InitialValue="False"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="cancel"
+			Group="Behavior"
+			InitialValue="false"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="defaultFormat"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="errorMessage"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="fileData"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -510,11 +694,32 @@ Protected Module VTHash
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="TheHash"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="useSSL"
+			Group="Behavior"
+			InitialValue="False"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="version"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="VTAPIKey"
+			Group="Behavior"
+			Type="String"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

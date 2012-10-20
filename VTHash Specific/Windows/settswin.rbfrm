@@ -14,16 +14,16 @@ Begin Window settswin
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   1399283711
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   False
    MinWidth        =   64
    Placement       =   1
    Resizeable      =   False
-   Title           =   "Settings"
+   Title           =   "VT Hash Check - Settings"
    Visible         =   True
-   Width           =   3.0e+2
+   Width           =   3.5e+2
    Begin GroupBox GroupBox1
       AutoDeactivate  =   True
       Bold            =   ""
@@ -34,7 +34,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   -2
+      Left            =   7
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -49,7 +49,7 @@ Begin Window settswin
       Top             =   26
       Underline       =   ""
       Visible         =   True
-      Width           =   295
+      Width           =   337
       Begin HintTextField HintTextField1
          AcceptTabs      =   ""
          Alignment       =   0
@@ -70,7 +70,7 @@ Begin Window settswin
          Index           =   -2147483648
          InitialParent   =   "GroupBox1"
          Italic          =   ""
-         Left            =   9
+         Left            =   18
          LimitText       =   0
          LockBottom      =   ""
          LockedInPosition=   False
@@ -93,7 +93,7 @@ Begin Window settswin
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   210
+         Width           =   248
       End
       Begin ComboBox ComboBox1
          AutoComplete    =   False
@@ -106,9 +106,9 @@ Begin Window settswin
          HelpTag         =   ""
          Index           =   -2147483648
          InitialParent   =   "GroupBox1"
-         InitialValue    =   "Save As Plain Text\r\nSave As CSV\r\nSave As Original JSON\r\nSave As Pretty JSON"
+         InitialValue    =   "Save As Plain Text\r\nSave As CSV\r\nSave As Original JSON\r\nSave As Unpacked JSON"
          Italic          =   ""
-         Left            =   9
+         Left            =   18
          ListIndex       =   0
          LockBottom      =   ""
          LockedInPosition=   False
@@ -128,6 +128,37 @@ Begin Window settswin
          Visible         =   True
          Width           =   163
       End
+      Begin PushButton PushButton1
+         AutoDeactivate  =   True
+         Bold            =   ""
+         ButtonStyle     =   0
+         Cancel          =   ""
+         Caption         =   "Browse..."
+         Default         =   ""
+         Enabled         =   True
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "GroupBox1"
+         Italic          =   ""
+         Left            =   271
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   2
+         TabPanelIndex   =   0
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   54
+         Underline       =   ""
+         Visible         =   True
+         Width           =   63
+      End
    End
    Begin CheckBox autolog
       AutoDeactivate  =   True
@@ -141,7 +172,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   2
+      Left            =   18
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -161,37 +192,6 @@ Begin Window settswin
       Visible         =   True
       Width           =   89
    End
-   Begin PushButton PushButton1
-      AutoDeactivate  =   True
-      Bold            =   ""
-      ButtonStyle     =   0
-      Cancel          =   ""
-      Caption         =   "Browse..."
-      Default         =   ""
-      Enabled         =   True
-      Height          =   22
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   224
-      LockBottom      =   ""
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   True
-      Scope           =   0
-      TabIndex        =   2
-      TabPanelIndex   =   0
-      TabStop         =   True
-      TextFont        =   "System"
-      TextSize        =   0
-      TextUnit        =   0
-      Top             =   54
-      Underline       =   ""
-      Visible         =   True
-      Width           =   63
-   End
    Begin CheckBox ssl
       AutoDeactivate  =   True
       Bold            =   ""
@@ -204,7 +204,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   204
+      Left            =   255
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -236,7 +236,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   103
+      Left            =   136
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -269,7 +269,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   193
+      Left            =   264
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -300,7 +300,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   108
+      Left            =   179
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -331,7 +331,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   22
+      Left            =   93
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -339,6 +339,37 @@ Begin Window settswin
       LockTop         =   True
       Scope           =   0
       TabIndex        =   9
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   137
+      Underline       =   ""
+      Visible         =   True
+      Width           =   80
+   End
+   Begin PushButton PushButton5
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   ""
+      Caption         =   "Update"
+      Default         =   False
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   7
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   10
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -367,22 +398,8 @@ End
 	#tag EndEvent
 
 
-	#tag Method, Flags = &h0
-		Sub ShowMe()
-		  Me.ShowModal
-		End Sub
-	#tag EndMethod
-
-
 #tag EndWindowCode
 
-#tag Events autolog
-	#tag Event
-		Sub Action()
-		  GroupBox1.Enabled = Me.Value
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
@@ -390,6 +407,13 @@ End
 		  If f <> Nil Then
 		    HintTextField1.Text = f.AbsolutePath
 		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events autolog
+	#tag Event
+		Sub Action()
+		  GroupBox1.Enabled = Me.Value
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -429,6 +453,15 @@ End
 		Sub Action()
 		  Dim s As String = editAPI.ShowMe
 		  If s <> "" Then VTAPIKey = s
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton5
+	#tag Event
+		Sub Action()
+		  'updateWin.Show()
+		  about.ShowMe
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents

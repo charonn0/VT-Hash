@@ -336,18 +336,22 @@ End
 		    If VTAPIKey = "" Then getKey()
 		    
 		    ProgressBar1.Value = 2
+		    dim hash As String
+		    dim tis As TextInputStream
+		    tis = tis.Open(toBeHashed)
+		    fileData = tis.ReadAll
+		    tis.Close
+		    
 		    Select Case algorithm
-		    case "MD5"
-		      theHash = hashIt(toBeHashed, "MD5")
 		    case "SHA1"
-		      'StaticText2.Text = "SHA1"
-		      theHash = hashIt(toBeHashed, "SHA1")
-		    else
-		      MsgBox("Unknown algorithm specified!")
-		      self.Close
+		      TheHash = Win32Crypto.Hash(fileData, Win32Crypto.CALG_SHA1)
+		    case "MD5"
+		      TheHash = Win32Crypto.Hash(fileData, Win32Crypto.CALG_MD5)
+		      'Return MD5Hash(toBeHashed, 1048576)
 		    end Select
+		    
 		    ProgressBar1.Value = 4
-		    path.Text = pretifyPath(toBeHashed.AbsolutePath)
+		    path.Text = toBeHashed.AbsolutePath.Shorten
 		    checkSum.Text = theHash
 		    
 		    Dim js As JSONItem = VTAPI.GetReport(TheHash, VTAPIKey)
@@ -359,13 +363,12 @@ End
 
 	#tag Method, Flags = &h0
 		Function isValidFile() As Boolean
-		  If toBeHashed.AbsolutePath = App.ExecutableFile.Parent.AbsolutePath Then
+		  If toBeHashed.AbsolutePath = App.ExecutableFile.AbsolutePath Then
 		    Self.Visible = False
-		    settswin.ShowMe
-		    'Call MsgBox("You Must Specify A File.", 16, "File Read Error")
+		    settswin.Show
 		    Return False
 		  End If
-		  path.Text = pretifyPath(toBeHashed.AbsolutePath)
+		  path.Text = toBeHashed.AbsolutePath.Shorten
 		  If toBeHashed.Directory Then
 		    Call MsgBox("Target Is A Directory.", 16, "File Read Error")
 		    Return False
