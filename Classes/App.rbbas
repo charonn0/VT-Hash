@@ -4,12 +4,16 @@ Inherits Application
 	#tag Event
 		Sub Open()
 		  Dim args() As String = Tokenize(System.CommandLine)
+		  args.Remove(0)
 		  ParseArgs(args)
 		  
 		  KillApiKeyFile()
 		  LoadConf()
 		  
-		  
+		  If toBeHashed = Nil Then
+		    settswin.ShowMe
+		    Quit()
+		  End If
 		  
 		  
 		  'Dim rw As New resultWindow
@@ -127,11 +131,14 @@ Inherits Application
 		          MsgBox("An invalid API key was specified on the command line.")
 		        End If
 		      Else
-		        toBeHashed = GetFolderItem(Args(i))
+		        Dim f As FolderItem = GetFolderItem(Args(i))
+		        If f <> Nil Then
+		          If f.AbsolutePath <> App.ExecutableFile.AbsolutePath Then
+		            toBeHashed = f
+		          End If
+		        End If
 		      end if
 		    End Select
-		    
-		    
 		  Next
 		End Sub
 	#tag EndMethod
