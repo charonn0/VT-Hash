@@ -4,7 +4,7 @@ Begin Window settswin
    Backdrop        =   ""
    CloseButton     =   False
    Composite       =   False
-   Frame           =   1
+   Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   1.65e+2
@@ -41,7 +41,7 @@ Begin Window settswin
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   6
+      TabIndex        =   7
       TabPanelIndex   =   0
       TextFont        =   "System"
       TextSize        =   0
@@ -180,7 +180,7 @@ Begin Window settswin
       LockTop         =   True
       Scope           =   0
       State           =   0
-      TabIndex        =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -212,7 +212,7 @@ Begin Window settswin
       LockTop         =   True
       Scope           =   0
       State           =   0
-      TabIndex        =   3
+      TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -244,7 +244,7 @@ Begin Window settswin
       LockTop         =   True
       Scope           =   0
       State           =   0
-      TabIndex        =   4
+      TabIndex        =   5
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -276,7 +276,7 @@ Begin Window settswin
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   7
+      TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -307,7 +307,7 @@ Begin Window settswin
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   8
+      TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -338,7 +338,7 @@ Begin Window settswin
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   9
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -354,7 +354,7 @@ Begin Window settswin
       Bold            =   ""
       ButtonStyle     =   0
       Cancel          =   ""
-      Caption         =   "Update"
+      Caption         =   "About"
       Default         =   False
       Enabled         =   True
       Height          =   22
@@ -369,7 +369,7 @@ Begin Window settswin
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   10
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -459,9 +459,7 @@ End
 #tag Events PushButton5
 	#tag Event
 		Sub Action()
-		  'updateWin.Show()
-		  about.ShowMe
-		  
+		  about.Show
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -109,7 +109,7 @@ Inherits HTTPSocket
 		    else
 		      updateWin.Log.AddRow("     Server reports 301 or 302: Moved. Following Redirect")
 		      updateaddress = headers.CommaSeparatedValues("Location")  //retrieve redirect URI from header, put it in the updateaddress property
-		      updInfo.localFile.Delete 
+		      updInfo.localFile.Delete
 		      checkVer(isSilent)
 		    end if
 		  case 403  //Access Denied or Password Required
@@ -142,7 +142,7 @@ Inherits HTTPSocket
 
 	#tag Event
 		Sub ReceiveProgress(bytesReceived as integer, totalBytes as integer, newData as string)
-		  //This event fires several times per second while a file is being downloaded. The code below merely updates the updateWin UI to reflect the current state of the transfer, 
+		  //This event fires several times per second while a file is being downloaded. The code below merely updates the updateWin UI to reflect the current state of the transfer,
 		  //as well as checking to see whether the user has clicked the cancel button.
 		  
 		  
@@ -226,7 +226,7 @@ Inherits HTTPSocket
 		          updateWin.stopDone.Caption = "Done"
 		        end if
 		        self.Close            //Die
-		      else 
+		      else
 		        //Ask for confirmation, update status and log
 		        updateWin.Status.Text = "New version available. Please confirm download."
 		        updateWin.Log.AddRow("New version found. Awaiting user confirmation.")
@@ -278,7 +278,7 @@ Inherits HTTPSocket
 		  //
 		  //After connecting to the server, the file is downloaded to the folderitem defined below as updFile
 		  //
-		  //the me.get() method will cause several of the event handlers to fire as the download commences (connected), is going (HeadersRecieved, ReceiveProgress), 
+		  //the me.get() method will cause several of the event handlers to fire as the download commences (connected), is going (HeadersRecieved, ReceiveProgress),
 		  //ends (DownloadComplete), or errors out (Error).
 		  updateWin.cancel = False
 		  updateWin.startTry.Enabled = False
@@ -300,7 +300,7 @@ Inherits HTTPSocket
 
 	#tag Method, Flags = &h21
 		Private Sub getupdate()
-		  //This method connects to your webserver and downloads the updated version of the app  from the URI specified in the update file that was downloaded in 
+		  //This method connects to your webserver and downloads the updated version of the app  from the URI specified in the update file that was downloaded in
 		  //the checkver method and parsed in the checkforupdate method.
 		  //
 		  //The code below instantiates the upgrdFile FolderItem in the user's Temporary Files folder using the name of the file being downloaded.
@@ -321,7 +321,7 @@ Inherits HTTPSocket
 		    me.Get(updInfo.URL, updInfo.localFile)
 		  else
 		    ShowURL(updInfo.URL)
-		    updateWin.stopDone.Caption = "Done" 
+		    updateWin.stopDone.Caption = "Done"
 		    updateWin.startTry.Enabled = False
 		  end if
 		End Sub
@@ -449,11 +449,6 @@ Inherits HTTPSocket
 		  tis.Close
 		  checkSum = Win32Crypto.Hash(fileInput, Win32Crypto.CALG_MD5)
 		  
-		  for n as Integer=1 to LenB(checkSum)
-		    v = AscB(MidB(checkSum, n, 1))
-		    s = s + RightB("00"+Hex(v),2)+""
-		  next
-		  checkSum =  LeftB(s, LenB(s)-LenB(""))
 		  
 		  if checkSum <> updInfo.Checksum then
 		    updateWin.Log.AddRow("     File Not Verified.")
@@ -523,7 +518,6 @@ Inherits HTTPSocket
 		
 		upgrade, upgrd
 		        I use the term "upgrade" or the abbreviation "upgrd" to refer to the actual file that will upgrade the app. This could be an executable file, an archive file, whatever.
-		        
 	#tag EndNote
 
 	#tag Note, Name = General Notes
@@ -567,7 +561,6 @@ Inherits HTTPSocket
 		       This is a Boolean value which is by default set to False. Set this value to True if you want to launch the upgradeURI in the user's browser rather than 
 		      directly download it. This is useful if you host your upgrade file on a third party server that doesn't allow direct downloads like File Hippo or Download.com. 
 		      If you set this value to True then make sure that the upgradeURI value points to the appropriate web page.
-		
 	#tag EndNote
 
 	#tag Note, Name = How To Integrate into your app
@@ -592,8 +585,6 @@ Inherits HTTPSocket
 		If you do use this in your program, I'd appreciate knowing about it. You can E-mail me at andrew@boredomsoft.org
 		
 		Any questions, comments, and suggestions are also welcome!
-		
-		
 	#tag EndNote
 
 	#tag Note, Name = myapp.upd Notes
@@ -636,8 +627,6 @@ Inherits HTTPSocket
 		MD5Sum:  The hex representation of the files MD5 checksum.
 		
 		Key=value pairs are NOT case sensitive.
-		
-		
 	#tag EndNote
 
 	#tag Note, Name = Read me
@@ -710,7 +699,7 @@ Inherits HTTPSocket
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		updateaddress As string = "http://www.boredomsoft.org/update/vthashcheck.upd"
+		updateaddress As string = "http://www.boredomsoft.org/update/vthash.upd"
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -730,18 +719,6 @@ Inherits HTTPSocket
 			InheritedFrom="HTTPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="BytesAvailable"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="TCPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BytesLeftToSend"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="TCPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="currentversion"
 			Group="Behavior"
 			Type="Double"
@@ -751,13 +728,6 @@ Inherits HTTPSocket
 			Group="Behavior"
 			InitialValue="0"
 			InheritedFrom="HTTPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Handle"
-			Group="Behavior"
-			InitialValue="0"
-			Type="Integer"
-			InheritedFrom="SocketCore"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="httpProxyAddress"
@@ -778,37 +748,16 @@ Inherits HTTPSocket
 			InheritedFrom="HTTPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="IsConnected"
-			Group="Behavior"
-			InitialValue="0"
-			Type="Boolean"
-			InheritedFrom="SocketCore"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="isSilent"
 			Group="Behavior"
 			InitialValue="false"
 			Type="boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="LastErrorCode"
-			Group="Behavior"
-			InitialValue="0"
-			Type="Integer"
-			InheritedFrom="SocketCore"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InheritedFrom="HTTPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LocalAddress"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-			InheritedFrom="SocketCore"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -822,12 +771,6 @@ Inherits HTTPSocket
 			Group="Behavior"
 			InitialValue="0"
 			InheritedFrom="HTTPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="RemoteAddress"
-			Group="Behavior"
-			Type="String"
-			InheritedFrom="TCPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

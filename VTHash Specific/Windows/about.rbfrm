@@ -4,7 +4,7 @@ Begin Window about
    Backdrop        =   ""
    CloseButton     =   True
    Composite       =   False
-   Frame           =   3
+   Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   140
@@ -290,7 +290,7 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  Window1.Close
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -312,7 +312,6 @@ End
 	#tag Event
 		Sub Action()
 		  updateWin.Show()
-		  Me.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

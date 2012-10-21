@@ -44,9 +44,8 @@ Begin Window errorHandler
       Multiline       =   True
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   0
+      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "An unhandled error has caused VT Hash to crash. \r\nCall stack follows:"
       TextAlign       =   0
       TextColor       =   0
@@ -90,7 +89,7 @@ Begin Window errorHandler
       ScrollbarHorizontal=   ""
       ScrollbarVertical=   True
       Styled          =   True
-      TabIndex        =   1
+      TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
@@ -124,7 +123,7 @@ Begin Window errorHandler
       LockRight       =   ""
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   2
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -155,7 +154,7 @@ Begin Window errorHandler
       LockRight       =   ""
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   3
+      TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -186,7 +185,7 @@ Begin Window errorHandler
       LockRight       =   ""
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   4
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -244,7 +243,7 @@ Begin Window errorHandler
       LockRight       =   ""
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   6
+      TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"

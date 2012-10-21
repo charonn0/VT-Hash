@@ -2,10 +2,9 @@
 Begin Window updateWin
    BackColor       =   16777215
    Backdrop        =   ""
-   BalloonHelp     =   ""
    CloseButton     =   False
    Composite       =   False
-   Frame           =   3
+   Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   116
@@ -45,9 +44,8 @@ Begin Window updateWin
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Status:"
       TextAlign       =   0
       TextColor       =   0
@@ -80,9 +78,8 @@ Begin Window updateWin
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   1
+      TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -110,9 +107,7 @@ Begin Window updateWin
       LockTop         =   ""
       Maximum         =   100
       Scope           =   0
-      TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   52
       Value           =   0
       Visible         =   True
@@ -121,6 +116,7 @@ Begin Window updateWin
    Begin PushButton stopDone
       AutoDeactivate  =   True
       Bold            =   ""
+      ButtonStyle     =   0
       Cancel          =   True
       Caption         =   "Cancel"
       Default         =   ""
@@ -137,7 +133,7 @@ Begin Window updateWin
       LockRight       =   ""
       LockTop         =   ""
       Scope           =   0
-      TabIndex        =   3
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -184,7 +180,7 @@ Begin Window updateWin
       ScrollbarHorizontal=   ""
       ScrollBarVertical=   True
       SelectionType   =   0
-      TabIndex        =   4
+      TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -214,7 +210,7 @@ Begin Window updateWin
       LockRight       =   ""
       LockTop         =   ""
       Scope           =   0
-      TabIndex        =   5
+      TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   98
@@ -244,7 +240,6 @@ Begin Window updateWin
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -260,6 +255,7 @@ Begin Window updateWin
    Begin PushButton startTry
       AutoDeactivate  =   True
       Bold            =   ""
+      ButtonStyle     =   0
       Cancel          =   ""
       Caption         =   "Start"
       Default         =   ""
@@ -276,7 +272,7 @@ Begin Window updateWin
       LockRight       =   ""
       LockTop         =   ""
       Scope           =   0
-      TabIndex        =   7
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"

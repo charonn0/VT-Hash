@@ -93,7 +93,7 @@ Begin Window resultWindow
       LockRight       =   False
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   1
+      TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -124,7 +124,7 @@ Begin Window resultWindow
       LockRight       =   True
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   2
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -161,7 +161,7 @@ Begin Window resultWindow
       ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   4
+      TabIndex        =   6
       TabPanelIndex   =   0
       Text            =   "Report Saved"
       TextAlign       =   2
@@ -215,7 +215,7 @@ Begin Window resultWindow
       LockTop         =   True
       maximum         =   100
       Scope           =   0
-      TabIndex        =   5
+      TabIndex        =   10
       TabPanelIndex   =   0
       TabStop         =   True
       textColor       =   "&c000000"
@@ -257,7 +257,7 @@ Begin Window resultWindow
       Password        =   ""
       ReadOnly        =   True
       Scope           =   0
-      TabIndex        =   7
+      TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
@@ -333,7 +333,7 @@ Begin Window resultWindow
       Password        =   ""
       ReadOnly        =   True
       Scope           =   0
-      TabIndex        =   9
+      TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
@@ -367,7 +367,7 @@ Begin Window resultWindow
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   10
+      TabIndex        =   9
       TabPanelIndex   =   0
       Text            =   "Hash:"
       TextAlign       =   2
@@ -400,7 +400,7 @@ Begin Window resultWindow
       LockRight       =   True
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   11
+      TabIndex        =   7
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   431
@@ -433,7 +433,7 @@ Begin Window resultWindow
       ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   ""
-      TabIndex        =   12
+      TabIndex        =   5
       TabPanelIndex   =   0
       Text            =   "Add a comment..."
       TextAlign       =   0

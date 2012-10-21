@@ -1,4 +1,4 @@
-VT Hash Check 1.1
+VT Hash Check 1.2
 Copyright ©2009-12 Boredom Software, All Rights Reserved
 
 1. Purpose

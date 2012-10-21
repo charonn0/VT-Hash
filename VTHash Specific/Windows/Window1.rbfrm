@@ -44,7 +44,7 @@ Begin Window Window1
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   0
+      TabIndex        =   3
       TabPanelIndex   =   0
       Text            =   "File:"
       TextAlign       =   0
@@ -78,7 +78,7 @@ Begin Window Window1
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   1
+      TabIndex        =   4
       TabPanelIndex   =   0
       Text            =   "MD5:"
       TextAlign       =   0
@@ -146,7 +146,7 @@ Begin Window Window1
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   3
+      TabIndex        =   1
       TabPanelIndex   =   0
       Text            =   ""
       TextAlign       =   0
@@ -201,7 +201,7 @@ Begin Window Window1
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   4
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -226,7 +226,7 @@ Begin Window Window1
       LockRight       =   ""
       LockTop         =   True
       Scope           =   0
-      TabIndex        =   5
+      TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   46
@@ -253,7 +253,7 @@ Begin Window Window1
       Multiline       =   ""
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   6
+      TabIndex        =   5
       TabPanelIndex   =   0
       Text            =   "Version 0.86"
       TextAlign       =   0
@@ -331,7 +331,7 @@ End
 		Sub initiate()
 		  ProgressBar1.Value = 1
 		  if isValidFile = False Then
-		    self.Close
+		    Quit()
 		  else
 		    If VTAPIKey = "" Then getKey()
 		    
@@ -365,7 +365,7 @@ End
 		Function isValidFile() As Boolean
 		  If toBeHashed.AbsolutePath = App.ExecutableFile.AbsolutePath Then
 		    Self.Visible = False
-		    settswin.Show
+		    settswin.ShowModal
 		    Return False
 		  End If
 		  path.Text = toBeHashed.AbsolutePath.Shorten
