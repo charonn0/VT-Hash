@@ -356,7 +356,7 @@ End
 		    
 		    Dim js As JSONItem = VTAPI.GetReport(TheHash, VTAPIKey)
 		    ProgressBar1.Value = 5
-		    If js <> Nil Then parseResponse(js)
+		    parseResponse(js)
 		  end if
 		End Sub
 	#tag EndMethod

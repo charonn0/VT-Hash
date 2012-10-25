@@ -112,15 +112,15 @@ Protected Module VTHash
 	#tag Method, Flags = &h0
 		Sub parseResponse(js As JSONItem)
 		  'Dim js As New JSONItem(content)
-		  Select Case js.Value("response_code")
+		  Select Case VTAPI.LastResponseCode
 		  Case 0  //Not Found
 		    If MsgBox("Hash Not Found!" + EndOfLine + "Would you like to upload this file?", 36, "File Not In Database") <> 6 Then
 		      Quit(0)
 		    else
-		      ShowURL("http://www.virustotal.com/")
-		      Quit(0)
-		      'Dim response As JSONItem = VTAPI.SubmitFile(toBeHashed, VTAPIKey)
-		      'Break
+		      'ShowURL("http://www.virustotal.com/")
+		      'Quit(0)
+		      js = VTAPI.SubmitFile(toBeHashed, VTAPIKey)
+		      Break
 		      
 		    end if
 		  Case -2  //Still Processing
@@ -129,6 +129,10 @@ Protected Module VTHash
 		  Case 1 //Found and ready to go
 		    resultWindows.Append(New resultWindow)
 		    resultWindows(0).showList(js)
+		    
+		  Else
+		    MsgBox(VTAPI.LastResponseVerbose)
+		    Quit(1)
 		  End Select
 		End Sub
 	#tag EndMethod
