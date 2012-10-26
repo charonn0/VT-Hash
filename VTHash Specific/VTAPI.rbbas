@@ -2254,8 +2254,9 @@ Protected Module VTAPI
 		  
 		  'js.Value("file") = File.Name
 		  js.Value("apikey") = APIKey
-		  ConstructUpload(File, sock)
+		  ConstructUpload(File, sock)'<-- doesn't work. help? https://www.virustotal.com/documentation/public-api/#scanning-files
 		  Return VTAPI.SendRequest(FileSubmit_URL, js, sock, 0)
+		  
 		  
 		End Function
 	#tag EndMethod
@@ -2269,6 +2270,9 @@ Protected Module VTAPI
 		Protected LastResponseVerbose As String
 	#tag EndProperty
 
+
+	#tag Constant, Name = Boundary, Type = String, Dynamic = False, Default = \"--------0xKhTmLbOuNdArY", Scope = Private
+	#tag EndConstant
 
 	#tag Constant, Name = CommentPut_URL, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/comments/put", Scope = Private
 	#tag EndConstant

@@ -1,5 +1,5 @@
 Type=Desktop
-RBProjectVersion=2011.043
+RBProjectVersion=2012.011
 MinIDEVersion=20070100
 BuildSteps=Build Automation;Build Automation.rbbas;&h364297FF;&h0;false
 Window=waitplease;VTHash Specific/Windows/waitplease.rbfrm;&h5E29A7FF;&h763397FF;false
@@ -59,7 +59,7 @@ MDICaption=
 DefaultEncoding=&h0
 AppIcon=virusTotal_RELEASE.rbres;&h0
 OSXBundleID=
-DebuggerCommandLine="C:\Documents and Settings\Hotel Manager\Desktop\sworteu-ParseSocket-e8b992a.zip"
+DebuggerCommandLine=C:\Users\Andrew\Desktop\sworteu-ParseSocket-e8b992a.zip
 UseGDIPlus=False
 UseBuildsFolder=True
 IsWebProject=False
