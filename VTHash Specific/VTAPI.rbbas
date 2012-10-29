@@ -2205,9 +2205,10 @@ Protected Module VTAPI
 		  Try
 		    js = New JSONItem(s)
 		    LastResponseCode = js.Value("response_code")
-		    Return New JSONItem(s)
-		  Catch Err As JSONException
-		    If VTSock.LastErrorCode <> 0 Then
+		    If js.HasName("verbose_msg") Then LastResponseVerbose = js.Value("verbose_msg")
+		    Return js
+		  Catch Err
+		    If VTSock.LastErrorCode = 0 Then
 		      LastResponseCode = INVALID_RESPONSE
 		      LastResponseVerbose = "VirusTotal.com responded with improperly formatted data."
 		    Else
@@ -2226,7 +2227,7 @@ Protected Module VTAPI
 		  Dim err As String = "Socket error " + Str(Sender.LastErrorCode)
 		  Select Case Sender.LastErrorCode
 		  Case 102
-		    err = err + ": Disconnected."
+		    err = err + ": Virus Total closed the connection. Try again later."
 		  Case 100
 		    err = err + ": Could not create a socket!"
 		  Case 103
