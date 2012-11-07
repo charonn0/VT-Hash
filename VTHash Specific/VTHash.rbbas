@@ -117,10 +117,10 @@ Protected Module VTHash
 		    If MsgBox("Hash Not Found!" + EndOfLine + "Would you like to upload this file?", 36, "File Not In Database") <> 6 Then
 		      Quit(0)
 		    else
-		      'ShowURL("http://www.virustotal.com/")
-		      'Quit(0)
-		      js = VTAPI.SubmitFile(toBeHashed, VTAPIKey)
-		      Break
+		      ShowURL("http://www.virustotal.com/")
+		      Quit(0)
+		      'js = VTAPI.SubmitFile(toBeHashed, VTAPIKey)
+		      'Break
 		      
 		    end if
 		  Case -2  //Still Processing
@@ -530,7 +530,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mversion As Double = 1.21
+		Protected mversion As Double = 1.22
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
