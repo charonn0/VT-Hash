@@ -109,7 +109,7 @@ Begin Window resultWindow
       Bold            =   ""
       ButtonStyle     =   0
       Cancel          =   ""
-      Caption         =   "Full Results"
+      Caption         =   "&Full Results"
       Default         =   True
       Enabled         =   True
       Height          =   22

@@ -2,52 +2,81 @@
 Protected Module VTAPI
 	#tag Method, Flags = &h0
 		Function AddComment(ResourceID As String, APIKey As String, Comment As String) As JSONItem
+		  'ResourceID is either a file hash or a URL
+		  'APIKey is the VirusTotal API key.
+		  'Comment is the text of the comment to post.
+		  '
+		  'Returns a JSONItem containing the response from VirusTotal, or Nil on error.
+		  
 		  Dim js As New JSONItem
 		  js.Value("apikey") = APIKey
 		  js.Value("resource") = ResourceID
 		  js.Value("comment") = Comment
-		  Return SendRequest(CommentPut_URL, js)
+		  Return SendRequest(VT_Put_Comment, js)
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub ConstructUpload(File As FolderItem, ByRef VTSock As HTTPSecureSocket)
-		  dim rawdata, data, LStrReturnData, FileName as string
-		  dim ReadStream as BinaryStream
+		Private Function ConstructUpload(File As FolderItem) As String
+		  'adapted from http://www.realsoftware.com/listarchives/realbasic-nug/2004-12/msg00731.html
 		  
-		  ReadStream = BinaryStream.Open(File)
-		  rawdata = ReadStream.Read(File.Length)
-		  
-		  Const boundary = "--------0xKhTmLbOuNdArY"
-		  
-		  
-		  // Step 1: Initialize data string
-		  
-		  // start with boundary line
-		  data="--" + boundary + CRLF
-		  
-		  // Step 2: Add each of the text-based form fields
-		  // as a separate MIME part, followed by a boundary
-		  
-		  // Now the file name of the first image
-		  data = data + "Content-Disposition: form-data; name=""file""" + CRLF + CRLF + File.Name + CRLF
-		  
-		  // boundary to separate the above from the next part
-		  data = data + "--" + boundary + CRLF
-		  
-		  // Next comes the actual file itself, with headers indicating what type it is
-		  // and what content type we&apos;re using (raw binary in this case)
-		  
-		  data = data + "Content-Disposition: form-data; name=""file""; filename=""" +  File.Name + """" + CRLF + "Content-Type: " + HTTPMimeString(File.Name) + CRLF + "Content-Length: " + str(lenb(rawdata)) + CRLF + "Content-Transfer-Encoding: binary" + CRLF + CRLF + rawdata + CRLF
+		  dim stream as BinaryStream
+		  dim postContent as String
+		  'Dim count As Integer = 1
+		  ' Pick an arbitrary name for our boundaries
 		  
 		  
-		  // Now our closing boundary marker, and our data is ready to send
-		  data = data + "--" + boundary + CRLF + CRLF
-		  //whew...
+		  ' Loop over all our content
+		  'for i As Integer = 0 to content.Count - 1
+		  ' Set up a MIMEBoundary
+		  postContent = postContent + "--" + MIMEBoundary + crlf
+		  ' Set our content disposition
 		  
-		  VTSock.SetPostContent data, "multipart/form-data, boundary=" + boundary
-		End Sub
+		  postContent = postContent + "Content-Disposition: form-data; name=""file"""
+		  
+		  ' Check to see if we got an object in our conent.  If we
+		  ' do, then we assume it is a FolderItem, and it is a file
+		  ' to be uploaded.
+		  'if varType( content.Value( content.Key( i ) ) ) = 9 then
+		  ' Get the file from the content dictionary
+		  'file = content.Value( content.key( i ) )
+		  ' We use the file's absolute path because that is what the
+		  ' server sends to us, and we need to match what the server
+		  ' sent exactly.
+		  
+		  postContent = postContent + "; filename=""" + file.AbsolutePath + """"
+		  
+		  ' Set the content type to being binary, since we
+		  ' really don't know what type of file it is.
+		  
+		  postContent = postContent + crlf + "Content-Type: application/binary" + crlf + crlf
+		  
+		  ' Open the file up as a binary stream
+		  stream = stream.Open(File)
+		  if stream = nil then
+		    
+		    ' If we couldn't get a stream, then we should report an error to the user,
+		    
+		    ' and return out from here.
+		    return ""
+		  end
+		  
+		  ' Read in the entire file to the string
+		  postContent = postContent + stream.Read( file.length )
+		  ' Close the binary stream
+		  stream.close
+		  
+		  'end if
+		  postContent = postContent + crlf
+		  'next
+		  
+		  ' Set the final MIMEBoundary
+		  postContent = postContent + "--" + MIMEBoundary + "--"
+		  
+		  //Now you can post the data
+		  Return postContent
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
@@ -57,18 +86,23 @@ Protected Module VTAPI
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetReport(ResourceID As String, APIKey As String, ReportType As Integer = 0) As JSONItem
-		  'Report type can be 0 or 1. 0 is for files, 1 is for URLs.
+		Function GetReport(ResourceID As String, APIKey As String, ReportType As ReportType) As JSONItem
+		  'ResourceID is either a file hash or a URL
+		  'APIKey is the VirusTotal API key.
+		  'Report type is a member of the ReportType Enum. e.g. VTAPI.ReportType.FileReport
+		  '
+		  'Returns a JSONItem containing the report from VirusTotal, or Nil on error.
+		  
 		  Dim js As New JSONItem
 		  js.Value("apikey") = APIKey
 		  
 		  Select Case ReportType
-		  Case TypeFile
+		  Case VTAPI.ReportType.FileReport
 		    js.Value("resource") = ResourceID
-		    Return SendRequest(FileReport_URL, js)
-		  Case TypeURL
+		    Return SendRequest(VT_Get_File, js)
+		  Case VTAPI.ReportType.URLReport
 		    js.Value("url") = ResourceID
-		    Return SendRequest(URLReport_URL, js)
+		    Return SendRequest(VT_Get_URL, js)
 		  End Select
 		End Function
 	#tag EndMethod
@@ -2182,43 +2216,61 @@ Protected Module VTAPI
 
 	#tag Method, Flags = &h0
 		Function RequestRescan(ResourceID As String, APIKey As String) As JSONItem
+		  'ResourceID is either a file hash or a URL
+		  'APIKey is the VirusTotal API key.
+		  '
+		  'Returns a JSONItem containing the report from VirusTotal, or Nil on error.
+		  'Rescans requested via the public API are given the lowest priority. It may take
+		  'several hours for a rescan to be completed.
+		  
 		  Dim js As New JSONItem
 		  js.Value("resource") =ResourceID
 		  js.Value("apikey") = APIKey
-		  Return SendRequest(FileRescan_URL, js)
+		  Return SendRequest(VT_Rescan_File, js)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function SendRequest(URL As String, Request As JSONItem, VTSock As HTTPSecureSocket = Nil, Timeout As Integer = 5) As JSONItem
+		  'This function is used by other functions to do the actual talking to VirusTotal.
+		  
+		  'URL is the URL to send the Post request to (e.g. the VTAPI.VT_Put_Comment constant)
+		  'Request is a JSONItem containing the specific API request details.
+		  'VTSock is an optional HTTPSecureSocket. Use this parameter to provide a socket to be used, otherwise a new socket is created.
+		  'Timeout is the number of seconds before the request is said to have timed out.
+		  
+		  'Returns  JSONItem containing the response from VirusTotal, or Nil on error.
+		  
+		  'The Module properties "LastResponseCode" and "LastResponseVerbose" will either contain the last
+		  'VirusTotal response_code and verbose_msg OR a socket error number and brief message OR VTAPI.INVALID_RESPONSE and an error message.
+		  
 		  If VTSock = Nil Then VTSock = New HTTPSecureSocket
-		  VTSock.SetRequestHeader("User-Agent", "VT-Hash-Check/" + version + " (Not at all like Mozilla)")
+		  VTSock.SetRequestHeader("User-Agent", "RB-VTAPI/" + VTHash.version + " " + VTHash.PlatformString)
 		  VTSock.Secure = True
+		  VTSock.ConnectionType = VTSock.TLSv1
 		  dim formData As New Dictionary
 		  For Each Name As String In Request.Names
 		    formData.Value(Name) = Request.Value(Name)
 		  Next
 		  VTSock.SetFormData(formData)
-		  Window1.ProgressBar1.Value = 5
 		  Dim s As String = VTSock.Post(URL, Timeout)
 		  Dim js As JSONItem
 		  Try
 		    js = New JSONItem(s)
 		    LastResponseCode = js.Value("response_code")
-		    If js.HasName("verbose_msg") Then LastResponseVerbose = js.Value("verbose_msg")
-		    Return js
-		  Catch Err
+		    LastResponseVerbose = js.Value("verbose_msg")
+		  Catch
 		    If VTSock.LastErrorCode = 0 Then
 		      LastResponseCode = INVALID_RESPONSE
-		      LastResponseVerbose = "VirusTotal.com responded with improperly formatted data."
+		      LastResponseVerbose = "The response from '" + URL + "' was improperly formatted. Please try again later."
 		    Else
 		      LastResponseCode = VTSock.LastErrorCode
 		      LastResponseVerbose = SocketErrorMessage(VTSock)
 		    End If
 		    js = Nil
+		  Finally
+		    Return js
 		  End Try
-		  
-		  Return js
 		End Function
 	#tag EndMethod
 
@@ -2227,15 +2279,15 @@ Protected Module VTAPI
 		  Dim err As String = "Socket error " + Str(Sender.LastErrorCode)
 		  Select Case Sender.LastErrorCode
 		  Case 102
-		    err = err + ": Virus Total closed the connection. Try again later."
+		    err = err + ": Disconnected."
 		  Case 100
 		    err = err + ": Could not create a socket!"
 		  Case 103
-		    err = err + ": VirusTotal.com is not responding in a timely mannner."
+		    err = err + ": Connection timed out."
 		  Case 105
 		    err = err + ": That port number is already in use."
 		  Case 106
-		    err = err + ": You can't do that right now."
+		    err = err + ": Socket is not ready for that command."
 		  Case 107
 		    err = err + ": Could not bind to port."
 		  Case 108
@@ -2250,17 +2302,234 @@ Protected Module VTAPI
 
 	#tag Method, Flags = &h0
 		Function SubmitFile(File As FolderItem, APIKey As String) As JSONItem
+		  'FIME
+		  'Please note that this method doesn't actually work yet
+		  
+		  'File is the file to be uploaded
+		  'APIKey is the VirusTotal API key.
+		  '
+		  'Returns a JSONItem containing the response from VirusTotal, or Nil on error.
+		  'Submitted files may take several hours to be scanned.
+		  
 		  Dim js As New JSONItem
 		  Dim sock As New HTTPSecureSocket
 		  
-		  'js.Value("file") = File.Name
+		  js.Value("file") = File.Name
 		  js.Value("apikey") = APIKey
-		  ConstructUpload(File, sock)'<-- doesn't work. help? https://www.virustotal.com/documentation/public-api/#scanning-files
-		  Return VTAPI.SendRequest(FileSubmit_URL, js, sock, 0)
-		  
+		  Dim upload As String = ConstructUpload(File)  '<-- doesn't work. help? https://www.virustotal.com/documentation/public-api/#scanning-files
+		  #If RBVersion >= 2012 Then
+		    sock.SetRequestContent(upload, "multipart/form-data, boundary=" + MIMEBoundary)
+		  #Else
+		    sock.SetPostContent(upload, "multipart/form-data, boundary=" + MIMEBoundary)
+		  #endif
+		  Return VTAPI.SendRequest(VT_Submit_File, js, sock, 0)
 		  
 		End Function
 	#tag EndMethod
+
+
+	#tag Note, Name = Copying
+		Copyright ©2012 Andrew Lambert, All Rights Reserved.
+		
+		This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as 
+		published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+		
+		This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
+		
+		You should have received a copy of the GNU Lesser General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+		
+		---
+		                   GNU LESSER GENERAL PUBLIC LICENSE
+		                       Version 3, 29 June 2007
+		
+		 Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+		 Everyone is permitted to copy and distribute verbatim copies
+		 of this license document, but changing it is not allowed.
+		
+		
+		  This version of the GNU Lesser General Public License incorporates
+		the terms and conditions of version 3 of the GNU General Public
+		License, supplemented by the additional permissions listed below.
+		
+		  0. Additional Definitions.
+		
+		  As used herein, "this License" refers to version 3 of the GNU Lesser
+		General Public License, and the "GNU GPL" refers to version 3 of the GNU
+		General Public License.
+		
+		  "The Library" refers to a covered work governed by this License,
+		other than an Application or a Combined Work as defined below.
+		
+		  An "Application" is any work that makes use of an interface provided
+		by the Library, but which is not otherwise based on the Library.
+		Defining a subclass of a class defined by the Library is deemed a mode
+		of using an interface provided by the Library.
+		
+		  A "Combined Work" is a work produced by combining or linking an
+		Application with the Library.  The particular version of the Library
+		with which the Combined Work was made is also called the "Linked
+		Version".
+		
+		  The "Minimal Corresponding Source" for a Combined Work means the
+		Corresponding Source for the Combined Work, excluding any source code
+		for portions of the Combined Work that, considered in isolation, are
+		based on the Application, and not on the Linked Version.
+		
+		  The "Corresponding Application Code" for a Combined Work means the
+		object code and/or source code for the Application, including any data
+		and utility programs needed for reproducing the Combined Work from the
+		Application, but excluding the System Libraries of the Combined Work.
+		
+		  1. Exception to Section 3 of the GNU GPL.
+		
+		  You may convey a covered work under sections 3 and 4 of this License
+		without being bound by section 3 of the GNU GPL.
+		
+		  2. Conveying Modified Versions.
+		
+		  If you modify a copy of the Library, and, in your modifications, a
+		facility refers to a function or data to be supplied by an Application
+		that uses the facility (other than as an argument passed when the
+		facility is invoked), then you may convey a copy of the modified
+		version:
+		
+		   a) under this License, provided that you make a good faith effort to
+		   ensure that, in the event an Application does not supply the
+		   function or data, the facility still operates, and performs
+		   whatever part of its purpose remains meaningful, or
+		
+		   b) under the GNU GPL, with none of the additional permissions of
+		   this License applicable to that copy.
+		
+		  3. Object Code Incorporating Material from Library Header Files.
+		
+		  The object code form of an Application may incorporate material from
+		a header file that is part of the Library.  You may convey such object
+		code under terms of your choice, provided that, if the incorporated
+		material is not limited to numerical parameters, data structure
+		layouts and accessors, or small macros, inline functions and templates
+		(ten or fewer lines in length), you do both of the following:
+		
+		   a) Give prominent notice with each copy of the object code that the
+		   Library is used in it and that the Library and its use are
+		   covered by this License.
+		
+		   b) Accompany the object code with a copy of the GNU GPL and this license
+		   document.
+		
+		  4. Combined Works.
+		
+		  You may convey a Combined Work under terms of your choice that,
+		taken together, effectively do not restrict modification of the
+		portions of the Library contained in the Combined Work and reverse
+		engineering for debugging such modifications, if you also do each of
+		the following:
+		
+		   a) Give prominent notice with each copy of the Combined Work that
+		   the Library is used in it and that the Library and its use are
+		   covered by this License.
+		
+		   b) Accompany the Combined Work with a copy of the GNU GPL and this license
+		   document.
+		
+		   c) For a Combined Work that displays copyright notices during
+		   execution, include the copyright notice for the Library among
+		   these notices, as well as a reference directing the user to the
+		   copies of the GNU GPL and this license document.
+		
+		   d) Do one of the following:
+		
+		       0) Convey the Minimal Corresponding Source under the terms of this
+		       License, and the Corresponding Application Code in a form
+		       suitable for, and under terms that permit, the user to
+		       recombine or relink the Application with a modified version of
+		       the Linked Version to produce a modified Combined Work, in the
+		       manner specified by section 6 of the GNU GPL for conveying
+		       Corresponding Source.
+		
+		       1) Use a suitable shared library mechanism for linking with the
+		       Library.  A suitable mechanism is one that (a) uses at run time
+		       a copy of the Library already present on the user's computer
+		       system, and (b) will operate properly with a modified version
+		       of the Library that is interface-compatible with the Linked
+		       Version.
+		
+		   e) Provide Installation Information, but only if you would otherwise
+		   be required to provide such information under section 6 of the
+		   GNU GPL, and only to the extent that such information is
+		   necessary to install and execute a modified version of the
+		   Combined Work produced by recombining or relinking the
+		   Application with a modified version of the Linked Version. (If
+		   you use option 4d0, the Installation Information must accompany
+		   the Minimal Corresponding Source and Corresponding Application
+		   Code. If you use option 4d1, you must provide the Installation
+		   Information in the manner specified by section 6 of the GNU GPL
+		   for conveying Corresponding Source.)
+		
+		  5. Combined Libraries.
+		
+		  You may place library facilities that are a work based on the
+		Library side by side in a single library together with other library
+		facilities that are not Applications and are not covered by this
+		License, and convey such a combined library under terms of your
+		choice, if you do both of the following:
+		
+		   a) Accompany the combined library with a copy of the same work based
+		   on the Library, uncombined with any other library facilities,
+		   conveyed under the terms of this License.
+		
+		   b) Give prominent notice with the combined library that part of it
+		   is a work based on the Library, and explaining where to find the
+		   accompanying uncombined form of the same work.
+		
+		  6. Revised Versions of the GNU Lesser General Public License.
+		
+		  The Free Software Foundation may publish revised and/or new versions
+		of the GNU Lesser General Public License from time to time. Such new
+		versions will be similar in spirit to the present version, but may
+		differ in detail to address new problems or concerns.
+		
+		  Each version is given a distinguishing version number. If the
+		Library as you received it specifies that a certain numbered version
+		of the GNU Lesser General Public License "or any later version"
+		applies to it, you have the option of following the terms and
+		conditions either of that published version or of any later version
+		published by the Free Software Foundation. If the Library as you
+		received it does not specify a version number of the GNU Lesser
+		General Public License, you may choose any version of the GNU Lesser
+		General Public License ever published by the Free Software Foundation.
+		
+		  If the Library as you received it specifies that a proxy can decide
+		whether future versions of the GNU Lesser General Public License shall
+		apply, that proxy's public statement of acceptance of any version is
+		permanent authorization for you to choose that version for the
+		Library.
+	#tag EndNote
+
+	#tag Note, Name = How to use
+		Reference: https://www.virustotal.com/documentation/public-api/
+		
+		All public functions of this module correspond to an actions available 
+		through the public VirusTotal API v.2. All interactions with the API require an
+		API key. 
+		
+		The Virus Total API returns JSON. Luckily, REALstudio has shipped with built-in 
+		JSON support since RS2011r2. All the public functions of this module, therefore, 
+		return JSONItems (or Nil, on error.)
+		
+		If the returned JSONItem was not Nil, then LastResponseCode and 
+		LastResponseVerbose correspond to the response_code and verbose_msg members 
+		of Virus Total's response. 
+		
+		If the returned JSONItem was Nil, and it was because of a socket error, then 
+		LastResponseCode and LastResponseVerbose correspond to the RB socket error 
+		number and a brief error message. 
+		
+		If the returned JSONItem was Nil, and it was because of a JSON error, then 
+		LastResponseCode is VTAPI.INVALID_RESPONSE and LastResponseVerbose is a 
+		brief error message.
+	#tag EndNote
 
 
 	#tag Property, Flags = &h1
@@ -2272,32 +2541,32 @@ Protected Module VTAPI
 	#tag EndProperty
 
 
-	#tag Constant, Name = Boundary, Type = String, Dynamic = False, Default = \"--------0xKhTmLbOuNdArY", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = CommentPut_URL, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/comments/put", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = FileReport_URL, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/report", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = FileRescan_URL, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/rescan", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = FileSubmit_URL, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/scan", Scope = Private
-	#tag EndConstant
-
 	#tag Constant, Name = INVALID_RESPONSE, Type = Double, Dynamic = False, Default = \"255", Scope = Protected
 	#tag EndConstant
 
-	#tag Constant, Name = TypeFile, Type = Double, Dynamic = False, Default = \"0", Scope = Protected
+	#tag Constant, Name = MIMEBoundary, Type = String, Dynamic = False, Default = \"--------0xKhTmLMIMEBoundary", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = TypeURL, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
+	#tag Constant, Name = VT_Get_File, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/report", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = URLReport_URL, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/url/scan", Scope = Private
+	#tag Constant, Name = VT_Get_URL, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/url/scan", Scope = Private
 	#tag EndConstant
+
+	#tag Constant, Name = VT_Put_Comment, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/comments/put", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Rescan_File, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/rescan", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Submit_File, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/scan", Scope = Private
+	#tag EndConstant
+
+
+	#tag Enum, Name = ReportType, Type = Integer, Flags = &h1
+		FileReport
+		URLReport
+	#tag EndEnum
 
 
 	#tag ViewBehavior

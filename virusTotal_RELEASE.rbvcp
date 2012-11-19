@@ -1,5 +1,5 @@
 Type=Desktop
-RBProjectVersion=2012.011
+RBProjectVersion=2011.043
 MinIDEVersion=20070100
 BuildSteps=Build Automation;Build Automation.rbbas;&h364297FF;&h0;false
 Window=waitplease;VTHash Specific/Windows/waitplease.rbfrm;&h5E29A7FF;&h763397FF;false
@@ -30,9 +30,9 @@ Class=App;Generics/App.rbbas;&h7B680FFF;&h9B80FFF;false
 FileTypeSet=FileTypes1;Generics/FileTypes1.rbbas;&h6F8C77FF;&h9B80FFF;false
 Class=versioncheck;Generics/versioncheck.rbbas;&h7C37E7FF;&h9B80FFF;false
 Folder=VTHash Specific;VTHash Specific;&h5384CFFF;&h0;false
+Module=VTAPI;VTHash Specific/VTAPI.rbbas;&h5ABBF7FF;&h5384CFFF;false
 Folder=Windows;VTHash Specific/Windows;&h763397FF;&h5384CFFF;false
 Module=VTHash;VTHash Specific/VTHash.rbbas;&h34A8A7FF;&h5384CFFF;false
-Module=VTAPI;VTHash Specific/VTAPI.rbbas;&h7829E7FF;&h5384CFFF;false
 DefaultWindow=Window1
 MajorVersion=1
 MinorVersion=0

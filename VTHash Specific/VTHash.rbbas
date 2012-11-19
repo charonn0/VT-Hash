@@ -85,7 +85,15 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag ExternalMethod, Flags = &h0
+		Declare Function GetCurrentProcess Lib "Kernel32" () As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
 		Declare Function GetLastError Lib "Kernel32" () As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Soft Declare Function GetVersionEx Lib "Kernel32" Alias "GetVersionExA" (ByRef info As OSVERSIONINFOEX) As Boolean
 	#tag EndExternalMethod
 
 	#tag Method, Flags = &h0
@@ -138,6 +146,23 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function PlatformString() As String
+		  //Returns a human-readable string corresponding to the version, SKU, service pack, and architecture of
+		  //the currently running version of Windows.
+		  //e.g. "Windows 7 Ultimate x64 Service Pack 1"
+		  
+		  #If TargetWin32 Then
+		    Dim info As OSVERSIONINFOEX
+		    info.StructSize = Info.Size
+		    
+		    If GetVersionEx(info) Then
+		      Return "(VT Hash Check; U; Win32 " + Str(info.BuildNumber) + ")"
+		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function RegExFind(Extends source As String, pattern As String) As String()
 		  //Returns a string array of all subexpressions
 		  
@@ -159,7 +184,6 @@ Protected Module VTHash
 	#tag Method, Flags = &h0
 		Sub SaveSettings()
 		  Dim s As New JSONItem
-		  s.Value("Use SSL") = useSSL
 		  s.Value("Use SHA1") = algorithm <> "MD5"
 		  s.Value("Autosave Results") = autosave
 		  s.Value("Default Save Format") = defaultFormat
@@ -533,6 +557,25 @@ Protected Module VTHash
 		Protected mversion As Double = 1.22
 	#tag EndProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  #If TargetWin32 Then
+			    Dim info As OSVERSIONINFOEX
+			    info.StructSize = Info.Size
+			    
+			    Call GetVersionEx(info)
+			    If info.MajorVersion >= 6 Then
+			      Return &h1000  //PROCESS_QUERY_LIMITED_INFORMATION
+			    Else
+			      Return PROCESS_QUERY_INFORMATION  //On old Windows, use the old API
+			    End If
+			  #endif
+			End Get
+		#tag EndGetter
+		PROCESS_QUERY_LIMITED_INFORMATION As Integer
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h0
 		ResultWindows() As resultWindow
 	#tag EndProperty
@@ -543,10 +586,6 @@ Protected Module VTHash
 
 	#tag Property, Flags = &h0
 		toBeHashed As FolderItem
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		useSSL As Boolean = False
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -611,9 +650,26 @@ Protected Module VTHash
 	#tag Constant, Name = OPEN_EXISTING, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = PROCESS_QUERY_INFORMATION, Type = Double, Dynamic = False, Default = \"&h400", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
 	#tag EndConstant
 
+
+	#tag Structure, Name = OSVERSIONINFOEX, Flags = &h0
+		StructSize As UInt32
+		  MajorVersion As Integer
+		  MinorVersion As Integer
+		  BuildNumber As Integer
+		  PlatformID As Integer
+		  ServicePackName As String*128
+		  ServicePackMajor As UInt16
+		  ServicePackMinor As UInt16
+		  SuiteMask As UInt16
+		  ProductType As Byte
+		Reserved As Byte
+	#tag EndStructure
 
 	#tag Structure, Name = SYSTEMTIME, Flags = &h0
 		Year As UInt16

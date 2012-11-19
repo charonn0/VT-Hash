@@ -16,31 +16,31 @@ Begin Menu MenuBar1
       End
       Begin MenuItem exportmenu
          SpecialMenu = 0
-         Text = "Export Results"
+         Text = "&Export Results"
          Index = -2147483648
          AutoEnable = True
          SubMenu = True
          Begin MenuItem textmenu
             SpecialMenu = 0
-            Text = "Text"
+            Text = "&Text"
             Index = -2147483648
             AutoEnable = True
          End
          Begin MenuItem csvmenu
             SpecialMenu = 0
-            Text = "CSV"
+            Text = "&CSV"
             Index = -2147483648
             AutoEnable = True
          End
          Begin MenuItem jsonmenu
             SpecialMenu = 0
-            Text = "Original JSON"
+            Text = "Original &JSON"
             Index = -2147483648
             AutoEnable = True
          End
          Begin MenuItem unpackedmenu
             SpecialMenu = 0
-            Text = "Unpacked JSON"
+            Text = "&Unpacked JSON"
             Index = -2147483648
             AutoEnable = True
          End
@@ -65,13 +65,13 @@ Begin Menu MenuBar1
       End
       Begin MenuItem SettsMenu
          SpecialMenu = 0
-         Text = "Settings..."
+         Text = "&Settings..."
          Index = -2147483648
          AutoEnable = True
       End
       Begin MenuItem AboutMenu
          SpecialMenu = 0
-         Text = "About..."
+         Text = "&About..."
          Index = -2147483648
          AutoEnable = True
       End

@@ -192,38 +192,6 @@ Begin Window settswin
       Visible         =   True
       Width           =   89
    End
-   Begin CheckBox ssl
-      AutoDeactivate  =   True
-      Bold            =   ""
-      Caption         =   "Use SSL"
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   255
-      LockBottom      =   ""
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   True
-      Scope           =   0
-      State           =   0
-      TabIndex        =   6
-      TabPanelIndex   =   0
-      TabStop         =   True
-      TextFont        =   "System"
-      TextSize        =   11
-      TextUnit        =   0
-      Top             =   2
-      Underline       =   ""
-      Value           =   False
-      Visible         =   True
-      Width           =   89
-   End
    Begin CheckBox sha
       AutoDeactivate  =   True
       Bold            =   ""
@@ -236,7 +204,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   136
+      Left            =   255
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -387,7 +355,6 @@ End
 	#tag Event
 		Sub Open()
 		  sha.Value = (algorithm <> "MD5")
-		  ssl.Value = useSSL
 		  autolog.Value = autosave
 		  If autosavePath <> Nil Then
 		    HintTextField1.Text = autosavePath.AbsolutePath
@@ -420,7 +387,6 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
-		  useSSL = ssl.Value
 		  If sha.Value Then
 		    algorithm = "SHA1"
 		  Else

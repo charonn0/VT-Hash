@@ -87,7 +87,9 @@ Inherits Application
 		    tis.Close
 		    j = New JSONItem(s)
 		    
-		    useSSL = j.Value("Use SSL")
+		    If j.HasName("Use SSL") Then
+		      System.DebugLog("VT Hash Check " + VTHash.version + ":  'Use SSL'  has been deprecated. SSL/TLS is no longer optional.")
+		    End If
 		    If j.Value("Use SHA1").BooleanValue Then
 		      algorithm = "SHA1"
 		    Else
@@ -115,7 +117,7 @@ Inherits Application
 		      Quit()
 		      
 		    Case "--ssl"
-		      useSSL = True
+		      MsgBox("'--ssl' has been deprecated. SSL/TLS is no longer optional.")
 		      
 		    Case "--sha1"
 		      algorithm = "SHA1"

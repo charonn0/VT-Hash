@@ -333,6 +333,7 @@ End
 		  if isValidFile = False Then
 		    Quit()
 		  else
+		    Me.TitleText = toBeHashed.Name
 		    If VTAPIKey = "" Then getKey()
 		    
 		    ProgressBar1.Value = 2
@@ -354,7 +355,7 @@ End
 		    path.Text = toBeHashed.AbsolutePath.Shorten
 		    checkSum.Text = theHash
 		    
-		    Dim js As JSONItem = VTAPI.GetReport(TheHash, VTAPIKey)
+		    Dim js As JSONItem = VTAPI.GetReport(TheHash, VTAPIKey, VTAPI.ReportType.FileReport)
 		    ProgressBar1.Value = 5
 		    parseResponse(js)
 		  end if
