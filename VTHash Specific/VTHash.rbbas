@@ -554,7 +554,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mversion As Double = 1.22
+		Protected mversion As Double = 1.25
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -751,6 +751,11 @@ Protected Module VTHash
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="PROCESS_QUERY_LIMITED_INFORMATION"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
@@ -768,12 +773,6 @@ Protected Module VTHash
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="useSSL"
-			Group="Behavior"
-			InitialValue="False"
-			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="version"

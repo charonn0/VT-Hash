@@ -491,7 +491,7 @@ End
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
 			Dim sock As New HTTPSecureSocket
 			
-			Dim results As JSONItem = VTAPI.RequestRescan(theresults.Value("resource"), VTAPIKey)
+			Dim results As JSONItem = VTAPI.RequestRescan(VTResult.Resource, VTAPIKey)
 			If results = Nil Then
 			Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
 			Else
@@ -543,6 +543,25 @@ End
 	#tag EndMenuHandler
 
 
+	#tag Method, Flags = &h21
+		Private Sub DoAutoSave()
+		  If autosave Then
+		    Try
+		      Dim d As New Date
+		      Dim f As FolderItem = autosavePath.Child(VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		      Dim bs As BinaryStream
+		      bs = BinaryStream.Create(f, True)
+		      bs.Close
+		      savedAs = saveAs(defaultFormat, f)
+		      saved.Visible = True
+		    Catch err
+		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
+		      System.DebugLog("VT Hash: Unable to save report! (" + CurrentMethodName + "->" + t.Name + ")")
+		    End Try
+		  End If
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
 		  Dim d As New Date
@@ -562,18 +581,18 @@ End
 		    tos = tos.Create(f)
 		    tos.WriteLine("VirusTotal Scan Results")
 		    tos.WriteLine("Report retrieved: " + d.ShortDate + "; " + d.ShortTime + " " + Timezone)
-		    tos.WriteLine("Report Date: " + theresults.Value("scan_date"))
+		    tos.WriteLine("Report Date: " + VTResult.ScanDate.SQLDateTime)
 		    tos.WriteLine("")
 		    For i As Integer = 0 To Me.ListBox1.LastIndex
 		      tos.WriteLine(Me.ListBox1.Cell(i, 0) + " " + Me.ListBox1.Cell(i, 1) + ": " + Chr(9) + Me.ListBox1.Cell(i, 2))
 		    Next
 		  Case Mode_Org_JSON
 		    tos = tos.Create(f)
-		    tos.Write(theresults.ToString)
+		    tos.Write(VTResult.ToString)
 		  Case Mode_Unp_JSON
 		    tos = tos.Create(f)
-		    theresults.Compact = False
-		    Dim tmp As String = theresults.ToString
+		    'VTResult.Compact = False
+		    Dim tmp As String = VTResult.ToString
 		    tos.Write(tmp)
 		  Case Mode_CSV
 		    tos = tos.Create(f)
@@ -587,53 +606,39 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub showList(results As JSONItem)
-		  'Me.Title = pretifyPath(toBeHashed.AbsolutePath, 60)
-		  theresults = results
-		  permalink = results.Value("permalink")
-		  Dim resCount, threatCount As Integer
-		  Dim detection As JSONItem = results.Child("scans")
-		  Dim lastScan As String = results.Value("scan_date")
-		  For i As Integer = 1 To detection.Count - 1
-		    Dim isThreat As Boolean
-		    Dim scanner, scannerVersion, scanResult As String
-		    scanner = detection.Name(i)
-		    scannerVersion = detection.Child(scanner).Value("version")
-		    scanResult = detection.Child(scanner).Value("result")
-		    If detection.Child(scanner).Value("detected") = "true" Then
-		      ListBox1.AddRow(scanner, scannerVersion, scanResult)
+		Sub showList(result As JSONItem)
+		  VTResult = New Results(result)
+		  VTResult.TargetFile = toBeHashed
+		  
+		  For i As Integer = 1 To VTResult.ResultCount - 1
+		    If VTResult.ScannerResult(i).Trim <> "" Then
+		      ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), VTResult.ScannerResult(i))
 		      ListBox1.RowPicture(ListBox1.LastIndex) = warn
 		      Listbox1.CellBold(ListBox1.LastIndex, 2) = True
 		      Listbox1.RowTag(Listbox1.LastIndex) = True
 		    Else
-		      ListBox1.AddRow(scanner, scannerVersion, "")
+		      ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), "")
 		      ListBox1.RowPicture(ListBox1.LastIndex) = clear
 		      Listbox1.RowTag(Listbox1.LastIndex) = False
 		    End If
 		  Next
-		  Dim total, positives As Integer
-		  total = results.Value("total")
-		  positives = results.Value("positives")
-		  ProgBar1.Text = Str(positives) + " of " + Str(total) + " found threats; Last Scan: " + lastScan  ' (" + Format(positives * 100 / total, "##0.00") + "%)
-		  If autosave Then
-		    Try
-		      Dim d As New Date
-		      Dim f As FolderItem = autosavePath.Child(toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
-		      Dim bs As BinaryStream
-		      bs = BinaryStream.Create(f, True)
-		      bs.Close
-		      savedAs = saveAs(defaultFormat, f)
-		      saved.Visible = True
-		    Catch err
-		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
-		      System.DebugLog("VT Hash: Unable to save report! (" + CurrentMethodName + "->" + t.Name + ")")
-		    End Try
-		  End If
-		  FileHash.Text = TheHash
-		  FilePath.Text = toBeHashed.AbsolutePath
-		  ProgBar1.value = positives * 100 / total
-		  ProgBar1.HelpTag = Format(positives * 100 / total, "##0.00") + "% dangerous"
-		  HashType.Text = algorithm + ":"
+		  
+		  ProgBar1.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
+		  + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
+		  
+		  FileHash.Text = VTResult.HashValue
+		  FilePath.Text = VTResult.TargetFile.AbsolutePath
+		  ProgBar1.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
+		  ProgBar1.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
+		  Select Case VTResult.Algorithm
+		  Case Results.ALG_MD5
+		    HashType.Text = "MD5:"
+		  Case Results.ALG_SHA1
+		    HashType.Text = "SHA1:"
+		  End Select
+		  
+		  DoAutosave()
+		  
 		  Me.ShowModal
 		  Quit()
 		End Sub
@@ -649,7 +654,7 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		theresults As JSONItem
+		VTResult As Results
 	#tag EndProperty
 
 
