@@ -43,6 +43,7 @@ Begin Window settswin
       Scope           =   0
       TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
@@ -354,7 +355,7 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  sha.Value = (algorithm <> "MD5")
+		  sha.Value = (algorithm <> ALG_MD5)
 		  autolog.Value = autosave
 		  If autosavePath <> Nil Then
 		    HintTextField1.Text = autosavePath.AbsolutePath
@@ -388,9 +389,9 @@ End
 	#tag Event
 		Sub Action()
 		  If sha.Value Then
-		    algorithm = "SHA1"
+		    algorithm = ALG_SHA1
 		  Else
-		    algorithm = "MD5"
+		    algorithm = ALG_SHA1
 		  End If
 		  autosave = autolog.Value
 		  defaultFormat = ComboBox1.ListIndex

@@ -91,9 +91,9 @@ Inherits Application
 		      System.DebugLog("VT Hash Check " + VTHash.version + ":  'Use SSL'  has been deprecated. SSL/TLS is no longer optional.")
 		    End If
 		    If j.Value("Use SHA1").BooleanValue Then
-		      algorithm = "SHA1"
+		      algorithm = ALG_SHA1
 		    Else
-		      algorithm = "MD5"
+		      algorithm = ALG_MD5
 		    End If
 		    
 		    Dim g As FolderItem = GetFolderItem(j.Value("Default Save Directory"))
@@ -120,7 +120,7 @@ Inherits Application
 		      MsgBox("'--ssl' has been deprecated. SSL/TLS is no longer optional.")
 		      
 		    Case "--sha1"
-		      algorithm = "SHA1"
+		      algorithm = ALG_SHA1
 		      
 		    Else
 		      if Left(Args(i), 6) = "--API=" Then

@@ -118,34 +118,6 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub parseResponse(js As JSONItem)
-		  'Dim js As New JSONItem(content)
-		  Select Case VTAPI.LastResponseCode
-		  Case 0  //Not Found
-		    If MsgBox("Hash Not Found!" + EndOfLine + "Would you like to upload this file?", 36, "File Not In Database") <> 6 Then
-		      Quit(0)
-		    else
-		      ShowURL("http://www.virustotal.com/")
-		      Quit(0)
-		      'js = VTAPI.SubmitFile(toBeHashed, VTAPIKey)
-		      'Break
-		      
-		    end if
-		  Case -2  //Still Processing
-		    Call MsgBox("This file has been uploaded to VirusTotal but is still being processed." + EndOfLine + "Please try again later.", 36, "File Not Yet Processed")
-		    Quit(0)
-		  Case 1 //Found and ready to go
-		    resultWindows.Append(New resultWindow)
-		    resultWindows(0).showList(js)
-		    
-		  Else
-		    MsgBox(VTAPI.LastResponseVerbose)
-		    Quit(1)
-		  End Select
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function PlatformString() As String
 		  //Returns a human-readable string corresponding to the version, SKU, service pack, and architecture of
 		  //the currently running version of Windows.
@@ -184,7 +156,7 @@ Protected Module VTHash
 	#tag Method, Flags = &h0
 		Sub SaveSettings()
 		  Dim s As New JSONItem
-		  s.Value("Use SHA1") = algorithm <> "MD5"
+		  s.Value("Use SHA1") = algorithm <> ALG_MD5
 		  s.Value("Autosave Results") = autosave
 		  s.Value("Default Save Format") = defaultFormat
 		  If autosavePath <> Nil Then
@@ -508,7 +480,7 @@ Protected Module VTHash
 
 
 	#tag Property, Flags = &h0
-		algorithm As String = """MD5"""
+		algorithm As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -605,6 +577,12 @@ Protected Module VTHash
 	#tag Constant, Name = ACCESS_DENIED, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = ALG_MD5, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = ALG_SHA1, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public
 	#tag EndConstant
 
@@ -654,6 +632,15 @@ Protected Module VTHash
 	#tag EndConstant
 
 	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Code_OK, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Code_Still_Proccessing, Type = Double, Dynamic = False, Default = \"-2", Scope = Public
 	#tag EndConstant
 
 

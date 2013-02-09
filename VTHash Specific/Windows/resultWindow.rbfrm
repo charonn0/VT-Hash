@@ -606,9 +606,8 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub showList(result As JSONItem)
-		  VTResult = New Results(result)
-		  VTResult.TargetFile = toBeHashed
+		Sub showList(result As Results)
+		  VTResult = result
 		  
 		  For i As Integer = 1 To VTResult.ResultCount - 1
 		    If VTResult.ScannerResult(i).Trim <> "" Then

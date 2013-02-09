@@ -303,7 +303,7 @@ End
 
 	#tag Event
 		Sub Open()
-		  If algorithm = "SHA1" Then
+		  If algorithm = ALG_SHA1 Then
 		    StaticText2.Text = "SHA1:"
 		  end If
 		End Sub
@@ -335,29 +335,21 @@ End
 		  else
 		    Me.TitleText = toBeHashed.Name
 		    If VTAPIKey = "" Then getKey()
-		    
 		    ProgressBar1.Value = 2
-		    dim hash As String
-		    dim tis As TextInputStream
-		    tis = tis.Open(toBeHashed)
-		    fileData = tis.ReadAll
-		    tis.Close
-		    
+		    Dim job As VTJob
 		    Select Case algorithm
-		    case "SHA1"
-		      TheHash = Win32Crypto.Hash(fileData, Win32Crypto.CALG_SHA1)
-		    case "MD5"
-		      TheHash = Win32Crypto.Hash(fileData, Win32Crypto.CALG_MD5)
-		      'Return MD5Hash(toBeHashed, 1048576)
-		    end Select
-		    
+		    Case ALG_MD5
+		      job = New VTJob(toBeHashed, Results.ALG_MD5)
+		    Case ALG_SHA1
+		      job = New VTJob(toBeHashed, Results.ALG_SHA1)
+		    End Select
 		    ProgressBar1.Value = 4
 		    path.Text = toBeHashed.AbsolutePath.Shorten
-		    checkSum.Text = theHash
-		    
-		    Dim js As JSONItem = VTAPI.GetReport(TheHash, VTAPIKey, VTAPI.ReportType.FileReport)
+		    checkSum.Text = Job.Hash
+		    Job.GetResults()
 		    ProgressBar1.Value = 5
-		    parseResponse(js)
+		    resultWindows.Append(New resultWindow)
+		    resultWindows(0).showList(Job.Response)
 		  end if
 		End Sub
 	#tag EndMethod

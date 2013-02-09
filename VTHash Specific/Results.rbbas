@@ -2,7 +2,11 @@
 Protected Class Results
 	#tag Method, Flags = &h0
 		Sub Constructor(Item As JSONItem)
-		  Me.Original = Item
+		  If Item <> Nil Then
+		    Me.Original = Item
+		  Else
+		    Raise New NilObjectException
+		  End If
 		End Sub
 	#tag EndMethod
 
@@ -67,14 +71,9 @@ Protected Class Results
 		Algorithm As Integer
 	#tag EndProperty
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return Original.Value("resource")
-			End Get
-		#tag EndGetter
+	#tag Property, Flags = &h0
 		HashValue As String
-	#tag EndComputedProperty
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private Original As JSONItem
@@ -170,6 +169,15 @@ Protected Class Results
 	#tag EndConstant
 
 	#tag Constant, Name = ALG_SHA1, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Code_OK, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = VT_Code_Still_Proccessing, Type = Double, Dynamic = False, Default = \"-2", Scope = Public
 	#tag EndConstant
 
 
