@@ -73,6 +73,7 @@ Begin Window about
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -107,6 +108,7 @@ Begin Window about
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Copyright ©2009-12 Boredom Software, All Rights Reserved.\r\n\r\nBoredom Software is not affiliated with VirusTotal.com, though we use their service a great deal and recommend it highly. :-)"
       TextAlign       =   0
       TextColor       =   0
@@ -177,6 +179,7 @@ Begin Window about
       Selectable      =   ""
       TabIndex        =   2
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "www.boredomsoft.org"
       TextAlign       =   2
       TextColor       =   "&c0000FF"
@@ -216,6 +219,7 @@ Begin Window about
       Selectable      =   ""
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "www.virustotal.com"
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -311,7 +315,12 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
-		  updateWin.Show()
+		  Dim upd As New UpdateWindow
+		  Dim f As FolderItem = upd.CheckNow("www.boredomsoft.com/updates/vthash.json", VTHash.mversion)
+		  If f <> Nil Then
+		    f.Child("vthashsetup.exe").Launch
+		    Quit
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
