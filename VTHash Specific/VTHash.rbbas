@@ -526,7 +526,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mversion As Double = 1.25
+		Protected mversion As Double = 1.26
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -685,7 +685,7 @@ Protected Module VTHash
 			Name="algorithm"
 			Group="Behavior"
 			InitialValue="""""MD5"""""
-			Type="String"
+			Type="Integer"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty

@@ -39,7 +39,9 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
+      TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   50
       Value           =   0
       Visible         =   True
@@ -67,6 +69,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Ready."
       TextAlign       =   0
       TextColor       =   32768
@@ -101,6 +104,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Status:"
       TextAlign       =   2
       TextColor       =   0
@@ -148,6 +152,7 @@ Begin Window UpdateWindow
       Address         =   ""
       BytesAvailable  =   0
       BytesLeftToSend =   0
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       IsConnected     =   0
@@ -155,8 +160,11 @@ Begin Window UpdateWindow
       LockedInPosition=   False
       Port            =   0
       Scope           =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   80
+      Visible         =   True
       Width           =   32
       yield           =   0
    End
@@ -202,13 +210,16 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
+      TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   69
       Value           =   0
       Visible         =   True
       Width           =   388
    End
    Begin Timer GetTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   304
@@ -216,8 +227,11 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   250
       Scope           =   0
+      TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   80
+      Visible         =   True
       Width           =   32
    End
    Begin PushButton PushButton2
@@ -273,6 +287,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -307,6 +322,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -320,6 +336,7 @@ Begin Window UpdateWindow
       Width           =   69
    End
    Begin Timer SpeedTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   341
@@ -327,8 +344,11 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   1000
       Scope           =   0
+      TabIndex        =   11
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   80
+      Visible         =   True
       Width           =   32
    End
 End

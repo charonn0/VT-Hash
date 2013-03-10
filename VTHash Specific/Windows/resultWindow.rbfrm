@@ -489,9 +489,11 @@ End
 
 	#tag MenuHandler
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
-			Dim sock As New HTTPSecureSocket
+			waitplease.ShowWithin(Self)
+			waitplease.Refresh()
 			
 			Dim results As JSONItem = VTAPI.RequestRescan(VTResult.Resource, VTAPIKey)
+			waitplease.Close
 			If results = Nil Then
 			Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
 			Else
@@ -588,10 +590,11 @@ End
 		    Next
 		  Case Mode_Org_JSON
 		    tos = tos.Create(f)
+		    VTResult.Compact = True
 		    tos.Write(VTResult.ToString)
 		  Case Mode_Unp_JSON
 		    tos = tos.Create(f)
-		    'VTResult.Compact = False
+		    VTResult.Compact = False
 		    Dim tmp As String = VTResult.ToString
 		    tos.Write(tmp)
 		  Case Mode_CSV
@@ -645,10 +648,6 @@ End
 
 
 	#tag Property, Flags = &h0
-		permalink As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
 		savedAs As FolderItem
 	#tag EndProperty
 
@@ -662,6 +661,7 @@ End
 #tag Events Listbox1
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
+		  #pragma Unused column
 		  If row <= Me.LastIndex Then
 		    If Me.RowTag(row) = True Then
 		      g.foreColor= &cFF808000
@@ -681,16 +681,26 @@ End
 	#tag EndEvent
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
-		  Dim cp As New MenuItem("Copy to clipboard")
-		  base.Append(cp)
+		  Dim infection As String = Me.Cell(Me.RowFromXY(X, Y), 2).Trim
+		  If infection <> "" Then
+		    Dim cp As New MenuItem("Copy to '" + infection + "' to clipboard")
+		    Dim se As New MenuItem("Search Google for '" + infection + "'")
+		    se.Tag = infection
+		    cp.Tag = infection
+		    base.Append(cp)
+		    base.Append(se)
+		    Return True
+		  End If
 		End Function
 	#tag EndEvent
 	#tag Event
 		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
-		  Select Case hitItem.Text
-		  Case "Copy to clipboard"
+		  Select Case hitItem.Text.Left(5)
+		  Case "Copy "
 		    Dim cb As New Clipboard
-		    cb.Text = Me.Cell(Me.ListIndex, 0) + " " + Me.Cell(Me.ListIndex, 1) + " " + Me.Cell(Me.ListIndex, 2)
+		    cb.Text = hitItem.Tag
+		  Case "Searc"
+		    ShowURL("https://encrypted.google.com/search?q=" + hitItem.Tag)
 		  End Select
 		End Function
 	#tag EndEvent
@@ -705,7 +715,7 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
-		  ShowURL(permalink)
+		  ShowURL(VTResult.Permalink)
 		  Quit(0)
 		End Sub
 	#tag EndEvent
@@ -760,6 +770,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  #pragma Unused X
+		  #pragma Unused Y
 		  toBeHashed.ShowInExplorer()
 		End Function
 	#tag EndEvent
@@ -769,12 +781,16 @@ End
 		Sub Action()
 		  Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
 		  If comment <> "" Then
+		    waitplease.ShowWithin(Self)
+		    waitplease.Refresh()
 		    Dim js As JSONItem = VTAPI.AddComment(TheHash, VTAPIKey, comment)
+		    waitplease.Close
 		    If js <> Nil Then
 		      MsgBox(js.Value("verbose_msg"))
 		    Else
 		      MsgBox("Invalid response from Virus Total.")
 		    End If
+		    
 		  End If
 		End Sub
 	#tag EndEvent

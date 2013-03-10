@@ -7,7 +7,7 @@ Begin Window errorHandler
    Frame           =   1
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   148
+   Height          =   1.71e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -23,7 +23,7 @@ Begin Window errorHandler
    Resizeable      =   True
    Title           =   "Error"
    Visible         =   True
-   Width           =   425
+   Width           =   4.69e+2
    Begin Label StaticText1
       AutoDeactivate  =   True
       Bold            =   ""
@@ -56,7 +56,7 @@ Begin Window errorHandler
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   343
+      Width           =   387
    End
    Begin TextArea errorStack
       AcceptTabs      =   ""
@@ -70,7 +70,7 @@ Begin Window errorHandler
       DataSource      =   ""
       Enabled         =   True
       Format          =   ""
-      Height          =   62
+      Height          =   85
       HelpTag         =   ""
       HideSelection   =   True
       Index           =   -2147483648
@@ -101,7 +101,7 @@ Begin Window errorHandler
       Underline       =   ""
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   399
+      Width           =   443
    End
    Begin PushButton PushButton1
       AutoDeactivate  =   True
@@ -116,11 +116,11 @@ Begin Window errorHandler
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   277
+      Left            =   321
       LockBottom      =   True
       LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
+      LockLeft        =   False
+      LockRight       =   True
       LockTop         =   False
       Scope           =   0
       TabIndex        =   0
@@ -129,7 +129,7 @@ Begin Window errorHandler
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   120
+      Top             =   143
       Underline       =   ""
       Visible         =   True
       Width           =   135
@@ -160,7 +160,7 @@ Begin Window errorHandler
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   120
+      Top             =   143
       Underline       =   ""
       Visible         =   True
       Width           =   83
@@ -191,7 +191,7 @@ Begin Window errorHandler
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   120
+      Top             =   143
       Underline       =   ""
       Visible         =   True
       Width           =   83
@@ -222,37 +222,6 @@ Begin Window errorHandler
       UseFocusRing    =   True
       Visible         =   True
       Width           =   35
-   End
-   Begin PushButton PushButton4
-      AutoDeactivate  =   True
-      Bold            =   ""
-      ButtonStyle     =   0
-      Cancel          =   ""
-      Caption         =   "Ignore(!)"
-      Default         =   ""
-      Enabled         =   True
-      Height          =   22
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   189
-      LockBottom      =   True
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   False
-      Scope           =   0
-      TabIndex        =   4
-      TabPanelIndex   =   0
-      TabStop         =   True
-      TextFont        =   "System"
-      TextSize        =   0
-      TextUnit        =   0
-      Top             =   120
-      Underline       =   ""
-      Visible         =   True
-      Width           =   83
    End
 End
 #tag EndWindow
@@ -294,15 +263,6 @@ End
 	#tag Event
 		Sub Paint(g As Graphics)
 		  g.DrawStopIcon(5, 5)
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton4
-	#tag Event
-		Sub Action()
-		  If MsgBox("Continuing May Result In Unexpected Behavior.", 52, "Are You Sure?") = 6 Then
-		    Self.Close
-		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
