@@ -1,4 +1,4 @@
-VT Hash Check 1.22
+VT Hash Check 1.26
 Copyright ©2009-12 Boredom Software, All Rights Reserved
 
 1. Purpose
@@ -50,4 +50,4 @@ If you feel as though your computer might be afflicted by malicious software, th
 *www.techsupportforum.com
 
 7. Contact
-Please send all queries to andrew@boredomsoft.org or use the online form at http://www.boredomsoft.org/contactus.bs to report bugs
+Please send all queries to andrew@boredomsoft.org or use the online form at http://www.boredomsoft.org/contactus.bs.
