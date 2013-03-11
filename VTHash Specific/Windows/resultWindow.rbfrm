@@ -610,39 +610,52 @@ End
 
 	#tag Method, Flags = &h0
 		Sub showList(result As Results)
-		  VTResult = result
-		  
-		  For i As Integer = 1 To VTResult.ResultCount - 1
-		    If VTResult.ScannerResult(i).Trim <> "" Then
-		      ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), VTResult.ScannerResult(i))
-		      ListBox1.RowPicture(ListBox1.LastIndex) = warn
-		      Listbox1.CellBold(ListBox1.LastIndex, 2) = True
-		      Listbox1.RowTag(Listbox1.LastIndex) = True
-		    Else
-		      ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), "")
-		      ListBox1.RowPicture(ListBox1.LastIndex) = clear
-		      Listbox1.RowTag(Listbox1.LastIndex) = False
+		  Select Case result.ResponseCode
+		  Case VT_Code_OK
+		    
+		    VTResult = result
+		    
+		    For i As Integer = 1 To VTResult.ResultCount - 1
+		      If VTResult.ScannerResult(i).Trim <> "" Then
+		        ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), VTResult.ScannerResult(i))
+		        ListBox1.RowPicture(ListBox1.LastIndex) = warn
+		        Listbox1.CellBold(ListBox1.LastIndex, 2) = True
+		        Listbox1.RowTag(Listbox1.LastIndex) = True
+		      Else
+		        ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), "")
+		        ListBox1.RowPicture(ListBox1.LastIndex) = clear
+		        Listbox1.RowTag(Listbox1.LastIndex) = False
+		      End If
+		    Next
+		    
+		    ProgBar1.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
+		    + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
+		    
+		    FileHash.Text = VTResult.HashValue
+		    FilePath.Text = VTResult.TargetFile.AbsolutePath
+		    ProgBar1.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
+		    ProgBar1.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
+		    Select Case VTResult.Algorithm
+		    Case Results.ALG_MD5
+		      HashType.Text = "MD5:"
+		    Case Results.ALG_SHA1
+		      HashType.Text = "SHA1:"
+		    End Select
+		    
+		    DoAutosave()
+		    
+		    Me.ShowModal
+		    Quit()
+		  Case VT_Code_Not_Found
+		    If MsgBox("That file is not present in Virus Total's database. Would you like to visit VirusTotal.com to upload this file?", 52, "Not found") = 6 Then
+		      ShowURL("https://www.virustotal.com/")
 		    End If
-		  Next
-		  
-		  ProgBar1.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
-		  + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
-		  
-		  FileHash.Text = VTResult.HashValue
-		  FilePath.Text = VTResult.TargetFile.AbsolutePath
-		  ProgBar1.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
-		  ProgBar1.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
-		  Select Case VTResult.Algorithm
-		  Case Results.ALG_MD5
-		    HashType.Text = "MD5:"
-		  Case Results.ALG_SHA1
-		    HashType.Text = "SHA1:"
+		    Quit()
+		  Case VT_Code_Still_Proccessing
+		    Call MsgBox("That file is still waiting to be analyzed. Please try again later.", 64, "Still processing")
+		    Quit()
+		    
 		  End Select
-		  
-		  DoAutosave()
-		  
-		  Me.ShowModal
-		  Quit()
 		End Sub
 	#tag EndMethod
 
