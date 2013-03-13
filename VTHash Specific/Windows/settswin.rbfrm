@@ -43,7 +43,6 @@ Begin Window settswin
       Scope           =   0
       TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
@@ -391,7 +390,7 @@ End
 		  If sha.Value Then
 		    algorithm = ALG_SHA1
 		  Else
-		    algorithm = ALG_SHA1
+		    algorithm = ALG_MD5
 		  End If
 		  autosave = autolog.Value
 		  defaultFormat = ComboBox1.ListIndex
