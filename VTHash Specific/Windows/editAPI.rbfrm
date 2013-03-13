@@ -4,7 +4,7 @@ Begin Window editAPI
    Backdrop        =   ""
    CloseButton     =   True
    Composite       =   False
-   Frame           =   2
+   Frame           =   1
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   9.3e+1
@@ -20,10 +20,10 @@ Begin Window editAPI
    MinimizeButton  =   True
    MinWidth        =   64
    Placement       =   0
-   Resizeable      =   True
+   Resizeable      =   False
    Title           =   "Virus Total API Key"
    Visible         =   True
-   Width           =   5.07e+2
+   Width           =   5.27e+2
    Begin Label StaticText1
       AutoDeactivate  =   True
       Bold            =   ""
@@ -35,7 +35,7 @@ Begin Window editAPI
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   0
+      Left            =   10
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -52,7 +52,7 @@ Begin Window editAPI
       TextFont        =   "System"
       TextSize        =   11
       TextUnit        =   0
-      Top             =   0
+      Top             =   2
       Transparent     =   True
       Underline       =   ""
       Visible         =   True

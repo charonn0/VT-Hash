@@ -759,9 +759,10 @@ End
 #tag Events TridTimer
 	#tag Event
 		Sub Action()
-		  Dim s As String = Trid(toBeHashed)
+		  Dim s As Dictionary = Trid(toBeHashed)
 		  waitplease.Close
-		  Call MsgBox(s, 64, "Trid Says:")
+		  Dim tridwin As New TridResult
+		  tridwin.ShowResult(s)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

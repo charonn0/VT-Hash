@@ -194,7 +194,7 @@ Begin Window Window1
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   101
+      Left            =   110
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -405,8 +405,7 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  cancel = True
-		  self.Close
+		  Quit()
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -449,8 +449,8 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Trid(f As FolderItem) As String
-		  If f.Directory Then Return "That is a directory."
+		Function Trid(f As FolderItem) As Dictionary
+		  If f.Directory Then Return New Dictionary("That is a directory":100)
 		  Dim g As FolderItem = SpecialFolder.Temporary.Child("trid.exe")
 		  Dim d As FolderItem = SpecialFolder.Temporary.Child("triddefs.trd")
 		  Dim tos As TextOutputStream
@@ -462,15 +462,15 @@ Protected Module VTHash
 		  tos.Close
 		  
 		  Dim sh As New Shell
-		  Dim ret As String = "Filetype not known (plain text?)"
+		  Dim ret As Dictionary
 		  sh.Execute("""" + g.AbsolutePath + """" + " """ + f.AbsolutePath + """")
 		  Dim search() As String = sh.Result.Split(EndOfLine)
 		  Dim pattern As String = "([+-]?\d*\.\d+)(?![-+0-9\.])(%)(\s+)(.*)\((\d*)"
 		  For i As Integer = 0 To UBound(search)
 		    Dim res() As String = search(i).RegExFind(pattern)
 		    If UBound(res) > -1 Then
-		      ret = res(4)
-		      Exit
+		      If ret = Nil Then ret = New Dictionary
+		      ret.Value(res(4)) = Val(res(1))
 		    End If
 		  Next
 		  
@@ -526,7 +526,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mversion As Double = 1.26
+		Protected mversion As Double = 1.27
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
