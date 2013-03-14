@@ -4,10 +4,10 @@ Begin Window TridResult
    Backdrop        =   ""
    CloseButton     =   True
    Composite       =   False
-   Frame           =   0
+   Frame           =   1
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   1.25e+2
+   Height          =   1.13e+2
    ImplicitInstance=   False
    LiveResize      =   True
    MacProcID       =   0
@@ -23,7 +23,7 @@ Begin Window TridResult
    Resizeable      =   True
    Title           =   "Trid Says"
    Visible         =   True
-   Width           =   2.87e+2
+   Width           =   3.48e+2
    Begin Listbox Listbox1
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
@@ -42,7 +42,7 @@ Begin Window TridResult
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   125
+      Height          =   113
       HelpTag         =   ""
       Hierarchical    =   ""
       Index           =   -2147483648
@@ -70,7 +70,7 @@ Begin Window TridResult
       Underline       =   ""
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   287
+      Width           =   348
       _ScrollWidth    =   -1
    End
    Begin PushButton PushButton1
@@ -116,7 +116,7 @@ End
 		      Listbox1.AddRow(key, Str(Results.Value(key).Int32Value) + "%")
 		    Next
 		  Else
-		    Listbox1.AddRow("Unknown", "100%")
+		    Listbox1.AddRow("Unknown (plain text?)", "100%")
 		  End If
 		  Me.ShowModal
 		End Sub
@@ -128,18 +128,48 @@ End
 #tag Events Listbox1
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  #pragma Unused column
-		  'g.ForeColor = &c00800000
-		  'g.FillRect(0, 0, g.Width, g.Height)
-		  If row <= Me.LastIndex Then
-		    Dim perc As Integer = Me.RowTag(row)
-		    g.foreColor= &cE6E6E600
-		    Dim w As Integer = perc * g.Width \ 100
-		    
-		    g.FillRect(0, 0, w, g.height)
-		  End If
-		  'Return True
+		  '#pragma Unused column
+		  ''g.ForeColor = &c00800000
+		  ''g.FillRect(0, 0, g.Width, g.Height)
+		  'If row <= Me.LastIndex Then
+		  'Dim perc As Integer = Me.RowTag(row)
+		  'g.foreColor= &cE6E6E600
+		  'Dim w As Integer = perc * g.Width \ 100
+		  '
+		  'g.FillRect(0, 0, w, g.height)
+		  'End If
+		  ''Return True
 		  
+		  #pragma Unused column
+		  #pragma Unused row
+		  g.foreColor= &cD8D8D800
+		  g.FillRect 0,0,g.width,g.height
+		  
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  Dim tridtype As String = Me.Cell(Me.RowFromXY(X, Y), 0).Trim
+		  If tridtype <> "" Then
+		    Dim cp As New MenuItem("Copy to '" + tridtype + "' to clipboard")
+		    Dim se As New MenuItem("Search Google for '" + tridtype + "'")
+		    se.Tag = tridtype
+		    cp.Tag = tridtype
+		    base.Append(cp)
+		    base.Append(se)
+		    Return True
+		  End If
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  Select Case hitItem.Text.Left(5)
+		  Case "Copy "
+		    Dim cb As New Clipboard
+		    cb.Text = hitItem.Tag
+		  Case "Searc"
+		    ShowURL("https://encrypted.google.com/search?q=" + hitItem.Tag)
+		  End Select
 		End Function
 	#tag EndEvent
 #tag EndEvents
