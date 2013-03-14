@@ -152,7 +152,7 @@ End
 		  Dim tridtype As String = Me.Cell(Me.RowFromXY(X, Y), 0).Trim
 		  If tridtype <> "" Then
 		    Dim cp As New MenuItem("Copy to '" + tridtype + "' to clipboard")
-		    Dim se As New MenuItem("Search Google for '" + tridtype + "'")
+		    Dim se As New MenuItem("Search " + SearchEngine.Left.StringValue + " for '" + tridtype + "'")
 		    se.Tag = tridtype
 		    cp.Tag = tridtype
 		    base.Append(cp)
@@ -168,7 +168,7 @@ End
 		    Dim cb As New Clipboard
 		    cb.Text = hitItem.Tag
 		  Case "Searc"
-		    ShowURL("https://encrypted.google.com/search?q=" + hitItem.Tag)
+		    ShowURL(Replace(SearchEngine.Right.StringValue, "%PARAMETER%", hitItem.Tag))
 		  End Select
 		End Function
 	#tag EndEvent

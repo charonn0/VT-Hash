@@ -697,7 +697,7 @@ End
 		  Dim infection As String = Me.Cell(Me.RowFromXY(X, Y), 2).Trim
 		  If infection <> "" Then
 		    Dim cp As New MenuItem("Copy to '" + infection + "' to clipboard")
-		    Dim se As New MenuItem("Search Google for '" + infection + "'")
+		    Dim se As New MenuItem("Search " + SearchEngine.Left.StringValue + " for '" + infection + "'")
 		    se.Tag = infection
 		    cp.Tag = infection
 		    base.Append(cp)
@@ -713,7 +713,7 @@ End
 		    Dim cb As New Clipboard
 		    cb.Text = hitItem.Tag
 		  Case "Searc"
-		    ShowURL("https://encrypted.google.com/search?q=" + hitItem.Tag)
+		    ShowURL(Replace(SearchEngine.Right.StringValue, "%PARAMETER%", hitItem.Tag))
 		  End Select
 		End Function
 	#tag EndEvent

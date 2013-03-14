@@ -69,6 +69,7 @@ Inherits Application
 	#tag Method, Flags = &h21
 		Private Sub LoadConf()
 		  Dim f As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software")
+		  SearchEngine = "Google":"https://encrypted.google.com/search?q=%PARAMETER%"
 		  If Not f.Exists Then
 		    f.CreateAsFolder()
 		  End If
@@ -90,6 +91,12 @@ Inherits Application
 		    If j.HasName("Use SSL") Then
 		      System.DebugLog("VT Hash Check " + VTHash.version + ":  'Use SSL'  has been deprecated. SSL/TLS is no longer optional.")
 		    End If
+		    
+		    If j.HasName("Search Engine") And j.HasName("Search URL") Then
+		      SearchEngine = j.Value("Search Engine").StringValue:j.Value("Search URL").StringValue
+		      
+		    End If
+		    
 		    If j.Value("Use SHA1").BooleanValue Then
 		      algorithm = ALG_SHA1
 		    Else

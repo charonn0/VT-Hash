@@ -553,6 +553,10 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		SearchEngine As Pair
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		TheHash As String
 	#tag EndProperty
 
