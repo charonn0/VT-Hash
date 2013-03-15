@@ -1,4 +1,4 @@
-VT Hash Check 1.26
+VT Hash Check 1.27
 Copyright ©2009-12 Boredom Software, All Rights Reserved
 
 1. Purpose
@@ -25,7 +25,7 @@ VT Hash Check will ask you for your API key the first time you run it. Alternati
 
 To use the program, once installed, simply right-click on any file in Windows Explorer and choose "Check Hash" from the context menu.
 
-Settings may be modified by running the vthash.exe program directly (i.e. without arguments.) You may turn SSL On/Off, toggle SHA1/MD5 and edit your API key. VT Hash Check can also be configured to automatically save all scan results to a directory. You may specify the directory and the save format in the settings window.
+Settings may be modified by running the vthash.exe program directly (i.e. without arguments.) You may toggle SHA1/MD5 and edit your API key. VT Hash Check can also be configured to automatically save all scan results to a directory. You may specify the directory and the save format in the settings window.
 
 4. Uninstalling
 To uninstall, either click "Remove" from the Add/Remove Programs control panel applet or execute the uninstall.exe file from the program's installation directory.
