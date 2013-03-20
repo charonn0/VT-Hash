@@ -1,5 +1,45 @@
 #tag Module
 Protected Module VTHash
+	#tag Method, Flags = &h0
+		Function AdjustPrivilegeToken(PrivilegeName As String, mode As Integer) As Integer
+		  //Modifies the calling process' security token
+		  //See the SE_* Constants in Win32Constants for privilege names.
+		  //Returns 0 on success, or a Win32 error number on failure.
+		  Dim error As Integer
+		  #If TargetWin32 Then
+		    Dim thisProc As Integer = GetCurrentProcess()
+		    Dim tHandle As Integer
+		    If OpenProcessToken(thisProc, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, tHandle) Then
+		      Dim luid As New MemoryBlock(8)
+		      If LookupPrivilegeValue(Nil, PrivilegeName, luid) Then
+		        Dim newState As New MemoryBlock(16)
+		        newState.UInt32Value(0) = 1
+		        newState.UInt32Value(4) = luid.UInt32Value(0)
+		        newState.UInt32Value(8) = luid.UInt32Value(4)
+		        newState.UInt32Value(12) = mode  //mode can be enable, disable, or remove. See: EnablePrivilege, DisablePrivilege, and DropPrivilege.
+		        Dim retLen As Integer
+		        Dim prevPrivs As Ptr
+		        If AdjustTokenPrivileges(tHandle, False, newState, newState.Size, prevPrivs, retLen) Then
+		          error = 0
+		        Else
+		          error = GetLastError()
+		        End If
+		      Else
+		        error = GetLastError()
+		      End If
+		    Else
+		      error = GetLastError()
+		    End If
+		  #endif
+		  
+		  Return error
+		End Function
+	#tag EndMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function AdjustTokenPrivileges Lib "AdvApi32" (tHandle As Integer, disableAllPrivs As Boolean, newState As Ptr, buffLength As Integer, prevPrivs As Ptr, ByRef retLen As Integer) As Boolean
+	#tag EndExternalMethod
+
 	#tag ExternalMethod, Flags = &h0
 		Declare Function CloseHandle Lib "Kernel32" (handle As Integer) As Boolean
 	#tag EndExternalMethod
@@ -93,12 +133,17 @@ Protected Module VTHash
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h0
+		Soft Declare Sub GetNativeSystemInfo Lib "Kernel32" (ByRef info As SYSTEM_INFO)
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
 		Soft Declare Function GetVersionEx Lib "Kernel32" Alias "GetVersionExA" (ByRef info As OSVERSIONINFOEX) As Boolean
 	#tag EndExternalMethod
 
 	#tag Method, Flags = &h0
 		Function isFound(Extends f As FolderItem) As Integer
-		  Dim HWND As Integer = CreateFile(f.AbsolutePath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0)
+		  Const FILE_FLAG_BACKUP_SEMANTICS = &h02000000
+		  Dim HWND As Integer = CreateFile(f.AbsolutePath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0)
 		  If HWND = -1 Then
 		    HWND = GetLastError()
 		    Select Case HWND
@@ -116,6 +161,14 @@ Protected Module VTHash
 		  End If
 		End Function
 	#tag EndMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function LookupPrivilegeValue Lib "AdvApi32" Alias "LookupPrivilegeValueW" (sysName As WString, privName As WString, Luid As Ptr) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function OpenProcessToken Lib "AdvApi32" (handle As Integer, access As Integer, ByRef tHandle As Integer) As Boolean
+	#tag EndExternalMethod
 
 	#tag Method, Flags = &h0
 		Function PlatformString() As String
@@ -638,6 +691,21 @@ Protected Module VTHash
 	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = SE_BACKUP_NAME, Type = String, Dynamic = False, Default = \"SeBackupPrivilege", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SE_PRIVILEGE_ENABLED, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SE_RESTORE_NAME, Type = String, Dynamic = False, Default = \"SeRestorePrivilege", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = TOKEN_ADJUST_PRIVILEGES, Type = Double, Dynamic = False, Default = \"&h00000020", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = TOKEN_QUERY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
@@ -671,6 +739,19 @@ Protected Module VTHash
 		  Minute As UInt16
 		  Second As UInt16
 		MS As UInt16
+	#tag EndStructure
+
+	#tag Structure, Name = SYSTEM_INFO, Flags = &h0
+		OEMID As Integer
+		  pageSize As Integer
+		  minApplicationAddress As Ptr
+		  maxApplicationAddress As Ptr
+		  activeProcessorMask As Integer
+		  numberOfProcessors As Integer
+		  processorType As Integer
+		  allocationGranularity As Integer
+		  processorLevel As Int16
+		processorRevision As Int16
 	#tag EndStructure
 
 	#tag Structure, Name = TIME_ZONE_INFORMATION, Flags = &h0

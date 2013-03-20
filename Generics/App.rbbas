@@ -3,6 +3,8 @@ Protected Class App
 Inherits Application
 	#tag Event
 		Sub Open()
+		  'Call AdjustPrivilegeToken(SE_BACKUP_NAME, SE_PRIVILEGE_ENABLED)
+		  'Call AdjustPrivilegeToken(SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED)
 		  Dim args() As String = Tokenize(System.CommandLine)
 		  args.Remove(0)
 		  ParseArgs(args)
@@ -10,9 +12,9 @@ Inherits Application
 		  KillApiKeyFile()
 		  LoadConf()
 		  
-		  If toBeHashed = Nil Then
-		    toBeHashed = App.ExecutableFile
-		  End If
+		  'If toBeHashed = Nil Then
+		  'toBeHashed = App.ExecutableFile
+		  'End If
 		  
 		  'Dim rw As New resultWindow
 		  'Dim tis As TextInputStream
@@ -25,6 +27,7 @@ Inherits Application
 		  '
 		  'rw.showList(New JSONItem(s))
 		  'Quit11
+		  
 		End Sub
 	#tag EndEvent
 
@@ -37,7 +40,32 @@ Inherits Application
 		    errorHandler.Show
 		    Dim t as Introspection.TypeInfo = Introspection.GetType(error)
 		    Dim theStack As String = Join(error.CleanStack, EndOfLine)
-		    errorHandler.errorStack.Text = t.Name + ": " + error.Message + "(" + Str(error.ErrorNumber) + ")" + EndOfLine + theStack
+		    Dim path As String
+		    If toBeHashed <> Nil Then
+		      path = toBeHashed.AbsolutePath
+		    Else
+		      path = "Invalid"
+		    End If
+		    
+		    Dim info As OSVERSIONINFOEX
+		    info.StructSize = Info.Size
+		    Dim OS As String = "Unknown"
+		    Dim bits As String = "x32"
+		    If GetVersionEx(info) Then
+		      If System.IsFunctionAvailable("GetNativeSystemInfo", "kernel32.dll") Then
+		        Dim sysinfo As SYSTEM_INFO
+		        GetNativeSystemInfo(sysinfo)
+		        bits = "x64"
+		      End If
+		      OS = "WinNT " + Str(info.MajorVersion) + "." + Str(info.MinorVersion) + "(" + info.ServicePackName + ")" + bits
+		    End If
+		    
+		    
+		    errorHandler.errorStack.Text = "EXE Version: " + VTHash.version + EndOfLine + _
+		    "Target path: " + path + EndOfLine + _
+		    "Algorithm: " + Str(algorithm) + EndOfLine + _
+		    "OS: " + OS + EndOfLine + EndOfLine + _
+		    "Call stack: " + EndOfLine + t.Name + ": " + error.Message + "(" + Str(error.ErrorNumber) + ")" + EndOfLine + theStack
 		    Return True
 		    
 		  End If

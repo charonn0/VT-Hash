@@ -11,9 +11,9 @@ Begin Window errorHandler
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
-   MaxHeight       =   200
+   MaxHeight       =   300
    MaximizeButton  =   False
-   MaxWidth        =   500
+   MaxWidth        =   600
    MenuBar         =   ""
    MenuBarVisible  =   True
    MinHeight       =   148
@@ -35,7 +35,7 @@ Begin Window errorHandler
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   41
+      Left            =   47
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -46,7 +46,7 @@ Begin Window errorHandler
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      Text            =   "An unhandled error has caused VT Hash to crash. \r\nCall stack follows:"
+      Text            =   "An unhandled error has caused VT Hash to crash. \r\nTechnical details follow:"
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"

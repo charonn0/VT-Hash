@@ -330,68 +330,60 @@ End
 	#tag Method, Flags = &h0
 		Sub initiate()
 		  ProgressBar1.Value = 1
-		  if isValidFile = False Then
-		    Quit()
-		  else
-		    Me.TitleText = toBeHashed.Name
-		    If VTAPIKey = "" Then getKey()
-		    ProgressBar1.Value = 2
-		    Dim job As VTJob
-		    Select Case algorithm
-		    Case ALG_MD5
-		      job = New VTJob(toBeHashed, Results.ALG_MD5)
-		    Case ALG_SHA1
-		      job = New VTJob(toBeHashed, Results.ALG_SHA1)
-		    End Select
-		    ProgressBar1.Value = 4
-		    path.Text = toBeHashed.AbsolutePath.Shorten
-		    checkSum.Text = Job.Hash
-		    Job.GetResults()
-		    ProgressBar1.Value = 5
-		    resultWindows.Append(New resultWindow)
-		    resultWindows(0).showList(Job.Response)
-		  end if
+		  isValidFile()
+		  Me.TitleText = toBeHashed.Name
+		  If VTAPIKey = "" Then getKey()
+		  ProgressBar1.Value = 2
+		  Dim job As VTJob
+		  Select Case algorithm
+		  Case ALG_MD5
+		    job = New VTJob(toBeHashed, Results.ALG_MD5)
+		  Case ALG_SHA1
+		    job = New VTJob(toBeHashed, Results.ALG_SHA1)
+		  End Select
+		  ProgressBar1.Value = 4
+		  path.Text = toBeHashed.AbsolutePath.Shorten
+		  checkSum.Text = Job.Hash
+		  Job.GetResults()
+		  ProgressBar1.Value = 5
+		  resultWindows.Append(New resultWindow)
+		  resultWindows(0).showList(Job.Response)
+		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function isValidFile() As Boolean
-		  If toBeHashed.AbsolutePath = App.ExecutableFile.AbsolutePath Then
+		Sub isValidFile()
+		  If toBeHashed = Nil Or toBeHashed.AbsolutePath = App.ExecutableFile.AbsolutePath Then
 		    Self.Visible = False
 		    settswin.ShowModal
-		    Return False
+		    Quit(0)
 		  End If
 		  path.Text = toBeHashed.AbsolutePath.Shorten
 		  If toBeHashed.Directory Then
 		    Call MsgBox("Target Is A Directory.", 16, "File Read Error")
-		    Return False
+		    Quit(1)
 		  End If
 		  Select Case toBeHashed.isFound
 		  Case FILE_NOT_FOUND
-		    Call MsgBox("File Does Not Exist", 16, "File Read Error")
-		    Return False
+		    Call MsgBox("The file could not be found", 16, "File Read Error")
+		    Quit(1)
 		  Case ERROR_OTHER
-		    Call MsgBox("Unknown Error While Reading File", 16, "File Read Error")
-		    Return False
+		    Call MsgBox("Unknown error while attempting to read or open the file", 16, "File Read Error")
+		    Quit(1)
 		  Case ACCESS_DENIED
-		    Call MsgBox("Could Not Open The File. Access Was Denied.", 16, "File Read Error")
-		    Return False
+		    Call MsgBox("Unable to open the file: access is denied.", 16, "File Read Error")
+		    Quit(1)
 		  End Select
 		  if toBeHashed.Length > 33554432 then
-		    Call MsgBox("File Exceeds 32MB and therefore will not be found in Virus Total's Database.", 16, "File Too Large")
-		    #If Not DebugBuild Then
-		      Return False
-		    #Else
-		      Return True
-		    #endif
+		    Call MsgBox("The file Exceeds 32MB and therefore will not be found in Virus Total's Database.", 16, "File Too Large")
+		    Quit(1)
 		  End if
 		  
-		  Return True
-		  
 		Exception err As NilObjectException
-		  Call MsgBox("File Does Not Exist", 16, "File Not Found")
-		  Return False
-		End Function
+		  Call MsgBox("File does not exist", 16, "File Not Found")
+		  Quit(1)
+		End Sub
 	#tag EndMethod
 
 
