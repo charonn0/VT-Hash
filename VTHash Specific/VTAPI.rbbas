@@ -2260,14 +2260,20 @@ Protected Module VTAPI
 		    LastResponseCode = js.Value("response_code")
 		    LastResponseVerbose = js.Value("verbose_msg")
 		  Catch
-		    If VTSock.LastErrorCode = 0 Then
-		      LastResponseCode = INVALID_RESPONSE
-		      LastResponseVerbose = "The response from '" + URL + "' was improperly formatted. Please try again later."
+		    If js <> Nil And js.HasName("response_code") Then
+		      If js.Value("response_code") = 1 Then
+		        LastResponseVerbose = "No message"
+		      End If
 		    Else
-		      LastResponseCode = VTSock.LastErrorCode
-		      LastResponseVerbose = SocketErrorMessage(VTSock)
+		      If VTSock.LastErrorCode = 0 Then
+		        LastResponseCode = INVALID_RESPONSE
+		        LastResponseVerbose = "The response from '" + URL + "' was improperly formatted. Please try again later."
+		      Else
+		        LastResponseCode = VTSock.LastErrorCode
+		        LastResponseVerbose = SocketErrorMessage(VTSock)
+		      End If
+		      js = Nil
 		    End If
-		    js = Nil
 		  Finally
 		    Return js
 		  End Try
