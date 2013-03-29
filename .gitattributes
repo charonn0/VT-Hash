@@ -12,6 +12,3 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
-*.RBBAS  diff=astextplain
-*.rbbas  diff=astextplain
-
