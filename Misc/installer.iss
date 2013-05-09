@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1E579B65-503B-4184-B481-5138124BEE1D}
 AppName=VT Hash Check
-AppVersion=1.28
+AppVersion=1.29
 ;AppVerName=VT Hash Check 1.22
 AppPublisher=Boredom Software
 AppPublisherURL=http://www.boredomsoft.org
@@ -23,11 +23,11 @@ SetupIconFile=..\Generics\Media\VTHash_102.ico
 Compression=lzma/ultra
 SolidCompression=true
 AppCopyright=Boredom Software
-AppVerName=VT Hash Check 1.28
+AppVerName=VT Hash Check 1.29
 AllowUNCPath=false
 UsePreviousGroup=false
 UninstallDisplayIcon={app}\VTHash.exe
-UninstallDisplayName=VT Hash Check 1.28
+UninstallDisplayName=VT Hash Check 1.29
 ShowLanguageDialog=no
 WizardImageFile=C:\Program Files (x86)\Inno Setup 5\Wizard Images\Modern\SetupModern21.bmp
 WizardSmallImageFile=C:\Program Files (x86)\Inno Setup 5\Wizard Images\Modern\Small\SetupModernSmall26.bmp
@@ -46,7 +46,7 @@ Source: ..\Generics\Media\VTHash_102.ico; DestDir: {app}; MinVersion: 0,6.0.6000
 
 [Registry]
 Root: HKCR; SubKey: *\shell\vthash; ValueType: string; ValueData: Check File Hash...; Flags: uninsdeletekey
-Root: HKLM; SubKey: SOFTWARE\Boredomsoft\VTHash; ValueType: string; ValueName: Version; ValueData: 1.28; Flags: uninsdeletekey
+Root: HKLM; SubKey: SOFTWARE\Boredomsoft\VTHash; ValueType: string; ValueName: Version; ValueData: 1.29; Flags: uninsdeletekey
 Root: HKLM; SubKey: SOFTWARE\Boredomsoft\VTHash; ValueType: string; ValueName: Release; ValueData: Final
 Root: HKCR; SubKey: *\shell\vthash\command; ValueType: string; ValueData: """{app}\VTHash.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; SubKey: *\shell\vthash; ValueType: string; ValueData: """{app}\VTHash_102.ico"""; Flags: uninsdeletekey; ValueName: Icon; MinVersion: 0,6.0.6000; Languages: 
