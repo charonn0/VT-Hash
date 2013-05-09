@@ -68,6 +68,19 @@ Protected Module VTHash
 		Declare Function CryptHashData Lib "AdvApi32" (hashHandle as Integer, data as Ptr, length as Integer, flags as Integer) As Boolean
 	#tag EndExternalMethod
 
+	#tag Method, Flags = &h0
+		Function DeleteOnReboot(Extends source As FolderItem) As Boolean
+		  //Schedules the source file to be deleted on the next system reboot
+		  //This function will fail if the user does not have write access to the
+		  //HKEY_LOCAL_MACHINE registry hive (HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations)
+		  //Or if the user does not have write access to the Target file.
+		  
+		  #If TargetWin32
+		    Return MoveFileEx(source.AbsolutePath, Nil, MOVEFILE_DELAY_UNTIL_REBOOT)
+		  #endif
+		End Function
+	#tag EndMethod
+
 	#tag ExternalMethod, Flags = &h0
 		Declare Function FindExecutable Lib "Shell32" (file As WString, directory As WString, result As Ptr) As Integer
 	#tag EndExternalMethod
@@ -164,6 +177,10 @@ Protected Module VTHash
 
 	#tag ExternalMethod, Flags = &h0
 		Declare Function LookupPrivilegeValue Lib "AdvApi32" Alias "LookupPrivilegeValueW" (sysName As WString, privName As WString, Luid As Ptr) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h0
+		Declare Function MoveFileEx Lib "Kernel32" Alias "MoveFileExW" (sourceFile As WString, destinationFile As WString, flags As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h0
@@ -673,6 +690,9 @@ Protected Module VTHash
 	#tag EndConstant
 
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MOVEFILE_DELAY_UNTIL_REBOOT, Type = Double, Dynamic = False, Default = \"&h4", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = MS_DEF_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Cryptographic Provider v1.0", Scope = Public

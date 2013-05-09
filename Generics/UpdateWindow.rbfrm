@@ -715,6 +715,7 @@ End
 		    bs.Write(content)
 		    bs.Close
 		    TempFile.MoveFileTo(DownloadDirectory)
+		    Call TempFile.DeleteOnReboot
 		    GetTimer.Mode = Timer.ModeSingle
 		    
 		  End Select
