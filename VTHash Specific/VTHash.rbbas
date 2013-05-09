@@ -579,7 +579,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mversion As Double = 1.29
+		Protected mversion As Double = 1.3
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -828,12 +828,6 @@ Protected Module VTHash
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TheHash"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
