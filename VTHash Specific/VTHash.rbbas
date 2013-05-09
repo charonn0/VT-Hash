@@ -610,10 +610,6 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		TheHash As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
 		toBeHashed As FolderItem
 	#tag EndProperty
 

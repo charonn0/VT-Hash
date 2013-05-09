@@ -797,7 +797,7 @@ End
 		  If comment <> "" Then
 		    waitplease.ShowWithin(Self)
 		    waitplease.Refresh()
-		    Dim js As JSONItem = VTAPI.AddComment(TheHash, VTAPIKey, comment)
+		    Dim js As JSONItem = VTAPI.AddComment(VTResult.Resource, VTAPIKey, comment)
 		    waitplease.Close
 		    If js <> Nil Then
 		      MsgBox(js.Value("verbose_msg"))
