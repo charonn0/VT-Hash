@@ -235,6 +235,17 @@ End
 	#tag EndEvent
 
 
+	#tag Method, Flags = &h0
+		Function ShowException(Error As RuntimeException) As Boolean
+		  'Dim t as Introspection.TypeInfo = Introspection.GetType(error)
+		  Dim trace As String = StackCleaner.StackTrace(Error)
+		  errorStack.Text = trace
+		  Me.ShowModal
+		  
+		End Function
+	#tag EndMethod
+
+
 #tag EndWindowCode
 
 #tag Events PushButton1

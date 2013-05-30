@@ -1,6 +1,31 @@
 #tag Module
 Protected Module StackCleaner
 	#tag Method, Flags = &h0
+		Function CleanedStack(Err As RuntimeException) As String()
+		  'This method was written by SirG3 <TheSirG3@gmail.com>; http://fireyesoftware.com/developer/stackcleaner/
+		  Dim result() As String
+		  
+		  #If rbVersion >= 2005.5
+		    For Each s As String In Err.stack
+		      Dim tmp As String = cleanMangledFunction( s )
+		      
+		      If tmp <> "" Then _
+		      result.append( tmp )
+		    Next
+		    
+		  #Else
+		    // leave result empty
+		    
+		  #EndIf
+		  
+		  // we must return some sort of array (even if empty), otherwise REALbasic will return a "nil" array, causing a crash when trying to use the array.
+		  // see http://realsoftware.com/feedback/viewreport.php?reportid=urvbevct
+		  
+		  Return result
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function CleanMangledFunction(item as string) As string
 		  #if rbVersion >= 2005.5
 		    
@@ -104,6 +129,31 @@ Protected Module StackCleaner
 		  // see http://realsoftware.com/feedback/viewreport.php?reportid=urvbevct
 		  
 		  return result
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function CleanStack(error as RuntimeException) As string()
+		  'This method was written by SirG3 <TheSirG3@gmail.com>; http://fireyesoftware.com/developer/stackcleaner/
+		  Dim result() As String
+		  
+		  #If rbVersion >= 2005.5
+		    For Each s As String In error.stack
+		      Dim tmp As String = cleanMangledFunction( s )
+		      
+		      If tmp <> "" Then _
+		      result.append( tmp )
+		    Next
+		    
+		  #Else
+		    // leave result empty
+		    
+		  #EndIf
+		  
+		  // we must return some sort of array (even if empty), otherwise REALbasic will return a "nil" array, causing a crash when trying to use the array.
+		  // see http://realsoftware.com/feedback/viewreport.php?reportid=urvbevct
+		  
+		  Return result
 		End Function
 	#tag EndMethod
 
@@ -218,6 +268,46 @@ Protected Module StackCleaner
 		  next
 		  
 		  return funcTypes
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function StackTrace(Err As RuntimeException) As String
+		  Dim info As OSVERSIONINFOEX
+		  info.StructSize = Info.Size
+		  Dim OS As String = "Unknown"
+		  Dim bits As String = "x32"
+		  If GetVersionEx(info) Then
+		    If System.IsFunctionAvailable("GetNativeSystemInfo", "kernel32.dll") Then
+		      Dim sysinfo As SYSTEM_INFO
+		      GetNativeSystemInfo(sysinfo)
+		      bits = "x64"
+		    End If
+		    OS = "WinNT " + Str(info.MajorVersion) + "." + Str(info.MinorVersion) + "(" + info.ServicePackName + ")" + bits
+		  End If
+		  Dim d As New Date
+		  Dim stack() As String = CleanedStack(Err)
+		  Dim m As String = "Message: "
+		  If Err.Message.Trim = "" Then
+		    m = m + "No additional details"
+		  Else
+		    m = m + Err.Message
+		  End If
+		  Dim head As String = _
+		  "Runtime Exception:" + EndOfLine + _
+		  "Date: " + d.SQLDateTime + EndOfLine + _
+		  "Exception type: " + Introspection.GetType(Err).FullName + EndOfLine + _
+		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine + _
+		  m + EndOfLine + EndOfLine
+		  
+		  Dim Error As String =_
+		  "Call stack at last call to Raise:" + EndOfLine + EndOfLine + _
+		  Join(stack, "     " + EndOfLine) + EndOfLine
+		  
+		  Dim OsBlock As String = _
+		  "EXE Version: " + VTHash.version + EndOfLine + "Target path: " + toBeHashed.AbsolutePath + EndOfLine + "Algorithm: " + Str(algorithm) + EndOfLine + "OS: " + OS + EndOfLine
+		  
+		  Return head + OsBlock + Error
 		End Function
 	#tag EndMethod
 

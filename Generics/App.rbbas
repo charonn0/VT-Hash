@@ -33,41 +33,17 @@ Inherits Application
 
 	#tag Event
 		Function UnhandledException(error As RuntimeException) As Boolean
+		  Window1.Timer1.Mode = Timer.ModeOff
+		  Window1.Timer2.Mode = Timer.ModeOff
+		  For Each w As resultWindow In ResultWindows()
+		    w.Close
+		  Next
+		  Window1.Visible = False
 		  If error IsA JSONException Then
 		    Call MsgBox("Illegal Response Format", 0, "VirusTotal.com provided an improperly formatted response." + EndOfLine + "Please try again later.")
 		    Quit(1)
 		  Else
-		    errorHandler.Show
-		    Dim t as Introspection.TypeInfo = Introspection.GetType(error)
-		    Dim theStack As String = Join(error.CleanStack, EndOfLine)
-		    Dim path As String
-		    If toBeHashed <> Nil Then
-		      path = toBeHashed.AbsolutePath
-		    Else
-		      path = "Invalid"
-		    End If
-		    
-		    Dim info As OSVERSIONINFOEX
-		    info.StructSize = Info.Size
-		    Dim OS As String = "Unknown"
-		    Dim bits As String = "x32"
-		    If GetVersionEx(info) Then
-		      If System.IsFunctionAvailable("GetNativeSystemInfo", "kernel32.dll") Then
-		        Dim sysinfo As SYSTEM_INFO
-		        GetNativeSystemInfo(sysinfo)
-		        bits = "x64"
-		      End If
-		      OS = "WinNT " + Str(info.MajorVersion) + "." + Str(info.MinorVersion) + "(" + info.ServicePackName + ")" + bits
-		    End If
-		    
-		    
-		    errorHandler.errorStack.Text = "EXE Version: " + VTHash.version + EndOfLine + _
-		    "Target path: " + path + EndOfLine + _
-		    "Algorithm: " + Str(algorithm) + EndOfLine + _
-		    "OS: " + OS + EndOfLine + EndOfLine + _
-		    "Call stack: " + EndOfLine + t.Name + ": " + error.Message + "(" + Str(error.ErrorNumber) + ")" + EndOfLine + theStack
-		    Return True
-		    
+		    Return errorHandler.ShowException(error)
 		  End If
 		End Function
 	#tag EndEvent
