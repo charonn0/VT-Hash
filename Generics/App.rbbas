@@ -40,7 +40,7 @@ Inherits Application
 		  Next
 		  Window1.Visible = False
 		  If error IsA JSONException Then
-		    Call MsgBox("Illegal Response Format", 0, "VirusTotal.com provided an improperly formatted response." + EndOfLine + "Please try again later.")
+		    Call MsgBox("VirusTotal.com provided an improperly formatted response." + EndOfLine + "Please try again later.", 16, "Illegal Response Format")
 		    Quit(1)
 		  Else
 		    Return errorHandler.ShowException(error)
