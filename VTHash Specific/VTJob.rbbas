@@ -10,10 +10,15 @@ Protected Class VTJob
 	#tag Method, Flags = &h0
 		Sub GetResults()
 		  Dim js As JSONItem = VTAPI.GetReport(Me.Hash, VTAPIKey, VTAPI.ReportType.FileReport)
-		  mResponse = New Results(js)
-		  Me.Response.HashValue = Me.Hash
-		  Me.Response.TargetFile = Me.TargetFile
-		  Me.Response.Algorithm = Me.Algorithm
+		  If js <> Nil Then
+		    mResponse = New Results(js)
+		    Me.Response.HashValue = Me.Hash
+		    Me.Response.TargetFile = Me.TargetFile
+		    Me.Response.Algorithm = Me.Algorithm
+		  Else
+		    Call MsgBox("VirusTotal.com responded with an illegal or empty object. Please try again in a few minutes.", 16, "Parse Error")
+		    Quit(1)
+		  End If
 		End Sub
 	#tag EndMethod
 
@@ -84,12 +89,14 @@ Protected Class VTJob
 			Name="Hash"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
+			Type="Integer"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
@@ -97,18 +104,21 @@ Protected Class VTJob
 			Visible=true
 			Group="Position"
 			InitialValue="0"
+			Type="Integer"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			Type="String"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
+			Type="String"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
@@ -116,6 +126,7 @@ Protected Class VTJob
 			Visible=true
 			Group="Position"
 			InitialValue="0"
+			Type="Integer"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior
