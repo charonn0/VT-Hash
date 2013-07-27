@@ -46,6 +46,7 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "File:"
       TextAlign       =   0
       TextColor       =   0
@@ -80,6 +81,7 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "MD5:"
       TextAlign       =   0
       TextColor       =   0
@@ -114,6 +116,7 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -148,6 +151,7 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -175,7 +179,9 @@ Begin Window Window1
       LockTop         =   True
       Maximum         =   5
       Scope           =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   32
       Value           =   0
       Visible         =   True
@@ -255,6 +261,7 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Version 0.86"
       TextAlign       =   0
       TextColor       =   8421504
@@ -268,6 +275,7 @@ Begin Window Window1
       Width           =   86
    End
    Begin Timer Timer2
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   408
@@ -275,11 +283,15 @@ Begin Window Window1
       Mode            =   2
       Period          =   300
       Scope           =   0
+      TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -6
+      Visible         =   True
       Width           =   32
    End
    Begin Timer Timer1
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   364
@@ -287,8 +299,11 @@ Begin Window Window1
       Mode            =   1
       Period          =   100
       Scope           =   0
+      TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -6
+      Visible         =   True
       Width           =   32
    End
 End
@@ -348,6 +363,11 @@ End
 		  ProgressBar1.Value = 5
 		  resultWindows.Append(New resultWindow)
 		  resultWindows(0).showList(Job.Response)
+		  
+		  
+		Exception Err As NilObjectException
+		  Call MsgBox("VirusTotal.com supplied an invalid response. Please try again in a few minutes.", 16, "Illegal response format!")
+		  Quit(1)
 		  
 		End Sub
 	#tag EndMethod
