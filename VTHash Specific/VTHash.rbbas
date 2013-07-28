@@ -596,7 +596,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mversion As Double = 1.3
+		Protected mversion As Double = 1.31
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0

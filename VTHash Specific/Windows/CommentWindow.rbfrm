@@ -131,6 +131,60 @@ Begin Window CommentWindow
       Visible         =   True
       Width           =   80
    End
+   Begin Canvas VoteSafe
+      AcceptFocus     =   ""
+      AcceptTabs      =   ""
+      AutoDeactivate  =   True
+      Backdrop        =   ""
+      DoubleBuffer    =   False
+      Enabled         =   True
+      EraseBackground =   True
+      Height          =   19
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   6
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   82
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   22
+   End
+   Begin Canvas VoteDangerous
+      AcceptFocus     =   ""
+      AcceptTabs      =   ""
+      AutoDeactivate  =   True
+      Backdrop        =   ""
+      DoubleBuffer    =   False
+      Enabled         =   True
+      EraseBackground =   True
+      Height          =   19
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   32
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   82
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   22
+   End
 End
 #tag EndWindow
 
@@ -149,6 +203,10 @@ End
 		Comment As String
 	#tag EndProperty
 
+	#tag Property, Flags = &h1
+		Protected VSOver As Boolean
+	#tag EndProperty
+
 
 #tag EndWindowCode
 
@@ -165,6 +223,108 @@ End
 		Sub Action()
 		  Comment = ""
 		  Self.Close
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events VoteSafe
+	#tag Event
+		Sub Paint(g As Graphics)
+		  If VSOver Then
+		    g.DrawPicture(greenshield, 0, 0)
+		  Else
+		    g.DrawPicture(graygreenshield, 0, 0)
+		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseMove(X As Integer, Y As Integer)
+		  #pragma Unused X
+		  #pragma Unused Y
+		  Me.Invalidate(False)
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseEnter()
+		  VSOver = True
+		  Me.Invalidate(True)
+		  Me.MouseCursor = System.Cursors.FingerPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  VSOver = False
+		  Me.Invalidate(True)
+		  Me.MouseCursor = System.Cursors.StandardPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  #pragma Unused X
+		  #pragma Unused Y
+		  Return True
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseUp(X As Integer, Y As Integer)
+		  #pragma Unused X
+		  #pragma Unused Y
+		  TextArea1.Text = "#goodware " + TextArea1.Text
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  Me.HelpTag = "Mark this file as safe"
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events VoteDangerous
+	#tag Event
+		Sub Paint(g As Graphics)
+		  If VSOver Then
+		    g.DrawPicture(redshield, 0, 0)
+		  Else
+		    g.DrawPicture(grayredshield, 0, 0)
+		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseMove(X As Integer, Y As Integer)
+		  #pragma Unused X
+		  #pragma Unused Y
+		  Me.Invalidate(False)
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseEnter()
+		  VSOver = True
+		  Me.Invalidate(True)
+		  Me.MouseCursor = System.Cursors.FingerPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  VSOver = False
+		  Me.Invalidate(True)
+		  Me.MouseCursor = System.Cursors.StandardPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  #pragma Unused X
+		  #pragma Unused Y
+		  Return True
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseUp(X As Integer, Y As Integer)
+		  #pragma Unused X
+		  #pragma Unused Y
+		  TextArea1.Text = "#badware " + TextArea1.Text
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  Me.HelpTag = "Mark this file as dangerous"
 		End Sub
 	#tag EndEvent
 #tag EndEvents
