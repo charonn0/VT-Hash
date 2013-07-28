@@ -41,4 +41,4 @@ PROGRAM UTILITIES. The program contains certain design, processing utilities, to
 
 Users who have need to use the software in a way which is not allowed under this license are encouraged to contact Boredom Software with their request.
 
-If you have any questions concerning this license, you may contact me at http://www.boredomsoft.org/contactus.bs
+If you have any questions concerning this license, you may contact Andrew Lambert.
