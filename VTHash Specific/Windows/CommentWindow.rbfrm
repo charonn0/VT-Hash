@@ -198,13 +198,44 @@ End
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Sub SetMalwareVote()
+		  
+		  Dim comment As String = TextArea1.Text
+		  While InStr(comment, "#badware ") > 0
+		    comment = Replace(comment, "#badware ", "")
+		  Wend
+		  
+		  While InStr(comment, "#goodware ") > 0
+		    comment = Replace(comment, "#goodware ", "")
+		  Wend
+		  
+		  Select Case VoteState
+		  Case 1 ' safe
+		    TextArea1.Text = "#goodware " + comment
+		  Case 2 ' bad
+		    TextArea1.Text = "#badware " + comment
+		  Else ' no vote
+		    TextArea1.Text = comment
+		  End Select
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h0
 		Comment As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected VSOver As Boolean
+		Protected VBOver As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected VoteState As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		VSOver As Boolean
 	#tag EndProperty
 
 
@@ -229,7 +260,7 @@ End
 #tag Events VoteSafe
 	#tag Event
 		Sub Paint(g As Graphics)
-		  If VSOver Then
+		  If VSOver Or VoteState = 1 Then
 		    g.DrawPicture(greenshield, 0, 0)
 		  Else
 		    g.DrawPicture(graygreenshield, 0, 0)
@@ -268,19 +299,26 @@ End
 		Sub MouseUp(X As Integer, Y As Integer)
 		  #pragma Unused X
 		  #pragma Unused Y
-		  TextArea1.Text = "#goodware " + TextArea1.Text
+		  If VoteState = 1 Then
+		    VoteState = 0 ' no vote
+		  Else
+		    VoteState = 1 ' 1 = vote safe
+		  End If
+		  SetMalwareVote()
+		  Me.Invalidate(False)
+		  VoteDangerous.Invalidate(False)
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub Open()
-		  Me.HelpTag = "Mark this file as safe"
+		  Me.HelpTag = "Tag this file as safe"
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events VoteDangerous
 	#tag Event
 		Sub Paint(g As Graphics)
-		  If VSOver Then
+		  If VBOver Or VoteState = 2 Then
 		    g.DrawPicture(redshield, 0, 0)
 		  Else
 		    g.DrawPicture(grayredshield, 0, 0)
@@ -296,14 +334,14 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub MouseEnter()
-		  VSOver = True
+		  VBOver = True
 		  Me.Invalidate(True)
 		  Me.MouseCursor = System.Cursors.FingerPointer
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub MouseExit()
-		  VSOver = False
+		  VBOver = False
 		  Me.Invalidate(True)
 		  Me.MouseCursor = System.Cursors.StandardPointer
 		End Sub
@@ -319,12 +357,19 @@ End
 		Sub MouseUp(X As Integer, Y As Integer)
 		  #pragma Unused X
 		  #pragma Unused Y
-		  TextArea1.Text = "#badware " + TextArea1.Text
+		  If VoteState = 2 Then
+		    VoteState = 0 ' no vote
+		  Else
+		    VoteState = 2 ' 2 = vote bad
+		  End If
+		  SetMalwareVote()
+		  Me.Invalidate(False)
+		  VoteSafe.Invalidate(False)
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub Open()
-		  Me.HelpTag = "Mark this file as dangerous"
+		  Me.HelpTag = "Tag this file as dangerous"
 		End Sub
 	#tag EndEvent
 #tag EndEvents
