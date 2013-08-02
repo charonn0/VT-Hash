@@ -300,12 +300,14 @@ Protected Module StackCleaner
 		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine + _
 		  m + EndOfLine + EndOfLine
 		  
+		  Dim file As String = "No File Specified"
+		  If toBeHashed <> Nil Then file = toBeHashed.AbsolutePath
 		  Dim Error As String =_
 		  "Call stack at last call to Raise:" + EndOfLine + EndOfLine + _
 		  Join(stack, "     " + EndOfLine) + EndOfLine
 		  
 		  Dim OsBlock As String = _
-		  "EXE Version: " + VTHash.version + EndOfLine + "Target path: " + toBeHashed.AbsolutePath + EndOfLine + "Algorithm: " + Str(algorithm) + EndOfLine + "OS: " + OS + EndOfLine
+		  "EXE Version: " + VTHash.version + EndOfLine + "Target path: " + file + EndOfLine + "Algorithm: " + Str(algorithm) + EndOfLine + "OS: " + OS + EndOfLine
 		  
 		  Return head + OsBlock + Error
 		End Function
