@@ -204,7 +204,7 @@ Begin Window settswin
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   255
+      Left            =   119
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -348,6 +348,37 @@ Begin Window settswin
       Visible         =   True
       Width           =   80
    End
+   Begin PushButton PushButton6
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   ""
+      Caption         =   "Change Search Engine"
+      Default         =   ""
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   199
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   8
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   0
+      Underline       =   ""
+      Visible         =   True
+      Width           =   143
+   End
 End
 #tag EndWindow
 
@@ -363,6 +394,11 @@ End
 		  
 		End Sub
 	#tag EndEvent
+
+
+	#tag Property, Flags = &h21
+		Private NewSearchEngine As Pair
+	#tag EndProperty
 
 
 #tag EndWindowCode
@@ -402,6 +438,10 @@ End
 		  Else
 		    autosavePath = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans")
 		  End If
+		  
+		  If NewSearchEngine <> Nil Then
+		    SearchEngine = NewSearchEngine
+		  End If
 		  SaveSettings()
 		  Close()
 		End Sub
@@ -426,6 +466,14 @@ End
 	#tag Event
 		Sub Action()
 		  about.Show
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton6
+	#tag Event
+		Sub Action()
+		  NewSearchEngine = SearchSetting.GetURL(SearchEngine)
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents

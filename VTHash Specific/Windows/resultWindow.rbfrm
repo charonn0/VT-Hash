@@ -632,7 +632,11 @@ End
 		    + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
 		    
 		    FileHash.Text = VTResult.HashValue
-		    FilePath.Text = VTResult.TargetFile.AbsolutePath
+		    If VTResult.TargetFile <> Nil Then
+		      FilePath.Text = VTResult.TargetFile.AbsolutePath
+		    Else
+		      FilePath.Text = "No File!?"
+		    End If
 		    ProgBar1.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
 		    ProgBar1.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
 		    Select Case VTResult.Algorithm
@@ -698,10 +702,12 @@ End
 		  If infection <> "" Then
 		    Dim cp As New MenuItem("Copy to '" + infection + "' to clipboard")
 		    Dim se As New MenuItem("Search " + SearchEngine.Left.StringValue + " for '" + infection + "'")
+		    Dim ch As New MenuItem("Change search engine...")
 		    se.Tag = infection
 		    cp.Tag = infection
 		    base.Append(cp)
 		    base.Append(se)
+		    base.Append(ch)
 		    Return True
 		  End If
 		End Function
@@ -714,8 +720,51 @@ End
 		    cb.Text = hitItem.Tag
 		  Case "Searc"
 		    ShowURL(Replace(SearchEngine.Right.StringValue, "%PARAMETER%", hitItem.Tag))
+		  Case "Chang"
+		    Dim newset As Pair = SearchSetting.GetURL(SearchEngine)
+		    If newset <> Nil Then
+		      SearchEngine = newset
+		      VTHash.SaveSettings()
+		    End If
 		  End Select
 		End Function
+	#tag EndEvent
+	#tag Event
+		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
+		  If column = 2 And Row <= Me.ListCount - 1 Then
+		    If Me.RowTag(row).BooleanValue Then
+		      'g.ForeColor = &c64646400
+		      g.Underline = True
+		    End If
+		  End If
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
+		  If IsContextualClick Then Return True
+		  If column = 2 And Row <= Me.ListCount - 1 Then
+		    If Me.RowTag(row).BooleanValue Then
+		      Dim infection As String = Me.Cell(row, column).Trim
+		      ShowURL(Replace(SearchEngine.Right.StringValue, "%PARAMETER%", infection))
+		    End If
+		  End If
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseMove(X As Integer, Y As Integer)
+		  Dim row, column As Integer
+		  row = Me.RowFromXY(X, Y)
+		  column = Me.ColumnFromXY(X, Y)
+		  If column = 2 And Row <= Me.ListCount - 1 Then
+		    If Me.RowTag(row).BooleanValue Then
+		      Me.MouseCursor = System.Cursors.FingerPointer
+		    Else
+		      Me.MouseCursor = System.Cursors.StandardPointer
+		    End If
+		  Else
+		    Me.MouseCursor = System.Cursors.StandardPointer
+		  End If
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events closeButton

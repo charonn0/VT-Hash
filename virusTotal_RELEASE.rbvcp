@@ -34,6 +34,7 @@ Class=VTJob;VTHash Specific/VTJob.rbbas;&h6E66A7FF;&h5384CFFF;false
 Class=Results;VTHash Specific/Results.rbbas;&h2A8FF7FF;&h5384CFFF;false
 Module=VTAPI;VTHash Specific/VTAPI.rbbas;&h5ABBF7FF;&h5384CFFF;false
 Folder=Windows;VTHash Specific/Windows;&h763397FF;&h5384CFFF;false
+Window=SearchSetting;VTHash Specific/Windows/SearchSetting.rbfrm;&h787287FF;&h763397FF;false
 Window=TridResult;VTHash Specific/Windows/TridResult.rbfrm;&h46C0E7FF;&h763397FF;false
 Module=VTHash;VTHash Specific/VTHash.rbbas;&h34A8A7FF;&h5384CFFF;false
 Window=UpdateWindow;Generics/UpdateWindow.rbfrm;&h6E665FFF;&h9B80FFF;false
