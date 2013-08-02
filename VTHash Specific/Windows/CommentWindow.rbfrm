@@ -132,8 +132,8 @@ Begin Window CommentWindow
       Width           =   80
    End
    Begin Canvas VoteSafe
-      AcceptFocus     =   ""
-      AcceptTabs      =   ""
+      AcceptFocus     =   True
+      AcceptTabs      =   True
       AutoDeactivate  =   True
       Backdrop        =   ""
       DoubleBuffer    =   True
@@ -144,11 +144,11 @@ Begin Window CommentWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   6
-      LockBottom      =   ""
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
-      LockTop         =   True
+      LockTop         =   False
       Scope           =   0
       TabIndex        =   3
       TabPanelIndex   =   0
@@ -159,8 +159,8 @@ Begin Window CommentWindow
       Width           =   22
    End
    Begin Canvas VoteDangerous
-      AcceptFocus     =   ""
-      AcceptTabs      =   ""
+      AcceptFocus     =   True
+      AcceptTabs      =   True
       AutoDeactivate  =   True
       Backdrop        =   ""
       DoubleBuffer    =   True
@@ -171,11 +171,11 @@ Begin Window CommentWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   32
-      LockBottom      =   ""
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
-      LockTop         =   True
+      LockTop         =   False
       Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
@@ -213,10 +213,16 @@ End
 		  Select Case VoteState
 		  Case 1 ' safe
 		    TextArea1.Text = "#goodware " + comment
+		    VoteSafe.HelpTag = "Remove safe tag"
+		    VoteDangerous.HelpTag = "Tag this file as dangerous"
 		  Case 2 ' bad
 		    TextArea1.Text = "#badware " + comment
+		    VoteSafe.HelpTag = "Tag this file as safe"
+		    VoteDangerous.HelpTag = "Remove dangerous tag"
 		  Else ' no vote
 		    TextArea1.Text = comment
+		    VoteSafe.HelpTag = "Tag this file as safe"
+		    VoteDangerous.HelpTag = "Tag this file as dangerous"
 		  End Select
 		  If caretpos > TextArea1.Text.Len Then caretpos = TextArea1.Text.Len
 		  TextArea1.SelStart = caretpos
@@ -243,6 +249,24 @@ End
 
 #tag EndWindowCode
 
+#tag Events TextArea1
+	#tag Event
+		Sub TextChange()
+		  Dim t1, t2 As Integer
+		  t1 = Instr(Me.Text, "#goodware ")
+		  t2 = Instr(Me.Text, "#badware ")
+		  If t2 = 0 And t1 > 0 Then
+		    VoteState = 1
+		  ElseIf t1 = 0 And t2 > 0 Then
+		    VoteState = 2
+		  Else
+		    VoteState = 0
+		  End If
+		  VoteDangerous.Invalidate(True)
+		  VoteSafe.Invalidate(True)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
