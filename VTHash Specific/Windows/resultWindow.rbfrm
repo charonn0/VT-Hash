@@ -766,6 +766,35 @@ End
 		  End If
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  Me.ColumnSortDirection(1) = 0
+		  Me.HeaderType(1) = Listbox.HeaderTypes.NotSortable
+		  Me.ColumnSortDirection(2) = -1
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CompareRows(row1 as Integer, row2 as Integer, column as Integer, ByRef result as Integer) As Boolean
+		  If column = 2 Then
+		    Dim c1, c2 As String
+		    c1 = Me.Cell(row1, 2)
+		    c2 = Me.Cell(row2, 2)
+		    If c1.Trim <> "" And c2.Trim = "" Then
+		      result = 1
+		      Return True
+		    ElseIf c1.Trim = "" And c2.Trim <> "" Then
+		      result = -1
+		      Return True
+		    ElseIf c1.Trim <> "" And c2.Trim <> "" Then
+		      result = StrComp(c1, c2, 0)
+		      Return True
+		    Else
+		      result = 0
+		      Return True
+		    End If
+		  End If
+		End Function
+	#tag EndEvent
 #tag EndEvents
 #tag Events closeButton
 	#tag Event
