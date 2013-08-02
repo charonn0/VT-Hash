@@ -136,9 +136,9 @@ Begin Window CommentWindow
       AcceptTabs      =   ""
       AutoDeactivate  =   True
       Backdrop        =   ""
-      DoubleBuffer    =   False
+      DoubleBuffer    =   True
       Enabled         =   True
-      EraseBackground =   True
+      EraseBackground =   False
       Height          =   19
       HelpTag         =   ""
       Index           =   -2147483648
@@ -163,9 +163,9 @@ Begin Window CommentWindow
       AcceptTabs      =   ""
       AutoDeactivate  =   True
       Backdrop        =   ""
-      DoubleBuffer    =   False
+      DoubleBuffer    =   True
       Enabled         =   True
-      EraseBackground =   True
+      EraseBackground =   False
       Height          =   19
       HelpTag         =   ""
       Index           =   -2147483648
@@ -200,8 +200,8 @@ End
 
 	#tag Method, Flags = &h1
 		Protected Sub SetMalwareVote()
-		  
 		  Dim comment As String = TextArea1.Text
+		  Dim caretpos As Integer = TextArea1.SelStart
 		  While InStr(comment, "#badware ") > 0
 		    comment = Replace(comment, "#badware ", "")
 		  Wend
@@ -218,6 +218,8 @@ End
 		  Else ' no vote
 		    TextArea1.Text = comment
 		  End Select
+		  If caretpos > TextArea1.Text.Len Then caretpos = TextArea1.Text.Len
+		  TextArea1.SelStart = caretpos
 		End Sub
 	#tag EndMethod
 
@@ -271,7 +273,7 @@ End
 		Sub MouseMove(X As Integer, Y As Integer)
 		  #pragma Unused X
 		  #pragma Unused Y
-		  Me.Invalidate(False)
+		  Me.Invalidate(True)
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -305,8 +307,8 @@ End
 		    VoteState = 1 ' 1 = vote safe
 		  End If
 		  SetMalwareVote()
-		  Me.Invalidate(False)
-		  VoteDangerous.Invalidate(False)
+		  Me.Invalidate(True)
+		  VoteDangerous.Invalidate(True)
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -329,7 +331,7 @@ End
 		Sub MouseMove(X As Integer, Y As Integer)
 		  #pragma Unused X
 		  #pragma Unused Y
-		  Me.Invalidate(False)
+		  Me.Invalidate(True)
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -363,8 +365,8 @@ End
 		    VoteState = 2 ' 2 = vote bad
 		  End If
 		  SetMalwareVote()
-		  Me.Invalidate(False)
-		  VoteSafe.Invalidate(False)
+		  Me.Invalidate(True)
+		  VoteSafe.Invalidate(True)
 		End Sub
 	#tag EndEvent
 	#tag Event
