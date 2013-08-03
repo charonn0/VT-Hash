@@ -11,7 +11,6 @@ Inherits Application
 		  
 		  KillApiKeyFile()
 		  LoadConf()
-		  
 		  'If toBeHashed = Nil Then
 		  'toBeHashed = App.ExecutableFile
 		  'End If
@@ -73,7 +72,8 @@ Inherits Application
 	#tag Method, Flags = &h21
 		Private Sub LoadConf()
 		  Dim f As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software")
-		  SearchEngine = "Google":"https://encrypted.google.com/search?q=%PARAMETER%"
+		  SearchEngineName = "Google"
+		  SearchEngineURL = "https://encrypted.google.com/search?q=%PARAMETER%"
 		  If Not f.Exists Then
 		    f.CreateAsFolder()
 		  End If
@@ -97,8 +97,8 @@ Inherits Application
 		    End If
 		    
 		    If j.HasName("Search Engine") And j.HasName("Search URL") Then
-		      SearchEngine = j.Value("Search Engine").StringValue:j.Value("Search URL").StringValue
-		      
+		      SearchEngineName = j.Value("Search Engine").StringValue
+		      SearchEngineURL = j.Value("Search URL").StringValue
 		    End If
 		    
 		    If j.Value("Use SHA1").BooleanValue Then

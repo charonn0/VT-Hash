@@ -701,13 +701,13 @@ End
 		  Dim infection As String = Me.Cell(Me.RowFromXY(X, Y), 2).Trim
 		  If infection <> "" Then
 		    Dim cp As New MenuItem("Copy to '" + infection + "' to clipboard")
-		    Dim se As New MenuItem("Search " + SearchEngine.Left.StringValue + " for '" + infection + "'")
-		    Dim ch As New MenuItem("Change search engine...")
+		    Dim se As New MenuItem("Search " + SearchEngineName + " for '" + infection + "'")
+		    'Dim ch As New MenuItem("Change search engine...")
 		    se.Tag = infection
 		    cp.Tag = infection
 		    base.Append(cp)
 		    base.Append(se)
-		    base.Append(ch)
+		    'base.Append(ch)
 		    Return True
 		  End If
 		End Function
@@ -719,13 +719,16 @@ End
 		    Dim cb As New Clipboard
 		    cb.Text = hitItem.Tag
 		  Case "Searc"
-		    ShowURL(Replace(SearchEngine.Right.StringValue, "%PARAMETER%", hitItem.Tag))
-		  Case "Chang"
-		    Dim newset As Pair = SearchSetting.GetURL(SearchEngine)
-		    If newset <> Nil Then
-		      SearchEngine = newset
-		      VTHash.SaveSettings()
-		    End If
+		    ShowURL(Replace(SearchEngineURL, "%PARAMETER%", hitItem.Tag))
+		    'Case "Chang"
+		    'Dim nm, url As String
+		    'nm = SearchEngineName
+		    'url = SearchEngineURL
+		    'If SearchSetting.GetURL(nm, url) Then
+		    'SearchEngineName = nm
+		    'SearchEngineURL = url
+		    'VTHash.SaveSettings()
+		    'End If
 		  End Select
 		End Function
 	#tag EndEvent
@@ -745,7 +748,7 @@ End
 		  If column = 2 And Row <= Me.ListCount - 1 Then
 		    If Me.RowTag(row).BooleanValue Then
 		      Dim infection As String = Me.Cell(row, column).Trim
-		      ShowURL(Replace(SearchEngine.Right.StringValue, "%PARAMETER%", infection))
+		      ShowURL(Replace(SearchEngineURL, "%PARAMETER%", infection))
 		    End If
 		  End If
 		End Function

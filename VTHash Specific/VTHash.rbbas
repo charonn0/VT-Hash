@@ -235,6 +235,12 @@ Protected Module VTHash
 		    s.Value("Default Save Directory") = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans").AbsolutePath
 		  End If
 		  s.Value("API Key") = VTAPIKey
+		  
+		  If SearchEngineName.Trim <> "" And SearchEngineURL.Trim <> "" Then
+		    s.Value("Search Engine") = SearchEngineName
+		    s.Value("Search URL") = SearchEngineURL
+		  End If
+		  s.Value("Comment Signature") = CommentSignature.Trim
 		  s.Compact = False
 		  Dim t As String = s.ToString
 		  Dim tos As TextOutputStream
@@ -580,6 +586,10 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		CommentSignature As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		defaultFormat As Integer
 	#tag EndProperty
 
@@ -623,7 +633,11 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		SearchEngine As Pair
+		SearchEngineName As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		SearchEngineURL As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
