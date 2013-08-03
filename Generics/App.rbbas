@@ -72,8 +72,6 @@ Inherits Application
 	#tag Method, Flags = &h21
 		Private Sub LoadConf()
 		  Dim f As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software")
-		  SearchEngineName = "Google"
-		  SearchEngineURL = "https://encrypted.google.com/search?q=%PARAMETER%"
 		  If Not f.Exists Then
 		    f.CreateAsFolder()
 		  End If
@@ -99,6 +97,9 @@ Inherits Application
 		    If j.HasName("Search Engine") And j.HasName("Search URL") Then
 		      SearchEngineName = j.Value("Search Engine").StringValue
 		      SearchEngineURL = j.Value("Search URL").StringValue
+		    Else
+		      SearchEngineName = "Google"
+		      SearchEngineURL = "https://encrypted.google.com/search?q=%PARAMETER%"
 		    End If
 		    
 		    If j.Value("Use SHA1").BooleanValue Then
@@ -112,6 +113,9 @@ Inherits Application
 		    defaultFormat = j.Value("Default Save Format")
 		    autosave = j.Value("Autosave Results")
 		    VTAPIKey = j.Value("API Key")
+		    If j.HasName("Comment Signature") Then
+		      CommentSignature = j.Value("Comment Signature")
+		    End If
 		  Else
 		    SaveSettings()
 		    LoadConf

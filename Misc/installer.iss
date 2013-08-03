@@ -23,11 +23,11 @@ SetupIconFile=..\Generics\Media\VTHash_102.ico
 Compression=lzma/ultra
 SolidCompression=true
 AppCopyright=Boredom Software
-AppVerName=VT Hash Check 1.31
+AppVerName=VT Hash Check 1.4
 AllowUNCPath=false
 UsePreviousGroup=false
 UninstallDisplayIcon={app}\VTHash.exe
-UninstallDisplayName=VT Hash Check 1.31
+UninstallDisplayName=VT Hash Check 1.4
 ShowLanguageDialog=no
 WizardImageFile=C:\Program Files (x86)\Inno Setup 5\Wizard Images\Modern\SetupModern21.bmp
 WizardSmallImageFile=C:\Program Files (x86)\Inno Setup 5\Wizard Images\Modern\Small\SetupModernSmall26.bmp
@@ -46,7 +46,7 @@ Source: ..\Generics\Media\VTHash_102.ico; DestDir: {app}; MinVersion: 0,6.0.6000
 
 [Registry]
 Root: HKCR; SubKey: *\shell\vthash; ValueType: string; ValueData: Check File Hash...; Flags: uninsdeletekey
-Root: HKLM; SubKey: SOFTWARE\Boredomsoft\VTHash; ValueType: string; ValueName: Version; ValueData: 1.31; Flags: uninsdeletekey
+Root: HKLM; SubKey: SOFTWARE\Boredomsoft\VTHash; ValueType: string; ValueName: Version; ValueData: 1.4; Flags: uninsdeletekey
 Root: HKLM; SubKey: SOFTWARE\Boredomsoft\VTHash; ValueType: string; ValueName: Release; ValueData: Final
 Root: HKCR; SubKey: *\shell\vthash\command; ValueType: string; ValueData: """{app}\VTHash.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; SubKey: *\shell\vthash; ValueType: string; ValueData: """{app}\VTHash_102.ico"""; Flags: uninsdeletekey; ValueName: Icon; MinVersion: 0,6.0.6000; Languages: 

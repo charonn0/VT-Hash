@@ -693,7 +693,10 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub DoubleClick()
-		  If Me.Cell(Me.ListIndex, 2) <> "" Then ShowURL("https://encrypted.google.com/search?q=" + Me.Cell(Me.ListIndex, 2))
+		  If Me.Cell(Me.ListIndex, 2) <> "" And SearchEngineSet Then
+		    Dim url As String = Replace(SearchEngineURL, "%PARAMETER%", Me.Cell(Me.ListIndex, 2))
+		    ShowURL(url)
+		  End If
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -706,7 +709,7 @@ End
 		    se.Tag = infection
 		    cp.Tag = infection
 		    base.Append(cp)
-		    base.Append(se)
+		    If SearchEngineSet Then base.Append(se)
 		    'base.Append(ch)
 		    Return True
 		  End If
@@ -731,43 +734,6 @@ End
 		    'End If
 		  End Select
 		End Function
-	#tag EndEvent
-	#tag Event
-		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
-		  If column = 2 And Row <= Me.ListCount - 1 Then
-		    If Me.RowTag(row).BooleanValue Then
-		      'g.ForeColor = &c64646400
-		      g.Underline = True
-		    End If
-		  End If
-		End Function
-	#tag EndEvent
-	#tag Event
-		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
-		  If IsContextualClick Then Return True
-		  If column = 2 And Row <= Me.ListCount - 1 Then
-		    If Me.RowTag(row).BooleanValue Then
-		      Dim infection As String = Me.Cell(row, column).Trim
-		      ShowURL(Replace(SearchEngineURL, "%PARAMETER%", infection))
-		    End If
-		  End If
-		End Function
-	#tag EndEvent
-	#tag Event
-		Sub MouseMove(X As Integer, Y As Integer)
-		  Dim row, column As Integer
-		  row = Me.RowFromXY(X, Y)
-		  column = Me.ColumnFromXY(X, Y)
-		  If column = 2 And Row <= Me.ListCount - 1 Then
-		    If Me.RowTag(row).BooleanValue Then
-		      Me.MouseCursor = System.Cursors.FingerPointer
-		    Else
-		      Me.MouseCursor = System.Cursors.StandardPointer
-		    End If
-		  Else
-		    Me.MouseCursor = System.Cursors.StandardPointer
-		  End If
-		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub Open()
@@ -796,6 +762,44 @@ End
 		      Return True
 		    End If
 		  End If
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseMove(X As Integer, Y As Integer)
+		  'Dim row, column As Integer
+		  'row = Me.RowFromXY(X, Y)
+		  'column = Me.ColumnFromXY(X, Y)
+		  'If column = 2 And Row <= Me.ListCount - 1 And SearchEngineSet Then
+		  'If Me.RowTag(row).BooleanValue Then
+		  'Me.MouseCursor = System.Cursors.FingerPointer
+		  'Else
+		  'Me.MouseCursor = System.Cursors.StandardPointer
+		  'End If
+		  'Else
+		  'Me.MouseCursor = System.Cursors.StandardPointer
+		  'End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
+		  'If column = 2 And Row <= Me.ListCount - 1 And SearchEngineSet Then
+		  'If Me.RowTag(row).BooleanValue Then
+		  ''g.ForeColor = &c64646400
+		  'g.Underline = True
+		  'End If
+		  'End If
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
+		  'If IsContextualClick Then Return True
+		  'If Not SearchEngineSet Then Return False
+		  'If column = 2 And Row <= Me.ListCount - 1 Then
+		  'If Me.RowTag(row).BooleanValue Then
+		  'Dim infection As String = Me.Cell(row, column).Trim
+		  'ShowURL(Replace(SearchEngineURL, "%PARAMETER%", infection))
+		  'End If
+		  'End If
 		End Function
 	#tag EndEvent
 #tag EndEvents

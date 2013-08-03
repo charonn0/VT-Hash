@@ -235,11 +235,8 @@ Protected Module VTHash
 		    s.Value("Default Save Directory") = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans").AbsolutePath
 		  End If
 		  s.Value("API Key") = VTAPIKey
-		  
-		  If SearchEngineName.Trim <> "" And SearchEngineURL.Trim <> "" Then
-		    s.Value("Search Engine") = SearchEngineName
-		    s.Value("Search URL") = SearchEngineURL
-		  End If
+		  s.Value("Search Engine") = SearchEngineName
+		  s.Value("Search URL") = SearchEngineURL
 		  s.Value("Comment Signature") = CommentSignature.Trim
 		  s.Compact = False
 		  Dim t As String = s.ToString
@@ -257,6 +254,12 @@ Protected Module VTHash
 		  tos.Write(t)
 		  tos.Close
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function SearchEngineSet() As Boolean
+		  Return SearchEngineName.Trim <> "" And SearchEngineURL.Trim <> ""
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -606,7 +609,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mversion As Double = 1.31
+		Protected mversion As Double = 1.4
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -816,6 +819,11 @@ Protected Module VTHash
 			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="CommentSignature"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="defaultFormat"
 			Group="Behavior"
 			Type="Integer"
@@ -856,6 +864,16 @@ Protected Module VTHash
 			Name="PROCESS_QUERY_LIMITED_INFORMATION"
 			Group="Behavior"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="SearchEngineName"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="SearchEngineURL"
+			Group="Behavior"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

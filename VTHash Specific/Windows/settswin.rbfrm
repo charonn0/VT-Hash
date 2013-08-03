@@ -775,6 +775,18 @@ End
 		    End If
 		  End If
 		  
+		  If SearchDisplayName.Text.Trim <> "" And SearchURL.Text.Trim <> "" Then
+		    SearchEngineName = SearchDisplayName.Text.Trim
+		    SearchEngineURL = SearchURL.Text.Trim
+		  Else
+		    If MsgBox("Disable search feature?", 4 + 32, "No Search Engine Set") <> 6 Then
+		      Return
+		    Else
+		      SearchEngineName = ""
+		      SearchEngineURL = ""
+		    End If
+		  End If
+		  
 		  If sha.Value Then
 		    algorithm = ALG_SHA1
 		  Else
@@ -791,11 +803,6 @@ End
 		    autosavePath = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("scans")
 		  End If
 		  CommentSignature = CommentSig.Text
-		  If SearchDisplayName.Text.Trim <> "" And SearchURL.Text.Trim <> "" Then
-		    SearchEngineName = SearchDisplayName.Text.Trim
-		    SearchEngineURL = SearchURL.Text.Trim
-		  End If
-		  
 		  SaveSettings()
 		  Close()
 		End Sub

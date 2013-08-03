@@ -270,7 +270,7 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  Comment = TextArea1.Text.Trim
+		  Comment = TextArea1.Text.Trim + EndOfLine + CommentSignature.Trim
 		  Self.Close
 		End Sub
 	#tag EndEvent
