@@ -112,7 +112,7 @@ Inherits Application
 		    If g <> Nil Then autosavePath = g
 		    defaultFormat = j.Value("Default Save Format")
 		    autosave = j.Value("Autosave Results")
-		    VTAPIKey = j.Value("API Key")
+		    If VTAPIKey = "" Then VTAPIKey = j.Value("API Key")
 		    If j.HasName("Comment Signature") Then
 		      CommentSignature = j.Value("Comment Signature")
 		    End If
