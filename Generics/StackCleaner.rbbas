@@ -178,6 +178,8 @@ Protected Module StackCleaner
 		    select case mode
 		    case kParamMode
 		      select case char
+		      Case "v" 
+		        funcTypes.append( "Variant" )
 		      case "i"
 		        mode = kIntMode
 		        
