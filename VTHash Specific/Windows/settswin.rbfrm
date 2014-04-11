@@ -50,7 +50,7 @@ Begin Window settswin
       Underline       =   ""
       Visible         =   True
       Width           =   337
-      Begin HintTextField LogFile
+      Begin TextField LogFile
          AcceptTabs      =   ""
          Alignment       =   0
          AutoDeactivate  =   True
@@ -63,10 +63,8 @@ Begin Window settswin
          DataSource      =   ""
          Enabled         =   True
          Format          =   ""
-         HasText         =   ""
          Height          =   22
          HelpTag         =   ""
-         HintText        =   "Default Save Folder"
          Index           =   -2147483648
          InitialParent   =   "GroupBox1"
          Italic          =   ""
@@ -405,7 +403,7 @@ Begin Window settswin
          Width           =   69
       End
    End
-   Begin HintTextField APIText
+   Begin TextField APIText
       AcceptTabs      =   ""
       Alignment       =   0
       AutoDeactivate  =   True
@@ -418,10 +416,8 @@ Begin Window settswin
       DataSource      =   ""
       Enabled         =   True
       Format          =   ""
-      HasText         =   ""
       Height          =   22
       HelpTag         =   ""
-      HintText        =   "Paste Your API Key Here"
       Index           =   -2147483648
       Italic          =   ""
       Left            =   88
@@ -562,7 +558,7 @@ Begin Window settswin
          BackColor       =   &hFFFFFF
          Bold            =   ""
          Border          =   True
-         CueText         =   ""
+         CueText         =   "http://example.com/?q=%PARAMETER%"
          DataField       =   ""
          DataSource      =   ""
          Enabled         =   True
@@ -586,7 +582,7 @@ Begin Window settswin
          TabIndex        =   0
          TabPanelIndex   =   0
          TabStop         =   True
-         Text            =   ""
+         Text            =   "https://encrypted.google.com/search?q=%PARAMETER%"
          TextColor       =   &h000000
          TextFont        =   "System"
          TextSize        =   0
@@ -629,7 +625,7 @@ Begin Window settswin
          TabIndex        =   3
          TabPanelIndex   =   0
          TabStop         =   True
-         Text            =   ""
+         Text            =   "Google"
          TextColor       =   &h000000
          TextFont        =   "System"
          TextSize        =   0
@@ -743,6 +739,10 @@ End
 	#tag EndProperty
 
 
+	#tag Constant, Name = eicarhash, Type = String, Dynamic = False, Default = \"44D88612FEA8A8F36DE82E1278ABB02F", Scope = Protected
+	#tag EndConstant
+
+
 #tag EndWindowCode
 
 #tag Events PushButton1
@@ -768,7 +768,7 @@ End
 		  If KeyValid Then
 		    VTAPIKey = APIText.Text
 		  Else
-		    If MsgBox("The API key was invalid.", 49 + 256, "Wrong Key Length!") = 1 Then
+		    If MsgBox("The API key is invalid.", 49 + 256, "Wrong key length") = 1 Then
 		      Self.Close
 		    Else
 		      Return
@@ -779,12 +779,12 @@ End
 		    SearchEngineName = SearchDisplayName.Text.Trim
 		    SearchEngineURL = SearchURL.Text.Trim
 		  Else
-		    If MsgBox("Disable search feature?", 4 + 32, "No Search Engine Set") <> 6 Then
-		      Return
-		    Else
-		      SearchEngineName = ""
-		      SearchEngineURL = ""
-		    End If
+		    'If MsgBox("Disable search feature?", 4 + 32, "No Search Engine Set") <> 6 Then
+		    'Return
+		    'Else
+		    SearchEngineName = ""
+		    SearchEngineURL = ""
+		    'End If
 		  End If
 		  
 		  If sha.Value Then
@@ -831,6 +831,31 @@ End
 		    g.DrawPicture(icon_validation_fail, 0, 0)
 		  End If
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseEnter()
+		  Me.MouseCursor = System.Cursors.FingerPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  Me.MouseCursor = System.Cursors.StandardPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  If Not KeyValid Then
+		    ShowURL("https://www.virustotal.com/en/faq/#virustotal-api")
+		  ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "Test API key now?") = 6 Then
+		    Dim js As JSONItem = VTAPI.GetReport(eicarhash, APIText.Text, VTAPI.ReportType.FileReport)
+		    If js <> Nil And js.HasName("total") Then
+		      MsgBox("API key test succeeded.")
+		    Else
+		      MsgBox("API key test failed." + EndOfLine + "Response code: " + Str(VTAPI.LastResponseCode) + EndOfLine + "Message: " + VTAPI.LastResponseVerbose)
+		    End If
+		    
+		  End If
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events APIText

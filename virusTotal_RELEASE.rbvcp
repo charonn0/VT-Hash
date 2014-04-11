@@ -19,7 +19,6 @@ RawData=triddefs;C:\Path\triddefs.trd;&h35ADEFFF;&h9B80FFF;false
 RawData=trid1;C:\Path\trid.exe;&h65CE4FFF;&h9B80FFF;false
 Module=Win32Crypto;Generics/Win32Crypto.rbbas;&h2CDF4FFF;&h9B80FFF;false
 Module=StackCleaner;Generics/StackCleaner.rbbas;&h502B2FFF;&h9B80FFF;false
-Class=HintTextField;Generics/HintTextField.rbbas;&h2F0E5FFF;&h9B80FFF;false
 Class=LinkLabel;Generics/LinkLabel.rbbas;&h252AB7FF;&h9B80FFF;false
 Folder=Media;Generics/Media;&h54184FFF;&h9B80FFF;false
 Picture=grayredshield;Generics/Media/grayredshield.png;&hF4D87FF;&h54184FFF;false;0;&h0
