@@ -2268,6 +2268,9 @@ Protected Module VTAPI
 		      If VTSock.LastErrorCode = 0 Then
 		        LastResponseCode = INVALID_RESPONSE
 		        LastResponseVerbose = "The response from '" + URL + "' was improperly formatted. Please try again later."
+		      ElseIf VTSock.LastErrorCode = 102 Then
+		        LastResponseCode = 0
+		        LastResponseVerbose = "Request refused."
 		      Else
 		        LastResponseCode = VTSock.LastErrorCode
 		        LastResponseVerbose = SocketErrorMessage(VTSock)
