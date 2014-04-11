@@ -567,7 +567,18 @@ End
 	#tag Method, Flags = &h0
 		Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
 		  Dim d As New Date
-		  If f = Nil Then f = GetSaveFolderItem(FileTypes1.All, toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		  If f = Nil Then 
+		    Dim filter As String
+		    Select Case mode
+		    Case Mode_CSV
+		      filter = FileTypes1.CommaSeparatedValues
+		    Case Mode_Org_JSON, Mode_Unp_JSON
+		      filter = FileTypes1.JavascriptObjectNotation
+		    Case Mode_Text
+		      filter = FileTypes1.Text
+		    End Select
+		    f = GetSaveFolderItem(filter, toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		  End If
 		  'If Not f.Exists Then f.CreateAsFolder
 		  If f = Nil Then Return Nil
 		  If f.Directory Then
@@ -703,8 +714,8 @@ End
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
 		  Dim infection As String = Me.Cell(Me.RowFromXY(X, Y), 2).Trim
 		  If infection <> "" Then
-		    Dim cp As New MenuItem("Copy to '" + infection + "' to clipboard")
-		    Dim se As New MenuItem("Search " + SearchEngineName + " for '" + infection + "'")
+		    Dim cp As New MenuItem("Copy to clipboard")
+		    Dim se As New MenuItem("Search " + SearchEngineName)
 		    'Dim ch As New MenuItem("Change search engine...")
 		    se.Tag = infection
 		    cp.Tag = infection

@@ -151,8 +151,8 @@ End
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
 		  Dim tridtype As String = Me.Cell(Me.RowFromXY(X, Y), 0).Trim
 		  If tridtype <> "" Then
-		    Dim cp As New MenuItem("Copy to '" + tridtype + "' to clipboard")
-		    Dim se As New MenuItem("Search " + SearchEngineName + " for '" + tridtype + "'")
+		    Dim cp As New MenuItem("Copy to clipboard")
+		    Dim se As New MenuItem("Search " + SearchEngineName)
 		    se.Tag = tridtype
 		    cp.Tag = tridtype
 		    base.Append(cp)
