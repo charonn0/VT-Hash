@@ -567,7 +567,7 @@ End
 	#tag Method, Flags = &h0
 		Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
 		  Dim d As New Date
-		  If f = Nil Then 
+		  If f = Nil Then
 		    Dim filter As String
 		    Select Case mode
 		    Case Mode_CSV
@@ -663,9 +663,12 @@ End
 		    Quit()
 		  Case VT_Code_Not_Found
 		    If MsgBox("That file is not present in Virus Total's database. Would you like to visit VirusTotal.com to upload this file?", 52, "Not found") = 6 Then
-		      ShowURL("https://www.virustotal.com/")
+		      Dim ul As New FileSubmit
+		      Self.Hide
+		      ul.SubmitFile(Result.TargetFile)
+		      'ShowURL("https://www.virustotal.com/")
 		    End If
-		    Quit()
+		    'Quit()
 		  Case VT_Code_Still_Proccessing
 		    Call MsgBox("That file is still waiting to be analyzed. Please try again later.", 64, "Still processing")
 		    Quit()

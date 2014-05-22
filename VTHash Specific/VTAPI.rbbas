@@ -79,12 +79,6 @@ Protected Module VTAPI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function CRLF() As String
-		  Return Encodings.ASCII.Chr(13) + Encodings.ASCII.Chr(10)
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Function GetReport(ResourceID As String, APIKey As String, ReportType As ReportType) As JSONItem
 		  'ResourceID is either a file hash or a URL
@@ -2568,7 +2562,7 @@ Protected Module VTAPI
 	#tag Constant, Name = VT_Rescan_File, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/rescan", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = VT_Submit_File, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/scan", Scope = Private
+	#tag Constant, Name = VT_Submit_File, Type = String, Dynamic = False, Default = \"www.virustotal.com/vtapi/v2/file/scan", Scope = Protected
 	#tag EndConstant
 
 
