@@ -332,7 +332,7 @@ End
 	#tag Event
 		Sub Action()
 		  Dim upd As New UpdateWindow
-		  Dim f As FolderItem = upd.CheckNow("www.boredomsoft.com/updates/vthash.json", VTHash.mversion)
+		  Dim f As FolderItem = upd.CheckNow("www.boredomsoft.org/updates/vthash.json", VTHash.mversion)
 		  If f <> Nil Then
 		    f.Child("vthashsetup.exe").Launch
 		    Quit
