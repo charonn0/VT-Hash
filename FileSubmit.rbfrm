@@ -172,7 +172,9 @@ End
 		Sub SubmitFile(f As FolderItem)
 		  TargetFile = f
 		  Socket.Address = "www.virustotal.com"
-		  Socket.Port = 80
+		  Socket.Port = 443
+		  Socket.Secure = True
+		  'Socket.ConnectionType = SSLSocket.TLSv1
 		  Socket.Connect
 		  Me.Show'Modal
 		End Sub
@@ -234,7 +236,8 @@ End
 		  h.AppendHeader("Content-Length", Str(Data.Size))
 		  h.AppendHeader("Host", "www.virustotal.com")
 		  h.AppendHeader("Connection", "close")
-		  Dim req As String = "POST /vtapi/v2/file/scan HTTP/1.1" + CRLF + h.Source + CRLF + CRLF + Data.StringValue(0, Data.Size)
+		  h.AppendHeader("User-Agent", "RB-VTAPI/" + VTHash.version + " " + VTHash.PlatformString)
+		  Dim req As String = "POST /vtapi/v2/file/scan HTTP/1.0" + CRLF + h.Source + CRLF + CRLF + Data.StringValue(0, Data.Size)
 		  Formsz = Data.Size
 		  Me.Write(req)
 		  'Me.Flush
