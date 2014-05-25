@@ -202,8 +202,8 @@ End
 		Protected Sub SetMalwareVote()
 		  Dim comment As String = TextArea1.Text
 		  Dim caretpos As Integer = TextArea1.SelStart
-		  While InStr(comment, "#badware ") > 0
-		    comment = Replace(comment, "#badware ", "")
+		  While InStr(comment, "#malware ") > 0
+		    comment = Replace(comment, "#malware ", "")
 		  Wend
 		  
 		  While InStr(comment, "#goodware ") > 0
@@ -216,7 +216,7 @@ End
 		    VoteSafe.HelpTag = "Remove safe tag"
 		    VoteDangerous.HelpTag = "Tag this file as dangerous"
 		  Case 2 ' bad
-		    TextArea1.Text = "#badware " + comment
+		    TextArea1.Text = "#malware " + comment
 		    VoteSafe.HelpTag = "Tag this file as safe"
 		    VoteDangerous.HelpTag = "Remove dangerous tag"
 		  Else ' no vote
@@ -254,7 +254,7 @@ End
 		Sub TextChange()
 		  Dim t1, t2 As Integer
 		  t1 = Instr(Me.Text, "#goodware ")
-		  t2 = Instr(Me.Text, "#badware ")
+		  t2 = Instr(Me.Text, "#malware ")
 		  If t2 = 0 And t1 > 0 Then
 		    VoteState = 1
 		  ElseIf t1 = 0 And t2 > 0 Then
