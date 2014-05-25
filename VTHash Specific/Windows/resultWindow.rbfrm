@@ -163,6 +163,7 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
       TextColor       =   255
@@ -176,6 +177,7 @@ Begin Window resultWindow
       Width           =   101
    End
    Begin Timer TridTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   -141
@@ -183,8 +185,11 @@ Begin Window resultWindow
       Mode            =   0
       Period          =   2500
       Scope           =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -6
+      Visible         =   True
       Width           =   32
    End
    Begin ProgBar ProgBar1
@@ -293,6 +298,7 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -369,6 +375,7 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -435,6 +442,7 @@ Begin Window resultWindow
       Selectable      =   ""
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -662,11 +670,13 @@ End
 		    Me.ShowModal
 		    Quit()
 		  Case VT_Code_Not_Found
-		    If MsgBox("That file is not present in Virus Total's database. Would you like to visit VirusTotal.com to upload this file?", 52, "Not found") = 6 Then
+		    If MsgBox("That file is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
 		      Dim ul As New FileSubmit
 		      Self.Hide
 		      ul.SubmitFile(Result.TargetFile)
 		      'ShowURL("https://www.virustotal.com/")
+		    Else
+		      Quit(0)
 		    End If
 		    'Quit()
 		  Case VT_Code_Still_Proccessing

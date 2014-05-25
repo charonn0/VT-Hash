@@ -4,7 +4,7 @@ Begin Window FileSubmit
    Backdrop        =   ""
    CloseButton     =   False
    Composite       =   False
-   Frame           =   4
+   Frame           =   3
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   9.9e+1
@@ -183,6 +183,10 @@ End
 		Private Formsz As Integer
 	#tag EndProperty
 
+	#tag Property, Flags = &h1
+		Protected Pause As Boolean
+	#tag EndProperty
+
 	#tag Property, Flags = &h21
 		Private PermaURL As String
 	#tag EndProperty
@@ -204,10 +208,13 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  If Me.Caption = "Cancel" Then 
-		    Socket.Disconnect
-		  End If
+		  'If Me.Caption = "Cancel" Then
+		  'Socket.Disconnect
+		  'End If
 		  'Self.Close
+		  If Socket.IsConnected And MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then 
+		    Return
+		  End If
 		  Quit
 		End Sub
 	#tag EndEvent
@@ -230,7 +237,7 @@ End
 		  Dim req As String = "POST /vtapi/v2/file/scan HTTP/1.1" + CRLF + h.Source + CRLF + CRLF + Data.StringValue(0, Data.Size)
 		  Formsz = Data.Size
 		  Me.Write(req)
-		  Me.Flush
+		  'Me.Flush
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -275,6 +282,9 @@ End
 	#tag EndEvent
 	#tag Event
 		Function SendProgress(bytesSent as Integer, bytesLeft as Integer) As Boolean
+		  While Pause
+		    App.YieldToNextThread
+		  Wend
 		  Dim snt As Integer = Formsz - bytesLeft
 		  ProgressBar1.Value = snt * 100 / Formsz
 		  App.YieldToNextThread
