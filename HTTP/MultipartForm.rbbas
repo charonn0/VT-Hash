@@ -20,7 +20,6 @@ Protected Class MultipartForm
 
 	#tag Method, Flags = &h0
 		Sub Element(Name As String, Assigns Value As Variant)
-		  If Value IsA FolderItem And FolderItem(Value).Name = "which.exe" Then Break
 		  If Value = Nil Then
 		    mFormElements.Remove(Name)
 		  Else
