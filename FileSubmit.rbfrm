@@ -214,7 +214,7 @@ End
 		  'Socket.Disconnect
 		  'End If
 		  'Self.Close
-		  If Socket.IsConnected And MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then 
+		  If Socket.IsConnected And MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then
 		    Return
 		  End If
 		  Quit
@@ -267,6 +267,7 @@ End
 		      If js.Value("response_code") = VT_Code_OK Then
 		        PermaURL = js.Value("permalink")
 		        Permalink.Visible = True
+		        Permalink.URL = PermaURL
 		        Label1.Text = "Upload complete."
 		      Else
 		        Label1.Text = "Upload error."
@@ -292,5 +293,10 @@ End
 		  ProgressBar1.Value = snt * 100 / Formsz
 		  App.YieldToNextThread
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub SendComplete(UserAborted As Boolean)
+		  Label1.Text = "Awaiting reply..."
+		End Sub
 	#tag EndEvent
 #tag EndEvents
