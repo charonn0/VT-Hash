@@ -670,7 +670,25 @@ End
 		    Me.ShowModal
 		    Quit()
 		  Case VT_Code_Not_Found
-		    If MsgBox("That file is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
+		    If result.TargetFile.Length >= 32 * 1024 * 1024 Then
+		      Select Case MsgBox(_
+		        "That file is not present in Virus Total's database. Additionally, the file exceeds 32MB which is the default limit for uploading via the API." + EndOfLine + _
+		        "Some users do not have this limit, would you like to attempt to upload anyway?", 48 + 3, "File too large for API")
+		      Case 6 ' Yes
+		        Dim ul As New FileSubmit
+		        Self.Hide
+		        ul.SubmitFile(Result.TargetFile)
+		      Case 7 ' No
+		        If MsgBox("Would you like to open virustotal.com in your default browser in order to upload this file manually?", 4 + 32, "Open browser?") = 6 Then
+		          ShowURL("https://www.virustotal.com/")
+		          Quit()
+		        Else
+		          Quit()
+		        End If
+		      Case 2 ' Cancel
+		        Quit()
+		      End Select
+		    ElseIf MsgBox("That file is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
 		      Dim ul As New FileSubmit
 		      Self.Hide
 		      ul.SubmitFile(Result.TargetFile)
