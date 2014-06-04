@@ -149,40 +149,38 @@ Begin Window FileSubmit
       Visible         =   True
       Width           =   80
    End
-   Begin SSLSocket Socket
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   2
+   Begin VTAPI.VTSession Socket
+      Address         =   ""
+      BytesAvailable  =   ""
+      BytesLeftToSend =   ""
       Height          =   32
       Index           =   -2147483648
+      IsConnected     =   0
       Left            =   277
       LockedInPosition=   False
+      Port            =   0
       Scope           =   0
-      Secure          =   ""
       TabPanelIndex   =   0
       Top             =   -21
       Width           =   32
+      yield           =   0
    End
 End
 #tag EndWindow
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Sub SubmitFile(f As FolderItem)
-		  TargetFile = f
-		  Socket.Address = "www.virustotal.com"
-		  Socket.Port = 443
-		  Socket.Secure = True
-		  'Socket.ConnectionType = SSLSocket.TLSv1
-		  Socket.Connect
-		  Me.Show'Modal
+		Sub SubmitFile(File As FolderItem, APIKey As String)
+		  Socket.APIKey = APIKey
+		  Socket.SubmitFile(File)
+		  TargetFile = File
+		  Me.ShowModal
 		End Sub
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h21
-		Private Formsz As Integer
+		Private Output As JSONItem
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
@@ -223,34 +221,7 @@ End
 #tag EndEvents
 #tag Events Socket
 	#tag Event
-		Sub Connected()
-		  Dim m As New HTTP.MultipartForm
-		  m.Element("file") = TargetFile
-		  m.Element("apikey") = VTAPIKey
-		  Dim content, type As String
-		  content = m.ToString
-		  Dim t As New HTTP.ContentType("multipart/form-data; boundary=" + m.Boundary)
-		  Dim h As New InternetHeaders
-		  Dim data As MemoryBlock = m.ToString
-		  h.AppendHeader("Content-Type", t.ToString)
-		  h.AppendHeader("Content-Length", Str(Data.Size))
-		  h.AppendHeader("Host", "www.virustotal.com")
-		  h.AppendHeader("Connection", "close")
-		  h.AppendHeader("User-Agent", "RB-VTAPI/" + VTHash.version + " " + VTHash.PlatformString)
-		  Dim req As String = "POST /vtapi/v2/file/scan HTTP/1.0" + CRLF + h.Source + CRLF + CRLF + Data.StringValue(0, Data.Size)
-		  Formsz = Data.Size
-		  Me.Write(req)
-		  'Me.Flush
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub DataAvailable()
-		  'Dim s As String = Me.ReadAll
-		  'Break
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub Error()
+		Sub Error(code as integer)
 		  If Me.LastErrorCode = 102 Then
 		    Dim raw As String = Me.ReadAll
 		    Dim body As Integer = InStr(raw, CRLF + CRLF)
@@ -286,17 +257,33 @@ End
 	#tag EndEvent
 	#tag Event
 		Function SendProgress(bytesSent as Integer, bytesLeft as Integer) As Boolean
+		  Label1.Text = "Sending file..."
 		  While Pause
 		    App.YieldToNextThread
 		  Wend
-		  Dim snt As Integer = Formsz - bytesLeft
-		  ProgressBar1.Value = snt * 100 / Formsz
+		  Dim snt As Integer = TargetFile.Length - bytesLeft
+		  ProgressBar1.Value = snt * 100 / TargetFile.Length
 		  App.YieldToNextThread
 		End Function
 	#tag EndEvent
 	#tag Event
-		Sub SendComplete(UserAborted As Boolean)
-		  Label1.Text = "Awaiting reply..."
+		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+		  If HTTPStatus = 200 And ResponseObject <> Nil Then
+		    If ResponseObject.Value("response_code") = VT_Code_OK Then
+		      PermaURL = ResponseObject.Value("permalink")
+		      Permalink.Visible = True
+		      Permalink.URL = PermaURL
+		      Label1.Text = "Upload complete."
+		    Else
+		      Label1.Text = "Upload error."
+		      MsgBox("Virus Total says: (" + Str(ResponseObject.Value("response_code").Int32Value) + ") " + ResponseObject.Value("verbose_msg"))
+		    End If
+		  Else
+		    Label1.Text = "Upload error."
+		    MsgBox("Error: " + Str(HTTPStatus) + ".")
+		  End If
+		  PushButton1.Caption = "Close"
+		  ProgressBar1.Value = ProgressBar1.Maximum
 		End Sub
 	#tag EndEvent
 #tag EndEvents

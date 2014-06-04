@@ -33,14 +33,14 @@ Inherits HTTPSocket
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub GetReport(ResourceID As String, ReportType As VTAPI.RequestType)
+		Sub GetReport(ResourceID As String, Type As VTAPI.RequestType)
 		  'ResourceID is either a file hash or a URL
 		  'Report type is a member of the RequestType Enum. e.g. VTAPI.RequestType.FileReport
 		  
 		  Dim frm As New MultipartForm
 		  frm.Element("apikey") = APIKey
 		  
-		  Select Case ReportType
+		  Select Case Type
 		  Case RequestType.FileReport
 		    frm.Element("resource") = ResourceID
 		  Case VTAPI.RequestType.URLReport
@@ -50,7 +50,7 @@ Inherits HTTPSocket
 		  Case RequestType.DomainReport
 		    frm.Element("domain") = ResourceID
 		  End Select
-		  SendRequest(ReportType, frm)
+		  SendRequest(Type, frm)
 		End Sub
 	#tag EndMethod
 
@@ -65,8 +65,8 @@ Inherits HTTPSocket
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub SendRequest(Type As RequestType, Request As MultipartForm)
+	#tag Method, Flags = &h0
+		Sub SendRequest(Type As RequestType, Request As MultipartForm)
 		  Dim APIURL As String = "www.virustotal.com"
 		  Dim HTTPVerb As String = "POST"
 		  Dim content As String
