@@ -183,10 +183,6 @@ End
 		Private Output As JSONItem
 	#tag EndProperty
 
-	#tag Property, Flags = &h1
-		Protected Pause As Boolean
-	#tag EndProperty
-
 	#tag Property, Flags = &h21
 		Private PermaURL As String
 	#tag EndProperty
@@ -257,13 +253,14 @@ End
 	#tag EndEvent
 	#tag Event
 		Function SendProgress(bytesSent as Integer, bytesLeft as Integer) As Boolean
-		  Label1.Text = "Sending file..."
-		  While Pause
-		    App.YieldToNextThread
-		  Wend
 		  Dim snt As Integer = TargetFile.Length - bytesLeft
 		  ProgressBar1.Value = snt * 100 / TargetFile.Length
-		  App.YieldToNextThread
+		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
+		    Label1.Text = "Awaiting response..."
+		  Else
+		    Label1.Text = "Sending file..."
+		  End If
+		  '11App.YieldToNextThread
 		End Function
 	#tag EndEvent
 	#tag Event
