@@ -1,5 +1,5 @@
 #tag Class
-Class ContentType
+Private Class ContentType
 	#tag Method, Flags = &h0
 		Function Acceptance(OtherType As ContentType) As Single
 		  'Returns a Single that is <=1. This is the comparative "weight" of the match between the
@@ -88,14 +88,14 @@ Class ContentType
 
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherType As String) As Integer
-		  Dim o As New HTTP.ContentType(OtherType)
+		  Dim o As New ContentType(OtherType)
 		  If Me.Accepts(o) Then Return 0
 		  Return StrComp(Me.ToString, OtherType, 1)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function ParseTypes(Raw As String) As HTTP.ContentType()
+		 Shared Function ParseTypes(Raw As String) As ContentType()
 		  'parses a multi-field content-type string into and array of ContentType objects
 		  'e.g. "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
 		  Dim fields() As String
@@ -104,7 +104,7 @@ Class ContentType
 		  Else
 		    fields.Append(raw)
 		  End If
-		  Dim types() As HTTP.ContentType
+		  Dim types() As ContentType
 		  Dim fcount As Integer = Ubound(fields)
 		  For i As Integer = 0 To fcount
 		    types.Append(New ContentType(fields(i)))

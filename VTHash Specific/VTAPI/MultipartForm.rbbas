@@ -1,5 +1,5 @@
 #tag Class
-Protected Class MultipartForm
+Private Class MultipartForm
 	#tag Method, Flags = &h0
 		Sub Constructor()
 		  mFormElements = New Dictionary
