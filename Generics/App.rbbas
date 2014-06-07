@@ -155,6 +155,10 @@ Inherits Application
 		      end if
 		    End Select
 		  Next
+		  
+		  #If DebugBuild Then
+		    toBeHashed = GetOpenFolderItem("")
+		  #endif
 		End Sub
 	#tag EndMethod
 

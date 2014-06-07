@@ -677,7 +677,7 @@ End
 		      Case 6 ' Yes
 		        Dim ul As New FileSubmit
 		        Self.Hide
-		        ul.SubmitFile(Result.TargetFile)
+		        ul.SubmitFile(Result.TargetFile, VTAPIKey)
 		      Case 7 ' No
 		        If MsgBox("Would you like to open virustotal.com in your default browser in order to upload this file manually?", 4 + 32, "Open browser?") = 6 Then
 		          ShowURL("https://www.virustotal.com/")
@@ -691,7 +691,7 @@ End
 		    ElseIf MsgBox("That file is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
 		      Dim ul As New FileSubmit
 		      Self.Hide
-		      ul.SubmitFile(Result.TargetFile)
+		      ul.SubmitFile(Result.TargetFile, VTAPIKey)
 		      'ShowURL("https://www.virustotal.com/")
 		    Else
 		      Quit(0)

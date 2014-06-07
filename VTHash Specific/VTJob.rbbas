@@ -9,7 +9,7 @@ Protected Class VTJob
 
 	#tag Method, Flags = &h0
 		Sub GetResults()
-		  Dim js As JSONItem = VTAPI.GetReport(Me.Hash, VTAPIKey, VTAPI.ReportType.FileReport)
+		  Dim js As JSONItem = VTAPI.GetReport(Me.Hash, VTAPIKey, VTAPI.RequestType.FileReport)
 		  If js <> Nil Then
 		    mResponse = New Results(js)
 		    Me.Response.HashValue = Me.Hash

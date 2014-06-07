@@ -43,6 +43,7 @@ Begin Window settswin
       Scope           =   0
       TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
@@ -334,6 +335,7 @@ Begin Window settswin
       Scope           =   0
       TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
@@ -390,6 +392,7 @@ Begin Window settswin
          Selectable      =   False
          TabIndex        =   1
          TabPanelIndex   =   0
+         TabStop         =   True
          Text            =   "Comment Signature (optional): "
          TextAlign       =   2
          TextColor       =   &h000000
@@ -467,6 +470,7 @@ Begin Window settswin
       Selectable      =   False
       TabIndex        =   12
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "API Key:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -543,6 +547,7 @@ Begin Window settswin
       Scope           =   0
       TabIndex        =   18
       TabPanelIndex   =   0
+      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
@@ -658,6 +663,7 @@ Begin Window settswin
          Selectable      =   False
          TabIndex        =   1
          TabPanelIndex   =   0
+         TabStop         =   True
          Text            =   "URL:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -692,6 +698,7 @@ Begin Window settswin
          Selectable      =   False
          TabIndex        =   2
          TabPanelIndex   =   0
+         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -847,7 +854,7 @@ End
 		  If Not KeyValid Then
 		    ShowURL("https://www.virustotal.com/en/faq/#virustotal-api")
 		  ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "Test API key now?") = 6 Then
-		    Dim js As JSONItem = VTAPI.GetReport(eicarhash, APIText.Text, VTAPI.ReportType.FileReport)
+		    Dim js As JSONItem = VTAPI.GetReport(eicarhash, APIText.Text, VTAPI.RequestType.FileReport)
 		    If js <> Nil And js.HasName("total") Then
 		      MsgBox("API key test succeeded.")
 		    Else
