@@ -4,7 +4,7 @@ Begin Window FileSubmit
    Backdrop        =   ""
    CloseButton     =   False
    Composite       =   False
-   Frame           =   3
+   Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   9.9e+1

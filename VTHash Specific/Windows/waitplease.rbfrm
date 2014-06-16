@@ -83,5 +83,17 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h0
+		Sub ShowWithin(parentWindow As Window, facing As Integer = - 1)
+		  Super.ShowWithin(parentWindow, facing)
+		  Dim w, h As Integer
+		  w = parentWindow.Left + (0.25 * Me.Width) + (0.25 * parentWindow.Width)
+		  h = parentWindow.Top + (0.25 * Me.Height) + (0.25 * parentWindow.Height)
+		  Me.Left = w
+		  Me.Top = h
+		End Sub
+	#tag EndMethod
+
+
 #tag EndWindowCode
 

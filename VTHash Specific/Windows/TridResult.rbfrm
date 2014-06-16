@@ -109,7 +109,7 @@ End
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Sub ShowResult(Results As Dictionary)
+		Sub ShowResult(Results As Dictionary, ParentWindow As Window)
 		  Listbox1.DeleteAllRows
 		  If Results <> Nil Then
 		    For Each key As String in Results.Keys
@@ -118,6 +118,11 @@ End
 		  Else
 		    Listbox1.AddRow("Unknown (plain text?)", "100%")
 		  End If
+		  Dim w, h As Integer
+		  w = parentWindow.Left + (0.25 * Me.Width) + (0.25 * parentWindow.Width)
+		  h = parentWindow.Top + (0.25 * Me.Height) + (0.25 * parentWindow.Height)
+		  Me.Left = w
+		  Me.Top = h
 		  Me.ShowModal
 		End Sub
 	#tag EndMethod

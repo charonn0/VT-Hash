@@ -346,8 +346,8 @@ End
 		  Job.GetResults()
 		  ProgressBar1.Value = 5
 		  resultWindows.Append(New resultWindow)
+		  Self.Close
 		  resultWindows(0).showList(Job.Response)
-		  
 		  
 		Exception Err As NilObjectException
 		  Call MsgBox("VirusTotal.com supplied an invalid response. Please try again in a few minutes.", 16, "Illegal response format!")
