@@ -12,7 +12,7 @@ Protected Module VTAPI
 
 	#tag Method, Flags = &h21
 		Private Sub ConnectedHandler(Sender As VTSession)
-		  Break
+		  'Break
 		End Sub
 	#tag EndMethod
 
@@ -49,7 +49,7 @@ Protected Module VTAPI
 
 	#tag Method, Flags = &h21
 		Private Sub HeadersReceivedHandler(Sender As VTSession, headers As InternetHeaders, code As Integer)
-		  Break
+		  'Break
 		End Sub
 	#tag EndMethod
 
@@ -76,7 +76,7 @@ Protected Module VTAPI
 
 	#tag Method, Flags = &h21
 		Private Function SendRequest(Type As RequestType, Form As MultipartForm) As JSONItem
-		  If Sock = Nil Then 
+		  If Sock = Nil Then
 		    Sock = New VTSession
 		    AddHandler Sock.Response, AddressOf ResponseHandler
 		    AddHandler Sock.Connected, AddressOf ConnectedHandler
@@ -85,25 +85,31 @@ Protected Module VTAPI
 		  End If
 		  Dim content As String = Form.ToString
 		  Dim t As New ContentType("multipart/form-data; boundary=" + Form.Boundary)
-		  Sock.SetRequestHeader("User-Agent", "RB-VTAPI/" + VTHash.version + " " + VTHash.PlatformString)
+		  Sock.SetRequestHeader("User-Agent", "RB-VTAPI/" + Format(AgentVersion, "#0.0#") + " " + VTHash.PlatformString)
 		  Sock.SetPostContent(content, t.ToString)
+		  
+		  '#if DebugBuild Then
+		  'Dim apiurl As String = System.GetNetworkInterface(0).IPAddress
+		  '#else
+		  Dim apiurl As String = "www.virustotal.com"
+		  '#endif
 		  
 		  Waiting = True
 		  Select Case Type
 		  Case RequestType.Comment
-		    Sock.SendRequest("POST", "www.virustotal.com" + VT_Put_Comment)
+		    Sock.SendRequest("POST", apiurl + VT_Put_Comment)
 		  Case RequestType.DomainReport
-		    Sock.SendRequest("POST", "www.virustotal.com" + VT_Get_Domain)
+		    Sock.SendRequest("POST", apiurl + VT_Get_Domain)
 		  Case RequestType.FileReport
-		    Sock.SendRequest("POST", "www.virustotal.com" + VT_Get_File)
+		    Sock.SendRequest("POST", apiurl + VT_Get_File)
 		  Case RequestType.FileSubmit
-		    Sock.SendRequest("POST", "www.virustotal.com" + VT_Submit_File)
+		    Sock.SendRequest("POST", apiurl + VT_Submit_File)
 		  Case RequestType.IPReport
-		    Sock.SendRequest("POST", "www.virustotal.com" + VT_Get_IP)
+		    Sock.SendRequest("POST", apiurl + VT_Get_IP)
 		  Case RequestType.Rescan
-		    Sock.SendRequest("POST", "www.virustotal.com" + VT_Rescan_File)
+		    Sock.SendRequest("POST", apiurl + VT_Rescan_File)
 		  Case RequestType.URLReport
-		    Sock.SendRequest("POST", "www.virustotal.com" + VT_Get_URL)
+		    Sock.SendRequest("POST", apiurl + VT_Get_URL)
 		  End Select
 		  While Waiting
 		    App.DoEvents
@@ -202,6 +208,17 @@ Protected Module VTAPI
 			Group="ID"
 			InitialValue="-2147483648"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastResponseCode"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastResponseVerbose"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"

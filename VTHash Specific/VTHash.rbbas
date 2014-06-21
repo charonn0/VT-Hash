@@ -198,7 +198,7 @@ Protected Module VTHash
 		    info.StructSize = Info.Size
 		    
 		    If GetVersionEx(info) Then
-		      Return "(VT Hash Check; U; Win32 " + Str(info.BuildNumber) + ")"
+		      Return "(VT Hash Check " + VTHash.version + "; U; Win32 " + Str(info.BuildNumber) + ")"
 		    End If
 		  #endif
 		End Function

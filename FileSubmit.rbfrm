@@ -27,7 +27,7 @@ Begin Window FileSubmit
    Begin ProgressBar ProgressBar1
       AutoDeactivate  =   True
       Enabled         =   True
-      Height          =   20
+      Height          =   10
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -165,6 +165,40 @@ Begin Window FileSubmit
       Width           =   32
       yield           =   0
    End
+   Begin Label Percentages
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   23
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   True
+      Left            =   14
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      Text            =   "%0 of %0 bytes sent"
+      TextAlign       =   0
+      TextColor       =   &h00808080
+      TextFont        =   "System"
+      TextSize        =   10
+      TextUnit        =   0
+      Top             =   33
+      Transparent     =   True
+      Underline       =   ""
+      Visible         =   True
+      Width           =   214
+   End
 End
 #tag EndWindow
 
@@ -174,10 +208,15 @@ End
 		  Socket.APIKey = APIKey
 		  Socket.SubmitFile(File)
 		  TargetFile = File
+		  fLength = TargetFile.Length
 		  Me.ShowModal
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h1
+		Protected fLength As Integer
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private Output As JSONItem
@@ -189,6 +228,10 @@ End
 
 	#tag Property, Flags = &h1
 		Protected TargetFile As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected tTotal As Integer
 	#tag EndProperty
 
 
@@ -218,6 +261,7 @@ End
 #tag Events Socket
 	#tag Event
 		Sub Error(code as integer)
+		  Percentages.Text = ""
 		  If Me.LastErrorCode = 102 Then
 		    Dim raw As String = Me.ReadAll
 		    Dim body As Integer = InStr(raw, CRLF + CRLF)
@@ -253,8 +297,10 @@ End
 	#tag EndEvent
 	#tag Event
 		Function SendProgress(bytesSent as Integer, bytesLeft as Integer) As Boolean
-		  Dim snt As Integer = TargetFile.Length - bytesLeft
-		  ProgressBar1.Value = snt * 100 / TargetFile.Length
+		  tTotal = tTotal + bytesSent
+		  'Dim snt As Integer = TargetFile.Length - bytesLeft
+		  ProgressBar1.Value = tTotal * 100 \ fLength
+		  Percentages.Text = FormatBytes(tTotal) + " of " + FormatBytes(fLength) + " bytes sent"
 		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
 		    Label1.Text = "Awaiting response..."
 		  Else
