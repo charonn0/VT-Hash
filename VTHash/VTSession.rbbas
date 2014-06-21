@@ -33,9 +33,9 @@ Inherits HTTPSocket
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub GetReport(ResourceID As String, Type As VTAPI.RequestType)
+		Sub GetReport(ResourceID As String, Type As VTHash.RequestType)
 		  'ResourceID is either a file hash or a URL
-		  'Report type is a member of the RequestType Enum. e.g. VTAPI.RequestType.FileReport
+		  'Report type is a member of the RequestType Enum. e.g. VTHash.RequestType.FileReport
 		  
 		  Dim frm As New MultipartForm
 		  frm.Element("apikey") = APIKey
@@ -43,7 +43,7 @@ Inherits HTTPSocket
 		  Select Case Type
 		  Case RequestType.FileReport
 		    frm.Element("resource") = ResourceID
-		  Case VTAPI.RequestType.URLReport
+		  Case VTHash.RequestType.URLReport
 		    frm.Element("url") = ResourceID
 		  Case RequestType.IPReport
 		    frm.Element("ip") = ResourceID

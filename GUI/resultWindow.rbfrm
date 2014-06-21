@@ -163,6 +163,7 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
       TextColor       =   255
@@ -176,6 +177,7 @@ Begin Window resultWindow
       Width           =   101
    End
    Begin Timer TridTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   -141
@@ -183,8 +185,11 @@ Begin Window resultWindow
       Mode            =   0
       Period          =   2500
       Scope           =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -6
+      Visible         =   True
       Width           =   32
    End
    Begin ProgBar ProgBar1
@@ -293,6 +298,7 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -369,6 +375,7 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -435,6 +442,7 @@ Begin Window resultWindow
       Selectable      =   ""
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -492,7 +500,7 @@ End
 			waitplease.ShowWithin(Self)
 			waitplease.Refresh()
 			
-			Dim results As JSONItem = VTAPI.RequestRescan(VTResult.Resource, VTAPIKey)
+			Dim results As JSONItem = VTHash.RequestRescan(VTResult.Resource, VTAPIKey)
 			waitplease.Close
 			If results = Nil Then
 			Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
@@ -916,7 +924,7 @@ End
 		  If comment <> "" Then
 		    waitplease.ShowWithin(Self)
 		    waitplease.Refresh()
-		    Dim js As JSONItem = VTAPI.AddComment(VTResult.Resource, VTAPIKey, comment)
+		    Dim js As JSONItem = VTHash.AddComment(VTResult.Resource, VTAPIKey, comment)
 		    waitplease.Close
 		    If js <> Nil Then
 		      MsgBox(js.Value("verbose_msg"))

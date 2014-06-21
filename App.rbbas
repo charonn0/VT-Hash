@@ -54,18 +54,17 @@ Inherits Application
 		  If Not f.Exists Then Return
 		  
 		  Dim keyfile As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software").Child("VT Hash").Child("api.key")
-		  If keyfile = Nil Then Return
-		  if keyfile.isFound = ERROR_NO_ERROR Then
-		    Dim tis As TextInputStream
-		    tis = tis.Open(keyfile)
-		    VTAPIKey = tis.ReadAll.Trim
-		    tis.Close
-		    keyfile.Delete
-		    if VTAPIKey.Len <> 64 Then
-		      MsgBox("Bad Virus Total API Key!")
-		      settswin.ShowModal
-		    end if
+		  If keyfile = Nil Or Not keyfile.Exists Or keyfile.Directory Then Return
+		  Dim tis As TextInputStream
+		  tis = tis.Open(keyfile)
+		  VTAPIKey = tis.ReadAll.Trim
+		  tis.Close
+		  keyfile.Delete
+		  if VTAPIKey.Len <> 64 Then
+		    MsgBox("Bad Virus Total API Key!")
+		    settswin.ShowModal
 		  end if
+		  
 		End Sub
 	#tag EndMethod
 

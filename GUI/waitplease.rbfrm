@@ -46,6 +46,7 @@ Begin Window waitplease
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Thinking..."
       TextAlign       =   1
       TextColor       =   &h000000

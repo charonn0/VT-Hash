@@ -1,5 +1,5 @@
 #tag Class
-Protected Class Results
+Class Results
 	#tag Method, Flags = &h0
 		Sub Compact(Assigns b As Boolean)
 		  Original.Compact = b
@@ -195,6 +195,7 @@ Protected Class Results
 			Name="HashValue"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -220,11 +221,13 @@ Protected Class Results
 			Name="Permalink"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Resource"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ResponseCode"
@@ -235,6 +238,7 @@ Protected Class Results
 			Name="ResponseMessage"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ResultCount"
@@ -245,6 +249,7 @@ Protected Class Results
 			Name="ScanID"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

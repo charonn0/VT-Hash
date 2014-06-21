@@ -854,11 +854,11 @@ End
 		  If Not KeyValid Then
 		    ShowURL("https://www.virustotal.com/en/faq/#virustotal-api")
 		  ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "Test API key now?") = 6 Then
-		    Dim js As JSONItem = VTAPI.GetReport(eicarhash, APIText.Text, VTAPI.RequestType.FileReport)
+		    Dim js As JSONItem = VTHash.GetReport(eicarhash, APIText.Text, VTHash.RequestType.FileReport)
 		    If js <> Nil And js.HasName("total") Then
 		      MsgBox("API key test succeeded.")
 		    Else
-		      MsgBox("API key test failed." + EndOfLine + "Response code: " + Str(VTAPI.LastResponseCode) + EndOfLine + "Message: " + VTAPI.LastResponseVerbose)
+		      MsgBox("API key test failed." + EndOfLine + "Response code: " + Str(VTHash.LastResponseCode) + EndOfLine + "Message: " + VTHash.LastResponseVerbose)
 		    End If
 		    
 		  End If

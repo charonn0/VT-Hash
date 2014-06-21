@@ -149,7 +149,7 @@ Begin Window FileSubmit
       Visible         =   True
       Width           =   80
    End
-   Begin VTAPI.VTSession Socket
+   Begin VTHash.VTSession Socket
       Address         =   ""
       BytesAvailable  =   ""
       BytesLeftToSend =   ""

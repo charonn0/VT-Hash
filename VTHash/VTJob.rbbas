@@ -1,5 +1,5 @@
 #tag Class
-Protected Class VTJob
+Class VTJob
 	#tag Method, Flags = &h0
 		Sub Constructor(File As FolderItem, Algorithm As Integer)
 		  Me.TargetFile = File
@@ -9,7 +9,7 @@ Protected Class VTJob
 
 	#tag Method, Flags = &h0
 		Sub GetResults()
-		  Dim js As JSONItem = VTAPI.GetReport(Me.Hash, VTAPIKey, VTAPI.RequestType.FileReport)
+		  Dim js As JSONItem = VTHash.GetReport(Me.Hash, VTAPIKey, VTHash.RequestType.FileReport)
 		  If js <> Nil Then
 		    mResponse = New Results(js)
 		    Me.Response.HashValue = Me.Hash
@@ -40,9 +40,9 @@ Protected Class VTJob
 			    
 			    Select Case Me.Algorithm
 			    case Results.ALG_SHA1
-			      mHash = Win32Crypto.Hash(fileData, Win32Crypto.CALG_SHA1)
+			      mHash = VTHash.Hash(fileData, VTHash.CALG_SHA1)
 			    case Results.ALG_MD5
-			      mHash = Win32Crypto.Hash(fileData, Win32Crypto.CALG_MD5)
+			      mHash = VTHash.Hash(fileData, VTHash.CALG_MD5)
 			    end Select
 			  End If
 			  
