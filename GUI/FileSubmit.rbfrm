@@ -204,11 +204,13 @@ End
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Sub SubmitFile(File As FolderItem, APIKey As String)
+		Sub SubmitFile(parentWindow As Window, File As FolderItem, APIKey As String)
 		  Socket.APIKey = APIKey
 		  Socket.SubmitFile(File)
 		  TargetFile = File
 		  fLength = TargetFile.Length
+		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
+		  ShowCentered(Me, ScreenNumber)
 		  Me.ShowModal
 		End Sub
 	#tag EndMethod

@@ -118,11 +118,10 @@ End
 		  Else
 		    Listbox1.AddRow("Unknown (plain text?)", "100%")
 		  End If
-		  Dim w, h As Integer
-		  w = parentWindow.Left + (0.25 * Me.Width) + (0.25 * parentWindow.Width)
-		  h = parentWindow.Top + (0.25 * Me.Height) + (0.25 * parentWindow.Height)
-		  Me.Left = w
-		  Me.Top = h
+		  
+		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
+		  ShowCentered(Me, ScreenNumber)
+		  
 		  Me.ShowModal
 		End Sub
 	#tag EndMethod

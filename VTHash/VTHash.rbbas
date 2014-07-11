@@ -661,6 +661,26 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function ScreenFromXY(X As Integer, Y As Integer) As Integer
+		  Dim rect As New REALbasic.Rect
+		  Dim pt As New REALbasic.Point
+		  pt.X = X
+		  pt.Y = Y
+		  For i As Integer = 0 To ScreenCount - 1
+		    rect.Top = Screen(i).Top
+		    rect.Left = Screen(i).Left
+		    rect.Width = Screen(i).Width
+		    rect.Height = Screen(i).Height
+		    If rect.Contains(pt) Then
+		      Return i
+		    End If
+		  Next
+		  
+		  Return -1
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function SearchEngineSet() As Boolean
 		  Return SearchEngineName.Trim <> "" And SearchEngineURL.Trim <> ""
 		End Function
@@ -734,6 +754,25 @@ Protected Module VTHash
 		Exception err
 		  Return data
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ShowCentered(Win As Window, ScreenNumber As Integer = 0)
+		  ' Shows the passed window centered on the specified Screen.
+		  
+		  Dim X, Y As Integer
+		  X = (0.5 * Screen(ScreenNumber).Width) - (0.5 * Win.Width)
+		  Y = (0.5 * Screen(ScreenNumber).Height) - (0.5 * Win.Height)
+		  win.Show
+		  If Screen(ScreenNumber).Top > Screen(0).Height - 1 Then
+		    Y = Y + Screen(ScreenNumber).Height
+		  End If
+		  If Screen(ScreenNumber).Left > Screen(0).Width - 1 Then
+		    X = X + Screen(ScreenNumber).Width
+		  End If
+		  win.Left = X
+		  win.Top = Y
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -1508,6 +1547,16 @@ Protected Module VTHash
 			InitialValue="-2147483648"
 			Type="Integer"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastResponseCode"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastResponseVerbose"
+			Group="Behavior"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"

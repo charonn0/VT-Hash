@@ -8,11 +8,11 @@ Inherits Label
 		  #pragma Unused Y
 		  Dim copylink As New MenuItem("Copy link")
 		  Dim openlink As New MenuItem("Open link")
-		  Dim makeshortcut As New MenuItem("Create desktop shortcut")
+		  'Dim makeshortcut As New MenuItem("Create desktop shortcut")
 		  
 		  base.Append(copylink)
 		  base.Append(openlink)
-		  base.Append(makeshortcut)
+		  'base.Append(makeshortcut)
 		End Function
 	#tag EndEvent
 
@@ -80,7 +80,7 @@ Inherits Label
 		Sub MouseEnter()
 		  HoverTimer.Mode = Timer.ModeSingle
 		  Me.HelpTag = AltText
-		  'Me.mousecursor = System.Cursors.FingerPointer
+		  Me.mousecursor = System.Cursors.FingerPointer
 		  Me.Underline = True
 		  RaiseEvent MouseEnter
 		End Sub
@@ -89,7 +89,7 @@ Inherits Label
 	#tag Event
 		Sub MouseExit()
 		  HoverTimer.Mode = Timer.ModeOff
-		  'Me.mousecursor = System.Cursors.StandardPointer
+		  Me.mousecursor = System.Cursors.StandardPointer
 		  Me.Underline = False
 		  RaiseEvent MouseExit
 		End Sub
