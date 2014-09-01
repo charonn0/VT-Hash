@@ -1295,7 +1295,7 @@ Protected Module VTHash
 	#tag Constant, Name = ACCESS_DENIED, Type = Double, Dynamic = False, Default = \"5", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = AgentVersion, Type = Double, Dynamic = False, Default = \"2.0", Scope = Private
+	#tag Constant, Name = AgentVersion, Type = Double, Dynamic = False, Default = \"2.0", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = ALG_MD5, Type = Double, Dynamic = False, Default = \"0", Scope = Public
@@ -1557,6 +1557,7 @@ Protected Module VTHash
 			Name="LastResponseVerbose"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"

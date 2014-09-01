@@ -72,7 +72,7 @@ Inherits HTTPSecureSocket
 		  Dim content As String
 		  content = Request.ToString
 		  Dim t As New ContentType("multipart/form-data; boundary=" + Request.Boundary)
-		  Me.SetRequestHeader("User-Agent", "RB-VTAPI/" + VTHash.version + " " + VTHash.PlatformString)
+		  Me.SetRequestHeader("User-Agent", "RB-VTAPI/" + VTHash.AgentVersion + " " + VTHash.PlatformString)
 		  Me.SetPostContent(Content, t.ToString)
 		  
 		  Select Case Type
@@ -125,57 +125,39 @@ Inherits HTTPSecureSocket
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="Address"
-			Visible=true
-			Group="Behavior"
-			Type="String"
-			InheritedFrom="TCPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="APIKey"
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="BytesAvailable"
+			Name="CertificateFile"
+			Visible=true
 			Group="Behavior"
+			Type="FolderItem"
+			InheritedFrom="HTTPSecureSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="CertificatePassword"
+			Visible=true
+			Group="Behavior"
+			Type="String"
+			InheritedFrom="HTTPSecureSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="CertificateRejectionFile"
+			Visible=true
+			Group="Behavior"
+			Type="FolderItem"
+			InheritedFrom="HTTPSecureSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ConnectionType"
+			Visible=true
+			Group="Behavior"
+			InitialValue="2"
 			Type="Integer"
-			InheritedFrom="TCPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BytesLeftToSend"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="TCPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="defaultPort"
-			Group="Behavior"
-			InitialValue="0"
-			Type="integer"
-			InheritedFrom="HTTPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Handle"
-			Group="Behavior"
-			InitialValue="0"
-			Type="Integer"
-			InheritedFrom="SocketCore"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="httpProxyAddress"
-			Group="Behavior"
-			Type="string"
-			EditorType="MultiLineEditor"
-			InheritedFrom="HTTPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="httpProxyPort"
-			Group="Behavior"
-			InitialValue="0"
-			Type="integer"
-			InheritedFrom="HTTPSocket"
+			InheritedFrom="HTTPSecureSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -185,32 +167,11 @@ Inherits HTTPSecureSocket
 			InheritedFrom="SSLSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="IsConnected"
-			Group="Behavior"
-			InitialValue="0"
-			Type="Boolean"
-			InheritedFrom="SocketCore"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LastErrorCode"
-			Group="Behavior"
-			InitialValue="0"
-			Type="Integer"
-			InheritedFrom="SocketCore"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			Type="Integer"
 			InheritedFrom="SSLSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LocalAddress"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-			InheritedFrom="SocketCore"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -219,18 +180,11 @@ Inherits HTTPSecureSocket
 			InheritedFrom="SSLSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Port"
+			Name="Secure"
 			Visible=true
 			Group="Behavior"
-			InitialValue="0"
-			Type="Integer"
-			InheritedFrom="TCPSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="RemoteAddress"
-			Group="Behavior"
-			Type="String"
-			InheritedFrom="TCPSocket"
+			Type="Boolean"
+			InheritedFrom="HTTPSecureSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
@@ -244,13 +198,6 @@ Inherits HTTPSecureSocket
 			Group="Position"
 			Type="Integer"
 			InheritedFrom="SSLSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="yield"
-			Group="Behavior"
-			InitialValue="0"
-			Type="boolean"
-			InheritedFrom="HTTPSocket"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
