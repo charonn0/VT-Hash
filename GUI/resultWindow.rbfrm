@@ -163,7 +163,6 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
       TextColor       =   255
@@ -177,7 +176,6 @@ Begin Window resultWindow
       Width           =   101
    End
    Begin Timer TridTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   -141
@@ -185,11 +183,8 @@ Begin Window resultWindow
       Mode            =   0
       Period          =   2500
       Scope           =   0
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -6
-      Visible         =   True
       Width           =   32
    End
    Begin ProgBar ProgBar1
@@ -298,7 +293,6 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -375,7 +369,6 @@ Begin Window resultWindow
       Selectable      =   False
       TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -442,7 +435,6 @@ Begin Window resultWindow
       Selectable      =   ""
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -487,7 +479,7 @@ End
 
 	#tag MenuHandler
 		Function OpenFileMenu() As Boolean Handles OpenFileMenu.Action
-			If MsgBox("Are you sure you want to run this file?", 52, "Execution Confirmation") = 6 Then
+			If MsgBox("Are you sure you want to run this file?", 4 + 48 + 256, "Execution Confirmation") = 6 Then
 			toBeHashed.Launch
 			End If
 			Return True
