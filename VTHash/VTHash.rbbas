@@ -1081,7 +1081,7 @@ Protected Module VTHash
 		  
 		  Dim sh As New Shell
 		  Dim ret As Dictionary
-		  sh.Execute("""" + g.AbsolutePath + """" + " """ + f.AbsolutePath + """")
+		  sh.Execute(g.ShellPath + " " + f.ShellPath)
 		  Dim search() As String = sh.Result.Split(EndOfLine)
 		  Dim pattern As String = "([+-]?\d*\.\d+)(?![-+0-9\.])(%)(\s+)(.*)\((\d*)"
 		  For i As Integer = 0 To UBound(search)
