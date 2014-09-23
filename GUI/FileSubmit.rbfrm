@@ -23,7 +23,7 @@ Begin Window FileSubmit
    Resizeable      =   False
    Title           =   "Upload File"
    Visible         =   True
-   Width           =   2.48e+2
+   Width           =   3.49e+2
    Begin ProgressBar ProgressBar1
       AutoDeactivate  =   True
       Enabled         =   True
@@ -35,7 +35,7 @@ Begin Window FileSubmit
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   True
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
@@ -43,7 +43,7 @@ Begin Window FileSubmit
       Top             =   23
       Value           =   0
       Visible         =   True
-      Width           =   214
+      Width           =   315
    End
    Begin Label Label1
       AutoDeactivate  =   True
@@ -60,7 +60,7 @@ Begin Window FileSubmit
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   True
       LockTop         =   True
       Multiline       =   ""
       Scope           =   0
@@ -77,7 +77,7 @@ Begin Window FileSubmit
       Transparent     =   False
       Underline       =   ""
       Visible         =   True
-      Width           =   228
+      Width           =   329
    End
    Begin LinkLabel Permalink
       ActiveColor     =   "&cFF0000"
@@ -98,7 +98,7 @@ Begin Window FileSubmit
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   True
       LockTop         =   True
       Multiline       =   False
       ResetPeriod     =   1000
@@ -116,7 +116,7 @@ Begin Window FileSubmit
       Transparent     =   True
       Underline       =   ""
       Visible         =   False
-      Width           =   214
+      Width           =   315
    End
    Begin PushButton PushButton1
       AutoDeactivate  =   True
@@ -131,11 +131,11 @@ Begin Window FileSubmit
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   81
+      Left            =   114
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   True
       LockTop         =   True
       Scope           =   0
       TabIndex        =   2
@@ -147,23 +147,22 @@ Begin Window FileSubmit
       Top             =   68
       Underline       =   ""
       Visible         =   True
-      Width           =   80
+      Width           =   115
    End
    Begin VTHash.VTSession Socket
-      Address         =   ""
-      BytesAvailable  =   ""
-      BytesLeftToSend =   ""
+      CertificateFile =   ""
+      CertificatePassword=   ""
+      CertificateRejectionFile=   ""
+      ConnectionType  =   2
       Height          =   32
       Index           =   -2147483648
-      IsConnected     =   0
       Left            =   277
       LockedInPosition=   False
-      Port            =   0
       Scope           =   0
+      Secure          =   ""
       TabPanelIndex   =   0
       Top             =   -21
       Width           =   32
-      yield           =   0
    End
    Begin Label Percentages
       AutoDeactivate  =   True
@@ -180,7 +179,7 @@ Begin Window FileSubmit
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   True
       LockTop         =   True
       Multiline       =   ""
       Scope           =   0
@@ -197,7 +196,7 @@ Begin Window FileSubmit
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   214
+      Width           =   315
    End
 End
 #tag EndWindow
