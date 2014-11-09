@@ -202,6 +202,48 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h21
+		Private Function CreateURLShortcut(URL As String, ShortcutName As String, IconResource As FolderItem = Nil, IconIndex As Integer = - 1) As FolderItem
+		  #pragma BreakOnExceptions Off
+		  //Creates a shortcut (.url file) in the users %TEMP% directory named ShortcutName and pointing to URL. Returns
+		  //a FolderItem corresponding to the shortcut file. You must move the returned Shortcut file to the desired directory.
+		  //On error, returns Nil.
+		  //You may optionally pass an IconResource and IconIndex. The IconResource is a Windows resource file that has icon resources,
+		  //for example EXE, DLL, SYS, ICO, and CUR files. The IconIndex parameter is the index of the icon in the IconResource file.
+		  
+		  
+		  #If TargetWin32 Then
+		    Dim lnkObj As OLEObject
+		    Dim scriptShell As New OLEObject("Wscript.shell")
+		    
+		    If scriptShell <> Nil then
+		      lnkObj = scriptShell.CreateShortcut(SpecialFolder.Temporary.AbsolutePath + ShortcutName + ".url")
+		      If lnkObj <> Nil then
+		        lnkObj.TargetPath = URL
+		        lnkObj.Save
+		        
+		        Dim optionalparams As String
+		        
+		        If IconResource <> Nil Then optionalparams = "IconFile=" + IconResource.AbsolutePath + EndOfLine.Windows + _
+		        "IconIndex=" + Str(IconIndex) + EndOfLine
+		        
+		        If optionalparams.Trim <> "" Then
+		          Dim tos As TextOutputStream
+		          tos = tos.Append(SpecialFolder.Temporary.TrueChild(ShortcutName + ".url"))
+		          tos.Write(optionalparams)
+		          tos.Close
+		        End If
+		        
+		        Return SpecialFolder.Temporary.TrueChild(ShortcutName + ".url")
+		      End If
+		    End If
+		  #endif
+		  
+		Exception OLEException
+		  Return Nil
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub SubmitFile(parentWindow As Window, File As FolderItem, APIKey As String)
 		  Socket.APIKey = APIKey
@@ -243,6 +285,41 @@ End
 		Sub Action()
 		  ShowURL(PermaURL)
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  '#pragma Unused X
+		  '#pragma Unused Y
+		  'Dim copylink As New MenuItem("Copy link")
+		  'Dim openlink As New MenuItem("Open link")
+		  ''Dim makeshortcut As New MenuItem("Create desktop shortcut")
+		  '
+		  'base.Append(copylink)
+		  'base.Append(openlink)
+		  ''base.Append(makeshortcut)AX
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  'Select Case hitItem.Text
+		  'Case "Copy link"
+		  'Dim cp As New Clipboard
+		  'cp.SetText(Me.URL)
+		  'Return True
+		  '
+		  'Case "Create desktop shortcut"
+		  'Dim shortcut As FolderItem = CreateURLShortcut(Me.URL, Me.Text)
+		  'If shortcut <> Nil Then shortcut.MoveFileTo(SpecialFolder.Desktop)
+		  '
+		  'Return True
+		  '
+		  '
+		  'Case "Open link"
+		  'ShowURL(Me.URL)
+		  'Return True
+		  '
+		  'End Select
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events PushButton1
