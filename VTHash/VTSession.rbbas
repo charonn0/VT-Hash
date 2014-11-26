@@ -1,6 +1,6 @@
 #tag Class
 Protected Class VTSession
-Inherits HTTPSecureSocket
+Inherits HTTPSocket
 	#tag Event
 		Sub PageReceived(url as string, httpStatus as integer, headers as internetHeaders, content as string)
 		  #pragma Unused url
