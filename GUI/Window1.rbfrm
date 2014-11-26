@@ -379,8 +379,8 @@ End
 		    Call MsgBox("Unable to open the file: access is denied.", 16, "File Read Error")
 		    Quit(1)
 		  End Select
-		  if toBeHashed.Length > 67108864 then
-		    Call MsgBox("The file is larger than 64MB and therefore will not be found in Virus Total's Database.", 16, "File Too Large")
+		  if toBeHashed.Length > 1024 * 1024 * 128 then
+		    Call MsgBox("The file is larger than 128MB and therefore will not be found in Virus Total's Database.", 16, "File Too Large")
 		    Quit(1)
 		  End if
 		  

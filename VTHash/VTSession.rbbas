@@ -125,39 +125,58 @@ Inherits HTTPSocket
 
 	#tag ViewBehavior
 		#tag ViewProperty
+			Name="Address"
+			Visible=true
+			Group="Behavior"
+			Type="String"
+			InheritedFrom="TCPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="APIKey"
+			Visible=true
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="CertificateFile"
-			Visible=true
+			Name="BytesAvailable"
 			Group="Behavior"
-			Type="FolderItem"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CertificatePassword"
-			Visible=true
-			Group="Behavior"
-			Type="String"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CertificateRejectionFile"
-			Visible=true
-			Group="Behavior"
-			Type="FolderItem"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ConnectionType"
-			Visible=true
-			Group="Behavior"
-			InitialValue="2"
 			Type="Integer"
-			InheritedFrom="HTTPSecureSocket"
+			InheritedFrom="TCPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="BytesLeftToSend"
+			Group="Behavior"
+			Type="Integer"
+			InheritedFrom="TCPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="defaultPort"
+			Group="Behavior"
+			InitialValue="0"
+			Type="integer"
+			InheritedFrom="HTTPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Handle"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="SocketCore"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="httpProxyAddress"
+			Group="Behavior"
+			Type="string"
+			EditorType="MultiLineEditor"
+			InheritedFrom="HTTPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="httpProxyPort"
+			Group="Behavior"
+			InitialValue="0"
+			Type="integer"
+			InheritedFrom="HTTPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -167,11 +186,32 @@ Inherits HTTPSocket
 			InheritedFrom="SSLSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="IsConnected"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Boolean"
+			InheritedFrom="SocketCore"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastErrorCode"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="SocketCore"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			Type="Integer"
 			InheritedFrom="SSLSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LocalAddress"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+			InheritedFrom="SocketCore"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -180,11 +220,18 @@ Inherits HTTPSocket
 			InheritedFrom="SSLSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Secure"
+			Name="Port"
 			Visible=true
 			Group="Behavior"
-			Type="Boolean"
-			InheritedFrom="HTTPSecureSocket"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="TCPSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="RemoteAddress"
+			Group="Behavior"
+			Type="String"
+			InheritedFrom="TCPSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
@@ -198,6 +245,13 @@ Inherits HTTPSocket
 			Group="Position"
 			Type="Integer"
 			InheritedFrom="SSLSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="yield"
+			Group="Behavior"
+			InitialValue="0"
+			Type="boolean"
+			InheritedFrom="HTTPSocket"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
