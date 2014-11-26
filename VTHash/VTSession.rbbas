@@ -1,6 +1,6 @@
 #tag Class
 Protected Class VTSession
-Inherits HTTPSocket
+Inherits HTTPSecureSocket
 	#tag Event
 		Sub PageReceived(url as string, httpStatus as integer, headers as internetHeaders, content as string)
 		  #pragma Unused url
@@ -16,6 +16,12 @@ Inherits HTTPSocket
 		    RaiseEvent Response(Nil, httpStatus)
 		  End If
 		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Function SendProgress(bytesSent as Integer, bytesLeft as Integer) As Boolean
+		  Return RaiseEvent SendProgress(bytesSent, bytesLeft)
+		End Function
 	#tag EndEvent
 
 
@@ -115,6 +121,10 @@ Inherits HTTPSocket
 
 	#tag Hook, Flags = &h0
 		Event Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+	#tag EndHook
+
+	#tag Hook, Flags = &h0
+		Event SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
 	#tag EndHook
 
 

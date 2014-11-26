@@ -149,21 +149,6 @@ Begin Window FileSubmit
       Visible         =   True
       Width           =   115
    End
-   Begin VTHash.VTSession Socket
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   2
-      Height          =   32
-      Index           =   -2147483648
-      Left            =   277
-      LockedInPosition=   False
-      Scope           =   0
-      Secure          =   ""
-      TabPanelIndex   =   0
-      Top             =   -21
-      Width           =   32
-   End
    Begin Label Percentages
       AutoDeactivate  =   True
       Bold            =   ""
@@ -197,6 +182,23 @@ Begin Window FileSubmit
       Underline       =   ""
       Visible         =   True
       Width           =   315
+   End
+   Begin VTHash.VTSession Socket
+      Address         =   ""
+      APIKey          =   ""
+      BytesAvailable  =   ""
+      BytesLeftToSend =   ""
+      Height          =   32
+      Index           =   -2147483648
+      IsConnected     =   0
+      Left            =   3.79e+2
+      LockedInPosition=   False
+      Port            =   0
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   -2.1e+1
+      Width           =   32
+      yield           =   0
    End
 End
 #tag EndWindow
@@ -374,20 +376,6 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function SendProgress(bytesSent as Integer, bytesLeft as Integer) As Boolean
-		  tTotal = tTotal + bytesSent
-		  'Dim snt As Integer = TargetFile.Length - bytesLeft
-		  ProgressBar1.Value = tTotal * 100 \ fLength
-		  Percentages.Text = FormatBytes(tTotal) + " of " + FormatBytes(fLength) + " bytes sent"
-		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
-		    Label1.Text = "Awaiting response..."
-		  Else
-		    Label1.Text = "Sending file..."
-		  End If
-		  '11App.YieldToNextThread
-		End Function
-	#tag EndEvent
-	#tag Event
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  If HTTPStatus = 200 And ResponseObject <> Nil Then
 		    If ResponseObject.Value("response_code") = VT_Code_OK Then
@@ -405,6 +393,25 @@ End
 		  End If
 		  PushButton1.Caption = "Close"
 		  ProgressBar1.Value = ProgressBar1.Maximum
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
+		  tTotal = tTotal + bytesSent
+		  'Dim snt As Integer = TargetFile.Length - bytesLeft
+		  ProgressBar1.Value = tTotal * 100 \ fLength
+		  Percentages.Text = FormatBytes(tTotal) + " of " + FormatBytes(fLength) + " bytes sent"
+		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
+		    Label1.Text = "Awaiting response..."
+		  Else
+		    Label1.Text = "Sending file..."
+		  End If
+		  '11App.YieldToNextThread
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Connected()
+		  Break
 		End Sub
 	#tag EndEvent
 #tag EndEvents
