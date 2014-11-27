@@ -184,21 +184,32 @@ Begin Window FileSubmit
       Width           =   315
    End
    Begin VTHash.VTSession Socket
-      Address         =   ""
       APIKey          =   ""
-      BytesAvailable  =   ""
-      BytesLeftToSend =   ""
+      CertificateFile =   ""
+      CertificatePassword=   ""
+      CertificateRejectionFile=   ""
+      ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
-      IsConnected     =   0
-      Left            =   3.79e+2
+      Left            =   379
       LockedInPosition=   False
-      Port            =   0
+      Scope           =   0
+      Secure          =   True
+      TabPanelIndex   =   0
+      Top             =   -21
+      Width           =   32
+   End
+   Begin Timer GUITimer
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   379
+      LockedInPosition=   False
+      Mode            =   2
+      Period          =   250
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   -2.1e+1
+      Top             =   12
       Width           =   32
-      yield           =   0
    End
 End
 #tag EndWindow
@@ -409,9 +420,17 @@ End
 		  '11App.YieldToNextThread
 		End Function
 	#tag EndEvent
+#tag EndEvents
+#tag Events GUITimer
 	#tag Event
-		Sub Connected()
-		  Break
+		Sub Action()
+		  If Right(Label1.Text, 3) = "..." Then
+		    Label1.Text = Left(Label1.Text, Label1.Text.Len - 3)
+		  ElseIf Right(Label1.Text, 2) = ".." Then
+		    Label1.Text = Label1.Text + "."
+		  ElseIf Right(Label1.Text, 1) = "." Then
+		    Label1.Text = Label1.Text + "."
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
