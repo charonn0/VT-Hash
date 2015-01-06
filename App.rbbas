@@ -5,7 +5,7 @@ Inherits Application
 		Sub Open()
 		  'Call AdjustPrivilegeToken(SE_BACKUP_NAME, SE_PRIVILEGE_ENABLED)
 		  'Call AdjustPrivilegeToken(SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED)
-		  Dim args() As String = Tokenize(System.CommandLine)
+		  Dim args() As String = Win32.Utils.Tokenize(System.CommandLine)
 		  args.Remove(0)
 		  ParseArgs(args)
 		  
@@ -32,17 +32,17 @@ Inherits Application
 
 	#tag Event
 		Function UnhandledException(error As RuntimeException) As Boolean
-		  Window1.Timer1.Mode = Timer.ModeOff
-		  Window1.Timer2.Mode = Timer.ModeOff
+		  HashWindow.Timer1.Mode = Timer.ModeOff
+		  HashWindow.Timer2.Mode = Timer.ModeOff
 		  For Each w As resultWindow In ResultWindows()
 		    w.Close
 		  Next
-		  Window1.Visible = False
+		  HashWindow.Visible = False
 		  If error IsA JSONException Then
 		    Call MsgBox("VirusTotal.com provided an improperly formatted response." + EndOfLine + "Please try again later.", 16, "Illegal Response Format")
 		    Quit(1)
 		  Else
-		    Return errorHandler.ShowException(error)
+		    Return ErrorWindow.ShowException(error)
 		  End If
 		End Function
 	#tag EndEvent
@@ -62,7 +62,7 @@ Inherits Application
 		  keyfile.Delete
 		  if VTAPIKey.Len <> 64 Then
 		    MsgBox("Bad Virus Total API Key!")
-		    settswin.ShowModal
+		    SettingsWindow.ShowModal
 		  end if
 		  
 		End Sub
@@ -102,9 +102,9 @@ Inherits Application
 		    End If
 		    
 		    If j.Value("Use SHA1").BooleanValue Then
-		      algorithm = ALG_SHA1
+		      algorithm = Win32.Crypto.CALG_SHA1
 		    Else
-		      algorithm = ALG_MD5
+		      algorithm = Win32.Crypto.CALG_MD5
 		    End If
 		    
 		    Dim g As FolderItem = GetFolderItem(j.Value("Default Save Directory"))
@@ -127,14 +127,14 @@ Inherits Application
 		  For i As Integer = 0 To UBound(Args)
 		    Select Case Args(i)
 		    Case "--about"
-		      about.ShowModal()
+		      AboutWindow.ShowModal()
 		      Quit()
 		      
 		    Case "--ssl"
 		      MsgBox("'--ssl' has been deprecated. SSL/TLS is no longer optional.")
 		      
 		    Case "--sha1"
-		      algorithm = ALG_SHA1
+		      algorithm = Win32.Crypto.CALG_SHA1
 		      
 		    Else
 		      if Left(Args(i), 6) = "--API=" Then

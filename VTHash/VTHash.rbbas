@@ -11,264 +11,10 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function AdjustPrivilegeToken(PrivilegeName As String, mode As Integer) As Integer
-		  //Modifies the calling process' security token
-		  //See the SE_* Constants in Win32Constants for privilege names.
-		  //Returns 0 on success, or a Win32 error number on failure.
-		  Dim error As Integer
-		  #If TargetWin32 Then
-		    Dim thisProc As Integer = GetCurrentProcess()
-		    Dim tHandle As Integer
-		    If OpenProcessToken(thisProc, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, tHandle) Then
-		      Dim luid As New MemoryBlock(8)
-		      If LookupPrivilegeValue(Nil, PrivilegeName, luid) Then
-		        Dim newState As New MemoryBlock(16)
-		        newState.UInt32Value(0) = 1
-		        newState.UInt32Value(4) = luid.UInt32Value(0)
-		        newState.UInt32Value(8) = luid.UInt32Value(4)
-		        newState.UInt32Value(12) = mode  //mode can be enable, disable, or remove. See: EnablePrivilege, DisablePrivilege, and DropPrivilege.
-		        Dim retLen As Integer
-		        Dim prevPrivs As Ptr
-		        If AdjustTokenPrivileges(tHandle, False, newState, newState.Size, prevPrivs, retLen) Then
-		          error = 0
-		        Else
-		          error = GetLastError()
-		        End If
-		      Else
-		        error = GetLastError()
-		      End If
-		    Else
-		      error = GetLastError()
-		    End If
-		  #endif
-		  
-		  Return error
-		End Function
-	#tag EndMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function AdjustTokenPrivileges Lib "AdvApi32" (tHandle As Integer, disableAllPrivs As Boolean, newState As Ptr, buffLength As Integer, prevPrivs As Ptr, ByRef retLen As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag Method, Flags = &h0
-		Function CleanedStack(Err As RuntimeException) As String()
-		  'This method was written by SirG3 <TheSirG3@gmail.com>; http://fireyesoftware.com/developer/stackcleaner/
-		  Dim result() As String
-		  
-		  #If rbVersion >= 2005.5
-		    For Each s As String In Err.stack
-		      Dim tmp As String = cleanMangledFunction( s )
-		      
-		      If tmp <> "" Then _
-		      result.append( tmp )
-		    Next
-		    
-		  #Else
-		    // leave result empty
-		    
-		  #EndIf
-		  
-		  // we must return some sort of array (even if empty), otherwise REALbasic will return a "nil" array, causing a crash when trying to use the array.
-		  // see http://realsoftware.com/feedback/viewreport.php?reportid=urvbevct
-		  
-		  Return result
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function CleanMangledFunction(item as string) As string
-		  #if rbVersion >= 2005.5
-		    
-		    dim blacklist() as string = array( _
-		    "REALbasic._RuntimeRegisterAppObject%%o<Application>", _
-		    "_NewAppInstance", _'
-		    "_Main", _
-		    "% main", _
-		    "REALbasic._RuntimeRun" _
-		    )
-		    
-		    if blacklist.indexOf( item ) >= 0 then _
-		    exit function
-		    
-		    dim parts() as string = item.split( "%" )
-		    if ubound( parts ) < 2 then _
-		    exit function
-		    
-		    dim func as string = parts( 0 )
-		    dim returnType as string
-		    if parts( 1 ) <> "" then _
-		    returnType = parseParams( parts( 1 ) ).pop()
-		    dim args() as string = parseParams( parts( 2 ) )
-		    
-		    if func.inStr( "$" ) > 0 then
-		      args( 0 ) = "extends " + args( 0 )
-		      func = func.replaceAll( "$", "" )
-		      
-		    elseif ubound( args ) >= 0 and func.nthField( ".", 1 ) = args( 0 ) then
-		      args.remove( 0 )
-		      
-		    end if
-		    
-		    if func.inStr( "=" ) > 0 then
-		      dim index as integer = ubound( args )
-		      
-		      args( index ) = "assigns " + args( index )
-		      func = func.replaceAll( "=", "" )
-		    end if
-		    
-		    if func.inStr( "*" ) > 0 then
-		      dim index as integer = ubound( args )
-		      
-		      args( index ) = "paramarray " + args( index )
-		      func = func.replaceAll( "*", "" )
-		    end if
-		    
-		    dim sig as string
-		    if func.instr( "#" ) > 0 then
-		      sig = "Event"
-		      func = func.replaceAll( "#", "" )
-		      
-		    elseif returnType = "" then
-		      sig = "Sub"
-		      
-		    else
-		      sig = "Function"
-		      
-		    end if
-		    
-		    if ubound( args ) >= 0 then
-		      sig = sig + " " + func + "( " + join( args, ", " ) + " )"
-		      
-		    else
-		      sig = sig + " " + func + "()"
-		      
-		    end if
-		    
-		    
-		    if returnType <> "" then
-		      sig = sig + " as " + returnType
-		    end if
-		    
-		    return sig
-		    
-		  #else
-		    return ""
-		    
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function CleanStack(extends error as RuntimeException) As string()
-		  dim result() as string
-		  
-		  #if rbVersion >= 2005.5
-		    for each s as string in error.stack
-		      dim tmp as string = cleanMangledFunction( s )
-		      
-		      if tmp <> "" then _
-		      result.append( tmp )
-		    next
-		    
-		  #else
-		    // leave result empty
-		    
-		  #endif
-		  
-		  // we must return some sort of array (even if empty), otherwise REALbasic will return a "nil" array, causing a crash when trying to use the array.
-		  // see http://realsoftware.com/feedback/viewreport.php?reportid=urvbevct
-		  
-		  return result
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function CleanStack(error as RuntimeException) As string()
-		  'This method was written by SirG3 <TheSirG3@gmail.com>; http://fireyesoftware.com/developer/stackcleaner/
-		  Dim result() As String
-		  
-		  #If rbVersion >= 2005.5
-		    For Each s As String In error.stack
-		      Dim tmp As String = cleanMangledFunction( s )
-		      
-		      If tmp <> "" Then _
-		      result.append( tmp )
-		    Next
-		    
-		  #Else
-		    // leave result empty
-		    
-		  #EndIf
-		  
-		  // we must return some sort of array (even if empty), otherwise REALbasic will return a "nil" array, causing a crash when trying to use the array.
-		  // see http://realsoftware.com/feedback/viewreport.php?reportid=urvbevct
-		  
-		  Return result
-		End Function
-	#tag EndMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function CloseHandle Lib "Kernel32" (handle As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag Method, Flags = &h21
-		Private Sub ConnectedHandler(Sender As VTSession)
-		  'Break
-		End Sub
-	#tag EndMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function CreateFile Lib "Kernel32" Alias "CreateFileW" (name As WString, access As Integer, sharemode As Integer, SecAtrribs As Integer, CreateDisp As Integer, flags As Integer, template As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag Method, Flags = &h0
 		Function CRLF() As String
 		  Return EndOfLine.Windows
 		End Function
 	#tag EndMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function CryptAcquireContext Lib "AdvApi32" Alias "CryptAcquireContextW" (ByRef provider as Integer, container as Integer, providerName as WString, providerType as Integer, flags as Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function CryptCreateHash Lib "AdvApi32" (provider as Integer, algorithm as Integer, key as Integer, flags as Integer, ByRef hashHandle as Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Sub CryptDestroyHash Lib "AdvApi32" (HashHandle As Integer)
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function CryptGetHashParam Lib "AdvApi32" (hashHandle as Integer, type as Integer, value as Ptr, ByRef length as Integer, flags as Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function CryptHashData Lib "AdvApi32" (hashHandle as Integer, data as Ptr, length as Integer, flags as Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag Method, Flags = &h0
-		Function DeleteOnReboot(Extends source As FolderItem) As Boolean
-		  //Schedules the source file to be deleted on the next system reboot
-		  //This function will fail if the user does not have write access to the
-		  //HKEY_LOCAL_MACHINE registry hive (HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations)
-		  //Or if the user does not have write access to the Target file.
-		  
-		  #If TargetWin32
-		    Return MoveFileEx(source.AbsolutePath, Nil, MOVEFILE_DELAY_UNTIL_REBOOT)
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Sub ErrorHandler(Sender As VTSession, code As Integer)
-		  Break
-		End Sub
-	#tag EndMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function FindExecutable Lib "Shell32" (file As WString, directory As WString, result As Ptr) As Integer
-	#tag EndExternalMethod
 
 	#tag Method, Flags = &h0
 		Function FormatBytes(bytes As UInt64, precision As Integer = 2) As String
@@ -322,18 +68,6 @@ Protected Module VTHash
 		End Function
 	#tag EndMethod
 
-	#tag ExternalMethod, Flags = &h0
-		Declare Function GetCurrentProcess Lib "Kernel32" () As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function GetLastError Lib "Kernel32" () As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Soft Declare Sub GetNativeSystemInfo Lib "Kernel32" (ByRef info As SYSTEM_INFO)
-	#tag EndExternalMethod
-
 	#tag Method, Flags = &h0
 		Function GetReport(ResourceID As String, APIKey As String, Type As RequestType) As JSONItem
 		  Dim frm As New MultipartForm
@@ -353,223 +87,6 @@ Protected Module VTHash
 		End Function
 	#tag EndMethod
 
-	#tag ExternalMethod, Flags = &h0
-		Soft Declare Function GetVersionEx Lib "Kernel32" Alias "GetVersionExA" (ByRef info As OSVERSIONINFOEX) As Boolean
-	#tag EndExternalMethod
-
-	#tag Method, Flags = &h0
-		Function Hash(data As String, algorithm As Integer) As String
-		  //Hashes the data string using the specified hash algorithm (see the constants for this Module for available algorithms.)
-		  //Returns a hex-formatted string of the binary hash
-		  
-		  Dim hashHandle As Integer
-		  Dim hashPtr As MemoryBlock
-		  'Select Case algorithm
-		  'Case CALG_SHA256
-		  'hashPtr = HashData(RSAProvider, data, hashHandle, algorithm)
-		  'Else
-		  hashPtr = HashData(baseCryptoProvider, data, hashHandle, algorithm)
-		  'End Select
-		  If hashPtr = Nil Then Return ""
-		  Dim ret As String = StringToHex(hashPtr.StringValue(0, hashPtr.Size))
-		  CryptDestroyHash(hashHandle)
-		  Return ret
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function HashData(provider as Integer, data as String, ByRef handle as Integer, algorithm As Integer) As MemoryBlock
-		  Dim hashHandle as Integer
-		  Dim xxx As UInt64
-		  If Not CryptCreateHash(provider, algorithm, 0, 0, hashHandle) Then
-		    xxx = GetLastError
-		    Break
-		    Return Nil
-		  End If
-		  Dim dataPtr As New MemoryBlock(Len(data))
-		  dataPtr = data
-		  If Not CryptHashData(hashHandle, dataPtr, dataPtr.Size, 0) Then
-		    xxx = GetLastError
-		    Break
-		    Return Nil
-		  End If
-		  Dim size as Integer = 4
-		  Dim toss As New MemoryBlock(4)
-		  If Not CryptGetHashParam(hashHandle, HP_HASHSIZE, toss, size, 0) Then
-		    xxx = GetLastError
-		    Break
-		    Return Nil
-		  End If
-		  size = toss.UInt32Value(0)
-		  Dim hashValue As New MemoryBlock(size)
-		  If Not CryptGetHashParam(hashHandle, HP_HASHVAL, hashValue, size, 0) Then
-		    xxx = GetLastError
-		    Break
-		    Return Nil
-		  End If
-		  handle = hashHandle
-		  
-		  Return hashValue
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Sub HeadersReceivedHandler(Sender As VTSession, headers As InternetHeaders, code As Integer)
-		  'Break
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function isFound(Extends f As FolderItem) As Integer
-		  Const FILE_FLAG_BACKUP_SEMANTICS = &h02000000
-		  Dim HWND As Integer = CreateFile(f.AbsolutePath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0)
-		  If HWND = -1 Then
-		    HWND = GetLastError()
-		    Select Case HWND
-		    Case 5
-		      Return ACCESS_DENIED
-		    Case 2
-		      Return FILE_NOT_FOUND
-		    Else
-		      Return ERROR_OTHER
-		    End Select
-		    
-		  Else
-		    Call CloseHandle(HWND)
-		    Return ERROR_NO_ERROR
-		  End If
-		End Function
-	#tag EndMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function LookupPrivilegeValue Lib "AdvApi32" Alias "LookupPrivilegeValueW" (sysName As WString, privName As WString, Luid As Ptr) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function MoveFileEx Lib "Kernel32" Alias "MoveFileExW" (sourceFile As WString, destinationFile As WString, flags As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h0
-		Declare Function OpenProcessToken Lib "AdvApi32" (handle As Integer, access As Integer, ByRef tHandle As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag Method, Flags = &h21
-		Private Function ParseParams(input as string) As string()
-		  dim chars() as string = input.split( "" )
-		  dim funcTypes() as string
-		  dim arrays() as integer
-		  dim arrayDims() as integer
-		  dim byrefs() as integer
-		  dim mode as integer
-		  dim buffer as string
-		  
-		  const kParamMode = 0
-		  const kObjectMode = 1
-		  const kIntMode = 2
-		  const kUIntMode = 3
-		  const kFloatingMode = 4
-		  const kArrayMode = 5
-		  
-		  for each char as string in chars
-		    select case mode
-		    case kParamMode
-		      select case char
-		      Case "v"
-		        funcTypes.append( "Variant" )
-		      case "i"
-		        mode = kIntMode
-		        
-		      case "u"
-		        mode = kUIntMode
-		        
-		      case "o"
-		        mode = kObjectMode
-		        
-		      case "b"
-		        funcTypes.append( "boolean" )
-		        
-		      case "s"
-		        funcTypes.append( "string" )
-		        
-		      case "f"
-		        mode = kFloatingMode
-		        
-		      case "c"
-		        funcTypes.append( "color" )
-		        
-		      case "A"
-		        mode = kArrayMode
-		        
-		      case "&"
-		        byrefs.append( ubound( funcTypes ) + 1 )
-		        
-		      end select
-		      
-		      
-		    case kObjectMode
-		      if char = "<" then _
-		      continue
-		      
-		      if char = ">" then
-		        funcTypes.append( buffer )
-		        buffer = ""
-		        mode = kParamMode
-		        
-		        continue
-		      end if
-		      
-		      buffer = buffer + char
-		      
-		      
-		    case kIntMode, kUIntMode
-		      dim intType as string = "int"
-		      
-		      if mode = kUIntMode then _
-		      intType = "uint"
-		      
-		      funcTypes.append( intType + str( val( char ) * 8 ) )
-		      mode = kParamMode
-		      
-		      
-		    case kFloatingMode
-		      if char = "4" then
-		        funcTypes.append( "single" )
-		        
-		      elseif char = "8" then
-		        funcTypes.append( "double" )
-		        
-		      end if
-		      
-		      mode = kParamMode
-		      
-		    case kArrayMode
-		      arrays.append( ubound( funcTypes ) + 1 )
-		      arrayDims.append( val( char ) )
-		      mode = kParamMode
-		      
-		    end select
-		  next
-		  
-		  for i as integer = 0 to ubound( arrays )
-		    dim arr as integer = arrays( i )
-		    dim s as string = funcTypes( arr ) + "("
-		    
-		    for i2 as integer = 2 to arrayDims( i )
-		      s = s + ","
-		    next
-		    
-		    funcTypes( arr ) = s + ")"
-		  next
-		  
-		  for each b as integer in byrefs
-		    funcTypes( b ) = "byref " + funcTypes( b )
-		  next
-		  
-		  return funcTypes
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Function PlatformString() As String
 		  //Returns a human-readable string corresponding to the version, SKU, service pack, and architecture of
@@ -577,12 +94,7 @@ Protected Module VTHash
 		  //e.g. "Windows 7 Ultimate x64 Service Pack 1"
 		  
 		  #If TargetWin32 Then
-		    Dim info As OSVERSIONINFOEX
-		    info.StructSize = Info.Size
-		    
-		    If GetVersionEx(info) Then
-		      Return "(VT Hash Check " + VTHash.version + "; U; Win32 " + Str(info.BuildNumber) + ")"
-		    End If
+		    Return "(VT Hash Check " + VTHash.version + "; U; Win32 " + Str(Win32.OSVersion.BuildNumber) + ")"
 		  #endif
 		End Function
 	#tag EndMethod
@@ -630,7 +142,7 @@ Protected Module VTHash
 	#tag Method, Flags = &h0
 		Sub SaveSettings()
 		  Dim s As New JSONItem
-		  s.Value("Use SHA1") = algorithm <> ALG_MD5
+		  s.Value("Use SHA1") = algorithm <> Win32.Crypto.CALG_MD5
 		  s.Value("Autosave Results") = autosave
 		  s.Value("Default Save Format") = defaultFormat
 		  If autosavePath <> Nil Then
@@ -691,9 +203,9 @@ Protected Module VTHash
 		  If Sock = Nil Then
 		    Sock = New VTSession
 		    AddHandler Sock.Response, AddressOf ResponseHandler
-		    AddHandler Sock.Connected, AddressOf ConnectedHandler
-		    AddHandler Sock.HeadersReceived, AddressOf HeadersReceivedHandler
-		    AddHandler Sock.Error, AddressOf VTHash.ErrorHandler
+		    'AddHandler Sock.Connected, AddressOf ConnectedHandler
+		    'AddHandler Sock.HeadersReceived, AddressOf HeadersReceivedHandler
+		    'AddHandler Sock.Error, AddressOf VTHash.ErrorHandler
 		  End If
 		  Dim content As String = Form.ToString
 		  Dim t As New ContentType("multipart/form-data; boundary=" + Form.Boundary)
@@ -788,48 +300,6 @@ Protected Module VTHash
 		    ShellExecuteW(0, "open", "explorer", param, 0, SW_SHOW)
 		  #endif
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function StackTrace(Err As RuntimeException) As String
-		  Dim info As OSVERSIONINFOEX
-		  info.StructSize = Info.Size
-		  Dim OS As String = "Unknown"
-		  Dim bits As String = "x32"
-		  If GetVersionEx(info) Then
-		    If System.IsFunctionAvailable("GetNativeSystemInfo", "kernel32.dll") Then
-		      Dim sysinfo As SYSTEM_INFO
-		      GetNativeSystemInfo(sysinfo)
-		      bits = "x64"
-		    End If
-		    OS = "WinNT " + Str(info.MajorVersion) + "." + Str(info.MinorVersion) + "(" + info.ServicePackName + ")" + bits
-		  End If
-		  Dim d As New Date
-		  Dim stack() As String = CleanedStack(Err)
-		  Dim m As String = "Message: "
-		  If Err.Message.Trim = "" Then
-		    m = m + "No additional details"
-		  Else
-		    m = m + Err.Message
-		  End If
-		  Dim head As String = _
-		  "Runtime Exception:" + EndOfLine + _
-		  "Date: " + d.SQLDateTime + EndOfLine + _
-		  "Exception type: " + Introspection.GetType(Err).FullName + EndOfLine + _
-		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine + _
-		  m + EndOfLine + EndOfLine
-		  
-		  Dim file As String = "No File Specified"
-		  If toBeHashed <> Nil Then file = toBeHashed.AbsolutePath
-		  Dim Error As String =_
-		  "Call stack at last call to Raise:" + EndOfLine + EndOfLine + _
-		  Join(stack, "     " + EndOfLine) + EndOfLine
-		  
-		  Dim OsBlock As String = _
-		  "EXE Version: " + VTHash.version + EndOfLine + "Target path: " + file + EndOfLine + "Algorithm: " + Str(algorithm) + EndOfLine + "OS: " + OS + EndOfLine
-		  
-		  Return head + OsBlock + Error
-		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -980,22 +450,6 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function StringToHex(src as string) As string
-		  //Hexify a string of binary data
-		  
-		  Dim hexvalue As Integer
-		  Dim hexedInt As String
-		  
-		  For i As Integer = 1 To LenB(src)
-		    hexvalue = AscB(MidB(src, i, 1))
-		    hexedInt = hexedInt + RightB("00" + Hex(hexvalue), 2)
-		  next
-		  
-		  Return LeftB(hexedInt, LenB(hexedInt))
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function SubmitFile(File As FolderItem, APIKey As String) As JSONItem
 		  Dim frm As New MultipartForm
 		  frm.Element("apikey") = APIKey
@@ -1011,14 +465,14 @@ Protected Module VTHash
 		  //On error, returns an empty string.
 		  
 		  #If TargetWin32 Then
-		    Declare Function GetTimeZoneInformation Lib "Kernel32" (ByRef TZInfo As TIME_ZONE_INFORMATION) As Integer
+		    Declare Function GetTimeZoneInformation Lib "Kernel32" (ByRef TZInfo As Win32.Utils.TIME_ZONE_INFORMATION) As Integer
 		    
 		    Const daylightSavingsOn = 2
 		    Const daylightSavingsOff = 1
 		    Const daylightSavingsUnknown = 0
 		    Const invalidTimeZone = &hFFFFFFFF
 		    
-		    Dim TZInfo As TIME_ZONE_INFORMATION
+		    Dim TZInfo As Win32.Utils.TIME_ZONE_INFORMATION
 		    Dim dlsStatus As Integer = GetTimeZoneInformation(TZInfo)
 		    
 		    If dlsStatus = daylightSavingsOn Or dlsStatus = daylightSavingsOff Or dlsStatus = daylightSavingsUnknown Then
@@ -1027,42 +481,6 @@ Protected Module VTHash
 		      Return ""
 		    End If
 		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Tokenize(ByVal Input As String) As String()
-		  //Returns a String array containing the space-delimited members of the Input string.
-		  //Like `String.Split(" ")` but honoring quotes; good for command line arguments and other parsing.
-		  //For example, this string:
-		  '                     MyApp.exe --foo "C:\My Dir\"
-		  //Would become:
-		  '                     s(0) = MyApp.exe
-		  '                     s(1) = --foo
-		  '                     s(2) = "C:\My Dir\"
-		  
-		  
-		  #If TargetWin32 Then
-		    Declare Function PathGetArgsW Lib "Shlwapi" (path As WString) As WString
-		    Dim ret() As String
-		    Dim cmdLine As String = Input
-		    While cmdLine.Len > 0
-		      Dim tmp As String
-		      Dim args As String = PathGetArgsW(cmdLine)
-		      If Len(args) = 0 Then
-		        tmp = ReplaceAll(cmdLine.Trim, Chr(34), "")
-		        ret.Append(tmp)
-		        Exit While
-		      Else
-		        tmp = Left(cmdLine, cmdLine.Len - args.Len).Trim
-		        tmp = ReplaceAll(tmp, Chr(34), "")
-		        ret.Append(tmp)
-		        cmdLine = args
-		      End If
-		    Wend
-		    Return ret
-		  #endif
-		  
 		End Function
 	#tag EndMethod
 
@@ -1097,28 +515,6 @@ Protected Module VTHash
 	#tag EndMethod
 
 
-	#tag ComputedProperty, Flags = &h21
-		#tag Getter
-			Get
-			  //Returns 0 on error, positive integer on success
-			  //For use with certain algorithms
-			  
-			  Static provider As Integer
-			  
-			  If provider = 0 Then
-			    If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, 0) Then
-			      If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
-			        Return 0
-			      End If
-			    End If
-			  end if
-			  
-			  Return provider
-			End Get
-		#tag EndGetter
-		Private AESProvider As Integer
-	#tag EndComputedProperty
-
 	#tag Property, Flags = &h0
 		algorithm As Integer
 	#tag EndProperty
@@ -1143,34 +539,6 @@ Protected Module VTHash
 			End Set
 		#tag EndSetter
 		autosavePath As FolderItem
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h21
-		#tag Getter
-			Get
-			  //Returns 0 on error, positive integer on success
-			  
-			  Static provider As Integer
-			  Dim lasterr As Integer
-			  Dim s As String
-			  If provider = 0 Then
-			    If Not CryptAcquireContext(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, 0) Then
-			      lasterr = GetLastError
-			      s = Hex(lasterr)
-			      Break
-			      If Not CryptAcquireContext(provider, 0, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
-			        lasterr = GetLastError
-			        s = Hex(lasterr)
-			        Break
-			        Return 0
-			      End If
-			    End If
-			  end if
-			  
-			  Return provider
-			End Get
-		#tag EndGetter
-		Private baseCryptoProvider As Integer
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
@@ -1213,50 +581,9 @@ Protected Module VTHash
 		Private Output As JSONItem
 	#tag EndProperty
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  #If TargetWin32 Then
-			    Dim info As OSVERSIONINFOEX
-			    info.StructSize = Info.Size
-			    
-			    Call GetVersionEx(info)
-			    If info.MajorVersion >= 6 Then
-			      Return &h1000  //PROCESS_QUERY_LIMITED_INFORMATION
-			    Else
-			      Return PROCESS_QUERY_INFORMATION  //On old Windows, use the old API
-			    End If
-			  #endif
-			End Get
-		#tag EndGetter
-		PROCESS_QUERY_LIMITED_INFORMATION As Integer
-	#tag EndComputedProperty
-
 	#tag Property, Flags = &h0
 		ResultWindows() As resultWindow
 	#tag EndProperty
-
-	#tag ComputedProperty, Flags = &h21
-		#tag Getter
-			Get
-			  //Returns 0 on error, positive integer on success
-			  //For use with certain algorithms
-			  
-			  Static provider As Integer
-			  
-			  If provider = 0 Then
-			    If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, 0) Then
-			      If Not CryptAcquireContext(provider, 0, MS_DEF_PROV + Chr(0), PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
-			        Return 0
-			      End If
-			    End If
-			  end if
-			  
-			  Return provider
-			End Get
-		#tag EndGetter
-		Private RSAProvider As Integer
-	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
 		SearchEngineName As String
@@ -1292,61 +619,7 @@ Protected Module VTHash
 	#tag EndProperty
 
 
-	#tag Constant, Name = ACCESS_DENIED, Type = Double, Dynamic = False, Default = \"5", Scope = Public
-	#tag EndConstant
-
 	#tag Constant, Name = AgentVersion, Type = Double, Dynamic = False, Default = \"2.0", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = ALG_MD5, Type = Double, Dynamic = False, Default = \"0", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = ALG_SHA1, Type = Double, Dynamic = False, Default = \"1", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = CALG_MD5, Type = Double, Dynamic = False, Default = \"&h00008003", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = CALG_SHA1, Type = Double, Dynamic = False, Default = \"&h00008004", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = CALG_SHA256, Type = Double, Dynamic = False, Default = \"&h0000800c", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = CALG_SHA384, Type = Double, Dynamic = False, Default = \"&h0000800d", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = CALG_SHA512, Type = Double, Dynamic = False, Default = \"&h0000800e", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = ERROR_NO_ERROR, Type = Double, Dynamic = False, Default = \"0", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = ERROR_OTHER, Type = Double, Dynamic = False, Default = \"1", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = FILE_NOT_FOUND, Type = Double, Dynamic = False, Default = \"2", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = FILE_READ_ACCESS, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = FILE_SHARE_READ, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = GENERIC_READ, Type = Double, Dynamic = False, Default = \"&h80000000", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = HP_HASHSIZE, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = HP_HASHVAL, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = kHashTypeHMAC, Type = Double, Dynamic = False, Default = \"32777", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = Mode_CSV, Type = Double, Dynamic = False, Default = \"1", Scope = Public
@@ -1359,51 +632,6 @@ Protected Module VTHash
 	#tag EndConstant
 
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = MOVEFILE_DELAY_UNTIL_REBOOT, Type = Double, Dynamic = False, Default = \"&h4", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = MS_DEF_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Cryptographic Provider v1.0", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = OPEN_EXISTING, Type = Double, Dynamic = False, Default = \"3", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = PROCESS_QUERY_INFORMATION, Type = Double, Dynamic = False, Default = \"&h400", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = RESOURCE_FOUND, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = RESOURCE_INVALID, Type = Double, Dynamic = False, Default = \"-1", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = RESOURCE_NOT_FOUND, Type = Double, Dynamic = False, Default = \"0", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = RESOURCE_PENDING, Type = Double, Dynamic = False, Default = \"-2", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = RESPONSE_INVALID, Type = Double, Dynamic = False, Default = \"255", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = SE_BACKUP_NAME, Type = String, Dynamic = False, Default = \"SeBackupPrivilege", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = SE_PRIVILEGE_ENABLED, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = SE_RESTORE_NAME, Type = String, Dynamic = False, Default = \"SeRestorePrivilege", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = TOKEN_ADJUST_PRIVILEGES, Type = Double, Dynamic = False, Default = \"&h00000020", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = TOKEN_QUERY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
@@ -1435,55 +663,6 @@ Protected Module VTHash
 
 	#tag Constant, Name = VT_Submit_File, Type = String, Dynamic = False, Default = \"/vtapi/v2/file/scan", Scope = Public
 	#tag EndConstant
-
-
-	#tag Structure, Name = OSVERSIONINFOEX, Flags = &h0
-		StructSize As UInt32
-		  MajorVersion As Integer
-		  MinorVersion As Integer
-		  BuildNumber As Integer
-		  PlatformID As Integer
-		  ServicePackName As String*128
-		  ServicePackMajor As UInt16
-		  ServicePackMinor As UInt16
-		  SuiteMask As UInt16
-		  ProductType As Byte
-		Reserved As Byte
-	#tag EndStructure
-
-	#tag Structure, Name = SYSTEMTIME, Flags = &h0
-		Year As UInt16
-		  Month As UInt16
-		  DOW As UInt16
-		  Day As UInt16
-		  Hour As UInt16
-		  Minute As UInt16
-		  Second As UInt16
-		MS As UInt16
-	#tag EndStructure
-
-	#tag Structure, Name = SYSTEM_INFO, Flags = &h0
-		OEMID As Integer
-		  pageSize As Integer
-		  minApplicationAddress As Ptr
-		  maxApplicationAddress As Ptr
-		  activeProcessorMask As Integer
-		  numberOfProcessors As Integer
-		  processorType As Integer
-		  allocationGranularity As Integer
-		  processorLevel As Int16
-		processorRevision As Int16
-	#tag EndStructure
-
-	#tag Structure, Name = TIME_ZONE_INFORMATION, Flags = &h0
-		Bias As Integer
-		  StandardName As Wstring*32
-		  StandardDate As SYSTEMTIME
-		  StandardBias As Integer
-		  DaylightName As WString*32
-		  DaylightDate As SYSTEMTIME
-		DaylightBias As Integer
-	#tag EndStructure
 
 
 	#tag Enum, Name = RequestType, Flags = &h1

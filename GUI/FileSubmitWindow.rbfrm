@@ -1,5 +1,5 @@
 #tag Window
-Begin Window FileSubmit
+Begin Window FileSubmitWindow
    BackColor       =   &hFFFFFF
    Backdrop        =   ""
    CloseButton     =   False

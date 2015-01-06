@@ -1,5 +1,5 @@
 #tag Window
-Begin Window waitplease
+Begin Window WaitWindow
    BackColor       =   &hFFFFFF
    Backdrop        =   ""
    CloseButton     =   False

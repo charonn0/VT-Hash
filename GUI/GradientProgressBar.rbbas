@@ -1,5 +1,5 @@
 #tag Class
-Protected Class ProgBar
+Protected Class GradientProgressBar
 Inherits Canvas
 	#tag Event
 		Sub Paint(g As Graphics)

@@ -32,28 +32,17 @@ Class VTJob
 			Get
 			  If mHash = "" Then
 			    Dim bs As BinaryStream
-			    Dim fileData As String
-			    
+			    Dim hp As New Win32.Crypto.HashProcessor(Me.Algorithm)
 			    bs = bs.Open(Me.TargetFile)
-			    fileData = bs.Read(bs.Length)
+			    While Not bs.EOF
+			      hp.Process(bs.Read(4 * 1024))
+			    Wend
 			    bs.Close
-			    
-			    Select Case Me.Algorithm
-			    case Results.ALG_SHA1
-			      mHash = VTHash.Hash(fileData, VTHash.CALG_SHA1)
-			    case Results.ALG_MD5
-			      mHash = VTHash.Hash(fileData, VTHash.CALG_MD5)
-			    end Select
+			    mHash = ConvertEncoding(Win32.Crypto.EncodeHex(hp.Value).Uppercase, Encodings.UTF8)
 			  End If
-			  
 			  return mHash
 			End Get
 		#tag EndGetter
-		#tag Setter
-			Set
-			  mHash = value
-			End Set
-		#tag EndSetter
 		Hash As String
 	#tag EndComputedProperty
 

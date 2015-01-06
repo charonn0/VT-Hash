@@ -1,5 +1,5 @@
 #tag Window
-Begin Window resultWindow
+Begin Window ResultWindow
    BackColor       =   14211288
    Backdrop        =   ""
    CloseButton     =   False
@@ -192,7 +192,7 @@ Begin Window resultWindow
       Visible         =   True
       Width           =   32
    End
-   Begin ProgBar ProgBar1
+   Begin GradientProgressBar ProgBar1
       AcceptFocus     =   ""
       AcceptTabs      =   ""
       AutoDeactivate  =   True
@@ -461,7 +461,7 @@ End
 #tag WindowCode
 	#tag MenuHandler
 		Function AboutMenu() As Boolean Handles AboutMenu.Action
-			about.ShowModal
+			AboutWindow.ShowModal
 			Return True
 			
 		End Function
@@ -497,11 +497,11 @@ End
 
 	#tag MenuHandler
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
-			waitplease.ShowWithin(Self)
-			waitplease.Refresh()
+			WaitWindow.ShowWithin(Self)
+			WaitWindow.Refresh()
 			
 			Dim results As JSONItem = VTHash.RequestRescan(VTResult.Resource, VTAPIKey)
-			waitplease.Close
+			WaitWindow.Close
 			If results = Nil Then
 			Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
 			Else
@@ -518,7 +518,7 @@ End
 
 	#tag MenuHandler
 		Function SettsMenu() As Boolean Handles SettsMenu.Action
-			settswin.Show
+			SettingsWindow.Show
 			Return True
 			
 		End Function
@@ -535,8 +535,8 @@ End
 
 	#tag MenuHandler
 		Function tridmenu() As Boolean Handles tridmenu.Action
-			waitplease.ShowWithin(Self)
-			waitplease.Refresh()
+			WaitWindow.ShowWithin(Self)
+			WaitWindow.Refresh()
 			TridTimer.Mode = Timer.ModeSingle
 			Return True
 			
@@ -675,7 +675,7 @@ End
 		        "That file is not present in Virus Total's database. Additionally, the file exceeds 32MB which is the default limit for uploading via the API." + EndOfLine + _
 		        "Some users do not have this limit, would you like to attempt to upload anyway?", 48 + 3, "File too large for API")
 		      Case 6 ' Yes
-		        Dim ul As New FileSubmit
+		        Dim ul As New FileSubmitWindow
 		        Self.Hide
 		        ul.SubmitFile(Self, Result.TargetFile, VTAPIKey)
 		      Case 7 ' No
@@ -689,7 +689,7 @@ End
 		        Quit()
 		      End Select
 		    ElseIf MsgBox("That file is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
-		      Dim ul As New FileSubmit
+		      Dim ul As New FileSubmitWindow
 		      Self.Hide
 		      ul.SubmitFile(Self, Result.TargetFile, VTAPIKey)
 		      'ShowURL("https://www.virustotal.com/")
@@ -887,8 +887,8 @@ End
 	#tag Event
 		Sub Action()
 		  Dim s As Dictionary = Trid(toBeHashed)
-		  waitplease.Close
-		  Dim tridwin As New TridResult
+		  WaitWindow.Close
+		  Dim tridwin As New TridResultWindow
 		  tridwin.ShowResult(s, Self)
 		End Sub
 	#tag EndEvent
@@ -922,10 +922,10 @@ End
 		Sub Action()
 		  Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
 		  If comment <> "" Then
-		    waitplease.ShowWithin(Self)
-		    waitplease.Refresh()
+		    WaitWindow.ShowWithin(Self)
+		    WaitWindow.Refresh()
 		    Dim js As JSONItem = VTHash.AddComment(VTResult.Resource, VTAPIKey, comment)
-		    waitplease.Close
+		    WaitWindow.Close
 		    If js <> Nil Then
 		      MsgBox(js.Value("verbose_msg"))
 		    Else

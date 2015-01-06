@@ -1,5 +1,5 @@
 #tag Window
-Begin Window Window1
+Begin Window HashWindow
    BackColor       =   16777215
    Backdrop        =   ""
    CloseButton     =   True
@@ -297,7 +297,7 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Close()
-		  about.Close
+		  AboutWindow.Close
 		End Sub
 	#tag EndEvent
 
@@ -316,7 +316,7 @@ End
 		  
 		  If VTAPIKey = "" Then
 		    MsgBox("No API key found. Please enter your API key into the settings window.")
-		    settswin.ShowModal
+		    SettingsWindow.ShowModal
 		    If VTAPIKey = "" Then
 		      Quit(1)
 		    Else
@@ -354,7 +354,7 @@ End
 		Sub isValidFile()
 		  If toBeHashed = Nil Or toBeHashed.AbsolutePath = App.ExecutableFile.AbsolutePath Then
 		    Self.Visible = False
-		    settswin.ShowModal
+		    SettingsWindow.ShowModal
 		    Quit(0)
 		  End If
 		  path.Text = toBeHashed.AbsolutePath.Shorten

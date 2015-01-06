@@ -1,5 +1,5 @@
 #tag Window
-Begin Window settswin
+Begin Window SettingsWindow
    BackColor       =   &hFFFFFF
    Backdrop        =   ""
    CloseButton     =   False
@@ -718,7 +718,7 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  sha.Value = (algorithm <> ALG_MD5)
+		  sha.Value = (algorithm <> Win32.Crypto.CALG_MD5)
 		  autolog.Value = autosave
 		  If autosavePath <> Nil Then
 		    LogFile.Text = autosavePath.AbsolutePath
@@ -795,9 +795,9 @@ End
 		  End If
 		  
 		  If sha.Value Then
-		    algorithm = ALG_SHA1
+		    algorithm = Win32.Crypto.CALG_SHA1
 		  Else
-		    algorithm = ALG_MD5
+		    algorithm = Win32.Crypto.CALG_MD5
 		  End If
 		  autosave = autolog.Value
 		  defaultFormat = LogType.ListIndex
@@ -825,7 +825,7 @@ End
 #tag Events PushButton5
 	#tag Event
 		Sub Action()
-		  about.Show
+		  AboutWindow.Show
 		End Sub
 	#tag EndEvent
 #tag EndEvents
