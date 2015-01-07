@@ -169,6 +169,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Comment Signature (optional): "
          TextAlign       =   2
          TextColor       =   &h000000
@@ -319,6 +320,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   4
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "API Key:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -384,6 +386,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Algorithm:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -415,6 +418,7 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   7
          TabPanelIndex   =   1
+         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
@@ -530,6 +534,7 @@ Begin Window SettingsWindow
             Selectable      =   False
             TabIndex        =   1
             TabPanelIndex   =   1
+            TabStop         =   True
             Text            =   "URL:"
             TextAlign       =   2
             TextColor       =   &h000000
@@ -564,6 +569,7 @@ Begin Window SettingsWindow
             Selectable      =   False
             TabIndex        =   2
             TabPanelIndex   =   1
+            TabStop         =   True
             Text            =   "Name:"
             TextAlign       =   2
             TextColor       =   &h000000
@@ -628,6 +634,7 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   2
+         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0

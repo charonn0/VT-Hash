@@ -6,7 +6,13 @@ Inherits Application
 		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
 		    If MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
 		      SettingsWindow.ShowModal
-		      If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then Quit(ERR_NO_APIKEY)
+		      If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then 
+		        mIsQuitting = True
+		        Quit(ERR_NO_APIKEY)
+		      End If
+		    Else
+		      mIsQuitting = True
+		      Quit(ERR_NO_APIKEY)
 		    End If
 		  End If
 		  
@@ -15,6 +21,7 @@ Inherits Application
 
 	#tag Event
 		Sub OpenDocument(item As FolderItem)
+		  If mIsQuitting Then Return
 		  If item <> Nil And item.Exists And Not item.Directory Then
 		    Dim w As New HashWindow
 		    w.ProcessFile(item)
@@ -47,6 +54,11 @@ Inherits Application
 		  Return f
 		End Function
 	#tag EndMethod
+
+
+	#tag Property, Flags = &h21
+		Private mIsQuitting As Boolean
+	#tag EndProperty
 
 
 	#tag Constant, Name = ERR_NO_APIKEY, Type = Double, Dynamic = False, Default = \"1", Scope = Private

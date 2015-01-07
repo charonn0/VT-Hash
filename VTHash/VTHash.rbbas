@@ -61,6 +61,8 @@ Protected Module VTHash
 	#tag Method, Flags = &h0
 		Function GetConfig(ConfigName As String) As Variant
 		  Return Config.GetValue(ConfigName)
+		Exception
+		  Return Nil
 		End Function
 	#tag EndMethod
 

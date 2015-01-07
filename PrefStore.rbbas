@@ -95,7 +95,14 @@ Class PrefStore
 
 	#tag Method, Flags = &h1
 		Protected Function ReadValue(File As FolderItem, Dereference As Boolean) As Variant
-		  Dim reader As BinaryStream = BinaryStream.Open(File)
+		  Dim reader As BinaryStream
+		  Try
+		    #pragma BreakOnExceptions Off
+		    reader = BinaryStream.Open(File)
+		    #pragma BreakOnExceptions On
+		  Catch Err As IOException
+		    Return Nil
+		  End Try
 		  reader.LittleEndian = False
 		  Dim ret As Variant
 		  Dim type As Integer = Me.ReadType(File)
