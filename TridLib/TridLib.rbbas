@@ -117,7 +117,7 @@ Protected Module TridLib
 			  If mDefsFile = Nil Then
 			    Dim f As FolderItem = SpecialFolder.Temporary.Child("triddefs.trd")
 			    Dim bs As BinaryStream = BinaryStream.Create(f, True)
-			    bs.Write(triddefs)
+			    bs.Write(TridDefFile)
 			    bs.Close
 			    mDefsFile = f
 			  End If
