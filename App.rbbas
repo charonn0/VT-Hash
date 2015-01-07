@@ -2,6 +2,18 @@
 Protected Class App
 Inherits Application
 	#tag Event
+		Sub Open()
+		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
+		    If MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
+		      SettingsWindow.ShowModal
+		      If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then Quit(ERR_NO_APIKEY)
+		    End If
+		  End If
+		  
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub OpenDocument(item As FolderItem)
 		  If item <> Nil And item.Exists And Not item.Directory Then
 		    Dim w As New HashWindow
@@ -36,6 +48,9 @@ Inherits Application
 		End Function
 	#tag EndMethod
 
+
+	#tag Constant, Name = ERR_NO_APIKEY, Type = Double, Dynamic = False, Default = \"1", Scope = Private
+	#tag EndConstant
 
 	#tag Constant, Name = kEditClear, Type = String, Dynamic = False, Default = \"&Delete", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"&Delete"
