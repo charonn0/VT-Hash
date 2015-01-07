@@ -565,8 +565,8 @@ End
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
+	#tag Method, Flags = &h21
+		Private Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
 		  Dim d As New Date
 		  If f = Nil Then
 		    Dim filter As String
@@ -654,7 +654,7 @@ End
 		    Case Win32.Crypto.CALG_SHA256
 		      HashType.Text = "SHA256:"
 		    End Select
-		    
+		    FileHash.Text = VTResult.HashValue
 		    DoAutosave()
 		    
 		    Me.ShowModal

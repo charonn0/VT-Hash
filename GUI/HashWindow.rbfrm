@@ -384,7 +384,9 @@ End
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  If HTTPStatus = 200 And ResponseObject <> Nil Then
 		    Dim rw As New ResultWindow
-		    rw.ShowResult(New VTHash.Results(ResponseObject, mTargetFile))
+		    Dim v As New VTHash.Results(ResponseObject, mTargetFile)
+		    v.HashValue = mHash
+		    rw.ShowResult(v)
 		  Else
 		    Break
 		  End If
