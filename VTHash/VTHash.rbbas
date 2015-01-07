@@ -168,10 +168,12 @@ Protected Module VTHash
 			      If isvalid Then
 			        mConfig = PrefStore.Open(f)
 			      Else
-			        f.MoveFileTo(f.Parent.Child(f.Name + ".bak"))
-			        f.Delete
+			        f.CopyFileTo(f.Parent.Child(f.Name + ".bak"))
+			        'f.Delete
 			        mConfig = PrefStore.Create(f)
 			      End If
+			    Else
+			      mConfig = PrefStore.Create(f)
 			    End If
 			  End If
 			  Return mConfig
@@ -257,65 +259,12 @@ Protected Module VTHash
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="algorithm"
-			Group="Behavior"
-			InitialValue="""""MD5"""""
-			Type="Integer"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="autosave"
-			Group="Behavior"
-			InitialValue="False"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="cancel"
-			Group="Behavior"
-			InitialValue="false"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CommentSignature"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="defaultFormat"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="errorMessage"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="fileData"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LastResponseCode"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LastResponseVerbose"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -333,18 +282,6 @@ Protected Module VTHash
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="SearchEngineName"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="SearchEngineURL"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
@@ -358,18 +295,6 @@ Protected Module VTHash
 			InitialValue="0"
 			Type="Integer"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="version"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="VTAPIKey"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module
