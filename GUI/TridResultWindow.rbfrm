@@ -109,11 +109,19 @@ End
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Sub ShowResult(Results As Dictionary, ParentWindow As Window)
+		Sub ShowResult(Results() As TridLib.FileType, File As FolderItem, ParentWindow As Window)
 		  Listbox1.DeleteAllRows
-		  If Results <> Nil Then
-		    For Each key As String in Results.Keys
-		      Listbox1.AddRow(key, Str(Results.Value(key).Int32Value) + "%")
+		  If UBound(Results) > -1 Then
+		    Dim total As Integer
+		    For i As Integer = 0 To UBound(Results)
+		      Dim rs As TridLib.FileType = Results(i)
+		      Listbox1.AddRow("(" + rs.Extension + ")" + rs.Description)
+		      Listbox1.RowTag(Listbox1.LastIndex) = rs
+		      total = total + rs.Points
+		    Next
+		    For i As Integer = 0 To Listbox1.ListCount - 1
+		      Dim rs As TridLib.FileType = Listbox1.RowTag(i)
+		      Listbox1.Cell(i, 1) = Format(rs.Points * 100 / total, "##0.0#") + "%"
 		    Next
 		  Else
 		    Listbox1.AddRow("Unknown (plain text?)", "100%")
@@ -156,7 +164,7 @@ End
 		  Dim tridtype As String = Me.Cell(Me.RowFromXY(X, Y), 0).Trim
 		  If tridtype <> "" Then
 		    Dim cp As New MenuItem("Copy to clipboard")
-		    Dim se As New MenuItem("Search " + SearchEngineName)
+		    Dim se As New MenuItem("Search " + VTHash.GetConfig("SearchEngineName"))
 		    se.Tag = tridtype
 		    cp.Tag = tridtype
 		    base.Append(cp)
@@ -172,7 +180,7 @@ End
 		    Dim cb As New Clipboard
 		    cb.Text = hitItem.Tag
 		  Case "Searc"
-		    ShowURL(Replace(SearchEngineURL, "%PARAMETER%", hitItem.Tag))
+		    ShowURL(Replace(VTHash.GetConfig("SearchEngineURL"), "%PARAMETER%", hitItem.Tag))
 		  End Select
 		End Function
 	#tag EndEvent
