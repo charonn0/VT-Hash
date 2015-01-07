@@ -1,5 +1,5 @@
 #tag Class
-Class Results
+Protected Class Results
 	#tag Method, Flags = &h0
 		Sub Compact(Assigns b As Boolean)
 		  Original.Compact = b
@@ -7,12 +7,13 @@ Class Results
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(Item As JSONItem)
+		Sub Constructor(Item As JSONItem, File As FolderItem)
 		  If Item <> Nil Then
 		    Me.Original = Item
 		  Else
 		    Raise New NilObjectException
 		  End If
+		  TargetFile = File
 		End Sub
 	#tag EndMethod
 
@@ -167,22 +168,6 @@ Class Results
 		#tag EndGetter
 		ThreatCount As Integer
 	#tag EndComputedProperty
-
-
-	#tag Constant, Name = ALG_MD5, Type = Double, Dynamic = False, Default = \"0", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = ALG_SHA1, Type = Double, Dynamic = False, Default = \"1", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = VT_Code_OK, Type = Double, Dynamic = False, Default = \"1", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = VT_Code_Still_Proccessing, Type = Double, Dynamic = False, Default = \"-2", Scope = Public
-	#tag EndConstant
 
 
 	#tag ViewBehavior

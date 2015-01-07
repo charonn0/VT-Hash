@@ -163,7 +163,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
       TextColor       =   255
@@ -177,7 +176,6 @@ Begin Window ResultWindow
       Width           =   101
    End
    Begin Timer TridTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   -141
@@ -185,11 +183,8 @@ Begin Window ResultWindow
       Mode            =   0
       Period          =   2500
       Scope           =   0
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -6
-      Visible         =   True
       Width           =   32
    End
    Begin GradientProgressBar ProgBar1
@@ -298,7 +293,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -375,7 +369,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -442,7 +435,6 @@ Begin Window ResultWindow
       Selectable      =   ""
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -488,7 +480,7 @@ End
 	#tag MenuHandler
 		Function OpenFileMenu() As Boolean Handles OpenFileMenu.Action
 			If MsgBox("Are you sure you want to run this file?", 4 + 48 + 256, "Execution Confirmation") = 6 Then
-			toBeHashed.Launch
+			VTResult.TargetFile.Launch
 			End If
 			Return True
 			
@@ -497,21 +489,21 @@ End
 
 	#tag MenuHandler
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
-			WaitWindow.ShowWithin(Self)
-			WaitWindow.Refresh()
-			
-			Dim results As JSONItem = VTHash.RequestRescan(VTResult.Resource, VTAPIKey)
-			WaitWindow.Close
-			If results = Nil Then
-			Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
-			Else
-			If results.Value("response_code").IntegerValue = 1 Then
-			Call MsgBox("Your request was accepted and added to the queue.", 64, "Rescan Accepted")
-			Else
-			Call MsgBox("VirusTotal said: " + results.Value("response_code").StringValue, 16, "Rescan Error")
-			End If
-			End If
-			Return True
+			'WaitWindow.ShowWithin(Self)
+			'WaitWindow.Refresh()
+			'
+			'Dim results As JSONItem = VTHash.RequestRescan(VTResult.Resource, VTHash.GetConfig("APIKey"))
+			'WaitWindow.Close
+			'If results = Nil Then
+			'Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
+			'Else
+			'If results.Value("response_code").IntegerValue = 1 Then
+			'Call MsgBox("Your request was accepted and added to the queue.", 64, "Rescan Accepted")
+			'Else
+			'Call MsgBox("VirusTotal said: " + results.Value("response_code").StringValue, 16, "Rescan Error")
+			'End If
+			'End If
+			'Return True
 			
 		End Function
 	#tag EndMenuHandler
@@ -555,14 +547,15 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub DoAutoSave()
-		  If autosave Then
+		  If VTHash.GetConfig("AutoSave").BooleanValue Then
+		    Dim autosavepath As FolderItem = VTHash.GetConfig("AutoSavePath")
 		    Try
 		      Dim d As New Date
 		      Dim f As FolderItem = autosavePath.Child(VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
 		      Dim bs As BinaryStream
 		      bs = BinaryStream.Create(f, True)
 		      bs.Close
-		      savedAs = saveAs(defaultFormat, f)
+		      savedAs = saveAs(VTHash.GetConfig("DefaultFormat"), f)
 		      saved.Visible = True
 		    Catch err
 		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
@@ -585,7 +578,7 @@ End
 		    Case Mode_Text
 		      filter = FileTypes1.Text
 		    End Select
-		    f = GetSaveFolderItem(filter, toBeHashed.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		    f = GetSaveFolderItem(filter, VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
 		  End If
 		  'If Not f.Exists Then f.CreateAsFolder
 		  If f = Nil Then Return Nil
@@ -601,7 +594,7 @@ End
 		  Case Mode_Text
 		    tos = tos.Create(f)
 		    tos.WriteLine("VirusTotal Scan Results")
-		    tos.WriteLine("Report retrieved: " + d.ShortDate + "; " + d.ShortTime + " " + Timezone)
+		    tos.WriteLine("Report retrieved: " + d.ShortDate + "; " + d.ShortTime + " " + Format(d.GMTOffset, "+-#0.##"))
 		    tos.WriteLine("Report Date: " + VTResult.ScanDate.SQLDateTime)
 		    tos.WriteLine("")
 		    For i As Integer = 0 To Me.ListBox1.LastIndex
@@ -628,12 +621,10 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub showList(result As Results)
+		Sub ShowResult(Result As VTHash.Results)
 		  Select Case result.ResponseCode
 		  Case VT_Code_OK
-		    
 		    VTResult = result
-		    
 		    For i As Integer = 1 To VTResult.ResultCount - 1
 		      If VTResult.ScannerResult(i).Trim <> "" Then
 		        ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), VTResult.ScannerResult(i))
@@ -649,20 +640,19 @@ End
 		    
 		    ProgBar1.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
 		    + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
-		    
-		    FileHash.Text = VTResult.HashValue
-		    If VTResult.TargetFile <> Nil Then
-		      FilePath.Text = VTResult.TargetFile.AbsolutePath
-		    Else
-		      FilePath.Text = "No File!?"
-		    End If
 		    ProgBar1.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
 		    ProgBar1.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
+		    
+		    FileHash.Text = VTResult.HashValue
+		    FilePath.Text = VTResult.TargetFile.AbsolutePath
+		    
 		    Select Case VTResult.Algorithm
-		    Case Results.ALG_MD5
+		    Case Win32.Crypto.CALG_MD5
 		      HashType.Text = "MD5:"
-		    Case Results.ALG_SHA1
+		    Case Win32.Crypto.CALG_SHA1
 		      HashType.Text = "SHA1:"
+		    Case Win32.Crypto.CALG_SHA256
+		      HashType.Text = "SHA256:"
 		    End Select
 		    
 		    DoAutosave()
@@ -677,7 +667,7 @@ End
 		      Case 6 ' Yes
 		        Dim ul As New FileSubmitWindow
 		        Self.Hide
-		        ul.SubmitFile(Self, Result.TargetFile, VTAPIKey)
+		        ul.SubmitFile(Self, Result.TargetFile, VTHash.GetConfig("APIKey"))
 		      Case 7 ' No
 		        If MsgBox("Would you like to open virustotal.com in your default browser in order to upload this file manually?", 4 + 32, "Open browser?") = 6 Then
 		          ShowURL("https://www.virustotal.com/")
@@ -691,7 +681,7 @@ End
 		    ElseIf MsgBox("That file is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
 		      Dim ul As New FileSubmitWindow
 		      Self.Hide
-		      ul.SubmitFile(Self, Result.TargetFile, VTAPIKey)
+		      ul.SubmitFile(Self, Result.TargetFile, VTHash.GetConfig("APIKey"))
 		      'ShowURL("https://www.virustotal.com/")
 		    Else
 		      Quit(0)
@@ -710,8 +700,8 @@ End
 		savedAs As FolderItem
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		VTResult As Results
+	#tag Property, Flags = &h1
+		Protected VTResult As VTHash.Results
 	#tag EndProperty
 
 
@@ -735,8 +725,9 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub DoubleClick()
-		  If Me.Cell(Me.ListIndex, 2) <> "" And SearchEngineSet Then
-		    Dim url As String = Replace(SearchEngineURL, "%PARAMETER%", Me.Cell(Me.ListIndex, 2))
+		  Dim searchURL As String = VTHash.GetConfig("SearchEngineURL")
+		  If Me.Cell(Me.ListIndex, 2) <> "" And searchURL <> "" Then
+		    Dim url As String = Replace(searchURL, "%PARAMETER%", Me.Cell(Me.ListIndex, 2))
 		    ShowURL(url)
 		  End If
 		End Sub
@@ -744,14 +735,15 @@ End
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
 		  Dim infection As String = Me.Cell(Me.RowFromXY(X, Y), 2).Trim
+		  Dim searchname As String = VTHash.GetConfig("SearchEngineName")
 		  If infection <> "" Then
 		    Dim cp As New MenuItem("Copy to clipboard")
-		    Dim se As New MenuItem("Search " + SearchEngineName)
+		    Dim se As New MenuItem("Search " + searchname)
 		    'Dim ch As New MenuItem("Change search engine...")
 		    se.Tag = infection
 		    cp.Tag = infection
 		    base.Append(cp)
-		    If SearchEngineSet Then base.Append(se)
+		    If searchname <> "" Then base.Append(se)
 		    'base.Append(ch)
 		    Return True
 		  End If
@@ -764,14 +756,14 @@ End
 		    Dim cb As New Clipboard
 		    cb.Text = hitItem.Tag
 		  Case "Searc"
-		    ShowURL(Replace(SearchEngineURL, "%PARAMETER%", hitItem.Tag))
+		    ShowURL(Replace(VTHash.GetConfig("SearchEngineURL"), "%PARAMETER%", hitItem.Tag))
 		    'Case "Chang"
 		    'Dim nm, url As String
 		    'nm = SearchEngineName
-		    'url = SearchEngineURL
+		    'url = VTHash.GetConfig("SearchEngineURL")
 		    'If SearchSetting.GetURL(nm, url) Then
 		    'SearchEngineName = nm
-		    'SearchEngineURL = url
+		    'VTHash.GetConfig("SearchEngineURL") = url
 		    'VTHash.SaveSettings()
 		    'End If
 		  End Select
@@ -839,7 +831,7 @@ End
 		  'If column = 2 And Row <= Me.ListCount - 1 Then
 		  'If Me.RowTag(row).BooleanValue Then
 		  'Dim infection As String = Me.Cell(row, column).Trim
-		  'ShowURL(Replace(SearchEngineURL, "%PARAMETER%", infection))
+		  'ShowURL(Replace(VTHash.GetConfig("SearchEngineURL"), "%PARAMETER%", infection))
 		  'End If
 		  'End If
 		End Function
@@ -886,10 +878,10 @@ End
 #tag Events TridTimer
 	#tag Event
 		Sub Action()
-		  Dim s As Dictionary = Trid(toBeHashed)
+		  Dim s() As TridLib.FileType = VTResult.TargetFile.TrIDTypes()
 		  WaitWindow.Close
 		  Dim tridwin As New TridResultWindow
-		  tridwin.ShowResult(s, Self)
+		  tridwin.ShowResult(s, VTResult.TargetFile, Self)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -913,28 +905,11 @@ End
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
 		  #pragma Unused X
 		  #pragma Unused Y
-		  toBeHashed.ShowInExplorer()
+		  VTResult.TargetFile.ShowInExplorer()
 		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events LinkLabel1
-	#tag Event
-		Sub Action()
-		  Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
-		  If comment <> "" Then
-		    WaitWindow.ShowWithin(Self)
-		    WaitWindow.Refresh()
-		    Dim js As JSONItem = VTHash.AddComment(VTResult.Resource, VTAPIKey, comment)
-		    WaitWindow.Close
-		    If js <> Nil Then
-		      MsgBox(js.Value("verbose_msg"))
-		    Else
-		      MsgBox("Invalid response from Virus Total.")
-		    End If
-		    
-		  End If
-		End Sub
-	#tag EndEvent
 	#tag Event
 		Sub MouseEnter()
 		  If Me.Visible Then
@@ -949,6 +924,23 @@ End
 		    Me.MouseCursor = System.Cursors.StandardPointer
 		    Me.Underline = False
 		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  'Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
+		  'If comment <> "" Then
+		  'WaitWindow.ShowWithin(Self)
+		  'WaitWindow.Refresh()
+		  'Dim js As JSONItem = VTHash.AddComment(VTResult.Resource, VTHash.GetConfig("APIKey"), comment)
+		  'WaitWindow.Close
+		  'If js <> Nil Then
+		  'MsgBox(js.Value("verbose_msg"))
+		  'Else
+		  'MsgBox("Invalid response from Virus Total.")
+		  'End If
+		  '
+		  'End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -270,7 +270,7 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  Comment = TextArea1.Text.Trim + EndOfLine + CommentSignature.Trim
+		  Comment = TextArea1.Text.Trim + EndOfLine + VTHash.GetConfig("CommentSignature").Trim
 		  Self.Close
 		End Sub
 	#tag EndEvent

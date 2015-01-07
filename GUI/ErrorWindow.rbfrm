@@ -46,6 +46,7 @@ Begin Window ErrorWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "An unhandled error has caused VT Hash to crash. \r\nTechnical details follow:"
       TextAlign       =   0
       TextColor       =   "&c00000000"
@@ -229,8 +230,8 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  Me.Top = HashWindow.Top + 111
-		  Me.Left = HashWindow.Left + 87
+		  Me.Top = Window(0).Top + 111
+		  Me.Left = Window(0).Left + 87
 		End Sub
 	#tag EndEvent
 
@@ -490,14 +491,12 @@ End
 		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine + _
 		  m + EndOfLine + EndOfLine
 		  
-		  Dim file As String = "No File Specified"
-		  If toBeHashed <> Nil Then file = toBeHashed.AbsolutePath
 		  Dim Error As String =_
 		  "Call stack at last call to Raise:" + EndOfLine + EndOfLine + _
 		  Join(stack, "     " + EndOfLine) + EndOfLine
 		  
 		  Dim OsBlock As String = _
-		  "EXE Version: " + VTHash.version + EndOfLine + "Target path: " + file + EndOfLine + "Algorithm: " + Str(algorithm) + EndOfLine + "OS: " + OS + EndOfLine
+		  "EXE Version: " + VTHash.version + EndOfLine + "Algorithm: 0x" + Hex(VTHash.GetConfig("Algorithm")) + EndOfLine + "OS: " + OS + EndOfLine
 		  
 		  Return head + OsBlock + Error
 		End Function

@@ -287,7 +287,7 @@ End
 #tag Events StaticText1
 	#tag Event
 		Sub Open()
-		  me.Text = "VT Hash Check " + version
+		  me.Text = "VT Hash Check " + VTHash.Version
 		End Sub
 	#tag EndEvent
 #tag EndEvents
