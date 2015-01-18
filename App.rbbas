@@ -6,7 +6,7 @@ Inherits Application
 		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
 		    If MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
 		      SettingsWindow.ShowModal
-		      If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then 
+		      If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
 		        mIsQuitting = True
 		        Quit(ERR_NO_APIKEY)
 		      End If
@@ -43,7 +43,13 @@ Inherits Application
 
 	#tag Method, Flags = &h0
 		Function DataFolder() As FolderItem
-		  Dim f As FolderItem = SpecialFolder.ApplicationData.Child("Boredom Software")
+		  Dim f As FolderItem
+		  If DebugBuild Then
+		    f = SelectFolder.Child("Boredom Software")
+		  Else
+		    f = SpecialFolder.ApplicationData.Child("Boredom Software")
+		  End If
+		  
 		  If Not f.Exists Then
 		    f.CreateAsFolder()
 		  End If
