@@ -771,8 +771,8 @@ End
 		    AlgSelect.ListIndex = 0
 		  End Select
 		  autolog.Value = VTHash.GetConfig("AutoSave")
-		  If VTHash.GetConfig("AutosavePath") <> "" Then
-		    LogFile.Text = VTHash.GetConfig("AutosavePath")
+		  If VTHash.GetConfig("AutosavePath") <> Nil Then
+		    LogFile.Text = FolderItem(VTHash.GetConfig("AutosavePath")).AbsolutePath
 		    LogType.ListIndex = VTHash.GetConfig("DefaultFormat")
 		  End If
 		  APIText.Text = VTHash.GetConfig("APIKey")
@@ -840,7 +840,7 @@ End
 		  If Not gf.Exists Then
 		    gf.CreateAsFolder
 		  End If
-		  VTHash.SetConfig("AutoSavePath", gf.AbsolutePath)
+		  VTHash.SetConfig("AutoSavePath", gf)
 		  VTHash.SetConfig("CommentSignature", CommentSig.Text)
 		  
 		  Close()
