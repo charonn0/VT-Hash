@@ -357,9 +357,11 @@ End
 		  Dim a As Integer = VTHash.GetConfig("Algorithm")
 		  Dim hp As New Win32.Crypto.HashProcessor(a)
 		  bs = bs.Open(mTargetFile)
+		  Dim chunksz As Integer
+		  If bs.Length > 1024 * 1024 Then chunksz = 1024 * 1024 Else chunksz = 4 * 1024
 		  While Not bs.EOF
 		    App.YieldToNextThread
-		    hp.Process(bs.Read(4 * 1024))
+		    hp.Process(bs.Read(chunksz))
 		    HashPercent = bs.Position * 100 / bs.Length
 		    GUITimer.Mode = Timer.ModeSingle
 		  Wend
