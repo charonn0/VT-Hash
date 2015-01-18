@@ -137,7 +137,7 @@ Class PrefStore
 		    Dim d As Dictionary = js
 		    ret = d
 		  Case TYPE_FILE
-		    ret = reader.Read(reader.Length)
+		    ret = GetFolderItem(reader.Read(reader.Length), FolderItem.PathTypeAbsolute)
 		  Case TYPE_SYMLINK, TYPE_EXTERNAL_STORE
 		    If Not Dereference Then
 		      ret = reader.Read(reader.Length)
@@ -224,9 +224,7 @@ Class PrefStore
 		      End Try
 		    Case Value IsA FolderItem
 		      Dim source As FolderItem = Value
-		      Dim sourcestream As BinaryStream = BinaryStream.Open(source)
-		      writer.Write(sourcestream.Read(sourcestream.Length))
-		      sourcestream.Close
+		      writer.Write(source.AbsolutePath)
 		      type = TYPE_FILE
 		    Case Me.ReadType(File) = TYPE_SYMLINK
 		      type = TYPE_SYMLINK
