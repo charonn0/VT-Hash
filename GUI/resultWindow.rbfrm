@@ -345,7 +345,7 @@ Begin Window ResultWindow
       Underline       =   ""
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   443
+      Width           =   427
    End
    Begin Label HashType
       AutoDeactivate  =   True
@@ -447,6 +447,33 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   109
    End
+   Begin Canvas MoreHashes
+      AcceptFocus     =   ""
+      AcceptTabs      =   ""
+      AutoDeactivate  =   True
+      Backdrop        =   ""
+      DoubleBuffer    =   False
+      Enabled         =   True
+      EraseBackground =   True
+      Height          =   16
+      HelpTag         =   "Calculate more hashes..."
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   477
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   False
+      LockRight       =   True
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   11
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   453
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   16
+   End
 End
 #tag EndWindow
 
@@ -479,8 +506,14 @@ End
 
 	#tag MenuHandler
 		Function OpenFileMenu() As Boolean Handles OpenFileMenu.Action
-			If MsgBox("Are you sure you want to run this file?", 4 + 48 + 256, "Execution Confirmation") = 6 Then
+			If Win32.IO.IsExecutable(VTResult.TargetFile) Then
+			If MsgBox("Are you sure you want to run this executable?", 4 + 64 + 256, "Execution Confirmation") = 6 Then
 			VTResult.TargetFile.Launch
+			End If
+			Else
+			If MsgBox("Are you sure you want to open this file?", 4 + 48 + 256, "Open Confirmation") = 6 Then
+			VTResult.TargetFile.Launch
+			End If
 			End If
 			Return True
 			
@@ -942,5 +975,30 @@ End
 		  '
 		  'End If
 		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events MoreHashes
+	#tag Event
+		Sub Paint(g As Graphics)
+		  g.DrawPicture(explore, 0, 0)
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseEnter()
+		  Me.MouseCursor = System.Cursors.FingerPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  Me.MouseCursor = System.Cursors.StandardPointer
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  #pragma Unused X
+		  #pragma Unused Y
+		  Dim bs As BinaryStream = BinaryStream.Open(VTResult.TargetFile)
+		  HashesViewer.ShowHashes(bs)
+		End Function
 	#tag EndEvent
 #tag EndEvents

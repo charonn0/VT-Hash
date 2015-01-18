@@ -13,6 +13,14 @@ Protected Module IO
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function IsExecutable(File As FolderItem) As Boolean
+		  Dim isExe As Boolean
+		  Call Win32.Libs.AdvApi32.SaferiIsExecutableFileType(File.AbsolutePath, isExe)
+		  Return isExe
+		End Function
+	#tag EndMethod
+
 
 	#tag Constant, Name = MOVEFILE_DELAY_UNTIL_REBOOT, Type = Double, Dynamic = False, Default = \"&h4", Scope = Protected
 	#tag EndConstant
