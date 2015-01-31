@@ -1,5 +1,56 @@
 #tag Module
 Protected Module VTHash
+	#tag Method, Flags = &h1
+		Protected Function ConvertOldConfig(OldConfigFile As FolderItem) As PrefStore
+		  OldConfigFile.CopyFileTo(OldConfigFile.Parent.Child(OldConfigFile.Name + ".bak"))
+		  OldConfigFile.Delete
+		  Dim bs As BinaryStream = BinaryStream.Open(OldConfigFile.Parent.Child(OldConfigFile.Name + ".bak"))
+		  Dim data As String = bs.Read(bs.Length)
+		  bs.Close
+		  Dim js As JSONItem
+		  Try
+		    js = New JSONItem(data)
+		  Catch
+		    Return Nil
+		  End Try
+		  Dim newprefs As PrefStore = PrefStore.Create(OldConfigFile)
+		  
+		  If js.HasName("Search Engine") And js.HasName("Search URL") Then
+		    newprefs.SetValue("SearchEngineName") = js.Value("Search Engine").StringValue
+		    newprefs.SetValue("SearchEngineURL") = js.Value("Search URL").StringValue
+		  Else
+		    newprefs.SetValue("SearchEngineName") = "Google"
+		    newprefs.SetValue("SearchEngineURL") = "https://encrypted.google.com/search?q=%PARAMETER%"
+		  End If
+		  
+		  If js.Value("Use SHA1").BooleanValue Then
+		    newprefs.SetValue("Algorithm") = Win32.Crypto.CALG_SHA1
+		  Else
+		    newprefs.SetValue("Algorithm") = Win32.Crypto.CALG_MD5
+		  End If
+		  
+		  Dim g As FolderItem = GetFolderItem(js.Value("Default Save Directory"))
+		  If g <> Nil Then
+		    newprefs.SetValue("AutoSavePath") = g
+		    newprefs.SetValue("AutoSave") = True
+		    newprefs.SetValue("DefaultFormat") = js.Value("Default Save Format").Int32Value
+		  Else
+		    newprefs.SetValue("AutoSavePath") = Nil
+		    newprefs.SetValue("AutoSave") = False
+		    newprefs.SetValue("DefaultFormat") = Mode_Org_JSON
+		  End If
+		  newprefs.SetValue("APIKey") = js.Value("API Key")
+		  
+		  If js.HasName("Comment Signature") Then
+		    newprefs.SetValue("CommentSignature") = js.Value("Comment Signature")
+		  Else
+		    newprefs.SetValue("CommentSignature") = ""
+		  End If
+		  
+		  Return newprefs
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function CRLF() As String
 		  Return EndOfLine.Windows
