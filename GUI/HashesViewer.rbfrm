@@ -4,10 +4,10 @@ Begin Window HashesViewer
    Backdrop        =   ""
    CloseButton     =   True
    Composite       =   False
-   Frame           =   0
+   Frame           =   3
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   3.01e+2
+   Height          =   1.31e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -23,7 +23,7 @@ Begin Window HashesViewer
    Resizeable      =   True
    Title           =   "Additional hashes"
    Visible         =   True
-   Width           =   4.17e+2
+   Width           =   4.64e+2
    Begin Listbox Listbox1
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
@@ -31,7 +31,7 @@ Begin Window HashesViewer
       Border          =   True
       ColumnCount     =   3
       ColumnsResizable=   ""
-      ColumnWidths    =   "5%, 30%"
+      ColumnWidths    =   "5%, 15%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -42,7 +42,7 @@ Begin Window HashesViewer
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
-      Height          =   290
+      Height          =   131
       HelpTag         =   ""
       Hierarchical    =   ""
       Index           =   -2147483648
@@ -70,13 +70,13 @@ Begin Window HashesViewer
       Underline       =   ""
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   417
+      Width           =   464
       _ScrollWidth    =   -1
    End
    Begin Thread HashThread
       Height          =   32
       Index           =   -2147483648
-      Left            =   492
+      Left            =   599
       LockedInPosition=   False
       Priority        =   5
       Scope           =   0
@@ -88,7 +88,7 @@ Begin Window HashesViewer
    Begin Timer HashTimer
       Height          =   32
       Index           =   -2147483648
-      Left            =   492
+      Left            =   599
       LockedInPosition=   False
       Mode            =   2
       Period          =   50
@@ -97,87 +97,56 @@ Begin Window HashesViewer
       Top             =   44
       Width           =   32
    End
-   Begin ProgressBar ProgressBar1
-      AutoDeactivate  =   True
-      Enabled         =   True
-      Height          =   8
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Left            =   0
-      LockBottom      =   True
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   True
-      LockTop         =   False
-      Maximum         =   100
-      Scope           =   0
-      TabPanelIndex   =   0
-      Top             =   293
-      Value           =   0
-      Visible         =   True
-      Width           =   417
-   End
 End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h1
+		Protected Function CompareHash(Hash As String) As Integer
+		  For i As Integer = 0 To Listbox1.ListCount - 1
+		    If Listbox1.Cell(i, 2) = Hash Then Return i
+		  Next
+		  Return -1
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub ShowHashes(Data As BinaryStream)
 		  mLock = New Semaphore
-		  BytesTotal = 0
-		  BytesProcessed = 0
 		  ListBox1.DeleteAllRows
 		  
 		  ListBox1.AddRow("", "MD5", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_MD5
-		  BytesTotal = BytesTotal + Data.Length
 		  
 		  ListBox1.AddRow("", "MD4", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_MD4
-		  BytesTotal = BytesTotal + Data.Length
 		  
 		  ListBox1.AddRow("", "MD2", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_MD2
-		  BytesTotal = BytesTotal + Data.Length
 		  
 		  'ListBox1.AddRow("", "CRC32", "Pending")
 		  'ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_
-		  'BytesTotal = BytesTotal + Data.Length
 		  
 		  'ListBox1.AddRow("", "Adler32", "Pending")
 		  'ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_
-		  'BytesTotal = BytesTotal + Data.Length
 		  
 		  ListBox1.AddRow("", "SHA1", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA1
-		  BytesTotal = BytesTotal + Data.Length
 		  
 		  ListBox1.AddRow("", "SHA256", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA256
-		  BytesTotal = BytesTotal + Data.Length
 		  
 		  ListBox1.AddRow("", "SHA384", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA384
-		  BytesTotal = BytesTotal + Data.Length
 		  
 		  ListBox1.AddRow("", "SHA512", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA512
-		  BytesTotal = BytesTotal + Data.Length
 		  
 		  DataStream = Data
 		  Me.Show()
 		End Sub
 	#tag EndMethod
 
-
-	#tag Property, Flags = &h21
-		Private BytesProcessed As Int64
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private BytesTotal As Int64
-	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private DataStream As BinaryStream
@@ -198,10 +167,69 @@ End
 
 #tag EndWindowCode
 
+#tag Events Listbox1
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  Dim row As Integer = Me.RowFromXY(X, Y)
+		  Dim ret As Boolean
+		  If row > -1 And row = Me.ListIndex Then
+		    Dim h As String = Me.Cell(row, 2)
+		    Dim cp As New MenuItem("Copy to clipboard")
+		    cp.Tag = h
+		    base.Append(cp)
+		    ret = True
+		  End If
+		  Dim cp As New Clipboard
+		  If cp.TextAvailable Then
+		    Dim m As New MenuItem("Compare to clipboard contents.")
+		    m.Tag = cp.Text
+		    base.Append(m)
+		    ret = True
+		  End If
+		  Return ret
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  Select Case hitItem.Text
+		  Case "Copy to clipboard"
+		    Dim cp As New Clipboard
+		    cp.Text = hitItem.Tag
+		    Return True
+		    
+		  Case "Compare to clipboard contents."
+		    Dim r As Integer = CompareHash(hitItem.Tag)
+		    If r > -1 Then
+		      Call MsgBox("Matches: " + Me.Cell(r, 1), 64, "Match found")
+		    Else
+		      Call MsgBox("No hashes match", 64, "No Matches")
+		    End If
+		    Return True
+		  End Select
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Open()
+		  Me.AcceptTextDrop
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub DropObject(obj As DragItem, action As Integer)
+		  If obj.TextAvailable Then
+		    Dim r As Integer = CompareHash(obj.Text)
+		    If r > -1 Then
+		      Call MsgBox("Matches: " + Me.Cell(r, 1), 64, "Match found")
+		    Else
+		      Call MsgBox("No hashes match", 64, "No Matches")
+		    End If
+		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag Events HashThread
 	#tag Event
 		Sub Run()
-		  While Not mLock.TrySignal 
+		  While Not mLock.TrySignal
 		    App.YieldToNextThread
 		  Wend
 		  Dim chunksz As Integer
@@ -210,9 +238,7 @@ End
 		    Dim h As New Win32.Crypto.HashProcessor(mCurrentAlg)
 		    DataStream.Position = 0
 		    While Not DataStream.EOF
-		      Dim chunk As MemoryBlock = DataStream.Read(chunksz)
-		      h.Process(chunk)
-		      BytesProcessed = BytesProcessed + chunk.Size
+		      h.Process(DataStream.Read(chunksz))
 		    Wend
 		    mHashValue = h.Value
 		  Finally
@@ -250,8 +276,6 @@ End
 		    Finally
 		      mLock.Release
 		    End Try
-		  Else
-		    ProgressBar1.value = Ceil(BytesProcessed * 100 / BytesTotal)
 		  End If
 		End Sub
 	#tag EndEvent
