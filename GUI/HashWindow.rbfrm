@@ -46,6 +46,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "File:"
       TextAlign       =   0
       TextColor       =   0
@@ -80,6 +81,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "MD5:"
       TextAlign       =   0
       TextColor       =   0
@@ -114,6 +116,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -148,6 +151,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
@@ -175,7 +179,9 @@ Begin Window HashWindow
       LockTop         =   True
       Maximum         =   5
       Scope           =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   32
       Value           =   0
       Visible         =   True
@@ -240,6 +246,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Version 0.86"
       TextAlign       =   0
       TextColor       =   8421504
@@ -253,6 +260,7 @@ Begin Window HashWindow
       Width           =   86
    End
    Begin Thread Hasher
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   311
@@ -260,8 +268,11 @@ Begin Window HashWindow
       Priority        =   5
       Scope           =   0
       StackSize       =   0
+      TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -19
+      Visible         =   True
       Width           =   32
    End
    Begin VTHash.VTSession VTSocket
@@ -270,17 +281,22 @@ Begin Window HashWindow
       CertificatePassword=   ""
       CertificateRejectionFile=   ""
       ConnectionType  =   3
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   311
       LockedInPosition=   False
       Scope           =   1
       Secure          =   True
+      TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   14
+      Visible         =   True
       Width           =   32
    End
    Begin Timer GUITimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   348
@@ -288,8 +304,11 @@ Begin Window HashWindow
       Mode            =   0
       Period          =   1
       Scope           =   0
+      TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   14
+      Visible         =   True
       Width           =   32
    End
 End
@@ -346,7 +365,7 @@ End
 #tag Events VersionText
 	#tag Event
 		Sub Open()
-		  me.Text = "Version " + VTHash.Version
+		  me.Text = "Version " + VTHash.VersionString
 		End Sub
 	#tag EndEvent
 #tag EndEvents

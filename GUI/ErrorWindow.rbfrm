@@ -496,7 +496,7 @@ End
 		  Join(stack, "     " + EndOfLine) + EndOfLine
 		  
 		  Dim OsBlock As String = _
-		  "EXE Version: " + VTHash.version + EndOfLine + "Algorithm: 0x" + Hex(VTHash.GetConfig("Algorithm")) + EndOfLine + "OS: " + OS + EndOfLine
+		  "EXE Version: " + VTHash.VersionString + EndOfLine + "Algorithm: 0x" + Hex(VTHash.GetConfig("Algorithm")) + EndOfLine + "OS: " + OS + EndOfLine
 		  
 		  Return head + OsBlock + Error
 		End Function

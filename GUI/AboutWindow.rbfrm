@@ -287,7 +287,7 @@ End
 #tag Events StaticText1
 	#tag Event
 		Sub Open()
-		  me.Text = "VT Hash Check " + VTHash.Version
+		  me.Text = "VT Hash Check " + VTHash.VersionString
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -336,7 +336,7 @@ End
 	#tag Event
 		Sub Action()
 		  Dim upd As New UpdateWindow
-		  Dim f As FolderItem = upd.CheckNow("www.boredomsoft.org/updates/vthash.json", VTHash.mversion)
+		  Dim f As FolderItem = upd.CheckNow("www.boredomsoft.org/updates/vthash.json", VTHash.Version)
 		  If f <> Nil Then
 		    f.Child("vthashsetup.exe").Launch
 		    Quit

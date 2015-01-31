@@ -73,7 +73,7 @@ Protected Module VTHash
 		  //e.g. "Windows 7 Ultimate x64 Service Pack 1"
 		  
 		  #If TargetWin32 Then
-		    Return "(VT Hash Check " + VTHash.version + "; U; Win32 " + Str(Win32.OSVersion.BuildNumber) + ")"
+		    Return "(VT Hash Check " + VTHash.VersionString + "; U; Win32 " + Str(Win32.OSVersion.BuildNumber) + ")"
 		  #endif
 		End Function
 	#tag EndMethod
@@ -132,7 +132,7 @@ Protected Module VTHash
 	#tag Method, Flags = &h0
 		Sub ShowCentered(Win As Window, ScreenNumber As Integer = 0)
 		  ' Shows the passed window centered on the specified Screen.
-		  
+		  If Win = Nil Then Win = Window(0)
 		  Dim X, Y As Integer
 		  X = (0.5 * Screen(ScreenNumber).Width) - (0.5 * Win.Width)
 		  Y = (0.5 * Screen(ScreenNumber).Height) - (0.5 * Win.Height)
@@ -170,9 +170,10 @@ Protected Module VTHash
 			      If isvalid Then
 			        mConfig = PrefStore.Open(f)
 			      Else
-			        f.CopyFileTo(f.Parent.Child(f.Name + ".bak"))
+			        mConfig = ConvertOldConfig(f)
+			        'f.CopyFileTo(f.Parent.Child(f.Name + ".bak"))
 			        'f.Delete
-			        mConfig = PrefStore.Create(f)
+			        'mConfig = PrefStore.Create(f)
 			      End If
 			    Else
 			      mConfig = PrefStore.Create(f)
@@ -188,17 +189,15 @@ Protected Module VTHash
 		Private mConfig As PrefStore
 	#tag EndProperty
 
-	#tag Property, Flags = &h1
-		Protected mVersion As Double = 1.48
-	#tag EndProperty
-
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return Format(mversion, "0.0#")
+			  Dim dbg As String
+			  If DebugBuild Then dbg = " (debug)"
+			  Return Format(VTHash.Version, "0.0#") + dbg
 			End Get
 		#tag EndGetter
-		Protected Version As String
+		Protected VersionString As String
 	#tag EndComputedProperty
 
 
@@ -215,6 +214,9 @@ Protected Module VTHash
 	#tag EndConstant
 
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.49", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
