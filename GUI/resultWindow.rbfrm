@@ -582,9 +582,19 @@ End
 		Private Sub DoAutoSave()
 		  If VTHash.GetConfig("AutoSave").BooleanValue Then
 		    Dim autosavepath As FolderItem = VTHash.GetConfig("AutoSavePath")
+		    If autosavepath = Nil Then Return
 		    Try
 		      Dim d As New Date
-		      Dim f As FolderItem = autosavePath.Child(VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		      Dim nm As String = VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000")
+		      Select Case VTHash.GetConfig("AutoSaveFormat")
+		      Case VTHash.Mode_Text
+		        nm = nm + ".txt"
+		      Case VTHash.Mode_CSV
+		        nm = nm + ".csv"
+		      Case VTHash.Mode_Org_JSON, VTHash.Mode_Unp_JSON
+		        nm = nm + ".json"
+		      End Select
+		      Dim f As FolderItem = autosavePath.Child(nm)
 		      Dim bs As BinaryStream
 		      bs = BinaryStream.Create(f, True)
 		      bs.Close
@@ -611,7 +621,7 @@ End
 		    Case Mode_Text
 		      filter = FileTypes1.Text
 		    End Select
-		    f = GetSaveFolderItem(filter, VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000"))
+		    f = GetSaveFolderItem(filter, VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000") + "." + filter)
 		  End If
 		  'If Not f.Exists Then f.CreateAsFolder
 		  If f = Nil Then Return Nil
