@@ -31,7 +31,7 @@ Begin Window HashesViewer
       Border          =   True
       ColumnCount     =   3
       ColumnsResizable=   ""
-      ColumnWidths    =   "5%, 15%"
+      ColumnWidths    =   "0%, 15%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -97,6 +97,37 @@ Begin Window HashesViewer
       Top             =   44
       Width           =   32
    End
+   Begin PushButton PushButton1
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   True
+      Caption         =   "Untitled"
+      Default         =   True
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   203
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   1
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   -54
+      Underline       =   ""
+      Visible         =   True
+      Width           =   80
+   End
 End
 #tag EndWindow
 
@@ -111,7 +142,7 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub ShowHashes(Data As BinaryStream)
+		Sub ShowHashes(Data As BinaryStream, ParentWindow As Window)
 		  mLock = New Semaphore
 		  ListBox1.DeleteAllRows
 		  
@@ -144,6 +175,8 @@ End
 		  
 		  DataStream = Data
 		  Me.Show()
+		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
+		  ShowCentered(Me, ScreenNumber)
 		End Sub
 	#tag EndMethod
 
@@ -215,6 +248,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub DropObject(obj As DragItem, action As Integer)
+		  #pragma Unused action
 		  If obj.TextAvailable Then
 		    Dim r As Integer = CompareHash(obj.Text)
 		    If r > -1 Then
@@ -277,6 +311,13 @@ End
 		      mLock.Release
 		    End Try
 		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton1
+	#tag Event
+		Sub Action()
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents
