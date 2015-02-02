@@ -2,6 +2,14 @@
 Protected Class App
 Inherits Application
 	#tag Event
+		Function CancelClose() As Boolean
+		  If Not mOpened And Not mIsQuitting Then
+		    SettingsWindow.ShowModal
+		  End If
+		End Function
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
 		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
 		    If MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
@@ -16,6 +24,7 @@ Inherits Application
 		    End If
 		  End If
 		  
+		  
 		End Sub
 	#tag EndEvent
 
@@ -26,6 +35,7 @@ Inherits Application
 		    Dim w As New HashWindow
 		    w.ProcessFile(item)
 		  End If
+		  mOpened = True
 		End Sub
 	#tag EndEvent
 
@@ -64,6 +74,10 @@ Inherits Application
 
 	#tag Property, Flags = &h21
 		Private mIsQuitting As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mOpened As Boolean
 	#tag EndProperty
 
 
