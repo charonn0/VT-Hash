@@ -842,32 +842,6 @@ End
 		End Function
 	#tag EndEvent
 	#tag Event
-		Sub MouseMove(X As Integer, Y As Integer)
-		  'Dim row, column As Integer
-		  'row = Me.RowFromXY(X, Y)
-		  'column = Me.ColumnFromXY(X, Y)
-		  'If column = 2 And Row <= Me.ListCount - 1 And SearchEngineSet Then
-		  'If Me.RowTag(row).BooleanValue Then
-		  'Me.MouseCursor = System.Cursors.FingerPointer
-		  'Else
-		  'Me.MouseCursor = System.Cursors.StandardPointer
-		  'End If
-		  'Else
-		  'Me.MouseCursor = System.Cursors.StandardPointer
-		  'End If
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
-		  'If column = 2 And Row <= Me.ListCount - 1 And SearchEngineSet Then
-		  'If Me.RowTag(row).BooleanValue Then
-		  ''g.ForeColor = &c64646400
-		  'g.Underline = True
-		  'End If
-		  'End If
-		End Function
-	#tag EndEvent
-	#tag Event
 		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
 		  'If IsContextualClick Then Return True
 		  'If Not SearchEngineSet Then Return False
@@ -877,6 +851,16 @@ End
 		  'ShowURL(Replace(VTHash.GetConfig("SearchEngineURL"), "%PARAMETER%", infection))
 		  'End If
 		  'End If
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
+		  If column = 2 And Row <= Me.ListCount - 1 And VTHash.GetConfig("SearchEngineURL") <> "" Then
+		    If Me.RowTag(row).BooleanValue Then
+		      g.ForeColor = &c64646400
+		      g.Underline = True
+		    End If
+		  End If
 		End Function
 	#tag EndEvent
 #tag EndEvents
@@ -990,7 +974,7 @@ End
 #tag Events MoreHashes
 	#tag Event
 		Sub Paint(g As Graphics)
-		  g.DrawPicture(explore, 0, 0)
+		  g.DrawPicture(Hashtag_Icon, 0, 0, g.Width, g.Height, 0, 0, Hashtag_Icon.Width, Hashtag_Icon.Height)
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -1008,7 +992,7 @@ End
 		  #pragma Unused X
 		  #pragma Unused Y
 		  Dim bs As BinaryStream = BinaryStream.Open(VTResult.TargetFile)
-		  HashesViewer.ShowHashes(bs)
+		  HashesViewer.ShowHashes(bs, Self)
 		End Function
 	#tag EndEvent
 #tag EndEvents
