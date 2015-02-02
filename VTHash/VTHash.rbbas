@@ -203,8 +203,8 @@ Protected Module VTHash
 		Sub ShowInExplorer(extends f As FolderItem)
 		  //Shows the file in Windows Explorer
 		  
-		  Dim explorer As FolderItem = SpecialFolder.System.Child("explorer.exe")
-		  explorer.Launch("/select, """ + f.AbsolutePath + """")
+		  Dim sh As New Shell
+		  sh.Execute("explorer.exe /select, """ + f.AbsolutePath + """")
 		End Sub
 	#tag EndMethod
 
