@@ -762,8 +762,6 @@ End
 		    end if
 		    g.FillRect 0,0,g.width,g.height
 		  End If
-		  'Return True
-		  
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -800,15 +798,6 @@ End
 		    cb.Text = hitItem.Tag
 		  Case "Searc"
 		    ShowURL(Replace(VTHash.GetConfig("SearchEngineURL"), "%PARAMETER%", hitItem.Tag))
-		    'Case "Chang"
-		    'Dim nm, url As String
-		    'nm = SearchEngineName
-		    'url = VTHash.GetConfig("SearchEngineURL")
-		    'If SearchSetting.GetURL(nm, url) Then
-		    'SearchEngineName = nm
-		    'VTHash.GetConfig("SearchEngineURL") = url
-		    'VTHash.SaveSettings()
-		    'End If
 		  End Select
 		End Function
 	#tag EndEvent
@@ -837,28 +826,6 @@ End
 		    Else
 		      result = 0
 		      Return True
-		    End If
-		  End If
-		End Function
-	#tag EndEvent
-	#tag Event
-		Function CellClick(row as Integer, column as Integer, x as Integer, y as Integer) As Boolean
-		  'If IsContextualClick Then Return True
-		  'If Not SearchEngineSet Then Return False
-		  'If column = 2 And Row <= Me.ListCount - 1 Then
-		  'If Me.RowTag(row).BooleanValue Then
-		  'Dim infection As String = Me.Cell(row, column).Trim
-		  'ShowURL(Replace(VTHash.GetConfig("SearchEngineURL"), "%PARAMETER%", infection))
-		  'End If
-		  'End If
-		End Function
-	#tag EndEvent
-	#tag Event
-		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
-		  If column = 2 And Row <= Me.ListCount - 1 And VTHash.GetConfig("SearchEngineURL") <> "" Then
-		    If Me.RowTag(row).BooleanValue Then
-		      g.ForeColor = &c64646400
-		      g.Underline = True
 		    End If
 		  End If
 		End Function

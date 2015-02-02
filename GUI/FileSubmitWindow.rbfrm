@@ -299,41 +299,6 @@ End
 		  ShowURL(PermaURL)
 		End Sub
 	#tag EndEvent
-	#tag Event
-		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
-		  '#pragma Unused X
-		  '#pragma Unused Y
-		  'Dim copylink As New MenuItem("Copy link")
-		  'Dim openlink As New MenuItem("Open link")
-		  ''Dim makeshortcut As New MenuItem("Create desktop shortcut")
-		  '
-		  'base.Append(copylink)
-		  'base.Append(openlink)
-		  ''base.Append(makeshortcut)AX
-		End Function
-	#tag EndEvent
-	#tag Event
-		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
-		  'Select Case hitItem.Text
-		  'Case "Copy link"
-		  'Dim cp As New Clipboard
-		  'cp.SetText(Me.URL)
-		  'Return True
-		  '
-		  'Case "Create desktop shortcut"
-		  'Dim shortcut As FolderItem = CreateURLShortcut(Me.URL, Me.Text)
-		  'If shortcut <> Nil Then shortcut.MoveFileTo(SpecialFolder.Desktop)
-		  '
-		  'Return True
-		  '
-		  '
-		  'Case "Open link"
-		  'ShowURL(Me.URL)
-		  'Return True
-		  '
-		  'End Select
-		End Function
-	#tag EndEvent
 #tag EndEvents
 #tag Events PushButton1
 	#tag Event
@@ -352,6 +317,7 @@ End
 #tag Events Socket
 	#tag Event
 		Sub Error(code as integer)
+		  #pragma Unused code
 		  Percentages.Text = ""
 		  If Me.LastErrorCode = 102 Then
 		    Dim raw As String = Me.ReadAll
@@ -408,6 +374,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Function SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
+		  #pragma Unused BytesLeft
 		  tTotal = tTotal + bytesSent
 		  'Dim snt As Integer = TargetFile.Length - bytesLeft
 		  ProgressBar1.Value = tTotal * 100 \ fLength

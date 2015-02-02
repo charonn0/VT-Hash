@@ -111,6 +111,7 @@ End
 	#tag Method, Flags = &h0
 		Sub ShowResult(Results() As TridLib.FileType, File As FolderItem, ParentWindow As Window)
 		  Listbox1.DeleteAllRows
+		  Self.Title = "TrID Analysis of " + File.Name
 		  If UBound(Results) > -1 Then
 		    Dim total As Integer
 		    For i As Integer = 0 To UBound(Results)

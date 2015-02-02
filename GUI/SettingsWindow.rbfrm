@@ -169,6 +169,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Comment Signature (optional): "
          TextAlign       =   2
          TextColor       =   &h000000
@@ -319,6 +320,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   4
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "API Key:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -384,6 +386,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Algorithm:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -447,6 +450,7 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   2
+         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
@@ -670,6 +674,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   2
          TabPanelIndex   =   3
+         TabStop         =   True
          Text            =   "URL:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -704,6 +709,7 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   3
+         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -723,14 +729,18 @@ Begin Window SettingsWindow
       CertificatePassword=   ""
       CertificateRejectionFile=   ""
       ConnectionType  =   3
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   364
       LockedInPosition=   False
       Scope           =   1
       Secure          =   True
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   23
+      Visible         =   True
       Width           =   32
    End
 End
@@ -867,6 +877,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  #pragma Unused X
+		  #pragma Unused Y
 		  If Not KeyValid Then
 		    ShowURL("https://www.virustotal.com/en/faq/#virustotal-api")
 		  ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "Test API key now?") = 6 Then
@@ -879,6 +891,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub MouseUp(X As Integer, Y As Integer)
+		  #pragma Unused X
+		  #pragma Unused Y
 		  WaitWindow.ShowWithin(Self)
 		End Sub
 	#tag EndEvent
@@ -926,6 +940,7 @@ End
 #tag Events VTSession1
 	#tag Event
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+		  #pragma Unused HTTPStatus
 		  WaitWindow.Close
 		  If ResponseObject <> Nil And ResponseObject.HasName("total") Then
 		    MsgBox("API key test succeeded.")
@@ -939,8 +954,11 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Error(code as integer)
-		  Break
-		  
+		  #pragma Unused code
+		  WaitWindow.Close
+		  If Me.LastErrorCode <> 102 Then
+		    MsgBox("Socket error: " + Str(code))
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
