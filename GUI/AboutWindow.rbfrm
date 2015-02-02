@@ -73,12 +73,11 @@ Begin Window AboutWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "Ariel"
-      TextSize        =   25
+      TextSize        =   23.5
       TextUnit        =   0
       Top             =   2
       Transparent     =   True
@@ -108,8 +107,7 @@ Begin Window AboutWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   "Copyright ©2009-14 Andrew Lambert, All Rights Reserved."
+      Text            =   "Copyright ©2009-15 Andrew Lambert, All Rights Reserved."
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"
@@ -179,7 +177,6 @@ Begin Window AboutWindow
       Selectable      =   ""
       TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "www.boredomsoft.org"
       TextAlign       =   2
       TextColor       =   "&c0000FF"
@@ -219,7 +216,6 @@ Begin Window AboutWindow
       Selectable      =   ""
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "www.virustotal.com"
       TextAlign       =   0
       TextColor       =   "&c0000FF"
