@@ -7,7 +7,7 @@ Begin Window SettingsWindow
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   2.83e+2
+   Height          =   1.86e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -38,11 +38,11 @@ Begin Window SettingsWindow
       InitialParent   =   ""
       Italic          =   ""
       Left            =   264
-      LockBottom      =   ""
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
-      LockTop         =   True
+      LockTop         =   False
       Scope           =   0
       TabIndex        =   3
       TabPanelIndex   =   0
@@ -50,7 +50,7 @@ Begin Window SettingsWindow
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   262
+      Top             =   165
       Underline       =   ""
       Visible         =   True
       Width           =   80
@@ -69,11 +69,11 @@ Begin Window SettingsWindow
       InitialParent   =   ""
       Italic          =   ""
       Left            =   177
-      LockBottom      =   ""
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
-      LockTop         =   True
+      LockTop         =   False
       Scope           =   0
       TabIndex        =   2
       TabPanelIndex   =   0
@@ -81,7 +81,7 @@ Begin Window SettingsWindow
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   262
+      Top             =   165
       Underline       =   ""
       Visible         =   True
       Width           =   80
@@ -100,11 +100,11 @@ Begin Window SettingsWindow
       InitialParent   =   ""
       Italic          =   ""
       Left            =   5
-      LockBottom      =   ""
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
-      LockTop         =   True
+      LockTop         =   False
       Scope           =   0
       TabIndex        =   0
       TabPanelIndex   =   0
@@ -112,7 +112,7 @@ Begin Window SettingsWindow
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   262
+      Top             =   165
       Underline       =   ""
       Visible         =   True
       Width           =   80
@@ -121,7 +121,7 @@ Begin Window SettingsWindow
       AutoDeactivate  =   True
       Bold            =   ""
       Enabled         =   True
-      Height          =   263
+      Height          =   160
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -135,7 +135,7 @@ Begin Window SettingsWindow
       Panels          =   ""
       Scope           =   0
       SmallTabs       =   ""
-      TabDefinition   =   "Virus Total\rResult Logs"
+      TabDefinition   =   "Virus Total\rResult Logs\rSearch Engine"
       TabIndex        =   21
       TabPanelIndex   =   0
       TabStop         =   True
@@ -169,7 +169,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Comment Signature (optional): "
          TextAlign       =   2
          TextColor       =   &h000000
@@ -237,7 +236,7 @@ Begin Window SettingsWindow
          Enabled         =   True
          EraseBackground =   True
          Height          =   16
-         HelpTag         =   ""
+         HelpTag         =   "Test API Key"
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Left            =   318
@@ -320,7 +319,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   4
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "API Key:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -386,7 +384,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Algorithm:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -398,190 +395,6 @@ Begin Window SettingsWindow
          Underline       =   ""
          Visible         =   True
          Width           =   88
-      End
-      Begin GroupBox GroupBox3
-         AutoDeactivate  =   True
-         Bold            =   ""
-         Caption         =   "Search Engine"
-         Enabled         =   True
-         Height          =   91
-         HelpTag         =   ""
-         Index           =   -2147483648
-         InitialParent   =   "TabPanel1"
-         Italic          =   ""
-         Left            =   7
-         LockBottom      =   ""
-         LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   ""
-         LockTop         =   True
-         Scope           =   0
-         TabIndex        =   7
-         TabPanelIndex   =   1
-         TabStop         =   True
-         TextFont        =   "System"
-         TextSize        =   0
-         TextUnit        =   0
-         Top             =   165
-         Underline       =   ""
-         Visible         =   True
-         Width           =   327
-         Begin TextField SearchURL
-            AcceptTabs      =   ""
-            Alignment       =   0
-            AutoDeactivate  =   True
-            AutomaticallyCheckSpelling=   False
-            BackColor       =   &hFFFFFF
-            Bold            =   ""
-            Border          =   True
-            CueText         =   "http://example.com/?q=%PARAMETER%"
-            DataField       =   ""
-            DataSource      =   ""
-            Enabled         =   True
-            Format          =   ""
-            Height          =   22
-            HelpTag         =   ""
-            Index           =   -2147483648
-            InitialParent   =   "GroupBox3"
-            Italic          =   ""
-            Left            =   88
-            LimitText       =   0
-            LockBottom      =   ""
-            LockedInPosition=   False
-            LockLeft        =   True
-            LockRight       =   ""
-            LockTop         =   True
-            Mask            =   ""
-            Password        =   ""
-            ReadOnly        =   ""
-            Scope           =   0
-            TabIndex        =   0
-            TabPanelIndex   =   1
-            TabStop         =   True
-            Text            =   "https://encrypted.google.com/search?q=%PARAMETER%"
-            TextColor       =   &h000000
-            TextFont        =   "System"
-            TextSize        =   0
-            TextUnit        =   0
-            Top             =   192
-            Underline       =   ""
-            UseFocusRing    =   True
-            Visible         =   True
-            Width           =   243
-         End
-         Begin TextField SearchDisplayName
-            AcceptTabs      =   ""
-            Alignment       =   0
-            AutoDeactivate  =   True
-            AutomaticallyCheckSpelling=   False
-            BackColor       =   &hFFFFFF
-            Bold            =   ""
-            Border          =   True
-            CueText         =   ""
-            DataField       =   ""
-            DataSource      =   ""
-            Enabled         =   True
-            Format          =   ""
-            Height          =   22
-            HelpTag         =   ""
-            Index           =   -2147483648
-            InitialParent   =   "GroupBox3"
-            Italic          =   ""
-            Left            =   88
-            LimitText       =   0
-            LockBottom      =   ""
-            LockedInPosition=   False
-            LockLeft        =   True
-            LockRight       =   ""
-            LockTop         =   True
-            Mask            =   ""
-            Password        =   ""
-            ReadOnly        =   ""
-            Scope           =   0
-            TabIndex        =   3
-            TabPanelIndex   =   1
-            TabStop         =   True
-            Text            =   "Google"
-            TextColor       =   &h000000
-            TextFont        =   "System"
-            TextSize        =   0
-            TextUnit        =   0
-            Top             =   216
-            Underline       =   ""
-            UseFocusRing    =   True
-            Visible         =   True
-            Width           =   243
-         End
-         Begin Label Label3
-            AutoDeactivate  =   True
-            Bold            =   ""
-            DataField       =   ""
-            DataSource      =   ""
-            Enabled         =   True
-            Height          =   20
-            HelpTag         =   ""
-            Index           =   -2147483648
-            InitialParent   =   "GroupBox3"
-            Italic          =   ""
-            Left            =   7
-            LockBottom      =   ""
-            LockedInPosition=   False
-            LockLeft        =   True
-            LockRight       =   ""
-            LockTop         =   True
-            Multiline       =   ""
-            Scope           =   0
-            Selectable      =   False
-            TabIndex        =   1
-            TabPanelIndex   =   1
-            TabStop         =   True
-            Text            =   "URL:"
-            TextAlign       =   2
-            TextColor       =   &h000000
-            TextFont        =   "System"
-            TextSize        =   0
-            TextUnit        =   0
-            Top             =   194
-            Transparent     =   False
-            Underline       =   ""
-            Visible         =   True
-            Width           =   68
-         End
-         Begin Label Label4
-            AutoDeactivate  =   True
-            Bold            =   ""
-            DataField       =   ""
-            DataSource      =   ""
-            Enabled         =   True
-            Height          =   20
-            HelpTag         =   ""
-            Index           =   -2147483648
-            InitialParent   =   "GroupBox3"
-            Italic          =   ""
-            Left            =   7
-            LockBottom      =   ""
-            LockedInPosition=   False
-            LockLeft        =   True
-            LockRight       =   ""
-            LockTop         =   True
-            Multiline       =   ""
-            Scope           =   0
-            Selectable      =   False
-            TabIndex        =   2
-            TabPanelIndex   =   1
-            TabStop         =   True
-            Text            =   "Name:"
-            TextAlign       =   2
-            TextColor       =   &h000000
-            TextFont        =   "System"
-            TextSize        =   0
-            TextUnit        =   0
-            Top             =   217
-            Transparent     =   False
-            Underline       =   ""
-            Visible         =   True
-            Width           =   68
-         End
       End
       Begin CheckBox autolog
          AutoDeactivate  =   True
@@ -634,11 +447,10 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   2
-         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   63
+         Top             =   50
          Underline       =   ""
          Visible         =   True
          Width           =   327
@@ -679,7 +491,7 @@ Begin Window SettingsWindow
             TextFont        =   "System"
             TextSize        =   0
             TextUnit        =   0
-            Top             =   91
+            Top             =   78
             Underline       =   ""
             UseFocusRing    =   True
             Visible         =   True
@@ -712,7 +524,7 @@ Begin Window SettingsWindow
             TextFont        =   "System"
             TextSize        =   0
             TextUnit        =   0
-            Top             =   125
+            Top             =   112
             Underline       =   ""
             UseFocusRing    =   True
             Visible         =   True
@@ -744,12 +556,182 @@ Begin Window SettingsWindow
             TextFont        =   "System"
             TextSize        =   0
             TextUnit        =   0
-            Top             =   91
+            Top             =   78
             Underline       =   ""
             Visible         =   True
             Width           =   63
          End
       End
+      Begin TextField SearchURL
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   False
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         CueText         =   "http://example.com/?q=%PARAMETER%"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   ""
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   91
+         LimitText       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Mask            =   ""
+         Password        =   ""
+         ReadOnly        =   ""
+         Scope           =   0
+         TabIndex        =   0
+         TabPanelIndex   =   3
+         TabStop         =   True
+         Text            =   "https://encrypted.google.com/search?q=%PARAMETER%"
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   39
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   243
+      End
+      Begin TextField SearchDisplayName
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   False
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         CueText         =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   ""
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   91
+         LimitText       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Mask            =   ""
+         Password        =   ""
+         ReadOnly        =   ""
+         Scope           =   0
+         TabIndex        =   1
+         TabPanelIndex   =   3
+         TabStop         =   True
+         Text            =   "Google"
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   63
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   243
+      End
+      Begin Label Label3
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   10
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   2
+         TabPanelIndex   =   3
+         Text            =   "URL:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   41
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   68
+      End
+      Begin Label Label4
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   10
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   3
+         TabPanelIndex   =   3
+         Text            =   "Name:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   64
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   68
+      End
+   End
+   Begin VTHash.VTSession VTSession1
+      APIKey          =   ""
+      CertificateFile =   ""
+      CertificatePassword=   ""
+      CertificateRejectionFile=   ""
+      ConnectionType  =   3
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   364
+      LockedInPosition=   False
+      Scope           =   1
+      Secure          =   True
+      TabPanelIndex   =   0
+      Top             =   23
+      Width           =   32
    End
 End
 #tag EndWindow
@@ -866,8 +848,10 @@ End
 		Sub Paint(g As Graphics)
 		  If KeyValid Then
 		    g.DrawPicture(icon_validation_good, 0, 0)
+		    Me.HelpTag = "Test API Key"
 		  Else
 		    g.DrawPicture(icon_validation_fail, 0, 0)
+		    Me.HelpTag = "Invalid API Key"
 		  End If
 		End Sub
 	#tag EndEvent
@@ -883,18 +867,20 @@ End
 	#tag EndEvent
 	#tag Event
 		Function MouseDown(X As Integer, Y As Integer) As Boolean
-		  'If Not KeyValid Then
-		  'ShowURL("https://www.virustotal.com/en/faq/#virustotal-api")
-		  'ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "Test API key now?") = 6 Then
-		  'Dim js As JSONItem = VTHash.GetReport(eicarhash, APIText.Text, VTHash.RequestType.FileReport)
-		  'If js <> Nil And js.HasName("total") Then
-		  'MsgBox("API key test succeeded.")
-		  'Else
-		  'MsgBox("API key test failed." + EndOfLine + "Response code: " + Str(VTHash.LastResponseCode) + EndOfLine + "Message: " + VTHash.LastResponseVerbose)
-		  'End If
-		  '
-		  'End If
+		  If Not KeyValid Then
+		    ShowURL("https://www.virustotal.com/en/faq/#virustotal-api")
+		  ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "Test API key now?") = 6 Then
+		    VTSession1.APIKey = APIText.Text
+		    VTSession1.GetReport(eicarhash, VTHash.RequestType.FileReport)
+		    Return True
+		  End If
+		  
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseUp(X As Integer, Y As Integer)
+		  WaitWindow.ShowWithin(Self)
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events APIText
@@ -934,6 +920,27 @@ End
 		  If f <> Nil Then
 		    LogFile.Text = f.AbsolutePath
 		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events VTSession1
+	#tag Event
+		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+		  WaitWindow.Close
+		  If ResponseObject <> Nil And ResponseObject.HasName("total") Then
+		    MsgBox("API key test succeeded.")
+		  ElseIf ResponseObject <> Nil Then
+		    MsgBox("API key test failed." + EndOfLine + "Response code: " + _
+		    ResponseObject.Value("response_code") + EndOfLine + "Message: " + ResponseObject.Value("verbose_msg"))
+		  Else
+		    MsgBox("API key test failed.")
+		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Error(code as integer)
+		  Break
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
