@@ -11,23 +11,19 @@ Protected Class ContentType
 
 	#tag Method, Flags = &h0
 		Function Accepts(OtherType As ContentType) As Boolean
+		  ' Returns True if the OtherType is compatible with the current type. Use the Acceptance method to
+		  ' determine which ContentType is preferred if more than one is accepted.
+		  ' Only the SuperType and SubType are compared; optional parts like CharSet are not considered.
+		  
 		  If OtherType.SuperType <> Me.SuperType And OtherType.SuperType <> "*" And Me.SuperType <> "*" Then Return False
 		  If OtherType.SubType <> Me.SubType And OtherType.SubType <> "*" And Me.SubType <> "*" Then Return False
 		  Return True
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Constructor(TargetFile As FolderItem)
-		  Dim t As String
-		  If TargetFile <> Nil Then t = MIMETypes.Lookup(NthField(TargetFile.Name, ".", CountFields(TargetFile.Name, ".")), "application/octet-stream")
-		  Me.Constructor(t)
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Constructor(Raw As String)
-		  'Accepts a single raw ContentType string (e.g. "text/html; CharSet=UTF8")
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(Raw As String)
+		  'Accepts a single raw ContentType string (e.g. "text/html; CharSet=UTF-8")
 		  'For strings that might contain multiple entries, use ContentType.ParseTypes
 		  
 		  If InStr(Raw, "/") = 0 Then Raise New UnsupportedFormatException
@@ -88,10 +84,35 @@ Protected Class ContentType
 
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherType As String) As Integer
-		  Dim o As New ContentType(OtherType)
-		  If Me.Accepts(o) Then Return 0
+		  ' Allows you to compare a ContentType directly to a String.
+		  ' If the String would be Accepted this method returns 0 (equivalence)
+		  ' Otherwise, performs a lexicographic comparison
+		  ' e.g.
+		  '     If MyContentType = "text/html" Then
+		  
+		  If Me.Accepts(New ContentType(OtherType)) Then Return 0
 		  Return StrComp(Me.ToString, OtherType, 1)
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Operator_Convert(FromFile As FolderItem)
+		  ' Pass a folderitem to construct a ContentType object based on the file name extension. The FolderItem need not exist.
+		  
+		  Dim t As String = "application/octet-stream"
+		  If FromFile <> Nil Then t = MIMETypes.Lookup(NthField(FromFile.Name, ".", CountFields(FromFile.Name, ".")), t)
+		  Me.Constructor(t)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Operator_Convert(OtherType As String)
+		  ' Allows you to convert a string into a ContentType
+		  ' e.g.
+		  '     MyContentType = "text/html"
+		  
+		  Me.Constructor(OtherType)
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -116,14 +137,15 @@ Protected Class ContentType
 	#tag Method, Flags = &h0
 		Function ToString() As String
 		  'serializes the object
+		  
 		  Dim data As String = SuperType + "/" + SubType
 		  If Me.Weight < 1 Then
 		    data = data + "; q=" + Format(Me.Weight, ".##")
 		  End If
-		  If Me.CharSet <> Nil Then
+		  If Me.CharSet <> Nil And Me.CharSet.internetName <> "" Then
 		    data = data + "; CharSet=" + Me.CharSet.internetName
 		  End If
-		  If Me.SuperType = "multipart" Then
+		  If Me.Boundary.Trim <> "" Then
 		    data = data + "; boundary=" + Me.Boundary
 		  End If
 		  Return Data
@@ -132,19 +154,24 @@ Protected Class ContentType
 
 
 	#tag Property, Flags = &h0
+		#tag Note
+			Optional; only useful in MultipartForms
+		#tag EndNote
 		Boundary As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		#tag Note
+			Optional; the character encoding of the content.
+		#tag EndNote
 		CharSet As TextEncoding
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Static mMIMEType As Dictionary
-			  If mMIMEType = Nil Then
-			    mMIMEType = New Dictionary( _
+			  If mMIMETypes = Nil Then
+			    mMIMETypes = New Dictionary( _
 			    "ez":"application/andrew-inset", _
 			    "aw":"application/applixware", _
 			    "atom":"application/atom+xml", _
@@ -158,6 +185,7 @@ Protected Class ContentType
 			    "cdmiq":"application/cdmi-queue", _
 			    "cu":"application/cu-seeme", _
 			    "davmount":"application/davmount+xml", _
+			    "daa":"application/x-daa", _
 			    "dssc":"application/dssc+der", _
 			    "xdssc":"application/dssc+xml", _
 			    "ecma":"application/ecmascript", _
@@ -803,6 +831,7 @@ Protected Class ContentType
 			    "pnt":"image/x-macpaint", _
 			    "mac":"image/x-macpaint", _
 			    "pcx":"image/x-pcx", _
+			    "pdf":"application/pdf", _
 			    "pnm":"image/x-portable-anymap", _
 			    "pbm":"image/x-portable-bitmap", _
 			    "pgm":"image/x-portable-graymap", _
@@ -927,11 +956,20 @@ Protected Class ContentType
 			    "movie":"video/x-sgi-movie", _
 			    "ice":"x-conference/x-cooltalk")
 			  End If
-			  return mMIMEType
+			  return mMIMETypes
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  mMIMETypes = value
+			End Set
+		#tag EndSetter
 		Protected Shared MIMETypes As Dictionary
 	#tag EndComputedProperty
+
+	#tag Property, Flags = &h21
+		Private Shared mMIMETypes As Dictionary
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		SubType As String
@@ -942,6 +980,9 @@ Protected Class ContentType
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		#tag Note
+			Optional; a number between 0.0 and 1.0 representing the weight of the type (1=highest weight)
+		#tag EndNote
 		Weight As Single = 1.0
 	#tag EndProperty
 

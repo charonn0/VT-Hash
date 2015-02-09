@@ -18,12 +18,6 @@ Inherits HTTPSecureSocket
 		End Sub
 	#tag EndEvent
 
-	#tag Event
-		Function SendProgress(bytesSent as Integer, bytesLeft as Integer) As Boolean
-		  Return RaiseEvent SendProgress(bytesSent, bytesLeft)
-		End Function
-	#tag EndEvent
-
 
 	#tag Method, Flags = &h0
 		Sub AddComment(ResourceID As String, Comment As String)
@@ -77,10 +71,9 @@ Inherits HTTPSecureSocket
 		  Dim HTTPVerb As String = "POST"
 		  Dim content As String
 		  content = Request.ToString
-		  Dim t As New ContentType("multipart/form-data; boundary=" + Request.Boundary)
+		  Dim t As ContentType = "multipart/form-data; boundary=" + Request.Boundary
 		  Me.SetRequestHeader("User-Agent", "RB-VTAPI/" + Format(VTHash.AgentVersion, "#0.0#") + " " + VTHash.PlatformString)
 		  Me.SetPostContent(Content, t.ToString)
-		  
 		  Select Case Type
 		  Case RequestType.Comment
 		    APIURL = APIURL + VT_Put_Comment
@@ -121,10 +114,6 @@ Inherits HTTPSecureSocket
 
 	#tag Hook, Flags = &h0
 		Event Response(ResponseObject As JSONItem, HTTPStatus As Integer)
-	#tag EndHook
-
-	#tag Hook, Flags = &h0
-		Event SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
 	#tag EndHook
 
 
