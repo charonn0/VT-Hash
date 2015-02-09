@@ -220,11 +220,14 @@ Protected Module VTHash
 			      bs.Close
 			      If isvalid Then
 			        mConfig = PrefStore.Open(f)
-			      Else
+			      ElseIf MsgBox( _
+			        "Your configuration file must be converted to the new format." + EndOfLine + _
+			        "If for any reason this operation fails, your original configuration file is backed up to: " + _
+			        f.AbsolutePath + ".bak", 1 + 48, "Old-style config file detected") = 1 Then
 			        mConfig = ConvertOldConfig(f)
-			        'f.CopyFileTo(f.Parent.Child(f.Name + ".bak"))
-			        'f.Delete
-			        'mConfig = PrefStore.Create(f)
+			      Else
+			        App.mIsQuitting = True
+			        Quit()
 			      End If
 			    Else
 			      mConfig = PrefStore.Create(f)

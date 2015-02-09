@@ -12,7 +12,7 @@ Inherits Application
 	#tag Event
 		Sub Open()
 		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
-		    If MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
+		    If Not mIsQuitting And MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
 		      SettingsWindow.ShowModal
 		      If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
 		        mIsQuitting = True
@@ -72,8 +72,8 @@ Inherits Application
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private mIsQuitting As Boolean
+	#tag Property, Flags = &h0
+		mIsQuitting As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
