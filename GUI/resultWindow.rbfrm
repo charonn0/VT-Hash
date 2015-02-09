@@ -474,6 +474,50 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   16
    End
+   Begin VTHash.VTSession RescanSession
+      APIKey          =   ""
+      CertificateFile =   ""
+      CertificatePassword=   ""
+      CertificateRejectionFile=   ""
+      ConnectionType  =   3
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   525
+      LockedInPosition=   False
+      Scope           =   1
+      Secure          =   True
+      TabPanelIndex   =   0
+      Top             =   -18
+      Width           =   32
+   End
+   Begin VTHash.VTSession CommentSession
+      APIKey          =   ""
+      CertificateFile =   ""
+      CertificatePassword=   ""
+      CertificateRejectionFile=   ""
+      ConnectionType  =   3
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   525
+      LockedInPosition=   False
+      Scope           =   1
+      Secure          =   True
+      TabPanelIndex   =   0
+      Top             =   14
+      Width           =   32
+   End
+   Begin Thread RescanThread
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   555
+      LockedInPosition=   False
+      Priority        =   5
+      Scope           =   0
+      StackSize       =   0
+      TabPanelIndex   =   0
+      Top             =   -18
+      Width           =   32
+   End
 End
 #tag EndWindow
 
@@ -522,21 +566,10 @@ End
 
 	#tag MenuHandler
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
-			'WaitWindow.ShowWithin(Self)
-			'WaitWindow.Refresh()
-			'
-			'Dim results As JSONItem = VTHash.RequestRescan(VTResult.Resource, VTHash.GetConfig("APIKey"))
-			'WaitWindow.Close
-			'If results = Nil Then
-			'Call MsgBox("Response was empty. Try again later.", 16, "Probably not my fault")
-			'Else
-			'If results.Value("response_code").IntegerValue = 1 Then
-			'Call MsgBox("Your request was accepted and added to the queue.", 64, "Rescan Accepted")
-			'Else
-			'Call MsgBox("VirusTotal said: " + results.Value("response_code").StringValue, 16, "Rescan Error")
-			'End If
-			'End If
-			'Return True
+			WaitWindow.ShowWithin(Self)
+			WaitWindow.Refresh()
+			RescanThread.Run
+			Return True
 			
 		End Function
 	#tag EndMenuHandler
@@ -700,8 +733,7 @@ End
 		    FileHash.Text = VTResult.HashValue
 		    DoAutosave()
 		    
-		    Me.ShowModal
-		    Quit()
+		    Me.Show
 		  Case VT_Code_Not_Found
 		    If result.TargetFile.Length >= 32 * 1024 * 1024 Then
 		      Select Case MsgBox(_
@@ -900,6 +932,7 @@ End
 		  #pragma Unused X
 		  #pragma Unused Y
 		  VTResult.TargetFile.ShowInExplorer()
+		  
 		End Function
 	#tag EndEvent
 #tag EndEvents
@@ -922,19 +955,13 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Action()
-		  'Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
-		  'If comment <> "" Then
-		  'WaitWindow.ShowWithin(Self)
-		  'WaitWindow.Refresh()
-		  'Dim js As JSONItem = VTHash.AddComment(VTResult.Resource, VTHash.GetConfig("APIKey"), comment)
-		  'WaitWindow.Close
-		  'If js <> Nil Then
-		  'MsgBox(js.Value("verbose_msg"))
-		  'Else
-		  'MsgBox("Invalid response from Virus Total.")
-		  'End If
-		  '
-		  'End If
+		  Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
+		  If comment <> "" Then
+		    WaitWindow.ShowWithin(Self)
+		    WaitWindow.Refresh()
+		    CommentSession.APIKey = VTHash.GetConfig("APIKey")
+		    CommentSession.AddComment(VTResult.Resource, comment)
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -959,7 +986,48 @@ End
 		  #pragma Unused X
 		  #pragma Unused Y
 		  Dim bs As BinaryStream = BinaryStream.Open(VTResult.TargetFile)
-		  HashesViewer.ShowHashes(bs, Self)
+		  Dim h As New HashesViewer
+		  h.ShowHashes(bs, Self)
 		End Function
+	#tag EndEvent
+#tag EndEvents
+#tag Events RescanSession
+	#tag Event
+		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+		  #pragma Unused HTTPStatus
+		  WaitWindow.Close
+		  If ResponseObject = Nil Then
+		    Call MsgBox("The response was empty. Please try again later.", 16, "Rescan Error")
+		  Else
+		    If ResponseObject.Value("response_code").IntegerValue = 1 Then
+		      Call MsgBox("Your request was accepted and added to the queue.", 64, "Rescan Accepted")
+		    Else
+		      Call MsgBox("VirusTotal said: " + ResponseObject.Value("response_code").StringValue, 16, "Rescan Error")
+		    End If
+		  End If
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events CommentSession
+	#tag Event
+		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+		  #pragma Unused HTTPStatus
+		  WaitWindow.Close
+		  If ResponseObject <> Nil Then
+		    MsgBox(ResponseObject.Value("verbose_msg"))
+		  Else
+		    MsgBox("Invalid response from Virus Total.")
+		  End If
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events RescanThread
+	#tag Event
+		Sub Run()
+		  RescanSession.APIKey = VTHash.GetConfig("APIKey")
+		  RescanSession.RequestRescan(VTResult.Resource)
+		End Sub
 	#tag EndEvent
 #tag EndEvents
