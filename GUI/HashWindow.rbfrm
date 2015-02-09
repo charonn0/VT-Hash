@@ -7,7 +7,7 @@ Begin Window HashWindow
    Frame           =   3
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   64
+   Height          =   6.4e+1
    ImplicitInstance=   False
    LiveResize      =   True
    MacProcID       =   0
@@ -23,7 +23,7 @@ Begin Window HashWindow
    Resizeable      =   False
    Title           =   "Calculating hash..."
    Visible         =   True
-   Width           =   301
+   Width           =   3.43e+2
    Begin Label StaticText1
       AutoDeactivate  =   True
       Bold            =   ""
@@ -56,7 +56,7 @@ Begin Window HashWindow
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   36
+      Width           =   49
    End
    Begin Label HashName
       AutoDeactivate  =   True
@@ -80,7 +80,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      Text            =   "MD5:"
+      Text            =   "SHA512:"
       TextAlign       =   2
       TextColor       =   0
       TextFont        =   "System"
@@ -90,7 +90,7 @@ Begin Window HashWindow
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   36
+      Width           =   49
    End
    Begin Label PathText
       AutoDeactivate  =   True
@@ -103,7 +103,7 @@ Begin Window HashWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   44
+      Left            =   57
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -114,7 +114,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
-      Text            =   "hhh"
+      Text            =   "Z:\\My Folder\\MySubFolder\\MyFile.exe"
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"
@@ -124,7 +124,7 @@ Begin Window HashWindow
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   255
+      Width           =   286
    End
    Begin Label HashText
       AutoDeactivate  =   True
@@ -137,7 +137,7 @@ Begin Window HashWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   44
+      Left            =   57
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -148,7 +148,7 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
-      Text            =   "hhh"
+      Text            =   00000000000000000000000000000000000000000000000000000000000000000000
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"
@@ -158,7 +158,7 @@ Begin Window HashWindow
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   255
+      Width           =   279
    End
    Begin ProgressBar HashProgress
       AutoDeactivate  =   True
@@ -179,7 +179,7 @@ Begin Window HashWindow
       Top             =   32
       Value           =   0
       Visible         =   True
-      Width           =   297
+      Width           =   341
    End
    Begin PushButton CancelButton
       AutoDeactivate  =   True
@@ -194,7 +194,7 @@ Begin Window HashWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   110
+      Left            =   131
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -255,13 +255,13 @@ Begin Window HashWindow
    Begin Thread Hasher
       Height          =   32
       Index           =   -2147483648
-      Left            =   311
+      Left            =   425
       LockedInPosition=   False
       Priority        =   5
       Scope           =   0
       StackSize       =   0
       TabPanelIndex   =   0
-      Top             =   -19
+      Top             =   -31
       Width           =   32
    End
    Begin VTHash.VTSession VTSocket
@@ -272,24 +272,24 @@ Begin Window HashWindow
       ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
-      Left            =   311
+      Left            =   425
       LockedInPosition=   False
       Scope           =   1
       Secure          =   True
       TabPanelIndex   =   0
-      Top             =   14
+      Top             =   0
       Width           =   32
    End
    Begin Timer GUITimer
       Height          =   32
       Index           =   -2147483648
-      Left            =   348
+      Left            =   462
       LockedInPosition=   False
       Mode            =   0
       Period          =   1
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   14
+      Top             =   2
       Width           =   32
    End
 End
@@ -353,6 +353,7 @@ End
 #tag Events Hasher
 	#tag Event
 		Sub Run()
+		  App.YieldToNextThread
 		  Dim bs As BinaryStream
 		  Dim a As Integer = VTHash.GetConfig("Algorithm")
 		  Dim hp As New Win32.Crypto.HashProcessor(a)
@@ -369,15 +370,8 @@ End
 		  mHash = ConvertEncoding(Win32.Crypto.EncodeHex(hp.Value).Uppercase, Encodings.UTF8)
 		  GUITimer.Mode = Timer.ModeSingle
 		  App.YieldToNextThread
-		  Dim Form As New VTHash.MultipartForm
-		  Form.Element("apikey") = VTHash.GetConfig("APIKey")
-		  Form.Element("resource") = mHash
-		  Dim content As String = Form.ToString
-		  Dim t As New VTHash.ContentType("multipart/form-data; boundary=" + Form.Boundary)
-		  VTSocket.SetRequestHeader("User-Agent", "RB-VTAPI/" + Format(VTHash.AgentVersion, "#0.0#") + " " + VTHash.PlatformString)
-		  VTSocket.SetPostContent(content, t.ToString)
-		  VTSocket.SendRequest("POST", "www.virustotal.com" + VT_Get_File)
-		  
+		  VTSocket.APIKey = VTHash.GetConfig("APIKey")
+		  VTSocket.GetReport(mHash, VTHash.RequestType.FileReport)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -389,9 +383,15 @@ End
 		    Dim v As New VTHash.Results(ResponseObject, mTargetFile)
 		    v.HashValue = mHash
 		    rw.ShowResult(v)
+		    Self.Close
 		  Else
 		    Break
 		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Error(code as integer)
+		  Break
 		End Sub
 	#tag EndEvent
 #tag EndEvents
