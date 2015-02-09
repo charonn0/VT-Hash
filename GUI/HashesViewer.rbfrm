@@ -8,7 +8,7 @@ Begin Window HashesViewer
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   1.31e+2
-   ImplicitInstance=   True
+   ImplicitInstance=   False
    LiveResize      =   True
    MacProcID       =   0
    MaxHeight       =   32000
@@ -74,6 +74,7 @@ Begin Window HashesViewer
       _ScrollWidth    =   -1
    End
    Begin Thread HashThread
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   599
@@ -81,11 +82,15 @@ Begin Window HashesViewer
       Priority        =   5
       Scope           =   0
       StackSize       =   0
+      TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   0
+      Visible         =   True
       Width           =   32
    End
    Begin Timer HashTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   599
@@ -93,8 +98,11 @@ Begin Window HashesViewer
       Mode            =   2
       Period          =   50
       Scope           =   0
+      TabIndex        =   2
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   44
+      Visible         =   True
       Width           =   32
    End
    Begin PushButton PushButton1
