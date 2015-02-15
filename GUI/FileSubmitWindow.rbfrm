@@ -204,11 +204,11 @@ Begin Window FileSubmitWindow
       Index           =   -2147483648
       Left            =   379
       LockedInPosition=   False
-      Mode            =   2
+      Mode            =   0
       Period          =   250
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   12
+      Top             =   17
       Width           =   32
    End
 End
@@ -259,13 +259,13 @@ End
 
 	#tag Method, Flags = &h0
 		Sub SubmitFile(parentWindow As Window, File As FolderItem, APIKey As String)
-		  Socket.APIKey = APIKey
-		  Socket.SubmitFile(File)
-		  TargetFile = File
-		  fLength = TargetFile.Length
 		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
 		  ShowCentered(Me, ScreenNumber)
-		  Me.ShowModal
+		  TargetFile = File
+		  fLength = TargetFile.Length
+		  'Socket.Yield = True
+		  Socket.APIKey = APIKey
+		  Socket.SubmitFile(File)
 		End Sub
 	#tag EndMethod
 
