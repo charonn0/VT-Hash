@@ -18,6 +18,12 @@ Inherits HTTPSecureSocket
 		End Sub
 	#tag EndEvent
 
+	#tag Event
+		Function SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
+		  Return RaiseEvent SendProgress(BytesSent, BytesLeft)
+		End Function
+	#tag EndEvent
+
 
 	#tag Method, Flags = &h0
 		Sub AddComment(ResourceID As String, Comment As String)
@@ -114,6 +120,10 @@ Inherits HTTPSecureSocket
 
 	#tag Hook, Flags = &h0
 		Event Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+	#tag EndHook
+
+	#tag Hook, Flags = &h0
+		Event SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
 	#tag EndHook
 
 
