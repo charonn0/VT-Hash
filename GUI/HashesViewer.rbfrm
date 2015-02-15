@@ -74,7 +74,6 @@ Begin Window HashesViewer
       _ScrollWidth    =   -1
    End
    Begin Thread HashThread
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   599
@@ -82,15 +81,11 @@ Begin Window HashesViewer
       Priority        =   5
       Scope           =   0
       StackSize       =   0
-      TabIndex        =   1
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   0
-      Visible         =   True
       Width           =   32
    End
    Begin Timer HashTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   599
@@ -98,11 +93,8 @@ Begin Window HashesViewer
       Mode            =   2
       Period          =   50
       Scope           =   0
-      TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   44
-      Visible         =   True
       Width           =   32
    End
    Begin PushButton PushButton1
@@ -307,6 +299,7 @@ End
 		        If Listbox1.Cell(i, 2) = "Pending" Then
 		          mCurrentAlg = Listbox1.CellTag(i, 0)
 		          mHashValue = ""
+		          Listbox1.Cell(i, 2) = "Calculating..."
 		          Exit For
 		        ElseIf i = Listbox1.ListCount - 1 Then
 		          Me.Mode = Timer.ModeOff
