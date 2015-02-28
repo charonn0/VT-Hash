@@ -384,14 +384,19 @@ End
 		    v.HashValue = mHash
 		    rw.ShowResult(v)
 		    Self.Close
+		  ElseIf HTTPStatus <> 200 Then
+		    Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "HTTP error")
+		    Quit()
 		  Else
-		    Break
+		    Call MsgBox("Invalid response from Virus Total.", 16, "Parse error")
+		    Quit()
 		  End If
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub Error(code as integer)
-		  Break
+		  Call MsgBox("Unable to connect to VirusTotal.com!", 16, "Network error")
+		  Quit()
 		End Sub
 	#tag EndEvent
 #tag EndEvents
