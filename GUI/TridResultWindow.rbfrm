@@ -24,7 +24,7 @@ Begin Window TridResultWindow
    Title           =   "Trid Says"
    Visible         =   True
    Width           =   3.48e+2
-   Begin Listbox Listbox1
+   Begin PrettyListBox Listbox1
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
       Bold            =   ""
@@ -139,27 +139,6 @@ End
 #tag EndWindowCode
 
 #tag Events Listbox1
-	#tag Event
-		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  '#pragma Unused column
-		  ''g.ForeColor = &c00800000
-		  ''g.FillRect(0, 0, g.Width, g.Height)
-		  'If row <= Me.LastIndex Then
-		  'Dim perc As Integer = Me.RowTag(row)
-		  'g.foreColor= &cE6E6E600
-		  'Dim w As Integer = perc * g.Width \ 100
-		  '
-		  'g.FillRect(0, 0, w, g.height)
-		  'End If
-		  ''Return True
-		  
-		  #pragma Unused column
-		  #pragma Unused row
-		  g.foreColor= &cD8D8D800
-		  g.FillRect 0,0,g.width,g.height
-		  
-		End Function
-	#tag EndEvent
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
 		  Dim tridtype As String = Me.Cell(Me.RowFromXY(X, Y), 0).Trim

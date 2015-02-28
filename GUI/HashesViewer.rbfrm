@@ -24,7 +24,7 @@ Begin Window HashesViewer
    Title           =   "Additional hashes"
    Visible         =   True
    Width           =   4.64e+2
-   Begin Listbox Listbox1
+   Begin PrettyListBox Listbox1
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
       Bold            =   ""

@@ -24,7 +24,7 @@ Begin Window ResultWindow
    Title           =   "Virus Total Report"
    Visible         =   True
    Width           =   4.96e+2
-   Begin Listbox Listbox1
+   Begin PrettyListBox Listbox1
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
       Bold            =   ""
@@ -786,32 +786,11 @@ End
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
 		  #pragma Unused column
-		  Select Case True
-		  Case Me.Selected(row)
-		    Dim ratio, endratio as Double
-		    Dim sc, ec As Color
-		    sc = &c0080FF00
-		    ec = &c0000FF00
-		    For i As Integer = 0 To g.Height
-		      ratio = (g.Height - i) / g.Height
-		      endratio = i / g.Height
-		      g.ForeColor = RGB(ec.Red * endratio + sc.Red * ratio, ec.Green * endratio + sc.Green * ratio, ec.Blue * endratio + sc.Blue * ratio)
-		      g.DrawLine(0, i, g.Width, i)
-		    next
-		    g.ForeColor = sc
-		    g.DrawLine(0, 0, g.Width, 0)
-		    
-		  Case row <= Me.LastIndex And Me.RowTag(row) = True
+		  If row <= Me.LastIndex And Me.RowTag(row) = True And Not Me.Selected(row) Then
 		    g.ForeColor= &cFF808000
 		    g.FillRect(0, 0, g.width, g.height)
-		    
-		  Else
-		    g.foreColor= &cD8D8D800
-		    g.FillRect(0, 0, g.width, g.height)
-		    
-		  End Select
-		  
-		  Return True
+		    Return True
+		  End If
 		  
 		End Function
 	#tag EndEvent
@@ -878,15 +857,6 @@ End
 		      result = 0
 		      Return True
 		    End If
-		  End If
-		End Function
-	#tag EndEvent
-	#tag Event
-		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
-		  If Me.Selected(row) Then
-		    g.ForeColor = &cFFFFFF00
-		  Else
-		    g.ForeColor = &c00000000
 		  End If
 		End Function
 	#tag EndEvent
