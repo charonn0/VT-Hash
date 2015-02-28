@@ -59,7 +59,7 @@ Begin Window SuggestionBox
       TabIndex        =   9
       TabPanelIndex   =   0
       Top             =   0
-      Value           =   0
+      Value           =   1
       Visible         =   True
       Width           =   425
       Begin Label Label1
@@ -444,7 +444,7 @@ Begin Window SuggestionBox
          Bold            =   ""
          Border          =   True
          ColumnCount     =   2
-         ColumnsResizable=   ""
+         ColumnsResizable=   True
          ColumnWidths    =   ""
          DataField       =   ""
          DataSource      =   ""
@@ -536,9 +536,13 @@ End
 		  If ExtraData.Count > 0 Then
 		    For Each Key As String In ExtraData.Keys
 		      If VarType(ExtraData.Value(Key)) = Variant.TypeString Then
-		        ExtraInfoView.AddRow(Key, ExtraData.Value(Key))
+		        Dim s As String = ExtraData.Value(Key)
+		        ExtraInfoView.AddRow(Key, s)
+		        ExtraInfoView.RowTag(ExtraInfoView.LastIndex) = s
 		      ElseIf ExtraData.Value(Key) IsA FolderItem Then
-		        ExtraInfoView.AddRow(Key, FolderItem(ExtraData.Value(Key)).AbsolutePath)
+		        Dim f As FolderItem = ExtraData.Value(Key)
+		        ExtraInfoView.AddRow(Key, f.AbsolutePath)
+		        ExtraInfoView.RowTag(ExtraInfoView.LastIndex) = f
 		      End If
 		    Next
 		  Else
@@ -558,6 +562,16 @@ End
 		  ExtraData.Value("Version") = VTHash.VersionString
 		  ExtraData.Value("Algorithm") = "0x" + Hex(VTHash.GetConfig("Algorithm"))
 		  ExtraData.Value("OS") = OS
+		  Dim tmp As FolderItem = SpecialFolder.Temporary.Child("config.dat")
+		  Dim bs As BinaryStream = BinaryStream.Create(tmp, True)
+		  Dim f As FolderItem = VTHash.Config.RootFile
+		  VTHash.Config.Close
+		  VTHash.Config = Nil
+		  Dim ins As BinaryStream = BinaryStream.Open(f, False)
+		  bs.Write(ins.Read(ins.Length))
+		  bs.Close
+		  ins.Close
+		  ExtraData.Value("User config.dat") = tmp
 		End Sub
 	#tag EndMethod
 
@@ -657,6 +671,72 @@ End
 	#tag Event
 		Sub Action()
 		  PagePanel1.Value = 0
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ExtraInfoView
+	#tag Event
+		Function CellTextPaint(g As Graphics, row As Integer, column As Integer, x as Integer, y as Integer) As Boolean
+		  #pragma Unused x
+		  #pragma Unused y
+		  If column <> 1 Then Return False
+		  If row > -1 And row < Me.ListCount Then
+		    Select Case Me.RowTag(row)
+		    Case Is = Nil
+		      
+		    Case IsA FolderItem
+		      If Not Me.Selected(row) Then g.ForeColor = &c0000FF00
+		      g.Underline = True
+		      
+		    End Select
+		  End If
+		  
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseMove(X As Integer, Y As Integer)
+		  Dim row, column As Integer
+		  row = Me.RowFromXY(X, Y)
+		  column = Me.ColumnFromXY(X, Y)
+		  If column <> 1 Then Return
+		  If row > -1 And row < Me.ListCount And Me.RowTag(row) <> Nil Then
+		    If Me.RowTag(row) IsA FolderItem Then
+		      Me.MouseCursor = System.Cursors.FingerPointer
+		    Else
+		      Me.MouseCursor = System.Cursors.StandardPointer
+		    End If
+		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(x As Integer, y As Integer) As Boolean
+		  Return Me.RowFromXY(x, y) = 1
+		  
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseUp(x As Integer, y As Integer)
+		  Dim row, column As Integer
+		  row = Me.RowFromXY(X, Y)
+		  column = Me.ColumnFromXY(X, Y)
+		  If column <> 1 Then Return
+		  If row > -1 And row < Me.ListCount And Me.RowTag(row) <> Nil Then
+		    If Me.RowTag(row) IsA FolderItem Then
+		      Dim f As FolderItem = Me.RowTag(row)
+		      f.ShowInExplorer
+		    Else
+		      Me.CellType(row, column) = Listbox.TypeEditable
+		      Me.EditCell(row, column)
+		    End If
+		  End If
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub CellAction(row As Integer, column As Integer)
+		  Dim name, value As String
+		  name = Me.Cell(row, 0)
+		  value = Me.Cell(row, 1)
+		  ExtraData.Value(name) = value
 		End Sub
 	#tag EndEvent
 #tag EndEvents

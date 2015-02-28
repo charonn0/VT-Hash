@@ -55,11 +55,14 @@ Class PrefStore
 
 	#tag Method, Flags = &h0
 		 Shared Function Create(RegFile As FolderItem) As PrefStore
+		  Dim p As PrefStore
 		  Try
-		    Return New PrefStore(RegFile.CreateVirtualVolume)
+		    p = New PrefStore(RegFile.CreateVirtualVolume)
 		  Catch
 		    Return Nil
 		  End Try
+		  p.mRootFile = RegFile
+		  Return p
 		End Function
 	#tag EndMethod
 
@@ -157,11 +160,14 @@ Class PrefStore
 
 	#tag Method, Flags = &h0
 		 Shared Function Open(RegFile As FolderItem) As PrefStore
+		  Dim p As PrefStore
 		  Try
-		    Return New PrefStore(RegFile.OpenAsVirtualVolume)
+		    p = New PrefStore(RegFile.OpenAsVirtualVolume)
 		  Catch
 		    Return Nil
 		  End Try
+		  p.mRootFile = RegFile
+		  Return p
 		End Function
 	#tag EndMethod
 
@@ -232,6 +238,12 @@ Class PrefStore
 		  End Select
 		  reader.Close
 		  Return ret
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function RootFile() As FolderItem
+		  Return mRootFile
 		End Function
 	#tag EndMethod
 
@@ -327,6 +339,10 @@ Class PrefStore
 
 	#tag Property, Flags = &h21
 		Private mPathSeparator As String = "."
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRootFile As FolderItem
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

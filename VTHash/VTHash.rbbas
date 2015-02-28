@@ -236,6 +236,11 @@ Protected Module VTHash
 			  Return mConfig
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  mConfig = value
+			End Set
+		#tag EndSetter
 		Protected Config As PrefStore
 	#tag EndComputedProperty
 
