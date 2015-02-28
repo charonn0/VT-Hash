@@ -57,7 +57,9 @@ Protected Module Win32
 
 	#tag Method, Flags = &h1
 		Protected Function Is64BitOS() As Boolean
-		  Return System.IsFunctionAvailable("GetNativeSystemInfo", "Kernel32")
+		  Return InStr(SpecialFolder.Applications.Name, "(x86)") > 0
+		  
+		  'Return System.IsFunctionAvailable("GetNativeSystemInfo", "Kernel32")
 		End Function
 	#tag EndMethod
 
