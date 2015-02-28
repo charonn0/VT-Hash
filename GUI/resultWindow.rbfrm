@@ -635,7 +635,7 @@ End
 		      saved.Visible = True
 		    Catch err
 		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
-		      System.DebugLog("VT Hash: Unable to save report! (" + CurrentMethodName + "->" + t.Name + ")")
+		      Call MsgBox("An error of type " + t.Name + " occurred while saving the report to " + autosavepath.AbsolutePath, 16, "Unable to save report!")
 		    End Try
 		  End If
 		End Sub
