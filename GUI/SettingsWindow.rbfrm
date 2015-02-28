@@ -44,7 +44,7 @@ Begin Window SettingsWindow
       LockRight       =   ""
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   3
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -75,7 +75,7 @@ Begin Window SettingsWindow
       LockRight       =   ""
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   2
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -91,7 +91,7 @@ Begin Window SettingsWindow
       Bold            =   ""
       ButtonStyle     =   0
       Cancel          =   ""
-      Caption         =   "About"
+      Caption         =   "Complaints"
       Default         =   False
       Enabled         =   True
       Height          =   22
@@ -106,7 +106,7 @@ Begin Window SettingsWindow
       LockRight       =   ""
       LockTop         =   False
       Scope           =   0
-      TabIndex        =   0
+      TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -115,7 +115,7 @@ Begin Window SettingsWindow
       Top             =   165
       Underline       =   ""
       Visible         =   True
-      Width           =   80
+      Width           =   85
    End
    Begin TabPanel TabPanel1
       AutoDeactivate  =   True
@@ -136,7 +136,7 @@ Begin Window SettingsWindow
       Scope           =   0
       SmallTabs       =   ""
       TabDefinition   =   "Virus Total\rResult Logs\rSearch Engine"
-      TabIndex        =   21
+      TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   0
+      Value           =   2
       Visible         =   True
       Width           =   344
       Begin Label Label2
@@ -283,7 +283,7 @@ Begin Window SettingsWindow
          Password        =   ""
          ReadOnly        =   ""
          Scope           =   0
-         TabIndex        =   3
+         TabIndex        =   0
          TabPanelIndex   =   1
          TabStop         =   True
          Text            =   ""
@@ -351,7 +351,7 @@ Begin Window SettingsWindow
          LockRight       =   ""
          LockTop         =   True
          Scope           =   0
-         TabIndex        =   5
+         TabIndex        =   2
          TabPanelIndex   =   1
          TabStop         =   True
          TextFont        =   "System"
@@ -839,7 +839,7 @@ End
 #tag Events PushButton5
 	#tag Event
 		Sub Action()
-		  AboutWindow.Show
+		  SuggestionBox.ShowModal
 		End Sub
 	#tag EndEvent
 #tag EndEvents

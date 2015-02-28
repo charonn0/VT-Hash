@@ -46,7 +46,6 @@ Begin Window ErrorWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "An unhandled error has caused VT Hash to crash. \r\nTechnical details follow:"
       TextAlign       =   0
       TextColor       =   "&c00000000"
@@ -508,6 +507,7 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
+		  App.mIsQuitting = True
 		  Quit()
 		End Sub
 	#tag EndEvent
@@ -523,7 +523,8 @@ End
 #tag Events PushButton3
 	#tag Event
 		Sub Action()
-		  ShowURL("http://www.boredomsoft.org/contactus.bs")
+		  'ShowURL("http://www.boredomsoft.org/contactus.bs")
+		  SuggestionBox.ShowData("Exception":ReplaceLineEndings(errorStack.Text, EndOfLine.Windows))
 		End Sub
 	#tag EndEvent
 #tag EndEvents
