@@ -14,7 +14,7 @@ Protected Module TridLib
 
 	#tag Method, Flags = &h1
 		Protected Function GetInfo(InfoType As Integer, InfoIndex As Integer, Output As MemoryBlock = Nil) As Integer
-		  If Output = Nil Then Output = New MemoryBlock(4 * 1024)
+		  If Output = Nil Then Output = New MemoryBlock(0)
 		  If TridLib.IsAvailable Then Return TrID_GetInfo(InfoType, InfoIndex, Output)
 		End Function
 	#tag EndMethod
@@ -42,16 +42,18 @@ Protected Module TridLib
 	#tag Method, Flags = &h1
 		Protected Function SetDefsPack(RawDefData As MemoryBlock) As Integer
 		  ' This function is not available in all editions of TridLib.dll
+		  Dim d As Integer = DefCount
 		  If System.IsFunctionAvailable("TrID_SetDefsPack", "tridlib") Then
-		    If DefCount = 0 Then Return TrID_SetDefsPack(RawDefData)
+		    If d = 0 Then d = TrID_SetDefsPack(RawDefData)
 		  End If
+		  Return d
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function SubmitFile(File As FolderItem) As Integer
 		  If TridLib.IsAvailable Then
-		    Dim mb As New MemoryBlock(File.AbsolutePath.LenB * 2)
+		    Dim mb As New MemoryBlock(File.AbsolutePath.LenB + 1)
 		    mb.CString(0) = File.AbsolutePath
 		    Return TrID_SubmitFileA(mb)
 		  End If
