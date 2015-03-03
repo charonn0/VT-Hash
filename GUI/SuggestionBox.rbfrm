@@ -571,6 +571,10 @@ End
 		  bs.Write(ins.Read(ins.Length))
 		  bs.Close
 		  ins.Close
+		  Dim anon As PrefStore = PrefStore.Open(tmp)
+		  Call anon.Delete("APIKey")
+		  anon.Close
+		  anon = Nil
 		  ExtraData.Value("User config.dat") = tmp
 		End Sub
 	#tag EndMethod
@@ -633,12 +637,12 @@ End
 		    Call MsgBox("Please enter a comment", 16, "Missing Information")
 		    Return
 		  End If
-		  Dim useragent As String = "RB-VTAPI/" + Format(VTHash.AgentVersion, "#0.0#") + " " + VTHash.PlatformString
+		  
 		  Dim form As New VTHash.MultipartForm
 		  form.Element("env_report") = "REMOTE_HOST,REMOTE_ADDR,HTTP_USER_AGENT,AUTH_TYPE,REMOTE_USER"
 		  form.Element("recipients") = "formsubmityXuvQY4boredomsoft.org"
 		  'form.Element("required") = "Comment:Your comment"
-		  form.Element("subject") = "Comment on " + useragent
+		  form.Element("subject") = "Comment on " + VTHash.UserAgent
 		  form.Element("Comment") = CommentText.Text
 		  If CommentName.Text <> "" Then form.Element("realname") = CommentName.Text
 		  If CommentAddress.Text <> "" Then form.Element("email") = CommentAddress.Text
@@ -646,7 +650,7 @@ End
 		    form.Element(key) = ExtraData.Value(key)
 		  Next
 		  Socket.SetPostContent(form.ToString, form.Type.ToString)
-		  Socket.SetRequestHeader("User-Agent", useragent)
+		  Socket.SetRequestHeader("User-Agent", VTHash.UserAgent)
 		  WaitWindow.ShowWithin(Self)
 		  Socket.Post("http://www.boredomsoft.org/submit.php")
 		End Sub
@@ -702,15 +706,18 @@ End
 		  If row > -1 And row < Me.ListCount And Me.RowTag(row) <> Nil Then
 		    If Me.RowTag(row) IsA FolderItem Then
 		      Me.MouseCursor = System.Cursors.FingerPointer
-		    Else
-		      Me.MouseCursor = System.Cursors.StandardPointer
+		      Return
 		    End If
 		  End If
+		  Me.MouseCursor = System.Cursors.StandardPointer
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function MouseDown(x As Integer, y As Integer) As Boolean
-		  Return Me.RowFromXY(x, y) = 1
+		  Dim r, c As Integer
+		  c = Me.ColumnFromXY(x, y)
+		  r = Me.RowFromXY(x, y)
+		  Return r < Me.ListCount And r > -1 And c = 1
 		  
 		End Function
 	#tag EndEvent

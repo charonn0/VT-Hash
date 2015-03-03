@@ -117,8 +117,8 @@ Protected Module VTHash
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function PlatformString() As String
+	#tag Method, Flags = &h1
+		Protected Function PlatformString() As String
 		  //Returns a human-readable string corresponding to the version, SKU, service pack, and architecture of
 		  //the currently running version of Windows.
 		  //e.g. "Windows 7 Ultimate x64 Service Pack 1"
@@ -208,6 +208,12 @@ Protected Module VTHash
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function UserAgent() As String
+		  Return "RB-VTAPI/" + Format(VTHash.AgentVersion, "#0.0#") + " " + VTHash.PlatformString
+		End Function
+	#tag EndMethod
+
 
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
@@ -251,9 +257,7 @@ Protected Module VTHash
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Dim dbg As String
-			  If DebugBuild Then dbg = " (debug)"
-			  Return Format(VTHash.Version, "0.0#") + dbg
+			  Return Format(VTHash.Version, "0.0#")
 			End Get
 		#tag EndGetter
 		Protected VersionString As String

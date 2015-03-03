@@ -78,7 +78,7 @@ Inherits HTTPSecureSocket
 		  Dim content As String
 		  content = Request.ToString
 		  Dim t As ContentType = "multipart/form-data; boundary=" + Request.Boundary
-		  Me.SetRequestHeader("User-Agent", "RB-VTAPI/" + Format(VTHash.AgentVersion, "#0.0#") + " " + VTHash.PlatformString)
+		  Me.SetRequestHeader("User-Agent", VTHash.UserAgent)
 		  Me.SetPostContent(Content, t.ToString)
 		  Select Case Type
 		  Case RequestType.Comment
