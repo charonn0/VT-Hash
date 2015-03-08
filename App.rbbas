@@ -31,11 +31,23 @@ Inherits Application
 	#tag Event
 		Sub OpenDocument(item As FolderItem)
 		  If mIsQuitting Then Return
-		  If item <> Nil And item.Exists And Not item.Directory Then
+		  Select Case True
+		  Case item = Nil, item.AbsolutePath.Trim = ""
+		    Return
+		  Case Not item.Exists
+		    Call MsgBox(item.AbsolutePath + " does not exist.", 16, "File not found")
+		    mIsQuitting = True
+		  Case item.Directory
+		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "Invalid file")
+		    mIsQuitting = True
+		  Case item.Length > 128 * 1024 * 1024
+		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "Invalid file")
+		    mIsQuitting = True
+		  Else
 		    Dim w As New HashWindow
 		    w.ProcessFile(item)
-		  End If
-		  mOpened = True
+		    mOpened = True
+		  End Select
 		End Sub
 	#tag EndEvent
 
