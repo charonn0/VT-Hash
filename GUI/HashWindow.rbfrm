@@ -23,7 +23,7 @@ Begin Window HashWindow
    Resizeable      =   False
    Title           =   "Calculating hash..."
    Visible         =   True
-   Width           =   3.43e+2
+   Width           =   3.19e+2
    Begin Label StaticText1
       AutoDeactivate  =   True
       Bold            =   ""
@@ -52,7 +52,7 @@ Begin Window HashWindow
       TextFont        =   "System"
       TextSize        =   11
       TextUnit        =   0
-      Top             =   0
+      Top             =   -3
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
@@ -120,45 +120,57 @@ Begin Window HashWindow
       TextFont        =   "System"
       TextSize        =   11
       TextUnit        =   0
-      Top             =   0
+      Top             =   -3
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
-      Width           =   286
+      Width           =   262
    End
-   Begin Label HashText
+   Begin TextArea HashText
+      AcceptTabs      =   ""
+      Alignment       =   0
       AutoDeactivate  =   True
+      AutomaticallyCheckSpelling=   False
+      BackColor       =   &hFFFFFF
       Bold            =   ""
+      Border          =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
-      Height          =   20
+      Format          =   ""
+      Height          =   18
       HelpTag         =   ""
+      HideSelection   =   True
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
       Left            =   57
+      LimitText       =   0
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   ""
       LockTop         =   True
+      Mask            =   ""
       Multiline       =   ""
+      ReadOnly        =   True
       Scope           =   0
-      Selectable      =   False
+      ScrollbarHorizontal=   ""
+      ScrollbarVertical=   False
+      Styled          =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   00000000000000000000000000000000000000000000000000000000000000000000
-      TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"
       TextSize        =   11
       TextUnit        =   0
       Top             =   14
-      Transparent     =   True
       Underline       =   ""
+      UseFocusRing    =   False
       Visible         =   True
-      Width           =   279
+      Width           =   262
    End
    Begin ProgressBar HashProgress
       AutoDeactivate  =   True
@@ -176,10 +188,10 @@ Begin Window HashWindow
       Maximum         =   5
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   32
+      Top             =   34
       Value           =   0
       Visible         =   True
-      Width           =   341
+      Width           =   317
    End
    Begin PushButton CancelButton
       AutoDeactivate  =   True
@@ -194,7 +206,7 @@ Begin Window HashWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   131
+      Left            =   120
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -207,7 +219,7 @@ Begin Window HashWindow
       TextFont        =   "System"
       TextSize        =   11
       TextUnit        =   0
-      Top             =   46
+      Top             =   47
       Underline       =   ""
       Visible         =   True
       Width           =   80
@@ -246,7 +258,7 @@ Begin Window HashWindow
       TextFont        =   "System"
       TextSize        =   9
       TextUnit        =   0
-      Top             =   46
+      Top             =   47
       Transparent     =   True
       Underline       =   ""
       Visible         =   True
@@ -403,7 +415,7 @@ End
 #tag Events GUITimer
 	#tag Event
 		Sub Action()
-		  PathText.Text = mTargetFile.AbsolutePath
+		  PathText.Text = mTargetFile.AbsolutePath.Shorten
 		  HashText.Text = mHash
 		  HashProgress.Value = HashPercent
 		End Sub
