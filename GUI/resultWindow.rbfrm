@@ -787,7 +787,7 @@ End
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
 		  #pragma Unused column
 		  If row <= Me.LastIndex And Me.RowTag(row) = True And Not Me.Selected(row) Then
-		    g.ForeColor= &cFF808000
+		    g.ForeColor = &cFF808000
 		    g.FillRect(0, 0, g.width, g.height)
 		    Return True
 		  End If
