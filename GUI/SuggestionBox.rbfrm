@@ -59,7 +59,7 @@ Begin Window SuggestionBox
       TabIndex        =   9
       TabPanelIndex   =   0
       Top             =   0
-      Value           =   1
+      Value           =   0
       Visible         =   True
       Width           =   425
       Begin Label Label1
@@ -575,7 +575,7 @@ End
 		  Call anon.Delete("APIKey")
 		  anon.Close
 		  anon = Nil
-		  ExtraData.Value("User config.dat") = tmp
+		  ExtraData.Value("User's config.dat") = tmp
 		End Sub
 	#tag EndMethod
 
@@ -717,7 +717,9 @@ End
 		  Dim r, c As Integer
 		  c = Me.ColumnFromXY(x, y)
 		  r = Me.RowFromXY(x, y)
-		  Return r < Me.ListCount And r > -1 And c = 1
+		  If r < 0 Or c < 0 Then Return False
+		  Dim iseditable As Boolean = Me.Cell(r, 0) <> "Exception" And Not mExtraData.Value(Me.Cell(r, 0)) IsA FolderItem
+		  Return iseditable And r < Me.ListCount And r > -1 And c = 1
 		  
 		End Function
 	#tag EndEvent
