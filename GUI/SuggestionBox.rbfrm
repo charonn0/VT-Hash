@@ -560,9 +560,9 @@ End
 		  Dim d As New Date
 		  ExtraData.Value("Date") = d.SQLDateTime
 		  ExtraData.Value("Version") = VTHash.VersionString
-		  ExtraData.Value("Algorithm") = "0x" + Hex(VTHash.GetConfig("Algorithm"))
+		  'ExtraData.Value("Algorithm") = "0x" + Hex(VTHash.GetConfig("Algorithm"))
 		  ExtraData.Value("OS") = OS
-		  Dim tmp As FolderItem = SpecialFolder.Temporary.Child("config.dat")
+		  Dim tmp As FolderItem = SpecialFolder.Temporary.Child("anonymized_config.dat")
 		  Dim bs As BinaryStream = BinaryStream.Create(tmp, True)
 		  Dim f As FolderItem = VTHash.Config.RootFile
 		  VTHash.Config.Close
