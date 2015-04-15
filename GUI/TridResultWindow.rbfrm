@@ -148,7 +148,7 @@ End
 		    se.Tag = tridtype
 		    cp.Tag = tridtype
 		    base.Append(cp)
-		    base.Append(se)
+		    If VTHash.GetConfig("SearchEngineName") <> "" Then base.Append(se)
 		    Return True
 		  End If
 		End Function
