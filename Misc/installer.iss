@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1E579B65-503B-4184-B481-5138124BEE1D}
 AppName=VT Hash Check
-AppVersion=1.49
+AppVersion=1.50
 ;AppVerName=VT Hash Check 1.22
 AppPublisher=Boredom Software
 AppPublisherURL=http://www.boredomsoft.org
@@ -23,11 +23,11 @@ SetupIconFile=..\GUI\Images\VTHash_102.ico
 Compression=lzma/ultra
 SolidCompression=true
 AppCopyright=Boredom Software
-AppVerName=VT Hash Check 1.49
+AppVerName=VT Hash Check 1.50
 AllowUNCPath=false
 UsePreviousGroup=false
 UninstallDisplayIcon={app}\VTHash.exe
-UninstallDisplayName=VT Hash Check 1.49
+UninstallDisplayName=VT Hash Check 1.50
 ShowLanguageDialog=no
 WizardImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\SetupModern21.bmp
 WizardSmallImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\Small\SetupModernSmall26.bmp
