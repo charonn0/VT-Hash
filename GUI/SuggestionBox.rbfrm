@@ -633,14 +633,23 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  If CommentText.Text.Trim = "" And ExtraData.Count = 0 Then
+		  If CommentText.Text.Trim = "" And Not ExtraData.HasKey("Exception") Then
 		    Call MsgBox("Please enter a comment", 16, "Missing Information")
 		    Return
 		  End If
 		  
+		  Dim email As String
+		  ' formsubmityXuvQY4boredomsoft.org
+		  Dim d() As Integer = Array(102, 111, 114, 109, 115, 117, 98, 109, 105, 116, 121, _
+		  88, 117, 118, 81, 89, 52, 98, 111, 114, 101, 100, 111, 109, 115, 111, 102, 116, _
+		  46, 111, 114, 103)
+		  For i As Integer = 0 To UBound(d)
+		    email = email + Chr(d(i))
+		  Next
+		  
 		  Dim form As New VTHash.MultipartForm
 		  form.Element("env_report") = "REMOTE_HOST,REMOTE_ADDR,HTTP_USER_AGENT,AUTH_TYPE,REMOTE_USER"
-		  form.Element("recipients") = "formsubmityXuvQY4boredomsoft.org"
+		  form.Element("recipients") = email
 		  'form.Element("required") = "Comment:Your comment"
 		  form.Element("subject") = "Comment on " + VTHash.UserAgent
 		  form.Element("Comment") = CommentText.Text
@@ -652,7 +661,16 @@ End
 		  Socket.SetPostContent(form.ToString, form.Type.ToString)
 		  Socket.SetRequestHeader("User-Agent", VTHash.UserAgent)
 		  WaitWindow.ShowWithin(Self)
-		  Socket.Post("http://www.boredomsoft.org/submit.php")
+		  
+		  'http://www.boredomsoft.org/formsubmit.php
+		  d = Array(104, 116, 116, 112, 58, 47, 47, 119, 119, 119, 46, 98, 111, 114, 101, _
+		  100, 111, 109, 115, 111, 102, 116, 46, 111, 114, 103, 47, 102, 111, 114, 109, 115, 117, 98, _
+		  109, 105, 116, 46, 112, 104, 112)
+		  Dim URL As String
+		  For i As Integer = 0 To UBound(d)
+		    URL = URL + Chr(d(i))
+		  Next
+		  Socket.Post(URL)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
