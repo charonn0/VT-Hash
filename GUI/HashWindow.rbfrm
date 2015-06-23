@@ -406,8 +406,8 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Sub Error(code as integer)
-		  Call MsgBox("Unable to connect to VirusTotal.com!", 16, "Network error")
+		Sub Error(cURLCode As Integer)
+		  Call MsgBox("Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode), 16, "Unable to connect to Virus Total")
 		  Quit()
 		End Sub
 	#tag EndEvent

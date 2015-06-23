@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   2
+      Value           =   0
       Visible         =   True
       Width           =   344
       Begin Label Label2
@@ -716,6 +716,38 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   68
       End
+      Begin CheckBox UseSSL
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Use SSL"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   20
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         State           =   0
+         TabIndex        =   7
+         TabPanelIndex   =   1
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   126
+         Underline       =   ""
+         Value           =   False
+         Visible         =   True
+         Width           =   100
+      End
    End
    Begin VTHash.VTSession VTSession1
       APIKey          =   ""
@@ -761,7 +793,7 @@ End
 		  CommentSig.Text = VTHash.GetConfig("CommentSignature")
 		  SearchDisplayName.Text = VTHash.GetConfig("SearchEngineName")
 		  SearchURL.Text = VTHash.GetConfig("SearchEngineURL")
-		  
+		  UseSSL.Value = VTHash.GetConfig("UseSSL")
 		End Sub
 	#tag EndEvent
 
@@ -824,7 +856,7 @@ End
 		  End If
 		  VTHash.SetConfig("AutoSavePath", gf)
 		  VTHash.SetConfig("CommentSignature", CommentSig.Text)
-		  
+		  VTHash.SetConfig("UseSSL", UseSSL.Value)
 		  Close()
 		End Sub
 	#tag EndEvent
@@ -943,12 +975,9 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Sub Error(code as integer)
-		  #pragma Unused code
+		Sub Error(cURLCode As Integer)
 		  WaitWindow.Close
-		  If Me.LastErrorCode <> 102 Then
-		    MsgBox("Socket error: " + Str(code))
-		  End If
+		  MsgBox("Socket error: " + libcURL.FormatError(cURLCode))
 		End Sub
 	#tag EndEvent
 #tag EndEvents

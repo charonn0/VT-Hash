@@ -24,7 +24,7 @@ Inherits Application
 		    End If
 		  End If
 		  
-		  
+		  If VTHash.Config.GetType("UseSSL") = PrefStore.TYPE_INVALID Then VTHash.SetConfig("UseSSL", True)
 		End Sub
 	#tag EndEvent
 
