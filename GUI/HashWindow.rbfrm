@@ -345,7 +345,7 @@ End
 	#tag Event
 		Sub Action()
 		  If MsgBox("Cancel this operation?", 52, "VT Hash Check - Confirmation") = 6 Then
-		    Quit()
+		    Self.Close
 		  End If
 		End Sub
 	#tag EndEvent
@@ -393,10 +393,10 @@ End
 		    Self.Close
 		  ElseIf HTTPStatus <> 200 Then
 		    Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "HTTP error")
-		    Quit()
+		    Self.Close
 		  Else
 		    Call MsgBox("Invalid response from Virus Total.", 16, "Parse error")
-		    Quit()
+		    Self.Close
 		  End If
 		End Sub
 	#tag EndEvent
@@ -416,7 +416,7 @@ End
 		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
 		  Call MsgBox(msg.Trim, 16, caption)
-		  Quit()
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

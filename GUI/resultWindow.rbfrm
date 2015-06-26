@@ -688,6 +688,7 @@ End
 
 	#tag Method, Flags = &h0
 		Sub ShowResult(Result As VTHash.Results)
+		  Self.Hide
 		  Select Case result.ResponseCode
 		  Case VT_Code_OK
 		    VTResult = result
@@ -727,7 +728,7 @@ End
 		  Case VT_Code_Not_Found
 		    If result.TargetFile.Length >= 32 * 1024 * 1024 Then
 		      Select Case MsgBox(_
-		        "That file is not present in Virus Total's database. Additionally, the file exceeds 32MB which is the default limit for uploading via the API." + EndOfLine + _
+		        "The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Additionally, the file exceeds 32MB which is the default limit for uploading via the API." + EndOfLine + _
 		        "Some users do not have this limit, would you like to attempt to upload anyway?", 48 + 3, "File too large for API")
 		      Case 6 ' Yes
 		        Dim ul As New FileSubmitWindow
@@ -736,25 +737,19 @@ End
 		      Case 7 ' No
 		        If MsgBox("Would you like to open virustotal.com in your default browser in order to upload this file manually?", 4 + 32, "Open browser?") = 6 Then
 		          ShowURL("https://www.virustotal.com/")
-		          Quit()
-		        Else
-		          Quit()
 		        End If
+		        Self.Close
 		      Case 2 ' Cancel
-		        Quit()
+		        Self.Close
 		      End Select
-		    ElseIf MsgBox("That file is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
+		    ElseIf MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
 		      Dim ul As New FileSubmitWindow
-		      Self.Hide
 		      ul.SubmitFile(Self, Result.TargetFile, VTHash.GetConfig("APIKey"))
-		      'ShowURL("https://www.virustotal.com/")
-		    Else
-		      Quit(0)
 		    End If
-		    'Quit()
+		    Self.Close
 		  Case VT_Code_Still_Proccessing
-		    Call MsgBox("That file is still waiting to be analyzed. Please try again later.", 64, "Still processing")
-		    Quit()
+		    Call MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is still waiting to be analyzed. Please try again later.", 64, "Still processing")
+		    Self.Close
 		    
 		  End Select
 		End Sub
@@ -862,7 +857,7 @@ End
 	#tag Event
 		Sub Action()
 		  ShowURL(VTResult.Permalink)
-		  Quit(0)
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -305,7 +305,7 @@ End
 		  If Not Socket.IsTransferComplete And MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then
 		    Return
 		  End If
-		  Quit
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents
