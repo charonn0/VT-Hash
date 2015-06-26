@@ -185,16 +185,11 @@ Begin Window FileSubmitWindow
    End
    Begin VTHash.VTSession Socket
       APIKey          =   ""
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
       Left            =   379
       LockedInPosition=   False
       Scope           =   0
-      Secure          =   True
       TabPanelIndex   =   0
       Top             =   -21
       Width           =   32
@@ -319,8 +314,21 @@ End
 		Sub Error(cURLCode As Integer)
 		  Percentages.Text = ""
 		  Label1.Text = "Upload error."
-		  MsgBox("Socket error")
 		  PushButton1.Caption = "Close"
+		  Dim msg, caption As String
+		  Select Case cURLCode
+		  Case libcURL.Errors.SSL_CA_CERT, libcURL.Errors.PEER_FAILED_VERIFICATION
+		    caption = "Untrusted SSL Certificate"
+		    msg = "The server claiming to be virustotal.com presented an invalid or untrusted SSL certificate. The operation has been aborted."
+		  Else
+		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
+		    caption = "Unable to connect to Virus Total"
+		  End Select
+		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		  End If
+		  Call MsgBox(msg.Trim, 16, caption)
 		End Sub
 	#tag EndEvent
 	#tag Event

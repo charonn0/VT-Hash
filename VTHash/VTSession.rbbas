@@ -62,9 +62,10 @@ Inherits libcURL.cURLClient
 
 	#tag Method, Flags = &h0
 		Sub SendRequest(Type As RequestType, Request As Dictionary)
+		  Me.EasyItem.UseErrorBuffer = True
 		  Me.EasyItem.Secure = True
-		  Me.EasyItem.CA_ListFile = Nil
-		  Dim APIURL As String 
+		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
+		  Dim APIURL As String
 		  If VTHash.GetConfig("UseSSL") Then
 		    APIURL = "https://www.virustotal.com"
 		  Else
@@ -132,35 +133,6 @@ Inherits libcURL.cURLClient
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="CertificateFile"
-			Visible=true
-			Group="Behavior"
-			Type="FolderItem"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CertificatePassword"
-			Visible=true
-			Group="Behavior"
-			Type="String"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CertificateRejectionFile"
-			Visible=true
-			Group="Behavior"
-			Type="FolderItem"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ConnectionType"
-			Visible=true
-			Group="Behavior"
-			InitialValue="2"
-			Type="Integer"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -179,13 +151,6 @@ Inherits libcURL.cURLClient
 			Visible=true
 			Group="ID"
 			InheritedFrom="SSLSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Secure"
-			Visible=true
-			Group="Behavior"
-			Type="Boolean"
-			InheritedFrom="HTTPSecureSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

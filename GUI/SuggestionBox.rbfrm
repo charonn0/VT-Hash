@@ -609,8 +609,11 @@ End
 	#tag Event
 		Sub Error(cURLCode As Integer)
 		  WaitWindow.Close
-		  Call MsgBox("Unable to connect to Virus Total: " + libcURL.FormatError(cURLCode), 16, "libcURL error " + Str(cURLCode))
 		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		  End If
+		  Call MsgBox("Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode), 16, "Unable to connect")
 		End Sub
 	#tag EndEvent
 	#tag Event

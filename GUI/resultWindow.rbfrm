@@ -476,32 +476,22 @@ Begin Window ResultWindow
    End
    Begin VTHash.VTSession RescanSession
       APIKey          =   ""
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
-      Secure          =   True
       TabPanelIndex   =   0
       Top             =   -18
       Width           =   32
    End
    Begin VTHash.VTSession CommentSession
       APIKey          =   ""
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
-      Secure          =   True
       TabPanelIndex   =   0
       Top             =   14
       Width           =   32
@@ -1006,6 +996,24 @@ End
 		  
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Sub Error(cURLCode As Integer)
+		  Dim msg, caption As String
+		  Select Case cURLCode
+		  Case libcURL.Errors.SSL_CA_CERT, libcURL.Errors.PEER_FAILED_VERIFICATION
+		    caption = "Untrusted SSL Certificate"
+		    msg = "The server claiming to be virustotal.com presented an invalid or untrusted SSL certificate. The operation has been aborted."
+		  Else
+		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
+		    caption = "Unable to connect to Virus Total"
+		  End Select
+		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		  End If
+		  Call MsgBox(msg.Trim, 16, caption)
+		End Sub
+	#tag EndEvent
 #tag EndEvents
 #tag Events CommentSession
 	#tag Event
@@ -1018,6 +1026,24 @@ End
 		    MsgBox("Invalid response from Virus Total.")
 		  End If
 		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Error(cURLCode As Integer)
+		  Dim msg, caption As String
+		  Select Case cURLCode
+		  Case libcURL.Errors.SSL_CA_CERT, libcURL.Errors.PEER_FAILED_VERIFICATION
+		    caption = "Untrusted SSL Certificate"
+		    msg = "The server claiming to be virustotal.com presented an invalid or untrusted SSL certificate. The operation has been aborted."
+		  Else
+		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
+		    caption = "Unable to connect to Virus Total"
+		  End Select
+		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		  End If
+		  Call MsgBox(msg.Trim, 16, caption)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
