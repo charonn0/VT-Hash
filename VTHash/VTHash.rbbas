@@ -264,7 +264,7 @@ Protected Module VTHash
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = AgentVersion, Type = Double, Dynamic = False, Default = \"2.0", Scope = Protected
+	#tag Constant, Name = AgentVersion, Type = Double, Dynamic = False, Default = \"2.1", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = Mode_CSV, Type = Double, Dynamic = False, Default = \"1", Scope = Public
@@ -279,7 +279,7 @@ Protected Module VTHash
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.50", Scope = Protected
+	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.51", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public

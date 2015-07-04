@@ -44,6 +44,11 @@ Source: license.txt; DestDir: {app}; DestName: license.txt; Flags: touch
 Source: ..\GUI\Images\VTHash_102.ico; DestDir: {app}; MinVersion: 0,6.0.6000
 Source: triddefs.trd; DestDir: {app}; Flags: overwritereadonly
 Source: TrIDLib.dll; DestDir: {app}; Flags: overwritereadonly
+Source: libcurl.dll; DestDir: {app}; Flags: overwritereadonly
+Source: libeay32.dll; DestDir: {app}; Flags: overwritereadonly
+Source: libidn-11.dll; DestDir: {app}; Flags: overwritereadonly
+Source: ssleay32.dll; DestDir: {app}; Flags: overwritereadonly
+Source: zlib1.dll; DestDir: {app}; Flags: overwritereadonly
 
 
 [Registry]
