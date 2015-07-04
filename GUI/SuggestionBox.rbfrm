@@ -24,21 +24,16 @@ Begin Window SuggestionBox
    Title           =   "Suggestion Box"
    Visible         =   True
    Width           =   4.27e+2
-   Begin HTTPSocket Socket
-      Address         =   ""
-      BytesAvailable  =   0
-      BytesLeftToSend =   0
+   Begin libcURL.cURLClient Socket
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
-      IsConnected     =   0
       Left            =   437
       LockedInPosition=   False
-      Port            =   0
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   -15
       Width           =   32
-      yield           =   0
    End
    Begin PagePanel PagePanel1
       AutoDeactivate  =   True
@@ -613,19 +608,23 @@ End
 
 #tag Events Socket
 	#tag Event
-		Sub Error(code as integer)
+		Sub Error(cURLCode As Integer)
 		  WaitWindow.Close
-		  If code <> 102 Then Call MsgBox("Your comment was not submitted, please try again later.", 16, "Error " + Str(code))
+		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		  End If
+		  Call MsgBox("Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode), 16, "Unable to connect")
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Sub PageReceived(url as string, httpStatus as integer, headers as internetHeaders, content as string)
+		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
 		  WaitWindow.Close
-		  If httpStatus = 200 Then
+		  If Me.GetStatusCode = 200 Then
 		    Call MsgBox("Your comment was submitted successfully.", 64, "Comment submitted")
 		    Self.Close
 		  Else
-		    Call MsgBox("Your comment was not submitted, please try again later.", 16, "HTTP Error " + Str(httpStatus))
+		    Call MsgBox("Your comment was not submitted, please try again later.", 16, "HTTP Error " + Str(Me.GetStatusCode))
 		  End If
 		End Sub
 	#tag EndEvent
@@ -637,40 +636,22 @@ End
 		    Call MsgBox("Please enter a comment", 16, "Missing Information")
 		    Return
 		  End If
-		  
-		  Dim email As String
-		  ' formsubmityXuvQY4boredomsoft.org
-		  Dim d() As Integer = Array(102, 111, 114, 109, 115, 117, 98, 109, 105, 116, 121, _
-		  88, 117, 118, 81, 89, 52, 98, 111, 114, 101, 100, 111, 109, 115, 111, 102, 116, _
-		  46, 111, 114, 103)
-		  For i As Integer = 0 To UBound(d)
-		    email = email + Chr(d(i))
-		  Next
-		  
-		  Dim form As New VTHash.MultipartForm
-		  form.Element("env_report") = "REMOTE_HOST,REMOTE_ADDR,HTTP_USER_AGENT,AUTH_TYPE,REMOTE_USER"
-		  form.Element("recipients") = email
-		  'form.Element("required") = "Comment:Your comment"
-		  form.Element("subject") = "Comment on " + VTHash.UserAgent
-		  form.Element("Comment") = CommentText.Text
-		  If CommentName.Text <> "" Then form.Element("realname") = CommentName.Text
-		  If CommentAddress.Text <> "" Then form.Element("email") = CommentAddress.Text
+
+		  Dim form As New Dictionary
+		  form.Value("env_report") = "REMOTE_HOST,REMOTE_ADDR,HTTP_USER_AGENT,AUTH_TYPE,REMOTE_USER"
+		  form.Value("recipients") = "formsubmityXuvQY4boredomsoft.org"
+		  'form.Value("required") = "Comment:Your comment"
+		  form.Value("subject") = "Comment on " + VTHash.UserAgent
+		  form.Value("Comment") = CommentText.Text
+		  If CommentName.Text <> "" Then form.Value("realname") = CommentName.Text
+		  If CommentAddress.Text <> "" Then form.Value("email") = CommentAddress.Text
 		  For Each key As String In ExtraData.Keys
-		    form.Element(key) = ExtraData.Value(key)
+		    form.Value(key) = ExtraData.Value(key)
 		  Next
-		  Socket.SetPostContent(form.ToString, form.Type.ToString)
-		  Socket.SetRequestHeader("User-Agent", VTHash.UserAgent)
+		  Socket.EasyItem.UserAgent = VTHash.UserAgent
 		  WaitWindow.ShowWithin(Self)
-		  
-		  'http://www.boredomsoft.org/formsubmit.php
-		  d = Array(104, 116, 116, 112, 58, 47, 47, 119, 119, 119, 46, 98, 111, 114, 101, _
-		  100, 111, 109, 115, 111, 102, 116, 46, 111, 114, 103, 47, 102, 111, 114, 109, 115, 117, 98, _
-		  109, 105, 116, 46, 112, 104, 112)
-		  Dim URL As String
-		  For i As Integer = 0 To UBound(d)
-		    URL = URL + Chr(d(i))
-		  Next
-		  Socket.Post(URL)
+
+		  Socket.Post("http://www.boredomsoft.org/submit.php", form)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

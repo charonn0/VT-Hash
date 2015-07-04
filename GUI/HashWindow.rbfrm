@@ -278,16 +278,11 @@ Begin Window HashWindow
    End
    Begin VTHash.VTSession VTSocket
       APIKey          =   ""
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
       Left            =   425
       LockedInPosition=   False
       Scope           =   1
-      Secure          =   True
       TabPanelIndex   =   0
       Top             =   0
       Width           =   32
@@ -350,7 +345,7 @@ End
 	#tag Event
 		Sub Action()
 		  If MsgBox("Cancel this operation?", 52, "VT Hash Check - Confirmation") = 6 Then
-		    Quit()
+		    Self.Close
 		  End If
 		End Sub
 	#tag EndEvent
@@ -398,17 +393,30 @@ End
 		    Self.Close
 		  ElseIf HTTPStatus <> 200 Then
 		    Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "HTTP error")
-		    Quit()
+		    Self.Close
 		  Else
 		    Call MsgBox("Invalid response from Virus Total.", 16, "Parse error")
-		    Quit()
+		    Self.Close
 		  End If
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Sub Error(code as integer)
-		  Call MsgBox("Unable to connect to VirusTotal.com!", 16, "Network error")
-		  Quit()
+		Sub Error(cURLCode As Integer)
+		  Dim msg, caption As String
+		  Select Case cURLCode
+		  Case libcURL.Errors.SSL_CA_CERT, libcURL.Errors.PEER_FAILED_VERIFICATION
+		    caption = "Untrusted SSL Certificate"
+		    msg = "The server claiming to be virustotal.com presented an invalid or untrusted SSL certificate. The operation has been aborted."
+		  Else
+		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
+		    caption = "Unable to connect to Virus Total"
+		  End Select
+		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		  End If
+		  Call MsgBox(msg.Trim, 16, caption)
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

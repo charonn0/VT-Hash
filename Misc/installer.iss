@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1E579B65-503B-4184-B481-5138124BEE1D}
 AppName=VT Hash Check
-AppVersion=1.50
+AppVersion=1.51
 ;AppVerName=VT Hash Check 1.22
 AppPublisher=Boredom Software
 AppPublisherURL=http://www.boredomsoft.org
@@ -23,11 +23,11 @@ SetupIconFile=..\GUI\Images\VTHash_102.ico
 Compression=lzma/ultra
 SolidCompression=true
 AppCopyright=Boredom Software
-AppVerName=VT Hash Check 1.50
+AppVerName=VT Hash Check 1.51
 AllowUNCPath=false
 UsePreviousGroup=false
 UninstallDisplayIcon={app}\VTHash.exe
-UninstallDisplayName=VT Hash Check 1.50
+UninstallDisplayName=VT Hash Check 1.51
 ShowLanguageDialog=no
 WizardImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\SetupModern21.bmp
 WizardSmallImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\Small\SetupModernSmall26.bmp
@@ -36,7 +36,7 @@ WizardSmallImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\Small\Se
 Name: english; MessagesFile: compiler:Default.isl
 
 [Files]
-Source: ..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\VTHash.exe; DestDir: {app}; Flags: ignoreversion replacesameversion touch
+Source: ..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\*; DestDir: {app}; Flags: ignoreversion replacesameversion touch
 Source: ..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\VTHash Libs\*; DestDir: {app}\VTHash Libs; Flags: ignoreversion recursesubdirs createallsubdirs touch; Languages: 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: readme.txt; DestDir: {app}; DestName: readme.txt; Flags: touch

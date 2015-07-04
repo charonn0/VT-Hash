@@ -185,16 +185,11 @@ Begin Window FileSubmitWindow
    End
    Begin VTHash.VTSession Socket
       APIKey          =   ""
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
       Left            =   379
       LockedInPosition=   False
       Scope           =   0
-      Secure          =   True
       TabPanelIndex   =   0
       Top             =   -21
       Width           =   32
@@ -307,49 +302,33 @@ End
 		  'Socket.Disconnect
 		  'End If
 		  'Self.Close
-		  If Socket.IsConnected And MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then
+		  If Not Socket.IsTransferComplete And MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then
 		    Return
 		  End If
-		  Quit
+		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events Socket
 	#tag Event
-		Sub Error(code as integer)
-		  #pragma Unused code
+		Sub Error(cURLCode As Integer)
 		  Percentages.Text = ""
-		  If Me.LastErrorCode = 102 Then
-		    Dim raw As String = Me.ReadAll
-		    Dim body As Integer = InStr(raw, CRLF + CRLF)
-		    Dim MessageBody As String = Right(raw, raw.Len - body)
-		    raw = Replace(raw, MessageBody, "").Trim
-		    Dim line As String
-		    line = NthField(raw, CRLF, 1)
-		    raw = Replace(raw, line + CRLF, "")
-		    raw = Replace(raw, MessageBody, "")
-		    'Dim Headers As New HTTPHeaders(raw)
-		    dim StatusCode As Integer = Val(NthField(line, " ", 2))
-		    If StatusCode = 200 Then
-		      Dim js As New JSONItem(MessageBody.Trim)
-		      If js.Value("response_code") = VT_Code_OK Then
-		        PermaURL = js.Value("permalink")
-		        Permalink.Visible = True
-		        Permalink.URL = PermaURL
-		        Label1.Text = "Upload complete."
-		      Else
-		        Label1.Text = "Upload error."
-		        MsgBox("Virus Total says: (" + Str(js.Value("response_code").Int32Value) + ") " + js.Value("verbose_msg"))
-		      End If
-		    Else
-		      Label1.Text = "Upload error."
-		      MsgBox("HTTP error.")
-		    End If
-		  Else
-		    Label1.Text = "Upload error."
-		    MsgBox("Socket error")
-		  End If
+		  Label1.Text = "Upload error."
 		  PushButton1.Caption = "Close"
+		  Dim msg, caption As String
+		  Select Case cURLCode
+		  Case libcURL.Errors.SSL_CA_CERT, libcURL.Errors.PEER_FAILED_VERIFICATION
+		    caption = "Untrusted SSL Certificate"
+		    msg = "The server claiming to be virustotal.com presented an invalid or untrusted SSL certificate. The operation has been aborted."
+		  Else
+		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
+		    caption = "Unable to connect to Virus Total"
+		  End Select
+		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		  End If
+		  Call MsgBox(msg.Trim, 16, caption)
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -373,12 +352,9 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
-		  #pragma Unused BytesLeft
-		  tTotal = tTotal + bytesSent
-		  'Dim snt As Integer = TargetFile.Length - bytesLeft
-		  ProgressBar1.Value = tTotal * 100 \ fLength
-		  Percentages.Text = FormatBytes(tTotal) + " of " + FormatBytes(fLength) + " bytes sent"
+		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		  ProgressBar1.Value = ulNow * 100 \ ultotal
+		  Percentages.Text = FormatBytes(ulNow) + " of " + FormatBytes(ultotal) + " bytes sent"
 		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
 		    Label1.Text = "Awaiting response..."
 		  Else

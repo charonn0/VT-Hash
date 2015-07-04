@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   2
+      Value           =   0
       Visible         =   True
       Width           =   344
       Begin Label Label2
@@ -716,19 +716,46 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   68
       End
+      Begin CheckBox UseSSL
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Use SSL"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   20
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         State           =   0
+         TabIndex        =   7
+         TabPanelIndex   =   1
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   126
+         Underline       =   ""
+         Value           =   False
+         Visible         =   True
+         Width           =   100
+      End
    End
    Begin VTHash.VTSession VTSession1
       APIKey          =   ""
-      CertificateFile =   ""
-      CertificatePassword=   ""
-      CertificateRejectionFile=   ""
-      ConnectionType  =   3
       Height          =   32
       Index           =   -2147483648
       Left            =   364
       LockedInPosition=   False
       Scope           =   1
-      Secure          =   True
       TabPanelIndex   =   0
       Top             =   23
       Width           =   32
@@ -761,7 +788,7 @@ End
 		  CommentSig.Text = VTHash.GetConfig("CommentSignature")
 		  SearchDisplayName.Text = VTHash.GetConfig("SearchEngineName")
 		  SearchURL.Text = VTHash.GetConfig("SearchEngineURL")
-		  
+		  UseSSL.Value = VTHash.GetConfig("UseSSL")
 		End Sub
 	#tag EndEvent
 
@@ -824,7 +851,7 @@ End
 		  End If
 		  VTHash.SetConfig("AutoSavePath", gf)
 		  VTHash.SetConfig("CommentSignature", CommentSig.Text)
-		  
+		  VTHash.SetConfig("UseSSL", UseSSL.Value)
 		  Close()
 		End Sub
 	#tag EndEvent
@@ -943,12 +970,22 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Sub Error(code as integer)
-		  #pragma Unused code
+		Sub Error(cURLCode As Integer)
 		  WaitWindow.Close
-		  If Me.LastErrorCode <> 102 Then
-		    MsgBox("Socket error: " + Str(code))
+		  Dim msg, caption As String
+		  Select Case cURLCode
+		  Case libcURL.Errors.SSL_CA_CERT, libcURL.Errors.PEER_FAILED_VERIFICATION
+		    caption = "Untrusted SSL Certificate"
+		    msg = "The server claiming to be virustotal.com presented an invalid or untrusted SSL certificate. The operation has been aborted."
+		  Else
+		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
+		    caption = "Unable to connect to Virus Total"
+		  End Select
+		  
+		  If Me.EasyItem.ErrorBuffer <> "" Then
+		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
+		  Call MsgBox(msg.Trim, 16, caption)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -24,7 +24,7 @@ Inherits Application
 		    End If
 		  End If
 		  
-		  
+		  If VTHash.Config.GetType("UseSSL") = PrefStore.TYPE_INVALID Then VTHash.SetConfig("UseSSL", True)
 		End Sub
 	#tag EndEvent
 
@@ -53,12 +53,21 @@ Inherits Application
 
 	#tag Event
 		Function UnhandledException(error As RuntimeException) As Boolean
-		  If error IsA JSONException Then
+		  Select Case error
+		  Case IsA JSONException
 		    Call MsgBox("VirusTotal.com provided an improperly formatted response." + EndOfLine + "Please try again later.", 16, "Illegal Response Format")
+		    mIsQuitting = True
 		    Quit(1)
-		  Else
-		    Return ErrorWindow.ShowException(error)
-		  End If
+		    
+		  Case IsA PlatformNotSupportedException
+		    If Instr(error.Message, "libcurl") > 0 Then
+		      Call MsgBox("libcurl could not be loaded! The program will now exit.", 16, "Fatal error: missing dependency")
+		      mIsQuitting = True
+		      Quit(2)
+		    End If
+		    
+		  End Select
+		  Return ErrorWindow.ShowException(error)
 		End Function
 	#tag EndEvent
 

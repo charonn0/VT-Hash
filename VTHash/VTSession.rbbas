@@ -1,27 +1,16 @@
 #tag Class
 Protected Class VTSession
-Inherits HTTPSecureSocket
+Inherits libcURL.cURLClient
 	#tag Event
-		Sub PageReceived(url as string, httpStatus as integer, headers as internetHeaders, content as string)
-		  #pragma Unused url
-		  #pragma Unused headers
-		  
-		  If httpStatus = 200 Then
-		    Try
-		      RaiseEvent Response(New JSONItem(content.Trim), httpStatus)
-		    Catch Err As JSONException
-		      RaiseEvent Response(Nil, httpStatus)
-		    End Try
+		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
+		  Dim responseobj As JSONItem
+		  If Me.GetStatusCode = 200 Then
+		    responseobj = New JSONItem(Me.GetDownloadedData)
+		    RaiseEvent Response(responseobj, 200)
 		  Else
-		    RaiseEvent Response(Nil, httpStatus)
+		    RaiseEvent Response(Nil, Me.GetStatusCode)
 		  End If
 		End Sub
-	#tag EndEvent
-
-	#tag Event
-		Function SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
-		  Return RaiseEvent SendProgress(BytesSent, BytesLeft)
-		End Function
 	#tag EndEvent
 
 
@@ -30,10 +19,10 @@ Inherits HTTPSecureSocket
 		  'ResourceID is either a file hash or a URL
 		  'Comment is the text of the comment to post.
 		  
-		  Dim frm As New MultipartForm
-		  frm.Element("apikey") = APIKey
-		  frm.Element("resource") = ResourceID
-		  frm.Element("comment") = Comment
+		  Dim frm As New Dictionary
+		  frm.Value("apikey") = APIKey
+		  frm.Value("resource") = ResourceID
+		  frm.Value("comment") = Comment
 		  SendRequest(RequestType.Comment, frm)
 		End Sub
 	#tag EndMethod
@@ -43,18 +32,18 @@ Inherits HTTPSecureSocket
 		  'ResourceID is either a file hash or a URL
 		  'Report type is a member of the RequestType Enum. e.g. VTHash.RequestType.FileReport
 		  
-		  Dim frm As New MultipartForm
-		  frm.Element("apikey") = APIKey
+		  Dim frm As New Dictionary
+		  frm.Value("apikey") = APIKey
 		  
 		  Select Case Type
 		  Case RequestType.FileReport
-		    frm.Element("resource") = ResourceID
+		    frm.Value("resource") = ResourceID
 		  Case VTHash.RequestType.URLReport
-		    frm.Element("url") = ResourceID
+		    frm.Value("url") = ResourceID
 		  Case RequestType.IPReport
-		    frm.Element("ip") = ResourceID
+		    frm.Value("ip") = ResourceID
 		  Case RequestType.DomainReport
-		    frm.Element("domain") = ResourceID
+		    frm.Value("domain") = ResourceID
 		  End Select
 		  SendRequest(Type, frm)
 		End Sub
@@ -64,27 +53,31 @@ Inherits HTTPSecureSocket
 		Sub RequestRescan(ResourceID As String)
 		  'ResourceID is either a file hash or a URL
 		  
-		  Dim frm As New MultipartForm
-		  frm.Element("resource") = ResourceID
-		  frm.Element("apikey") = APIKey
+		  Dim frm As New Dictionary
+		  frm.Value("resource") = ResourceID
+		  frm.Value("apikey") = APIKey
 		  SendRequest(RequestType.Rescan, frm)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub SendRequest(Type As RequestType, Request As MultipartForm)
-		  Dim APIURL As String = "www.virustotal.com"
+		Sub SendRequest(Type As RequestType, Request As Dictionary)
+		  Me.EasyItem.UseErrorBuffer = True
+		  Me.EasyItem.Secure = True
+		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
+		  Dim APIURL As String
+		  If VTHash.GetConfig("UseSSL") Then
+		    APIURL = "https://www.virustotal.com"
+		  Else
+		    APIURL = "http://www.virustotal.com"
+		  End If
+		  
 		  Dim HTTPVerb As String = "POST"
-		  Dim content As String
-		  content = Request.ToString
-		  Dim t As ContentType = "multipart/form-data; boundary=" + Request.Boundary
-		  Me.SetRequestHeader("User-Agent", VTHash.UserAgent)
-		  Me.SetPostContent(Content, t.ToString)
+		  Me.EasyItem.UserAgent = VTHash.UserAgent
 		  Select Case Type
 		  Case RequestType.Comment
 		    APIURL = APIURL + VT_Put_Comment
 		  Case RequestType.DomainReport
-		    #pragma Warning "Fix me" ' RB doesn't send the post content with GET
 		    HTTPVerb = "GET"
 		    APIURL = APIURL + VT_Get_Domain
 		  Case RequestType.FileReport
@@ -92,7 +85,6 @@ Inherits HTTPSecureSocket
 		  Case RequestType.FileSubmit
 		    APIURL = APIURL + VT_Submit_File
 		  Case RequestType.IPReport
-		    #pragma Warning "Fix me" ' RB doesn't send the post content with GET
 		    HTTPVerb = "GET"
 		    APIURL = APIURL + VT_Get_IP
 		  Case RequestType.Rescan
@@ -103,16 +95,20 @@ Inherits HTTPSecureSocket
 		    Raise New RuntimeException
 		  End Select
 		  
-		  Super.SendRequest(HTTPVerb, APIURL)
-		  
+		  If HTTPVerb = "POST" Then
+		    Me.Post(APIURL, Request)
+		  ElseIf HTTPVerb = "GET" Then
+		    Me.SetFormData(Request)
+		    Me.Get(APIURL)
+		  End If
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub SubmitFile(File As FolderItem)
-		  Dim frm As New MultipartForm
-		  frm.Element("apikey") = APIKey
-		  frm.Element("file") = File
+		  Dim frm As New Dictionary
+		  frm.Value("apikey") = APIKey
+		  frm.Value("file") = File
 		  SendRequest(RequestType.FileSubmit, frm)
 		End Sub
 	#tag EndMethod
@@ -120,10 +116,6 @@ Inherits HTTPSecureSocket
 
 	#tag Hook, Flags = &h0
 		Event Response(ResponseObject As JSONItem, HTTPStatus As Integer)
-	#tag EndHook
-
-	#tag Hook, Flags = &h0
-		Event SendProgress(BytesSent As Integer, BytesLeft As Integer) As Boolean
 	#tag EndHook
 
 
@@ -139,35 +131,6 @@ Inherits HTTPSecureSocket
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CertificateFile"
-			Visible=true
-			Group="Behavior"
-			Type="FolderItem"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CertificatePassword"
-			Visible=true
-			Group="Behavior"
-			Type="String"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CertificateRejectionFile"
-			Visible=true
-			Group="Behavior"
-			Type="FolderItem"
-			InheritedFrom="HTTPSecureSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ConnectionType"
-			Visible=true
-			Group="Behavior"
-			InitialValue="2"
-			Type="Integer"
-			InheritedFrom="HTTPSecureSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -188,13 +151,6 @@ Inherits HTTPSecureSocket
 			Visible=true
 			Group="ID"
 			InheritedFrom="SSLSocket"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Secure"
-			Visible=true
-			Group="Behavior"
-			Type="Boolean"
-			InheritedFrom="HTTPSecureSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
