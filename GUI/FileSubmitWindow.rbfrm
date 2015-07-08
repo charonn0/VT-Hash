@@ -353,6 +353,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		  #pragma Unused dlnow
+		  #pragma Unused dlTotal
 		  ProgressBar1.Value = ulNow * 100 \ ultotal
 		  Percentages.Text = FormatBytes(ulNow) + " of " + FormatBytes(ultotal) + " bytes sent"
 		  If ProgressBar1.Value >= ProgressBar1.Maximum Then

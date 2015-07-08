@@ -3,6 +3,8 @@ Protected Class VTSession
 Inherits libcURL.cURLClient
 	#tag Event
 		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
+		  #pragma Unused BytesRead
+		  #pragma Unused BytesWritten
 		  Dim responseobj As JSONItem
 		  If Me.GetStatusCode = 200 Then
 		    responseobj = New JSONItem(Me.GetDownloadedData)

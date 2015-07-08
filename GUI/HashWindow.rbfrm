@@ -372,6 +372,7 @@ End
 		    hp.Process(bs.Read(chunksz))
 		    HashPercent = bs.Position * 100 / bs.Length
 		    GUITimer.Mode = Timer.ModeSingle
+		    App.YieldToNextThread
 		  Wend
 		  bs.Close
 		  mHash = ConvertEncoding(Win32.Crypto.EncodeHex(hp.Value).Uppercase, Encodings.UTF8)
