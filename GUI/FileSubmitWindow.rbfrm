@@ -131,7 +131,7 @@ Begin Window FileSubmitWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   114
+      Left            =   174
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -144,10 +144,10 @@ Begin Window FileSubmitWindow
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   84
+      Top             =   82
       Underline       =   ""
       Visible         =   True
-      Width           =   115
+      Width           =   82
    End
    Begin Label Percentages
       AutoDeactivate  =   True
@@ -206,6 +206,37 @@ Begin Window FileSubmitWindow
       Top             =   17
       Width           =   32
    End
+   Begin PushButton PauseButton
+      AutoDeactivate  =   True
+      Bold            =   False
+      ButtonStyle     =   0
+      Cancel          =   ""
+      Caption         =   "Pause"
+      Default         =   ""
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   87
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   ""
+      TextUnit        =   0
+      Top             =   82
+      Underline       =   False
+      Visible         =   True
+      Width           =   82
+   End
 End
 #tag EndWindow
 
@@ -261,6 +292,7 @@ End
 		  'Socket.Yield = True
 		  Socket.APIKey = APIKey
 		  Socket.SubmitFile(File)
+		  Self.Title = "Submitting '" + TargetFile.Name + "'"
 		End Sub
 	#tag EndMethod
 
@@ -302,8 +334,12 @@ End
 		  'Socket.Disconnect
 		  'End If
 		  'Self.Close
-		  If Not Socket.IsTransferComplete And MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then
-		    Return
+		  If Not Socket.IsTransferComplete Then
+		    Call Socket.EasyItem.Pause
+		    If MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then
+		      Call Socket.EasyItem.Resume
+		      Return
+		    End If
 		  End If
 		  Self.Close
 		End Sub
@@ -315,6 +351,7 @@ End
 		  Percentages.Text = ""
 		  Label1.Text = "Upload error."
 		  PushButton1.Caption = "Close"
+		  PauseButton.Enabled = False
 		  Dim msg, caption As String
 		  Select Case cURLCode
 		  Case libcURL.Errors.SSL_CA_CERT, libcURL.Errors.PEER_FAILED_VERIFICATION
@@ -348,6 +385,7 @@ End
 		    MsgBox("Error: " + Str(HTTPStatus) + ".")
 		  End If
 		  PushButton1.Caption = "Close"
+		  PauseButton.Enabled = False
 		  ProgressBar1.Value = ProgressBar1.Maximum
 		End Sub
 	#tag EndEvent
@@ -375,6 +413,21 @@ End
 		    Label1.Text = Label1.Text + "."
 		  ElseIf Right(Label1.Text, 1) = "." Then
 		    Label1.Text = Label1.Text + "."
+		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PauseButton
+	#tag Event
+		Sub Action()
+		  If Me.Caption = "Pause" Then 
+		    Call Socket.EasyItem.Pause 
+		    Me.Caption = "Resume"
+		    Self.Title = "Submitting '" + TargetFile.Name + "' - Paused"
+		  Else 
+		    Call Socket.EasyItem.Resume
+		    Me.Caption = "Pause"
+		    Self.Title = "Submitting '" + TargetFile.Name + "'"
 		  End If
 		End Sub
 	#tag EndEvent
