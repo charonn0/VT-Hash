@@ -414,7 +414,7 @@ End
 		  End Select
 		  
 		  If Me.EasyItem.ErrorBuffer <> "" Then
-		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
 		  Call MsgBox(msg.Trim, 16, caption)
 		  Self.Close

@@ -31,8 +31,11 @@ Begin Window SuggestionBox
       Left            =   437
       LockedInPosition=   False
       Scope           =   0
+      TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -15
+      Visible         =   True
       Width           =   32
    End
    Begin PagePanel PagePanel1
@@ -53,6 +56,7 @@ Begin Window SuggestionBox
       Scope           =   0
       TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   0
       Value           =   0
       Visible         =   True
@@ -79,6 +83,7 @@ Begin Window SuggestionBox
          Selectable      =   True
          TabIndex        =   0
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Feedback, bug reports, praise, and criticisms are gratefully accepted. In addition to your comment, anonymous data about your computer will also be shared. Provide an e-mail address if you would like a reply."
          TextAlign       =   0
          TextColor       =   0
@@ -196,6 +201,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "What is being shared?"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -304,6 +310,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -381,6 +388,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   8
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "e-mail:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -421,6 +429,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   2
+         TabStop         =   True
          Text            =   "Go Back"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -612,7 +621,7 @@ End
 		  WaitWindow.Close
 		  
 		  If Me.EasyItem.ErrorBuffer <> "" Then
-		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
 		  Call MsgBox("Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode), 16, "Unable to connect")
 		End Sub
@@ -636,7 +645,7 @@ End
 		    Call MsgBox("Please enter a comment", 16, "Missing Information")
 		    Return
 		  End If
-
+		  
 		  Dim form As New Dictionary
 		  form.Value("env_report") = "REMOTE_HOST,REMOTE_ADDR,HTTP_USER_AGENT,AUTH_TYPE,REMOTE_USER"
 		  form.Value("recipients") = "formsubmityXuvQY4boredomsoft.org"
@@ -650,7 +659,7 @@ End
 		  Next
 		  Socket.EasyItem.UserAgent = VTHash.UserAgent
 		  WaitWindow.ShowWithin(Self)
-
+		  
 		  Socket.Post("http://www.boredomsoft.org/submit.php", form)
 		End Sub
 	#tag EndEvent

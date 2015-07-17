@@ -363,7 +363,7 @@ End
 		  End Select
 		  
 		  If Me.EasyItem.ErrorBuffer <> "" Then
-		    System.DebugLog(CurrentMethodName + ":curl(" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
+		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
 		  Call MsgBox(msg.Trim, 16, caption)
 		End Sub
@@ -420,11 +420,11 @@ End
 #tag Events PauseButton
 	#tag Event
 		Sub Action()
-		  If Me.Caption = "Pause" Then 
-		    Call Socket.EasyItem.Pause 
+		  If Me.Caption = "Pause" Then
+		    Call Socket.EasyItem.Pause
 		    Me.Caption = "Resume"
 		    Self.Title = "Submitting '" + TargetFile.Name + "' - Paused"
-		  Else 
+		  Else
 		    Call Socket.EasyItem.Resume
 		    Me.Caption = "Pause"
 		    Self.Title = "Submitting '" + TargetFile.Name + "'"
