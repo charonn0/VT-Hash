@@ -386,19 +386,26 @@ End
 #tag Events VTSocket
 	#tag Event
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
-		  If HTTPStatus = 200 And ResponseObject <> Nil Then
+		  Select Case True
+		  Case HTTPStatus = 200 And ResponseObject <> Nil
 		    Dim rw As New ResultWindow
 		    Dim v As New VTHash.Results(ResponseObject, mTargetFile)
 		    v.HashValue = mHash
 		    rw.ShowResult(v)
 		    Self.Close
-		  ElseIf HTTPStatus <> 200 Then
-		    Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "HTTP error")
-		    Self.Close
+		  Case HTTPStatus <> 200
+		    Select Case HTTPStatus
+		    Case 204
+		      Call MsgBox("Virus Total refused to accept your query at this time. Please try again in a few minutes.", 16, "Rate limit exceeded")
+		    Case 403
+		      Call MsgBox("Your Virus Total account is not allowed to perform that action." + Str(HTTPStatus), 16, "Access denied")
+		    Else
+		      Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "HTTP error")
+		    End Select
 		  Else
 		    Call MsgBox("Invalid response from Virus Total.", 16, "Parse error")
-		    Self.Close
-		  End If
+		  End Select
+		  Self.Close
 		End Sub
 	#tag EndEvent
 	#tag Event
