@@ -39,9 +39,7 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
-      TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   50
       Value           =   0
       Visible         =   True
@@ -69,7 +67,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Ready."
       TextAlign       =   0
       TextColor       =   32768
@@ -104,7 +101,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Status:"
       TextAlign       =   2
       TextColor       =   0
@@ -152,7 +148,6 @@ Begin Window UpdateWindow
       Address         =   ""
       BytesAvailable  =   0
       BytesLeftToSend =   0
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       IsConnected     =   0
@@ -160,11 +155,8 @@ Begin Window UpdateWindow
       LockedInPosition=   False
       Port            =   0
       Scope           =   0
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   80
-      Visible         =   True
       Width           =   32
       yield           =   0
    End
@@ -210,16 +202,13 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
-      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   69
       Value           =   0
       Visible         =   True
       Width           =   388
    End
    Begin Timer GetTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   304
@@ -227,11 +216,8 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   250
       Scope           =   0
-      TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   80
-      Visible         =   True
       Width           =   32
    End
    Begin PushButton PushButton2
@@ -287,7 +273,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -322,7 +307,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -336,7 +320,6 @@ Begin Window UpdateWindow
       Width           =   69
    End
    Begin Timer SpeedTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   341
@@ -344,11 +327,8 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   1000
       Scope           =   0
-      TabIndex        =   11
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   80
-      Visible         =   True
       Width           =   32
    End
 End
@@ -388,6 +368,23 @@ End
 		  data = DecodeBase64(data)
 		  Return Picture.FromData(data)
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DeleteDir(Dir As FolderItem)
+		  Dim f() As FolderItem
+		  Dim c As Integer = Dir.Count
+		  For i As Integer = 1 To c
+		    f.Append(Dir.Item(i))
+		  Next
+		  
+		  For i As Integer = 0 To UBound(f)
+		    If f(i).Directory Then DeleteDir(f(i))
+		    f(i).Delete
+		  Next
+		  
+		  Dir.Delete
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -500,6 +497,13 @@ End
 		  If MsgBox("A newer version is available. Would you like the download this update now?", 36, "An update is available.") = 6 Then
 		    Dim items As JSONItem = UpdateInfo.Child("files")
 		    DownloadDirectory = SpecialFolder.Temporary.Child(App.ExecutableFile.Name + "_Update")
+		    If DownloadDirectory.Exists Then
+		      If Not DownloadDirectory.Directory Then
+		        DownloadDirectory.Delete
+		      Else
+		        DeleteDir(DownloadDirectory)
+		      End If
+		    End If
 		    DownloadDirectory.CreateAsFolder
 		    Dim i As Integer
 		    For i = 0 To items.Count - 1
@@ -684,7 +688,15 @@ End
 		      If MsgBox("A newer version is available. Would you like the download this update now?", 36, "An update is available.") = 6 Then
 		        Dim items As JSONItem = UpdateInfo.Child("files")
 		        DownloadDirectory = SpecialFolder.Temporary.Child(App.ExecutableFile.Name + "_Update")
+		        If DownloadDirectory.Exists Then
+		          If Not DownloadDirectory.Directory Then
+		            DownloadDirectory.Delete
+		          Else
+		            DeleteDir(DownloadDirectory)
+		          End If
+		        End If
 		        DownloadDirectory.CreateAsFolder
+		        
 		        Dim i As Integer
 		        For i = 0 To items.Count - 1
 		          Files.Append(items(i))
