@@ -380,6 +380,17 @@ End
 		  App.YieldToNextThread
 		  VTSocket.APIKey = VTHash.GetConfig("APIKey")
 		  VTSocket.GetReport(mHash, VTHash.RequestType.FileReport)
+		  
+		Exception Err As IOException
+		  Dim msg As String = "Unable to open the target file: "
+		  If Err.ErrorNumber <> 0 Then
+		    msg = msg + Win32.FormatError(Err.ErrorNumber) + "(" + Str(Err.ErrorNumber) + ")"
+		  Else
+		    Err.Message = "Unknown error."
+		  End If
+		  Call MsgBox(msg, 16, "File Error")
+		  App.mIsQuitting = True
+		  Quit()
 		End Sub
 	#tag EndEvent
 #tag EndEvents
