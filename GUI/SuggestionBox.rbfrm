@@ -623,17 +623,17 @@ End
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
-		  Call MsgBox("Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode), 16, "Unable to connect")
+		  Call MsgBox("Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode), 16, "VT Hash Check - Unable to connect")
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
 		  WaitWindow.Close
 		  If Me.GetStatusCode = 200 Then
-		    Call MsgBox("Your comment was submitted successfully.", 64, "Comment submitted")
+		    Call MsgBox("Your comment was submitted successfully.", 64, "VT Hash Check - Comment submitted")
 		    Self.Close
 		  Else
-		    Call MsgBox("Your comment was not submitted, please try again later.", 16, "HTTP Error " + Str(Me.GetStatusCode))
+		    Call MsgBox("Your comment was not submitted, please try again later.", 16, "VT Hash Check - HTTP Error " + Str(Me.GetStatusCode))
 		  End If
 		End Sub
 	#tag EndEvent
@@ -642,7 +642,7 @@ End
 	#tag Event
 		Sub Action()
 		  If CommentText.Text.Trim = "" And Not ExtraData.HasKey("Exception") Then
-		    Call MsgBox("Please enter a comment", 16, "Missing Information")
+		    Call MsgBox("Please enter a comment", 16, "VT Hash Check - Missing Information")
 		    Return
 		  End If
 		  

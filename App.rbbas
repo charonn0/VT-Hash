@@ -35,13 +35,13 @@ Inherits Application
 		  Case item = Nil, item.AbsolutePath.Trim = ""
 		    Return
 		  Case Not item.Exists
-		    Call MsgBox(item.AbsolutePath + " does not exist.", 16, "File not found")
+		    Call MsgBox(item.AbsolutePath + " does not exist.", 16, "VT Hash Check - File not found")
 		    mIsQuitting = True
 		  Case item.Directory
-		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "Invalid file")
+		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "VT Hash Check - Invalid file")
 		    mIsQuitting = True
 		  Case item.Length > 128 * 1024 * 1024
-		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "Invalid file")
+		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "VT Hash Check - Invalid file")
 		    mIsQuitting = True
 		  Else
 		    Dim w As New HashWindow
@@ -55,13 +55,13 @@ Inherits Application
 		Function UnhandledException(error As RuntimeException) As Boolean
 		  Select Case error
 		  Case IsA JSONException
-		    Call MsgBox("VirusTotal.com provided an improperly formatted response." + EndOfLine + "Please try again later.", 16, "Illegal Response Format")
+		    Call MsgBox("VirusTotal.com provided an improperly formatted response." + EndOfLine + "Please try again later.", 16, "VT Hash Check - Illegal Response Format")
 		    mIsQuitting = True
 		    Quit(1)
 		    
 		  Case IsA PlatformNotSupportedException
 		    If Instr(error.Message, "libcurl") > 0 Then
-		      Call MsgBox("libcurl could not be loaded! The program will now exit.", 16, "Fatal error: missing dependency")
+		      Call MsgBox("libcurl could not be loaded! The program will now exit.", 16, "VT Hash Check - Fatal error: missing dependency")
 		      mIsQuitting = True
 		      Quit(2)
 		    End If

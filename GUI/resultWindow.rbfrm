@@ -163,7 +163,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
       TextColor       =   255
@@ -177,7 +176,6 @@ Begin Window ResultWindow
       Width           =   101
    End
    Begin Timer TridTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   -141
@@ -185,11 +183,8 @@ Begin Window ResultWindow
       Mode            =   0
       Period          =   2500
       Scope           =   0
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -6
-      Visible         =   True
       Width           =   32
    End
    Begin GradientProgressBar ProgBar1
@@ -298,7 +293,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -375,7 +369,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -442,7 +435,6 @@ Begin Window ResultWindow
       Selectable      =   ""
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -484,36 +476,27 @@ Begin Window ResultWindow
    End
    Begin VTHash.VTSession RescanSession
       APIKey          =   ""
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
-      TabIndex        =   13
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -18
-      Visible         =   True
       Width           =   32
    End
    Begin VTHash.VTSession CommentSession
       APIKey          =   ""
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
-      TabIndex        =   14
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   14
-      Visible         =   True
       Width           =   32
    End
    Begin Thread RescanThread
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   555
@@ -521,11 +504,8 @@ Begin Window ResultWindow
       Priority        =   5
       Scope           =   0
       StackSize       =   0
-      TabIndex        =   15
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -18
-      Visible         =   True
       Width           =   32
    End
 End
@@ -561,11 +541,11 @@ End
 	#tag MenuHandler
 		Function OpenFileMenu() As Boolean Handles OpenFileMenu.Action
 			If Win32.IO.IsExecutable(VTResult.TargetFile) Then
-			If MsgBox("Are you sure you want to run this executable?", 4 + 64 + 256, "Execution Confirmation") = 6 Then
+			If MsgBox("Are you sure you want to run this executable?", 4 + 16, "VT Hash Check - Execution Confirmation") = 6 Then
 			VTResult.TargetFile.Launch
 			End If
 			Else
-			If MsgBox("Are you sure you want to open this file?", 4 + 48 + 256, "Open Confirmation") = 6 Then
+			If MsgBox("Are you sure you want to open this file?", 4 + 48, "VT Hash Check - Open Confirmation") = 6 Then
 			VTResult.TargetFile.Launch
 			End If
 			End If
@@ -645,7 +625,7 @@ End
 		      saved.Visible = True
 		    Catch err
 		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
-		      Call MsgBox("An error of type " + t.Name + " occurred while saving the report to " + autosavepath.AbsolutePath, 16, "Unable to save report!")
+		      Call MsgBox("An error of type " + t.Name + " occurred while saving the report to " + autosavepath.AbsolutePath, 16, "VT Hash Check - Unable to save report!")
 		    End Try
 		  End If
 		End Sub
@@ -749,26 +729,26 @@ End
 		    If result.TargetFile.Length >= 32 * 1024 * 1024 Then
 		      Select Case MsgBox(_
 		        "The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Additionally, the file exceeds 32MB which is the default limit for uploading via the API." + EndOfLine + _
-		        "Some users do not have this limit, would you like to attempt to upload anyway?", 48 + 3, "File too large for API")
+		        "Some users do not have this limit, would you like to attempt to upload anyway?", 48 + 3, "VT Hash Check - File too large for API")
 		      Case 6 ' Yes
 		        Dim ul As New FileSubmitWindow
 		        Self.Hide
 		        ul.SubmitFile(Self, Result.TargetFile, VTHash.GetConfig("APIKey"))
 		      Case 7 ' No
-		        If MsgBox("Would you like to open virustotal.com in your default browser in order to upload this file manually?", 4 + 32, "Open browser?") = 6 Then
+		        If MsgBox("Would you like to open virustotal.com in your default browser in order to upload this file manually?", 4 + 32, "VT Hash Check - Open browser?") = 6 Then
 		          ShowURL("https://www.virustotal.com/")
 		        End If
 		        Self.Close
 		      Case 2 ' Cancel
 		        Self.Close
 		      End Select
-		    ElseIf MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Would you like to upload this file?", 52, "Not found") = 6 Then
+		    ElseIf MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Would you like to upload this file?", 52, "VT Hash Check - Not found") = 6 Then
 		      Dim ul As New FileSubmitWindow
 		      ul.SubmitFile(Self, Result.TargetFile, VTHash.GetConfig("APIKey"))
 		    End If
 		    Self.Close
 		  Case VT_Code_Still_Proccessing
-		    Call MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is still waiting to be analyzed. Please try again later.", 64, "Still processing")
+		    Call MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is still waiting to be analyzed. Please try again later.", 64, "VT Hash Check - Still processing")
 		    Self.Close
 		    
 		  End Select
@@ -1000,12 +980,12 @@ End
 		  #pragma Unused HTTPStatus
 		  WaitWindow.Close
 		  If ResponseObject = Nil Then
-		    Call MsgBox("The response was empty. Please try again later.", 16, "Rescan Error")
+		    Call MsgBox("The response was empty. Please try again later.", 16, "VT Hash Check - Rescan Error")
 		  Else
 		    If ResponseObject.Value("response_code").IntegerValue = 1 Then
-		      Call MsgBox("Your request was accepted and added to the queue.", 64, "Rescan Accepted")
+		      Call MsgBox("Your request was accepted and added to the queue.", 64, "VT Hash Check - Rescan Accepted")
 		    Else
-		      Call MsgBox("VirusTotal said: " + ResponseObject.Value("response_code").StringValue, 16, "Rescan Error")
+		      Call MsgBox("VirusTotal said: " + ResponseObject.Value("response_code").StringValue, 16, "VT Hash Check - Rescan Error")
 		    End If
 		  End If
 		  
@@ -1026,7 +1006,7 @@ End
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
-		  Call MsgBox(msg.Trim, 16, caption)
+		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

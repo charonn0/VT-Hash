@@ -39,7 +39,9 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
+      TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   50
       Value           =   0
       Visible         =   True
@@ -67,6 +69,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Ready."
       TextAlign       =   0
       TextColor       =   32768
@@ -101,6 +104,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Status:"
       TextAlign       =   2
       TextColor       =   0
@@ -148,6 +152,7 @@ Begin Window UpdateWindow
       Address         =   ""
       BytesAvailable  =   0
       BytesLeftToSend =   0
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       IsConnected     =   0
@@ -155,8 +160,11 @@ Begin Window UpdateWindow
       LockedInPosition=   False
       Port            =   0
       Scope           =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   80
+      Visible         =   True
       Width           =   32
       yield           =   0
    End
@@ -202,13 +210,16 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
+      TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   69
       Value           =   0
       Visible         =   True
       Width           =   388
    End
    Begin Timer GetTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   304
@@ -216,8 +227,11 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   250
       Scope           =   0
+      TabIndex        =   7
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   80
+      Visible         =   True
       Width           =   32
    End
    Begin PushButton PushButton2
@@ -273,6 +287,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -307,6 +322,7 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -320,6 +336,7 @@ Begin Window UpdateWindow
       Width           =   69
    End
    Begin Timer SpeedTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   341
@@ -327,8 +344,11 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   1000
       Scope           =   0
+      TabIndex        =   11
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   80
+      Visible         =   True
       Width           =   32
    End
 End
@@ -338,7 +358,7 @@ End
 	#tag Event
 		Function CancelClose(appQuitting as Boolean) As Boolean
 		  If Sock.IsConnected Or UBound(Files) > -1 Then
-		    If appQuitting Or MsgBox("Abort update?", 52, "A download is in progress") = 6 Then
+		    If appQuitting Or MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
 		      Self.Reset()
 		    Else
 		      Return True
@@ -494,7 +514,7 @@ End
 		  HandleOptionalValues(UpdateInfo)
 		  Status.Text = "An update package is available."
 		  Status.TextColor = UpdateAvailColor
-		  If MsgBox("A newer version is available. Would you like the download this update now?", 36, "An update is available.") = 6 Then
+		  If MsgBox("A newer version is available. Would you like the download this update now?", 36, "VT Hash Check - An update is available.") = 6 Then
 		    Dim items As JSONItem = UpdateInfo.Child("files")
 		    DownloadDirectory = SpecialFolder.Temporary.Child(App.ExecutableFile.Name + "_Update")
 		    If DownloadDirectory.Exists Then
@@ -644,7 +664,7 @@ End
 		    Sock.Get(UpdateAddress)
 		    SocketMode = Mode_Checking
 		  ElseIf Me.Caption = "Cancel" Then
-		    If MsgBox("Abort update?", 52, "A download is in progress") = 6 Then
+		    If MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
 		      Self.Reset()
 		      Self.Close
 		    End If
@@ -685,7 +705,7 @@ End
 		    If LatestVersion > Currentversion Then
 		      Status.Text = "An update package is available."
 		      Status.TextColor = UpdateAvailColor
-		      If MsgBox("A newer version is available. Would you like the download this update now?", 36, "An update is available.") = 6 Then
+		      If MsgBox("A newer version is available. Would you like the download this update now?", 36, "VT Hash Check - An update is available.") = 6 Then
 		        Dim items As JSONItem = UpdateInfo.Child("files")
 		        DownloadDirectory = SpecialFolder.Temporary.Child(App.ExecutableFile.Name + "_Update")
 		        If DownloadDirectory.Exists Then
@@ -716,7 +736,7 @@ End
 		      Self.Reset
 		      Status.Text = "No new versions available."
 		      Status.TextColor = OKColor
-		      Call MsgBox("There are no newer versions available.", 64, "You have the latest version")
+		      Call MsgBox("There are no newer versions available.", 64, "VT Hash Check - You have the latest version")
 		    End If
 		    
 		  Case Mode_Downloading
@@ -799,7 +819,7 @@ End
 		  PushButton1.Caption = "Cancel"
 		  If UBound(Files) <= -1 Then
 		    Me.Mode = Me.ModeOff
-		    If MsgBox("Download complete. Would you like to apply this update now?", 36, "An update is ready to be applied.") = 6 Then
+		    If MsgBox("Download complete. Would you like to apply this update now?", 36, "VT Hash Check - An update is ready to be applied.") = 6 Then
 		      Self.Close
 		    Else
 		      Self.Reset()
@@ -824,7 +844,7 @@ End
 	#tag Event
 		Sub Action()
 		  If Sock.IsConnected Or UBound(Files) > -1 Then
-		    If MsgBox("Abort update?", 52, "A download is in progress") = 6 Then
+		    If MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
 		      Self.Reset()
 		      Self.Close()
 		    End If

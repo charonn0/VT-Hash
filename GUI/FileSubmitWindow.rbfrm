@@ -365,7 +365,7 @@ End
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
-		  Call MsgBox(msg.Trim, 16, caption)
+		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
 		End Sub
 	#tag EndEvent
 	#tag Event

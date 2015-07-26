@@ -388,7 +388,7 @@ End
 		  Else
 		    Err.Message = "Unknown error."
 		  End If
-		  Call MsgBox(msg, 16, "File Error")
+		  Call MsgBox(msg, 16, "VT Hash Check - File Error")
 		  App.mIsQuitting = True
 		  Quit()
 		End Sub
@@ -407,14 +407,14 @@ End
 		  Case HTTPStatus <> 200
 		    Select Case HTTPStatus
 		    Case 204
-		      Call MsgBox("Virus Total refused to accept your query at this time. Please try again in a few minutes.", 16, "Rate limit exceeded")
+		      Call MsgBox("Virus Total refused to accept your query at this time. Please try again in a few minutes.", 16, "VT Hash Check - Rate limit exceeded")
 		    Case 403
-		      Call MsgBox("Your Virus Total account is not allowed to perform that action." + Str(HTTPStatus), 16, "Access denied")
+		      Call MsgBox("Your Virus Total account is not allowed to perform that action." + Str(HTTPStatus), 16, "VT Hash Check - Access denied")
 		    Else
-		      Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "HTTP error")
+		      Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "VT Hash Check - HTTP error")
 		    End Select
 		  Else
-		    Call MsgBox("Invalid response from Virus Total.", 16, "Parse error")
+		    Call MsgBox("Invalid response from Virus Total.", 16, "VT Hash Check - Parse error")
 		  End Select
 		  Self.Close
 		End Sub
@@ -434,7 +434,7 @@ End
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
-		  Call MsgBox(msg.Trim, 16, caption)
+		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
 		  Self.Close
 		End Sub
 	#tag EndEvent

@@ -828,7 +828,7 @@ End
 		  If KeyValid Then
 		    VTHash.SetConfig("APIKey", APIText.Text)
 		  Else
-		    If MsgBox("The API key is invalid.", 49 + 256, "Wrong key length") = 1 Then
+		    If MsgBox("The API key is invalid.", 49 + 256, "VT Hash Check - Wrong key length") = 1 Then
 		      Self.Close
 		    Else
 		      Return
@@ -908,7 +908,7 @@ End
 		  #pragma Unused Y
 		  If Not KeyValid Then
 		    ShowURL("https://www.virustotal.com/en/faq/#virustotal-api")
-		  ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "Test API key now?") = 6 Then
+		  ElseIf MsgBox("Would you like to send a test request to virustotal.com?", 4 + 32, "VT Hash Check - Test API key now?") = 6 Then
 		    VTSession1.APIKey = APIText.Text
 		    VTSession1.GetReport(eicarhash, VTHash.RequestType.FileReport)
 		    Return True
@@ -995,7 +995,7 @@ End
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
-		  Call MsgBox(msg.Trim, 16, caption)
+		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
