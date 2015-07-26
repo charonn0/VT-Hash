@@ -15,9 +15,7 @@ Protected Module IO
 
 	#tag Method, Flags = &h1
 		Protected Function IsExecutable(File As FolderItem) As Boolean
-		  Dim isExe As Boolean
-		  Call Win32.Libs.AdvApi32.SaferiIsExecutableFileType(File.AbsolutePath, isExe)
-		  Return isExe
+		  Return Win32.Libs.AdvApi32.SaferiIsExecutableFileType(File.AbsolutePath, False)
 		End Function
 	#tag EndMethod
 
