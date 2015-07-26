@@ -971,6 +971,16 @@ End
 		  Dim bs As BinaryStream = BinaryStream.Open(VTResult.TargetFile)
 		  Dim h As New HashesViewer
 		  h.ShowHashes(bs, Self)
+		  
+		Exception Err As IOException
+		  Dim msg As String = "Unable to open the target file: "
+		  If Err.ErrorNumber <> 0 Then
+		    msg = msg + Win32.FormatError(Err.ErrorNumber) + "(" + Str(Err.ErrorNumber) + ")"
+		  Else
+		    Err.Message = "Unknown error."
+		  End If
+		  Call MsgBox(msg, 16, "VT Hash Check - File Error")
+		  
 		End Function
 	#tag EndEvent
 #tag EndEvents
