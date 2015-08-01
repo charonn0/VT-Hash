@@ -36,13 +36,10 @@ Inherits Application
 		    Return
 		  Case Not item.Exists
 		    Call MsgBox(item.AbsolutePath + " does not exist.", 16, "VT Hash Check - File not found")
-		    mIsQuitting = True
 		  Case item.Directory
 		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "VT Hash Check - Invalid file")
-		    mIsQuitting = True
 		  Case item.Length > 128 * 1024 * 1024
 		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "VT Hash Check - Invalid file")
-		    mIsQuitting = True
 		  Else
 		    Dim w As New HashWindow
 		    w.ProcessFile(item)
