@@ -193,10 +193,13 @@ Protected Module libcURL
 		  
 		  Static CA_File As FolderItem
 		  If CA_File = Nil Then
-		    CA_File = GetTemporaryFolderItem()
-		    Dim bs As BinaryStream = BinaryStream.Create(CA_File, True)
-		    bs.Write(DEFAULT_CA_INFO_PEM)
-		    bs.Close
+		    CA_FILE = App.DataFolder.Child("certlist.pem")
+		    If Not CA_File.Exists Then
+		      CA_File = GetTemporaryFolderItem()
+		      Dim bs As BinaryStream = BinaryStream.Create(CA_File, True)
+		      bs.Write(DEFAULT_CA_INFO_PEM)
+		      bs.Close
+		    End If
 		  End If
 		  Return CA_File
 		End Function
