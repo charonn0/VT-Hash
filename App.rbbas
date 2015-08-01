@@ -71,7 +71,9 @@ Inherits Application
 
 	#tag Method, Flags = &h0
 		Function DataFolder() As FolderItem
-		  Dim f As FolderItem
+		  Static f As FolderItem
+		  If f <> Nil Then Return f
+		  
 		  If DebugBuild Then
 		    f = SelectFolder.Child("Boredom Software")
 		  Else
