@@ -989,7 +989,7 @@ End
 		    msg = "The server claiming to be virustotal.com (" + Me.EasyItem.RemoteIP + ") presented an untrusted SSL certificate. The operation has been aborted."
 		    
 		  Case libcURL.Errors.PEER_FAILED_VERIFICATION
-		    caption = "Untrusted SSL Certificate"
+		    caption = "Invalid SSL Certificate"
 		    msg = "The server claiming to be virustotal.com (" + Me.EasyItem.RemoteIP + ") presented an invalid SSL certificate. The operation has been aborted."
 		  Else
 		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
