@@ -488,7 +488,9 @@ End
 		  "Date: " + d.SQLDateTime + EndOfLine + _
 		  "Exception type: " + Introspection.GetType(Err).FullName + EndOfLine + _
 		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine + _
-		  m + EndOfLine + EndOfLine
+		  m + EndOfLine + _
+		  "libcURL version: " + libcURL.Version.Name + EndOfLine + _
+		  EndOfLine
 		  
 		  Dim Error As String =_
 		  "Call stack at last call to Raise:" + EndOfLine + EndOfLine + _
