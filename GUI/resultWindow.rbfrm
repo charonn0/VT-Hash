@@ -583,9 +583,13 @@ End
 
 	#tag MenuHandler
 		Function tridmenu() As Boolean Handles tridmenu.Action
+			If TridLib.IsAvailable Then
 			WaitWindow.ShowWithin(Self)
 			WaitWindow.Refresh()
 			TridTimer.Mode = Timer.ModeSingle
+			Else
+			Call MsgBox("TrIDLib.dll could not be loaded!", 16, "VT Hash Check - Error: missing dependency")
+			End If
 			Return True
 			
 		End Function
