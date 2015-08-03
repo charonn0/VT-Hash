@@ -1,22 +1,6 @@
 #tag Module
 Protected Module Win32
 	#tag Method, Flags = &h1
-		Protected Function CurrentProcessID() As Integer
-		  #If TargetWin32 Then
-		    Return Win32.Libs.Kernel32.GetCurrentProcess()
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function CurrentThreadID() As Integer
-		  #If TargetWin32 Then
-		    Return Win32.Libs.Kernel32.GetCurrentThreadId()
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function FormatError(WinErrorNumber As Integer) As String
 		  //Returns the error message corresponding to a given windows error number.
 		  
@@ -30,14 +14,6 @@ Protected Module Win32
 		  #Else
 		    Return "Not a Windows system. Error number: " + Str(WinErrorNumber)
 		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function GetSystemInfo() As SYSTEM_INFO
-		  Dim info As SYSTEM_INFO
-		  Win32.Libs.Kernel32.GetSystemInfo(info)
-		  Return info
 		End Function
 	#tag EndMethod
 
@@ -79,12 +55,6 @@ Protected Module Win32
 		Protected Function LastError() As Integer
 		  Return Win32.Libs.Kernel32.GetLastError
 		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Sub LastError(Assigns NewErrorNumber As Integer)
-		  Win32.Libs.Kernel32.SetLastError(NewErrorNumber)
-		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
