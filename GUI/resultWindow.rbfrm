@@ -639,16 +639,19 @@ End
 		Private Function saveAs(mode As Integer, f As FolderItem = Nil) As FolderItem
 		  Dim d As New Date
 		  If f = Nil Then
-		    Dim filter As String
+		    Dim filter, ext As String
 		    Select Case mode
 		    Case Mode_CSV
 		      filter = FileTypes1.CommaSeparatedValues
+		      ext = FileTypes1.CommaSeparatedValues.Extensions
 		    Case Mode_Org_JSON, Mode_Unp_JSON
 		      filter = FileTypes1.JavascriptObjectNotation
+		      ext = FileTypes1.JavascriptObjectNotation.Extensions
 		    Case Mode_Text
 		      filter = FileTypes1.Text
+		      ext = FileTypes1.Text.Extensions
 		    End Select
-		    f = GetSaveFolderItem(filter, VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000") + "." + filter)
+		    f = GetSaveFolderItem(filter, VTResult.TargetFile.Name + "_" + Format(d.TotalSeconds, "#######0000000") + ext)
 		  End If
 		  'If Not f.Exists Then f.CreateAsFolder
 		  If f = Nil Then Return Nil
