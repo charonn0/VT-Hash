@@ -49,10 +49,7 @@ Inherits libcURL.cURLHandle
 		    mLastError = libcURL.Errors.INIT_FAILED
 		    Raise New cURLException(Me)
 		  End If
-		  ' by default, only raise the DebugMessage event if we're debugging
-		  #If DebugBuild Then
-		    Me.Verbose = True
-		  #endif
+		  Me.Verbose = VTHash.CurlVerbose
 		End Sub
 	#tag EndMethod
 

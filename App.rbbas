@@ -35,7 +35,28 @@ Inherits Application
 		  Case item = Nil, item.AbsolutePath.Trim = ""
 		    Return
 		  Case Not item.Exists
-		    Call MsgBox(item.AbsolutePath + " does not exist.", 16, "VT Hash Check - File not found")
+		    Select Case item.AbsolutePath
+		    Case "--debug"
+		      VTHash.CurlVerbose = True
+		      
+		    Case "--prefs"
+		      SettingsWindow.ShowModal
+		      
+		    Case "--update"
+		      Dim upd As New UpdateWindow
+		      Dim f As FolderItem = upd.CheckNow("www.boredomsoft.org/updates/vthash.json", VTHash.Version)
+		      If f <> Nil Then
+		        f.Child("vthashsetup.exe").Launch
+		        mIsQuitting = True
+		        Quit
+		      End If
+		      
+		    Case "--about"
+		      AboutWindow.ShowModal
+		      
+		    Else
+		      Call MsgBox(item.AbsolutePath + " does not exist.", 16, "VT Hash Check - File not found")
+		    End Select
 		  Case item.Directory
 		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "VT Hash Check - Invalid file")
 		  Case item.Length > 128 * 1024 * 1024

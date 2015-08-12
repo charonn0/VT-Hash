@@ -251,6 +251,10 @@ Protected Module VTHash
 		Protected Config As PrefStore
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h1
+		Protected CurlVerbose As Boolean
+	#tag EndProperty
+
 	#tag Property, Flags = &h21
 		Private mConfig As PrefStore
 	#tag EndProperty
