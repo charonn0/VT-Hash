@@ -118,6 +118,29 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Sub HandleCurlError(Sender As cURLClient, cURLCode As Integer)
+		  Dim msg, caption As String
+		  Dim server As URI = Sender.EasyItem.URL
+		  msg = "The server claiming to be " + server.Host + " (" + Sender.EasyItem.RemoteIP + ") presented an "
+		  Select Case cURLCode
+		  Case libcURL.Errors.SSL_CA_CERT
+		    caption = "Untrusted SSL Certificate"
+		    msg = msg + "untrusted SSL certificate. The operation has been aborted."
+		    
+		  Case libcURL.Errors.PEER_FAILED_VERIFICATION
+		    caption = "Invalid SSL Certificate"
+		    msg = msg + "presented an invalid SSL certificate. The operation has been aborted."
+		    
+		  Else
+		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
+		    caption = "Unable to connect to Virus Total"
+		  End Select
+		  
+		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function PlatformString() As String
 		  //Returns a human-readable string corresponding to the version, SKU, service pack, and architecture of
 		  //the currently running version of Windows.

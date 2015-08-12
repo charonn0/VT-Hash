@@ -982,24 +982,7 @@ End
 	#tag Event
 		Sub Error(cURLCode As Integer)
 		  WaitWindow.Close
-		  Dim msg, caption As String
-		  Select Case cURLCode
-		  Case libcURL.Errors.SSL_CA_CERT
-		    caption = "Untrusted SSL Certificate"
-		    msg = "The server claiming to be virustotal.com (" + Me.EasyItem.RemoteIP + ") presented an untrusted SSL certificate. The operation has been aborted."
-		    
-		  Case libcURL.Errors.PEER_FAILED_VERIFICATION
-		    caption = "Invalid SSL Certificate"
-		    msg = "The server claiming to be virustotal.com (" + Me.EasyItem.RemoteIP + ") presented an invalid SSL certificate. The operation has been aborted."
-		  Else
-		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
-		    caption = "Unable to connect to Virus Total"
-		  End Select
-		  
-		  If Me.EasyItem.ErrorBuffer <> "" Then
-		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
-		  End If
-		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
+		  VTHash.HandleCurlError(Me, cURLCode)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

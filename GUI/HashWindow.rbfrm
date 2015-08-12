@@ -479,35 +479,18 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Sub Error(cURLCode As Integer)
-		  Dim msg, caption As String
-		  Select Case cURLCode
-		  Case libcURL.Errors.SSL_CA_CERT
-		    caption = "Untrusted SSL Certificate"
-		    msg = "The server claiming to be virustotal.com (" + Me.EasyItem.RemoteIP + ") presented an untrusted SSL certificate. The operation has been aborted."
-		    
-		  Case libcURL.Errors.PEER_FAILED_VERIFICATION
-		    caption = "Invalid SSL Certificate"
-		    msg = "The server claiming to be virustotal.com (" + Me.EasyItem.RemoteIP + ") presented an invalid SSL certificate. The operation has been aborted."
-		  Else
-		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
-		    caption = "Unable to connect to Virus Total"
-		  End Select
-		  
-		  If Me.EasyItem.ErrorBuffer <> "" Then
-		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
-		  End If
-		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
-		  Self.Close
-		End Sub
-	#tag EndEvent
-	#tag Event
 		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
 		  #pragma Unused ulnow
 		  #pragma Unused ultotal
 		  'HashPercent = dlnow * 100 \ dlTotal
 		  'SubmitterGUITimer.Mode = Timer.ModeSingle
 		End Function
+	#tag EndEvent
+	#tag Event
+		Sub Error(cURLCode As Integer)
+		  VTHash.HandleCurlError(Me, cURLCode)
+		  Self.Close
+		End Sub
 	#tag EndEvent
 #tag EndEvents
 #tag Events HashGUITimer

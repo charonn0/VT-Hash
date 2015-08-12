@@ -71,6 +71,7 @@ Class=cURLManager;libcURL/cURLManager.rbbas;&h228A9FFF;&h2287FFFF;false
 Module=LibZ;libcURL/Version/LibZ.rbbas;&h27A4B7FF;&h5F0DF7FF;false
 RawData=DEFAULT_CA_INFO_PEM;../RB-libcURL/DEFAULT_CA_INFO_PEM;&h38D6B7FF;&h0;false
 Class=KeyContainer;Win32/Crypto/KeyContainer.rbbas;&h1A0917FF;&h28D357FF;false
+Class=URI;URI.rbbas;&h5079FFF;&h0;false
 MajorVersion=1
 MinorVersion=0
 SubVersion=0
