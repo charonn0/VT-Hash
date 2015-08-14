@@ -644,9 +644,10 @@ Inherits libcURL.cURLHandle
 		  Dim mb As MemoryBlock = data
 		  Dim s As String = mb.StringValue(0, size)
 		  #If Debugbuild And RBVersion < 2013 Then
-		    If info <> curl_infotype.data_in And info <> curl_infotype.data_out Then
+		    If info <> curl_infotype.data_in And info <> curl_infotype.data_out And info <> curl_infotype.ssl_in And info <> curl_infotype.ssl_out Then
 		      Dim lines() As String = Split(s, EndOfLine.Windows)
 		      For i As Integer = 0 To UBound(lines)
+		        If lines(i).Trim = "" Then Continue
 		        System.DebugLog("libcURL 0x" + Hex(mHandle) + " (" + curl_infoname(info) + "): " + lines(i))
 		      Next
 		    End If
