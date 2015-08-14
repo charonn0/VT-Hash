@@ -169,7 +169,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Comment Signature (optional): "
          TextAlign       =   2
          TextColor       =   &h000000
@@ -320,7 +319,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   4
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "API Key:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -386,7 +384,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Algorithm:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -450,7 +447,6 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   2
-         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
@@ -674,7 +670,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   2
          TabPanelIndex   =   3
-         TabStop         =   True
          Text            =   "URL:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -709,7 +704,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   3
-         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -757,17 +751,13 @@ Begin Window SettingsWindow
    End
    Begin VTHash.VTSession VTSession1
       APIKey          =   ""
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   364
       LockedInPosition=   False
       Scope           =   1
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   23
-      Visible         =   True
       Width           =   32
    End
 End
@@ -775,7 +765,15 @@ End
 
 #tag WindowCode
 	#tag Event
+		Sub Close()
+		  mWaiter.Close
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
+		  mWaiter = New WaitWindow
+		  mWaiter.Visible = False
 		  AlgSelect.AddRow("MD5")
 		  AlgSelect.AddRow("SHA1")
 		  AlgSelect.AddRow("SHA256")
@@ -805,6 +803,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private KeyValid As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mWaiter As WaitWindow
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -920,7 +922,7 @@ End
 		Sub MouseUp(X As Integer, Y As Integer)
 		  #pragma Unused X
 		  #pragma Unused Y
-		  WaitWindow.ShowWithin(Self)
+		  mWaiter.ShowWithin(Self)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -968,7 +970,7 @@ End
 	#tag Event
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  #pragma Unused HTTPStatus
-		  WaitWindow.Close
+		  mWaiter.Close
 		  If ResponseObject <> Nil And ResponseObject.HasName("total") Then
 		    MsgBox("API key test succeeded.")
 		  ElseIf ResponseObject <> Nil Then
@@ -981,7 +983,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Error(cURLCode As Integer)
-		  WaitWindow.Close
+		  mWaiter.Close
 		  VTHash.HandleCurlError(Me, cURLCode)
 		End Sub
 	#tag EndEvent

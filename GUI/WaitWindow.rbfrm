@@ -8,7 +8,7 @@ Begin Window WaitWindow
    FullScreen      =   False
    HasBackColor    =   False
    Height          =   6.4e+1
-   ImplicitInstance=   True
+   ImplicitInstance=   False
    LiveResize      =   True
    MacProcID       =   0
    MaxHeight       =   32000
@@ -46,7 +46,6 @@ Begin Window WaitWindow
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Thinking..."
       TextAlign       =   1
       TextColor       =   &h000000
@@ -79,11 +78,42 @@ Begin Window WaitWindow
          Visible         =   True
          Width           =   16
       End
+      Begin ProgressBar ProgressBar1
+         AutoDeactivate  =   True
+         Enabled         =   True
+         Height          =   8
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "Label1"
+         Left            =   0
+         LockBottom      =   True
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   True
+         LockTop         =   False
+         Maximum         =   0
+         Scope           =   0
+         TabPanelIndex   =   0
+         Top             =   56
+         Value           =   0
+         Visible         =   True
+         Width           =   160
+      End
    End
 End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h0
+		Sub SetProgress(Value As Integer, Max As Integer)
+		  If Self.Visible Then
+		    ProgressBar1.Maximum = 100
+		    ProgressBar1.Value = Value * 100 / Max
+		    'Self.Refresh(False)
+		  End If
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub ShowWithin(parentWindow As Window, facing As Integer = - 1)
 		  Super.ShowWithin(parentWindow, facing)

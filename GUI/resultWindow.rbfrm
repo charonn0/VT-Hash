@@ -178,13 +178,13 @@ Begin Window ResultWindow
    Begin Timer TridTimer
       Height          =   32
       Index           =   -2147483648
-      Left            =   -141
+      Left            =   555
       LockedInPosition=   False
       Mode            =   0
       Period          =   2500
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   -6
+      Top             =   14
       Width           =   32
    End
    Begin GradientProgressBar ProgBar1
@@ -512,6 +512,20 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Close()
+		  mWaiter.Close
+		End Sub
+	#tag EndEvent
+
+	#tag Event
+		Sub Open()
+		  mWaiter = New WaitWindow
+		  mWaiter.Visible = False
+		End Sub
+	#tag EndEvent
+
+
 	#tag MenuHandler
 		Function AboutMenu() As Boolean Handles AboutMenu.Action
 			AboutWindow.ShowModal
@@ -556,8 +570,8 @@ End
 
 	#tag MenuHandler
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
-			WaitWindow.ShowWithin(Self)
-			WaitWindow.Refresh()
+			mWaiter.ShowWithin(Self)
+			mWaiter.Refresh()
 			RescanThread.Run
 			Return True
 			
@@ -584,8 +598,8 @@ End
 	#tag MenuHandler
 		Function tridmenu() As Boolean Handles tridmenu.Action
 			If TridLib.IsAvailable Then
-			WaitWindow.ShowWithin(Self)
-			WaitWindow.Refresh()
+			mWaiter.ShowWithin(Self)
+			mWaiter.Refresh()
 			TridTimer.Mode = Timer.ModeSingle
 			Else
 			Call MsgBox("TrIDLib.dll could not be loaded!", 16, "VT Hash Check - Error: missing dependency")
@@ -763,6 +777,10 @@ End
 	#tag EndMethod
 
 
+	#tag Property, Flags = &h21
+		Private mWaiter As WaitWindow
+	#tag EndProperty
+
 	#tag Property, Flags = &h0
 		savedAs As FolderItem
 	#tag EndProperty
@@ -895,7 +913,7 @@ End
 	#tag Event
 		Sub Action()
 		  Dim s() As TridLib.FileType = VTResult.TargetFile.TrIDTypes()
-		  WaitWindow.Close
+		  mWaiter.Close
 		  Dim tridwin As New TridResultWindow
 		  tridwin.ShowResult(s, VTResult.TargetFile, Self)
 		End Sub
@@ -947,8 +965,8 @@ End
 		Sub Action()
 		  Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
 		  If comment <> "" Then
-		    WaitWindow.ShowWithin(Self)
-		    WaitWindow.Refresh()
+		    mWaiter.ShowWithin(Self)
+		    mWaiter.Refresh()
 		    CommentSession.APIKey = VTHash.GetConfig("APIKey")
 		    CommentSession.AddComment(VTResult.Resource, comment)
 		  End If
@@ -995,7 +1013,7 @@ End
 	#tag Event
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  #pragma Unused HTTPStatus
-		  WaitWindow.Close
+		  mWaiter.Close
 		  If ResponseObject = Nil Then
 		    Call MsgBox("The response was empty. Please try again later.", 16, "VT Hash Check - Rescan Error")
 		  Else
@@ -1018,7 +1036,7 @@ End
 	#tag Event
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  #pragma Unused HTTPStatus
-		  WaitWindow.Close
+		  mWaiter.Close
 		  If ResponseObject <> Nil Then
 		    MsgBox(ResponseObject.Value("verbose_msg"))
 		  Else

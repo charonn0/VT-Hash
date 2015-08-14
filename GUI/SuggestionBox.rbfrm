@@ -25,17 +25,13 @@ Begin Window SuggestionBox
    Visible         =   True
    Width           =   4.27e+2
    Begin libcURL.cURLClient Socket
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   437
       LockedInPosition=   False
       Scope           =   0
-      TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -15
-      Visible         =   True
       Width           =   32
    End
    Begin PagePanel PagePanel1
@@ -56,9 +52,8 @@ Begin Window SuggestionBox
       Scope           =   0
       TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   0
-      Value           =   0
+      Value           =   1
       Visible         =   True
       Width           =   425
       Begin Label Label1
@@ -83,7 +78,6 @@ Begin Window SuggestionBox
          Selectable      =   True
          TabIndex        =   0
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Feedback, bug reports, praise, and criticisms are gratefully accepted. In addition to your comment, anonymous data about your computer will also be shared. Provide an e-mail address if you would like a reply."
          TextAlign       =   0
          TextColor       =   0
@@ -201,7 +195,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "What is being shared?"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -310,7 +303,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -388,7 +380,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   8
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "e-mail:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -429,7 +420,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   2
-         TabStop         =   True
          Text            =   "Go Back"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -440,7 +430,6 @@ Begin Window SuggestionBox
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
-         Width           =   152
          Width           =   67
       End
       Begin PrettyListBox ExtraInfoView
@@ -529,7 +518,15 @@ End
 
 #tag WindowCode
 	#tag Event
+		Sub Close()
+		  mWaiter.Close
+		End Sub
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
+		  mWaiter = New WaitWindow
+		  mWaiter.Visible = False
 		  PopulateInfo()
 		End Sub
 	#tag EndEvent
@@ -613,13 +610,17 @@ End
 		Private mExtraData As Dictionary
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private mWaiter As WaitWindow
+	#tag EndProperty
+
 
 #tag EndWindowCode
 
 #tag Events Socket
 	#tag Event
 		Sub Error(cURLCode As Integer)
-		  WaitWindow.Close
+		  mWaiter.Close
 		  
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
@@ -629,7 +630,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
-		  WaitWindow.Close
+		  mWaiter.Close
 		  If Me.GetStatusCode = 200 Then
 		    Call MsgBox("Your comment was submitted successfully.", 64, "VT Hash Check - Comment submitted")
 		    Self.Close
@@ -637,6 +638,13 @@ End
 		    Call MsgBox("Your comment was not submitted, please try again later.", 16, "VT Hash Check - HTTP Error " + Str(Me.GetStatusCode))
 		  End If
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		  #pragma Unused dlTotal
+		  #pragma Unused dlnow
+		  mWaiter.SetProgress(ulnow, ultotal)
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events PushButton1
@@ -659,7 +667,7 @@ End
 		    form.Value(key) = ExtraData.Value(key)
 		  Next
 		  Socket.EasyItem.UserAgent = VTHash.UserAgent
-		  WaitWindow.ShowWithin(Self)
+		  mWaiter.ShowWithin(Self)
 		  
 		  Socket.Post("http://www.boredomsoft.org/submit.php", form)
 		End Sub
