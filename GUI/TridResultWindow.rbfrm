@@ -128,9 +128,10 @@ End
 		    Listbox1.AddRow("Unknown (plain text?)", "100%")
 		  End If
 		  
-		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
-		  ShowCentered(Me, ScreenNumber)
 		  
+		  Dim ScreenNumber As Integer = 0
+		  If ParentWindow <> Nil Then ScreenNumber = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
+		  ShowCentered(Me, ScreenNumber)
 		  Me.ShowModal
 		End Sub
 	#tag EndMethod
