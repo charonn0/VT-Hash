@@ -441,6 +441,7 @@ Begin Window SuggestionBox
          Underline       =   ""
          Visible         =   True
          Width           =   152
+         Width           =   67
       End
       Begin PrettyListBox ExtraInfoView
          AutoDeactivate  =   True
@@ -707,6 +708,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub MouseMove(X As Integer, Y As Integer)
+		  Me.MouseCursor = System.Cursors.StandardPointer
 		  Dim row, column As Integer
 		  row = Me.RowFromXY(X, Y)
 		  column = Me.ColumnFromXY(X, Y)
@@ -717,17 +719,21 @@ End
 		      Return
 		    End If
 		  End If
-		  Me.MouseCursor = System.Cursors.StandardPointer
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Function MouseDown(x As Integer, y As Integer) As Boolean
-		  Dim r, c As Integer
-		  c = Me.ColumnFromXY(x, y)
-		  r = Me.RowFromXY(x, y)
-		  If r < 0 Or c < 0 Then Return False
-		  Dim iseditable As Boolean = Me.Cell(r, 0) <> "Exception" And Not mExtraData.Value(Me.Cell(r, 0)) IsA FolderItem
-		  Return iseditable And r < Me.ListCount And r > -1 And c = 1
+		  Dim row, column As Integer
+		  row = Me.RowFromXY(X, Y)
+		  column = Me.ColumnFromXY(X, Y)
+		  If column <> 1 Then Return False
+		  
+		  If row > -1 And row < Me.ListCount Then
+		    Dim iseditable As Boolean = Me.Cell(row, 0) <> "Exception"' And Not mExtraData.Value(Me.Cell(row, 0)) IsA FolderItem
+		    Return iseditable And row < Me.ListCount And row > -1 And column = 1
+		  End If
+		  
+		  
 		  
 		End Function
 	#tag EndEvent
@@ -737,14 +743,18 @@ End
 		  row = Me.RowFromXY(X, Y)
 		  column = Me.ColumnFromXY(X, Y)
 		  If column <> 1 Then Return
-		  If row > -1 And row < Me.ListCount And Me.RowTag(row) <> Nil Then
-		    If Me.RowTag(row) IsA FolderItem Then
+		  
+		  If row > -1 And row < Me.ListCount Then
+		    Select Case True
+		    Case Me.RowTag(row) IsA FolderItem
 		      Dim f As FolderItem = Me.RowTag(row)
 		      f.ShowInExplorer
-		    Else
+		      
+		    Case VarType(Me.RowTag(row)) = Variant.TypeString
 		      Me.CellType(row, column) = Listbox.TypeEditable
 		      Me.EditCell(row, column)
-		    End If
+		      
+		    End Select
 		  End If
 		End Sub
 	#tag EndEvent
@@ -755,6 +765,37 @@ End
 		  value = Me.Cell(row, 1)
 		  ExtraData.Value(name) = value
 		End Sub
+	#tag EndEvent
+	#tag Event
+		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
+		  Dim row As Integer = Me.RowFromXY(X, Y)
+		  If row > -1 And row < Me.ListCount Then
+		    Select Case True
+		    Case Me.Cell(row, 0) = "Exception", Me.Cell(row, 0) = "User's config.dat"
+		      Return False
+		      
+		    Case mExtraData.HasKey(Me.Cell(row, 0))
+		      Dim mnu As New MenuItem("Remove")
+		      mnu.Tag = row
+		      base.Append(mnu)
+		      Return True
+		    End Select
+		  End If
+		  
+		  
+		  
+		End Function
+	#tag EndEvent
+	#tag Event
+		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
+		  Select Case hitItem.Text
+		  Case "Remove"
+		    Dim row As Integer = hitItem.Tag
+		    mExtraData.Remove(Me.Cell(row, 0))
+		    Me.RemoveRow(row)
+		    Return True
+		  End Select
+		End Function
 	#tag EndEvent
 #tag EndEvents
 #tag Events PushButton3
