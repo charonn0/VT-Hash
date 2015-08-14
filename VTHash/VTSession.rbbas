@@ -65,7 +65,7 @@ Inherits libcURL.cURLClient
 	#tag Method, Flags = &h0
 		Sub SendRequest(Type As RequestType, Request As Dictionary)
 		  Me.EasyItem.UseErrorBuffer = True
-		  Me.EasyItem.Secure = True
+		  Me.EasyItem.Secure = App.Secure
 		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
 		  Dim APIURL As String
 		  If VTHash.GetConfig("UseSSL") Then

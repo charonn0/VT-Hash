@@ -41,6 +41,13 @@ Inherits Application
 		      
 		    Case "--prefs"
 		      SettingsWindow.ShowModal
+		      mIsQuitting = True
+		      
+		    Case "--trid"
+		      mTridMode = True
+		      
+		    Case "--insecure"
+		      mInsecure = True
 		      
 		    Case "--update"
 		      Dim upd As New UpdateWindow
@@ -53,6 +60,7 @@ Inherits Application
 		      
 		    Case "--about"
 		      AboutWindow.ShowModal
+		      mIsQuitting = True
 		      
 		    Else
 		      Call MsgBox(item.AbsolutePath + " does not exist.", 16, "VT Hash Check - File not found")
@@ -62,8 +70,20 @@ Inherits Application
 		  Case item.Length > 128 * 1024 * 1024
 		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "VT Hash Check - Invalid file")
 		  Else
-		    Dim w As New HashWindow
-		    w.ProcessFile(item)
+		    If Not mTridMode Then
+		      Dim w As New HashWindow
+		      w.ProcessFile(item)
+		    Else ' trid mode
+		      If TridLib.IsAvailable Then
+		        Dim s() As TridLib.FileType = item.TrIDTypes()
+		        Dim tridwin As New TridResultWindow
+		        tridwin.ShowResult(s, item, Nil)
+		      Else
+		        Call MsgBox("TrIDLib.dll could not be loaded!", 16, "VT Hash Check - Error: missing dependency")
+		        mIsQuitting = True
+		        Quit
+		      End If
+		    End If
 		    mOpened = True
 		  End Select
 		End Sub
@@ -112,6 +132,16 @@ Inherits Application
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function Secure() As Boolean
+		  Return Not mInsecure
+		End Function
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h21
+		Private mInsecure As Boolean
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		mIsQuitting As Boolean
@@ -119,6 +149,10 @@ Inherits Application
 
 	#tag Property, Flags = &h21
 		Private mOpened As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mTridMode As Boolean
 	#tag EndProperty
 
 
