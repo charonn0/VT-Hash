@@ -231,7 +231,7 @@ Inherits libcURL.cURLHandle
 		      Raise New cURLException(Sender)
 		    Else
 		      If Sender.Verbose Then
-		        LogEvent("libcURL 0x" + Hex(Sender.Handle) + " (RB-libcURL): Callbacks are not supported by the selected SSL library.")
+		        System.DebugLog("libcURL 0x" + Hex(Sender.Handle) + " (RB-libcURL): Callbacks are not supported by the selected SSL library.")
 		      End If
 		    End If
 		  End If
@@ -655,7 +655,7 @@ Inherits libcURL.cURLHandle
 		      Dim lines() As String = Split(s, EndOfLine.Windows)
 		      For i As Integer = 0 To UBound(lines)
 		        If lines(i).Trim = "" Then Continue
-		        LogEvent("libcURL 0x" + Hex(mHandle) + " (" + curl_infoname(info) + "): " + lines(i))
+		        System.DebugLog("libcURL 0x" + Hex(mHandle) + " (" + curl_infoname(info) + "): " + lines(i))
 		      Next
 		    End If
 		  #endif
