@@ -518,15 +518,7 @@ End
 
 #tag WindowCode
 	#tag Event
-		Sub Close()
-		  mWaiter.Close
-		End Sub
-	#tag EndEvent
-
-	#tag Event
 		Sub Open()
-		  mWaiter = New WaitWindow
-		  mWaiter.Visible = False
 		  PopulateInfo()
 		End Sub
 	#tag EndEvent
@@ -621,6 +613,7 @@ End
 	#tag Event
 		Sub Error(cURLCode As Integer)
 		  mWaiter.Close
+		  mWaiter = Nil
 		  
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
@@ -631,6 +624,7 @@ End
 	#tag Event
 		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
 		  mWaiter.Close
+		  mWaiter = Nil
 		  If Me.GetStatusCode = 200 Then
 		    Call MsgBox("Your comment was submitted successfully.", 64, "VT Hash Check - Comment submitted")
 		    Self.Close
@@ -667,6 +661,7 @@ End
 		    form.Value(key) = ExtraData.Value(key)
 		  Next
 		  Socket.EasyItem.UserAgent = VTHash.UserAgent
+		  mWaiter = New WaitWindow
 		  mWaiter.ShowWithin(Self)
 		  
 		  Socket.Post("http://www.boredomsoft.org/submit.php", form)

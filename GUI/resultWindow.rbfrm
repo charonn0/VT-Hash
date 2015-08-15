@@ -163,6 +163,7 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
       TextColor       =   255
@@ -176,6 +177,7 @@ Begin Window ResultWindow
       Width           =   101
    End
    Begin Timer TridTimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   555
@@ -183,8 +185,11 @@ Begin Window ResultWindow
       Mode            =   0
       Period          =   2500
       Scope           =   0
+      TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   14
+      Visible         =   True
       Width           =   32
    End
    Begin GradientProgressBar ProgBar1
@@ -293,6 +298,7 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -369,6 +375,7 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -435,6 +442,7 @@ Begin Window ResultWindow
       Selectable      =   ""
       TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -476,27 +484,36 @@ Begin Window ResultWindow
    End
    Begin VTHash.VTSession RescanSession
       APIKey          =   ""
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
+      TabIndex        =   13
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -18
+      Visible         =   True
       Width           =   32
    End
    Begin VTHash.VTSession CommentSession
       APIKey          =   ""
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
+      TabIndex        =   14
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   14
+      Visible         =   True
       Width           =   32
    End
    Begin Thread RescanThread
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   555
@@ -504,28 +521,17 @@ Begin Window ResultWindow
       Priority        =   5
       Scope           =   0
       StackSize       =   0
+      TabIndex        =   15
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -18
+      Visible         =   True
       Width           =   32
    End
 End
 #tag EndWindow
 
 #tag WindowCode
-	#tag Event
-		Sub Close()
-		  mWaiter.Close
-		End Sub
-	#tag EndEvent
-
-	#tag Event
-		Sub Open()
-		  mWaiter = New WaitWindow
-		  mWaiter.Visible = False
-		End Sub
-	#tag EndEvent
-
-
 	#tag MenuHandler
 		Function AboutMenu() As Boolean Handles AboutMenu.Action
 			AboutWindow.ShowModal
@@ -570,6 +576,7 @@ End
 
 	#tag MenuHandler
 		Function RescanMenu() As Boolean Handles RescanMenu.Action
+			mWaiter = New WaitWindow
 			mWaiter.ShowWithin(Self)
 			mWaiter.Refresh()
 			RescanThread.Run
@@ -598,6 +605,7 @@ End
 	#tag MenuHandler
 		Function tridmenu() As Boolean Handles tridmenu.Action
 			If TridLib.IsAvailable Then
+			mWaiter = New WaitWindow
 			mWaiter.ShowWithin(Self)
 			mWaiter.Refresh()
 			TridTimer.Mode = Timer.ModeSingle
@@ -914,6 +922,7 @@ End
 		Sub Action()
 		  Dim s() As TridLib.FileType = VTResult.TargetFile.TrIDTypes()
 		  mWaiter.Close
+		  mWaiter = Nil
 		  Dim tridwin As New TridResultWindow
 		  tridwin.ShowResult(s, VTResult.TargetFile, Self)
 		End Sub
@@ -965,6 +974,7 @@ End
 		Sub Action()
 		  Dim comment As String = CommentWindow.GetComment(System.MouseX, System. MouseY)
 		  If comment <> "" Then
+		    mWaiter = New WaitWindow
 		    mWaiter.ShowWithin(Self)
 		    mWaiter.Refresh()
 		    CommentSession.APIKey = VTHash.GetConfig("APIKey")
@@ -1014,6 +1024,7 @@ End
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  #pragma Unused HTTPStatus
 		  mWaiter.Close
+		  mWaiter = Nil
 		  If ResponseObject = Nil Then
 		    Call MsgBox("The response was empty. Please try again later.", 16, "VT Hash Check - Rescan Error")
 		  Else
@@ -1037,6 +1048,7 @@ End
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  #pragma Unused HTTPStatus
 		  mWaiter.Close
+		  mWaiter = Nil
 		  If ResponseObject <> Nil Then
 		    MsgBox(ResponseObject.Value("verbose_msg"))
 		  Else

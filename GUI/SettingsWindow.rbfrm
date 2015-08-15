@@ -765,15 +765,7 @@ End
 
 #tag WindowCode
 	#tag Event
-		Sub Close()
-		  mWaiter.Close
-		End Sub
-	#tag EndEvent
-
-	#tag Event
 		Sub Open()
-		  mWaiter = New WaitWindow
-		  mWaiter.Visible = False
 		  AlgSelect.AddRow("MD5")
 		  AlgSelect.AddRow("SHA1")
 		  AlgSelect.AddRow("SHA256")
@@ -922,6 +914,7 @@ End
 		Sub MouseUp(X As Integer, Y As Integer)
 		  #pragma Unused X
 		  #pragma Unused Y
+		  mWaiter = New WaitWindow
 		  mWaiter.ShowWithin(Self)
 		End Sub
 	#tag EndEvent
@@ -971,6 +964,7 @@ End
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
 		  #pragma Unused HTTPStatus
 		  mWaiter.Close
+		  mWaiter = Nil
 		  If ResponseObject <> Nil And ResponseObject.HasName("total") Then
 		    MsgBox("API key test succeeded.")
 		  ElseIf ResponseObject <> Nil Then
@@ -984,6 +978,7 @@ End
 	#tag Event
 		Sub Error(cURLCode As Integer)
 		  mWaiter.Close
+		  mWaiter = Nil
 		  VTHash.HandleCurlError(Me, cURLCode)
 		End Sub
 	#tag EndEvent
