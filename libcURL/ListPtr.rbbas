@@ -16,7 +16,7 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(ListPtr As Ptr = Nil, GlobalInitFlags As Integer = libcURL.CURL_GLOBAL_NOTHING)
+		Sub Constructor(ListPtr As Ptr = Nil, GlobalInitFlags As Integer = libcURL.CURL_GLOBAL_DEFAULT)
 		  ' Creates a linked list that is managed by libcURL. Pass a Ptr to the first item in an existing list,
 		  ' or Nil to create an empty list.
 		  
@@ -25,6 +25,23 @@ Inherits libcURL.cURLHandle
 		  Super.Constructor(GlobalInitFlags)
 		  List = ListPtr
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Count() As Integer
+		  ' Returns the number of strings in the list.
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Count
+		  
+		  Dim p As Ptr = List
+		  Dim i As Integer
+		  Do Until p = Nil
+		    i = i + 1
+		    p = p.Ptr(4)
+		  Loop
+		  Return i
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
@@ -46,24 +63,82 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Handle() As Integer
-		  ' This method returns a Ptr to the header list which can be passed back to libcURL
-		  Return Integer(List)
+		Function Item(Index As Integer) As String
+		  ' Reads the string located at Index. The first item is at Index=0
+		  ' If the list does not contain a string at Index, an OutOfBoundsException will be raised.
+		  ' If the next link points to an invalid Ptr, a NilObjectException will be raised.
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Item
+		  
+		  Dim p As Ptr = List
+		  Dim i As Integer
+		  Do
+		    If i < Index Then
+		      Dim nxt As Ptr = p.Ptr(4)
+		      If nxt <> Nil Then 
+		        p = nxt
+		      Else
+		        Raise New NilObjectException
+		      End If
+		      
+		    ElseIf i = Index Then
+		      Dim mb As MemoryBlock = p.Ptr(0)
+		      If mb = Nil Then Return ""
+		      Return mb.CString(0)
+		      
+		    Else
+		      Raise New OutOfBoundsException
+		    End If
+		    i = i + 1
+		  Loop
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherList As libcURL.ListPtr) As Integer
+		  ' Overloads the comparison operator(=), permitting direct comparisons between instances of ListPtr
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Operator_Compare
+		  
 		  Dim i As Integer = Super.Operator_Compare(OtherList)
-		  If i = 0 Then Return Sign(mHandle - OtherList.Handle)
+		  If i = 0 Then i = Sign(mHandle - OtherList.Handle)
 		  Return i
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Operator_Convert() As String()
+		  ' Overloads the conversion operator(=), permitting implicit and explicit conversion from a ListPtr into a string array
+		  ' The converted array is a copy of the ListPtr contents
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Operator_Convert
+		  
+		  If mLastError = libcURL.Errors.NOT_INITIALIZED Then Raise New cURLException(Me)
+		  
+		  Dim ret() As String
+		  Dim c As Integer = Me.Count - 1
+		  For i As Integer = 0 To c
+		    ret.Append(Me.Item(i))
+		  Next
+		  Return ret
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Operator_Convert(From() As String)
-		  Me.Free()
-		  Me.Constructor()
+		  ' Overloads the conversion operator(=), permitting implicit and explicit conversion from a string array into a ListPtr
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Operator_Convert
+		  
+		  If mLastError = libcURL.Errors.NOT_INITIALIZED Then
+		    Me.Constructor()
+		  Else
+		    Me.Free()
+		  End If
 		  For i As Integer = 0 To UBound(From)
 		    If Not Me.Append(From(i)) Then Raise New cURLException(Me)
 		  Next

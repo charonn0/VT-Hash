@@ -9,11 +9,11 @@ Protected Module libcURL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_easy_escape Lib "libcurl" (EasyHandle As Integer, char As Ptr, Length As Integer) As Ptr
+		Private Soft Declare Function curl_easy_escape Lib "libcurl" (EasyHandle As Integer, CharBuffer As Ptr, Length As Integer) As Ptr
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_easy_getinfo Lib "libcurl" (EasyHandle As Integer, infoCode As Integer, buffer As Ptr) As Integer
+		Private Soft Declare Function curl_easy_getinfo Lib "libcurl" (EasyHandle As Integer, InfoCode As Integer, Buffer As Ptr) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -45,7 +45,7 @@ Protected Module libcURL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_easy_strerror Lib "libcurl" (errNo As Integer) As Ptr
+		Private Soft Declare Function curl_easy_strerror Lib "libcurl" (EasyError As Integer) As CString
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -57,7 +57,15 @@ Protected Module libcURL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function curl_formadd Lib "libcurl" (ByRef FirstItem As Ptr, ByRef LastItem As Ptr, Option1 As Integer, Value1 As CString, Option2 As Integer, Value2 As CString, Option3 As Integer, Value3 As CString, FinalOption As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Sub curl_formfree Lib "libcurl" (curlform As Ptr)
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function curl_formget Lib "libcurl" (First As Ptr, UserData As Integer, Callback As Ptr) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -107,15 +115,7 @@ Protected Module libcURL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_multi_assign Lib "libcurl" (MultiHandle As Integer, SockFD As Integer, sockptr As Ptr) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function curl_multi_cleanup Lib "libcurl" (MultiHandle As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_multi_fdset Lib "libcurl" (MultiHandle As Integer, ByRef read_fd As Integer, ByRef write_fd As Integer, ByRef exc_fd As Integer, ByRef max_fd As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -139,11 +139,7 @@ Protected Module libcURL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_multi_socket_action Lib "libcurl" (MultiHandle As Integer, sock_fd As Integer, ev_bitmask As Integer, ByRef running_handles As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_multi_strerror Lib "libcurl" (errNo As Integer) As Ptr
+		Private Soft Declare Function curl_multi_strerror Lib "libcurl" (errNo As Integer) As CString
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -163,7 +159,7 @@ Protected Module libcURL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_share_strerror Lib "libcurl" (errNo As Integer) As Ptr
+		Private Soft Declare Function curl_share_strerror Lib "libcurl" (errNo As Integer) As CString
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -186,10 +182,11 @@ Protected Module libcURL
 		Protected Function Default_CA_File() As FolderItem
 		  ' For SSL/TLS connections we must specify a file with a list of acceptable certificate authorities to verify the peer with.
 		  ' This method dumps the the default CA list for Mozilla products (included as DEFAULT_CA_INFO_PEM) into a temp file and
-		  ' returns it.
+		  ' returns it. The DEFAULT_CA_INFO_PEM file is subject to the terms of the Mozilla Public License 1.1
+		  '
 		  ' To generate an updated CA file use one of these two scripts:
 		  '    VBScript: https://github.com/bagder/curl/blob/master/lib/mk-ca-bundle.vbs
-		  '        Perl: https://github.com/bagder/curl/blob/master/lib/mk-ca-bundle.pl
+		  '        perl: https://github.com/bagder/curl/blob/master/lib/mk-ca-bundle.pl
 		  
 		  Static CA_File As FolderItem
 		  If CA_File = Nil Then
@@ -206,48 +203,62 @@ Protected Module libcURL
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function FormatError(cURLError As Integer) As String
+		Protected Function FormatError(cURLError As Integer, Encoding As TextEncoding = Nil) As String
 		  ' Translates libcurl error numbers to messages
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_easy_strerror.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.FormatError
 		  
 		  If Not libcURL.IsAvailable Then Return "libcURL is not available or is an unsupported version."
-		  Dim mb As MemoryBlock = curl_easy_strerror(cURLError)
-		  Return mb.CString(0)
+		  Dim msg As String = curl_easy_strerror(cURLError)
+		  If Encoding <> Nil Then
+		    Return ConvertEncoding(msg, Encoding)
+		  Else
+		    Return DefineEncoding(msg, Encodings.ASCII)
+		  End If
+		  
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function FormatMultiError(cURLMultiError As Integer) As String
+		Protected Function FormatMultiError(cURLMultiError As Integer, Encoding As TextEncoding = Nil) As String
 		  ' Translates libcurl multi error numbers to messages
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_multi_strerror.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.FormatMultiError
 		  
 		  If Not libcURL.IsAvailable Then Return "libcURL is not available or is an unsupported version."
-		  Dim mb As MemoryBlock = curl_multi_strerror(cURLMultiError)
-		  Return mb.CString(0)
+		  Dim msg As String = curl_multi_strerror(cURLMultiError)
+		  If Encoding <> Nil Then
+		    Return ConvertEncoding(msg, Encoding)
+		  Else
+		    Return DefineEncoding(msg, Encodings.ASCII)
+		  End If
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function FormatShareError(cURLShareError As Integer) As String
+		Protected Function FormatShareError(cURLShareError As Integer, Encoding As TextEncoding = Nil) As String
 		  ' Translates libcurl share error numbers to messages
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_share_strerror.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.FormatShareError
 		  
 		  If Not libcURL.IsAvailable Then Return "libcURL is not available or is an unsupported version."
-		  Dim mb As MemoryBlock = curl_share_strerror(cURLShareError)
-		  Return mb.CString(0)
+		  Dim msg As String = curl_share_strerror(cURLShareError)
+		  If Encoding <> Nil Then
+		    Return ConvertEncoding(msg, Encoding)
+		  Else
+		    Return DefineEncoding(msg, Encodings.ASCII)
+		  End If
+		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Get(URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
+		Attributes( deprecated = "libcURL.cURLClient.Get" ) Protected Function Get(URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
 		  ' Synchronously performs a retrieval using protocol-appropriate semantics (http GET, ftp RETR, etc.)
 		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses.
 		  ' Pass a connection TimeOut interval (in seconds), or 0 to wait forever. Pass an InternetHeaders instance and
@@ -282,7 +293,7 @@ Protected Module libcURL
 		Protected Function ParseDate(RawDate As String, ByRef Parsed As Date) As Boolean
 		  ' Parses the passed date string into the referenced Date object.
 		  ' If parsing was successful, returns True and instantiates the passed date reference; else, returns false.
-		  ' Valid for dates on or before 31 Dec 2036 23:59:59 GMT
+		  ' Valid for dates between 1 Jan 1970 00:00:00 GMT and 19 Jan 2038 03:14:07 GMT
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_getdate.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ParseDate
@@ -298,7 +309,7 @@ Protected Module libcURL
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Post(FormData As Dictionary, URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
+		Attributes( deprecated = "libcURL.cURLClient.Post" ) Protected Function Post(FormData As Dictionary, URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
 		  ' Synchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
 		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
 		  ' may be a string or a FolderItem. Pass a connection TimeOut interval (in seconds), or 0 to wait forever. Pass an
@@ -316,7 +327,7 @@ Protected Module libcURL
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Put(File As FolderItem, URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
+		Attributes( deprecated = "libcURL.cURLClient.Put" ) Protected Function Put(File As FolderItem, URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
 		  ' Synchronously uploads the passed FolderItem using protocol-appropriate semantics (http PUT, ftp STOR, etc.)
 		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses. The
 		  ' path part of the URL specifies the remote directory and file name to store the file under. Pass a connection

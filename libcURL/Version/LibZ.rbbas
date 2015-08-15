@@ -4,18 +4,19 @@ Protected Module LibZ
 		Protected Function IsAtLeast(Major As Integer, Minor As Integer, Patch As Integer) As Boolean
 		  ' Returns True if LibZ is available and at least the version specified.
 		  
-		  Dim available As Boolean
 		  Select Case True
+		  Case Not libcURL.Version.LibZ.IsAvailable
+		    Return False
+		    
 		  Case libcURL.Version.LibZ.MajorNumber > Minor
-		    available = True
+		    Return True
 		    
 		  Case libcURL.Version.LibZ.MajorNumber = Major
 		    If libcURL.Version.LibZ.MinorNumber > Minor Or (libcURL.Version.LibZ.MinorNumber = Minor And libcURL.Version.LibZ.PatchNumber >= Patch) Then
-		      available = True
+		      Return True
 		    End If
 		    
 		  End Select
-		  Return available
 		End Function
 	#tag EndMethod
 

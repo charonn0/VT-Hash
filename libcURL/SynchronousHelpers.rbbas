@@ -59,21 +59,21 @@ Private Module SynchronousHelpers
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function _DataAvailableHandler(Sender As EasyHandle, NewData As String) As Integer
+		Private Function _DataAvailableHandler(Sender As EasyHandle, NewData As MemoryBlock) As Integer
 		  Dim d As Dictionary = Transfers.Lookup(Sender, Nil)
 		  If d = Nil Then Return 0
 		  Dim w As Writeable = d.Value("Output")
 		  w.Write(NewData)
-		  Return NewData.LenB
+		  Return NewData.Size
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function _DataNeededHandler(Sender As EasyHandle, Buffer As MemoryBlock) As Integer
+		Private Function _DataNeededHandler(Sender As EasyHandle, Buffer As MemoryBlock, MaxLength As Integer) As Integer
 		  Dim d As Dictionary = Transfers.Lookup(Sender, Nil)
 		  If d = Nil Then Return 0
 		  Dim r As Readable = d.Value("Input")
-		  Dim data As MemoryBlock = r.Read(Buffer.Size)
+		  Dim data As MemoryBlock = r.Read(MaxLength)
 		  Buffer.StringValue(0, data.Size) = data
 		  Return data.Size
 		End Function

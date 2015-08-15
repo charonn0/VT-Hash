@@ -3,16 +3,26 @@ Protected Class cURLException
 Inherits RuntimeException
 	#tag Method, Flags = &h1000
 		Sub Constructor(ErrantItem As libcURL.cURLHandle)
+		  If ErrantItem Is Nil Then 
+		    Me.Message = "Unknown error."
+		    Me.ErrorNumber = 0
+		    Return
+		  End If
 		  Me.ErrorNumber = ErrantItem.LastError
 		  Select Case True
-		  Case Not libcURL.IsAvailable
-		    Me.Message = "libcURL is not available or is an unsupported version."
-		    
 		  Case Me.ErrorNumber = libcURL.Errors.INIT_FAILED
 		    Me.Message = "Unknown failure while constructing a libcURL handle."
 		    
 		  Case Me.ErrorNumber = libcURL.Errors.FEATURE_UNAVAILABLE
-		    Me.Message = "This feature is not available in the installed version of libcURL."
+		    Me.Message = "A required feature is not available in the installed version of libcURL."
+		    
+		  Case Not libcURL.IsAvailable
+		    Me.Message = "libcURL is not available or is an unsupported version."
+		    
+		  Case Me.ErrorNumber = libcURL.Errors.NOT_INITIALIZED
+		    ' This indicates that cURLHandle.Constructor has not yet run, but ErrantItem is not Nil (e.g. an error in Operator_Convert)
+		    ' cURLHandle.Constructor MUST be called from subclass constructors, else this error will be raised.
+		    Me.Message = "libcURL has not yet been initialized."
 		    
 		  Case ErrantItem IsA libcURL.ShareHandle
 		    Me.Message = libcURL.FormatShareError(Me.ErrorNumber)
@@ -21,7 +31,7 @@ Inherits RuntimeException
 		    Me.Message = libcURL.FormatMultiError(Me.ErrorNumber)
 		    
 		  Else
-		    Me.Message = libcURL.FormatError(Me.ErrorNumber) + "(" + libcURL.Errors.Name(Me.ErrorNumber) + ")"
+		    Me.Message = libcURL.FormatError(Me.ErrorNumber) + " (" + libcURL.Errors.Name(Me.ErrorNumber) + ")"
 		    
 		  End Select
 		  If ErrantItem IsA libcURL.EasyHandle Then

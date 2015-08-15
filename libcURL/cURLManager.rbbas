@@ -202,23 +202,23 @@ Protected Class cURLManager
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function _DataAvailableHandler(Sender As libcURL.EasyHandle, NewData As String) As Integer
+		Private Function _DataAvailableHandler(Sender As libcURL.EasyHandle, NewData As MemoryBlock) As Integer
 		  #pragma Unused Sender
 		  If mDownload = Nil Then
 		    mDownloadMB = New MemoryBlock(0)
 		    mDownload = New BinaryStream(mDownloadMB)
 		  End If
 		  mDownload.Write(NewData)
-		  Return NewData.LenB
+		  Return NewData.Size
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function _DataNeededHandler(Sender As libcURL.EasyHandle, Buffer As MemoryBlock) As Integer
+		Private Function _DataNeededHandler(Sender As libcURL.EasyHandle, Buffer As MemoryBlock, MaxLength As Integer) As Integer
 		  #pragma Unused Sender
 		  
 		  If mUpload <> Nil Then
-		    Dim data As MemoryBlock = mUpload.Read(Buffer.Size)
+		    Dim data As MemoryBlock = mUpload.Read(MaxLength)
 		    Buffer.StringValue(0, data.Size) = data
 		    Return data.Size
 		  End If
@@ -276,7 +276,6 @@ Protected Class cURLManager
 	#tag Method, Flags = &h21
 		Private Sub _TransferCompleteHandler(Sender As libcURL.MultiHandle, Item As libcURL.EasyHandle)
 		  #pragma Unused Sender
-		  Dim cURLCode As Integer = Item.LastError ' this gets clobbered too often
 		  If mDownload <> Nil And mDownload IsA BinaryStream And mDownloadMB <> Nil Then BinaryStream(mDownload).Close
 		  Dim status As Integer = Item.LastError
 		  If status <> 0 Then
@@ -288,7 +287,7 @@ Protected Class cURLManager
 		  ClearFormData()
 		  mEasyItem.UploadMode = False
 		  mUpload = Nil
-		  If Item.LastError <> cURLCode Then ErrorSetter(Item).LastError = cURLCode
+		  If Item.LastError <> status Then ErrorSetter(Item).LastError = status
 		End Sub
 	#tag EndMethod
 

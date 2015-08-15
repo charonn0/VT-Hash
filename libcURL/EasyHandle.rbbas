@@ -225,8 +225,15 @@ Inherits libcURL.cURLHandle
 		  End If
 		  
 		  If libcURL.Version.SSL Then
-		    If Not Sender.SetOption(libcURL.Opts.SSL_CTX_DATA, Sender.Handle) Then Raise New cURLException(Sender)
-		    If Not Sender.SetOption(libcURL.Opts.SSL_CTX_FUNCTION, AddressOf SSLInitCallback) Then Raise New cURLException(Sender)
+		    If Sender.SetOption(libcURL.Opts.SSL_CTX_DATA, Sender.Handle) Then
+		      If Not Sender.SetOption(libcURL.Opts.SSL_CTX_FUNCTION, AddressOf SSLInitCallback) Then Raise New cURLException(Sender)
+		    ElseIf Sender.LastError <> libcURL.Errors.NOT_BUILT_IN Then
+		      Raise New cURLException(Sender)
+		    Else
+		      If Sender.Verbose Then
+		        LogEvent("libcURL 0x" + Hex(Sender.Handle) + " (RB-libcURL): Callbacks are not supported by the selected SSL library.")
+		      End If
+		    End If
 		  End If
 		  
 		  If libcURL.Version.IsAtLeast(7, 21, 7) Then
@@ -648,7 +655,7 @@ Inherits libcURL.cURLHandle
 		      Dim lines() As String = Split(s, EndOfLine.Windows)
 		      For i As Integer = 0 To UBound(lines)
 		        If lines(i).Trim = "" Then Continue
-		        System.DebugLog("libcURL 0x" + Hex(mHandle) + " (" + curl_infoname(info) + "): " + lines(i))
+		        LogEvent("libcURL 0x" + Hex(mHandle) + " (" + curl_infoname(info) + "): " + lines(i))
 		      Next
 		    End If
 		  #endif
@@ -704,18 +711,7 @@ Inherits libcURL.cURLHandle
 		  ' DO NOT CALL THIS METHOD
 		  
 		  Dim sz As Integer = nmemb * size
-		  Dim mb As New MemoryBlock(sz)
-		  sz = RaiseEvent DataNeeded(mb)
-		  Select Case sz
-		  Case 0, CURL_READFUNC_ABORT, CURL_READFUNC_PAUSE
-		    Return sz
-		  Case Is > 0
-		    Dim out As MemoryBlock = char
-		    out.StringValue(0, sz) = mb.StringValue(0, sz)
-		    Return sz
-		  Else
-		    Raise New OutOfBoundsException
-		  End Select
+		  Return RaiseEvent DataNeeded(char, sz)
 		End Function
 	#tag EndMethod
 
@@ -755,11 +751,11 @@ Inherits libcURL.cURLHandle
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event DataAvailable(NewData As String) As Integer
+		Event DataAvailable(NewData As MemoryBlock) As Integer
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
-		Event DataNeeded(Buffer As MemoryBlock) As Integer
+		Event DataNeeded(Buffer As MemoryBlock, MaxLength As Integer) As Integer
 	#tag EndHook
 
 	#tag Hook, Flags = &h0
