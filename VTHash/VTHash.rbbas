@@ -129,7 +129,7 @@ Protected Module VTHash
 		    
 		  Case libcURL.Errors.PEER_FAILED_VERIFICATION
 		    caption = "Invalid SSL Certificate"
-		    msg = msg + "presented an invalid SSL certificate. The operation has been aborted."
+		    msg = msg + "invalid SSL certificate. The operation has been aborted."
 		    
 		  Else
 		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
