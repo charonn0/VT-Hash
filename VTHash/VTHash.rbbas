@@ -134,8 +134,8 @@ Protected Module VTHash
 		  Else
 		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
 		    caption = "Unable to connect to Virus Total"
+		    If Sender.EasyItem.ErrorBuffer.Trim <> "" Then msg = msg + EndOfLine + Sender.EasyItem.ErrorBuffer
 		  End Select
-		  
 		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
 		End Sub
 	#tag EndMethod
