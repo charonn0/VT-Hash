@@ -979,7 +979,12 @@ End
 		Sub Error(cURLCode As Integer)
 		  mWaiter.Close
 		  mWaiter = Nil
-		  VTHash.HandleCurlError(Me, cURLCode)
+		  
+		  If Me.GetStatusCode  = 0 Then
+		    VTHash.HandleCurlError(Me, cURLCode)
+		  Else
+		    Call MsgBox("API key test failed. (HTTP" + Str(Me.GetStatusCode, "000") +")", 16, "VT Hash Check - Invalid API key")
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
