@@ -11,6 +11,7 @@ Inherits Application
 
 	#tag Event
 		Sub Open()
+		  VTHash.LoadConfig(App.DataFolder)
 		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
 		    If Not mIsQuitting And MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
 		      SettingsWindow.ShowModal
@@ -112,23 +113,25 @@ Inherits Application
 
 	#tag Method, Flags = &h0
 		Function DataFolder() As FolderItem
-		  Static f As FolderItem
-		  If f <> Nil Then Return f
-		  
+		  If mDataFolder <> Nil Then Return mDataFolder
 		  If DebugBuild Then
-		    f = SelectFolder.Child("Boredom Software")
+		    Dim dlg As New SelectFolderDialog
+		    dlg.Title = "Select AppData"
+		    dlg.InitialDirectory = SpecialFolder.Desktop
+		    mDataFolder = dlg.ShowModal
+		    mDataFolder = mDataFolder.Child("Boredom Software")
 		  Else
-		    f = SpecialFolder.ApplicationData.Child("Boredom Software")
+		    mDataFolder = SpecialFolder.ApplicationData.Child("Boredom Software")
 		  End If
 		  
-		  If Not f.Exists Then
-		    f.CreateAsFolder()
+		  If Not mDataFolder.Exists Then
+		    mDataFolder.CreateAsFolder()
 		  End If
-		  f = f.Child("VT Hash")
-		  If Not f.Exists Then
-		    f.CreateAsFolder()
+		  mDataFolder = mDataFolder.Child("VT Hash")
+		  If Not mDataFolder.Exists Then
+		    mDataFolder.CreateAsFolder()
 		  End If
-		  Return f
+		  Return mDataFolder
 		End Function
 	#tag EndMethod
 
@@ -138,6 +141,10 @@ Inherits Application
 		End Function
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h21
+		Private mDataFolder As FolderItem
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mInsecure As Boolean
