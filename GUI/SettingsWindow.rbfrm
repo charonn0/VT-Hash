@@ -777,13 +777,14 @@ End
 		  Case Win32.Crypto.CALG_SHA256
 		    AlgSelect.ListIndex = 2
 		  Else
-		    AlgSelect.ListIndex = 0
+		    AlgSelect.ListIndex = 2 ' default to sha256
 		  End Select
 		  autolog.Value = VTHash.GetConfig("AutoSave")
 		  If VTHash.GetConfig("AutosavePath") <> Nil Then
 		    LogFile.Text = FolderItem(VTHash.GetConfig("AutosavePath")).AbsolutePath
 		    LogType.ListIndex = VTHash.GetConfig("DefaultFormat")
 		  End If
+		  
 		  APIText.Text = VTHash.GetConfig("APIKey")
 		  CommentSig.Text = VTHash.GetConfig("CommentSignature")
 		  SearchDisplayName.Text = VTHash.GetConfig("SearchEngineName")
