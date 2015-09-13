@@ -257,8 +257,10 @@ Protected Module VTHash
 		Sub ShowInExplorer(extends f As FolderItem)
 		  //Shows the file in Windows Explorer
 		  
-		  Dim sh As New Shell
-		  sh.Execute("explorer.exe /select, """ + f.AbsolutePath + """")
+		  Dim e As FolderItem = SpecialFolder.System.Child("explorer.exe")
+		  e.Launch("/select, """ + f.AbsolutePath + """")
+		  'Dim sh As New Shell
+		  'sh.Execute("explorer.exe /select, """ + f.AbsolutePath + """")
 		End Sub
 	#tag EndMethod
 
@@ -319,7 +321,7 @@ Protected Module VTHash
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.52", Scope = Protected
+	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.51", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
