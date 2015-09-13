@@ -53,7 +53,7 @@ Begin Window SuggestionBox
       TabIndex        =   9
       TabPanelIndex   =   0
       Top             =   0
-      Value           =   1
+      Value           =   0
       Visible         =   True
       Width           =   425
       Begin Label Label1
@@ -556,20 +556,25 @@ End
 		  ExtraData.Value("Version") = VTHash.VersionString
 		  'ExtraData.Value("Algorithm") = "0x" + Hex(VTHash.GetConfig("Algorithm"))
 		  ExtraData.Value("OS") = OS
-		  Dim tmp As FolderItem = SpecialFolder.Temporary.Child("anonymized_config.dat")
-		  Dim bs As BinaryStream = BinaryStream.Create(tmp, True)
-		  Dim f As FolderItem = VTHash.Config.RootFile
-		  VTHash.Config.Close
-		  VTHash.Config = Nil
-		  Dim ins As BinaryStream = BinaryStream.Open(f, False)
-		  bs.Write(ins.Read(ins.Length))
-		  bs.Close
-		  ins.Close
-		  Dim anon As PrefStore = PrefStore.Open(tmp)
-		  anon.SetValue("APIKey") = "                                                                      " ' 60 spaces
-		  anon.Close
-		  anon = Nil
-		  ExtraData.Value("User's config.dat") = tmp
+		  
+		  If VTHash.IsConfigLoaded Then
+		    Dim tmp As FolderItem = SpecialFolder.Temporary.Child("anonymized_config.dat")
+		    Dim bs As BinaryStream = BinaryStream.Create(tmp, True)
+		    Dim f As FolderItem = VTHash.Config.RootFile
+		    VTHash.Config.Close
+		    VTHash.Config = Nil
+		    Dim ins As BinaryStream = BinaryStream.Open(f, False)
+		    bs.Write(ins.Read(ins.Length))
+		    bs.Close
+		    ins.Close
+		    Dim anon As PrefStore = PrefStore.Open(tmp)
+		    anon.SetValue("APIKey") = "                                                                      " ' 60 spaces
+		    anon.Close
+		    anon = Nil
+		    ExtraData.Value("User's config.dat") = tmp
+		  Else
+		    ExtraData.Value("User's config.dat") = "Not specified"
+		  End If
 		End Sub
 	#tag EndMethod
 
