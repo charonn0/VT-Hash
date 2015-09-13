@@ -197,7 +197,7 @@ Protected Class cURLManager
 	#tag Method, Flags = &h21
 		Private Sub _CreateSocketHandler(Sender As libcURL.EasyHandle, Socket As Integer)
 		  #pragma Unused Sender
-		  #pragma Unused Socket
+		  RaiseEvent Connected(Socket)
 		End Sub
 	#tag EndMethod
 
@@ -239,7 +239,7 @@ Protected Class cURLManager
 	#tag Method, Flags = &h21
 		Private Sub _DisconnectedHandler(Sender As libcURL.EasyHandle, Socket As Integer)
 		  #pragma Unused Sender
-		  #pragma Unused Socket
+		  RaiseEvent Disconnected(Socket)
 		End Sub
 	#tag EndMethod
 
@@ -293,7 +293,15 @@ Protected Class cURLManager
 
 
 	#tag Hook, Flags = &h0
+		Event Connected(Socket As Integer)
+	#tag EndHook
+
+	#tag Hook, Flags = &h0
 		Event DebugMessage(MessageType As libcURL.curl_infotype, data As String)
+	#tag EndHook
+
+	#tag Hook, Flags = &h0
+		Event Disconnected(Socket As Integer)
 	#tag EndHook
 
 	#tag Hook, Flags = &h0

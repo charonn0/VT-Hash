@@ -39,9 +39,7 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
-      TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   50
       Value           =   0
       Visible         =   True
@@ -69,7 +67,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Ready."
       TextAlign       =   0
       TextColor       =   32768
@@ -104,7 +101,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Status:"
       TextAlign       =   2
       TextColor       =   0
@@ -148,26 +144,6 @@ Begin Window UpdateWindow
       Visible         =   True
       Width           =   80
    End
-   Begin HTTPSocket Sock
-      Address         =   ""
-      BytesAvailable  =   0
-      BytesLeftToSend =   0
-      Enabled         =   True
-      Height          =   32
-      Index           =   -2147483648
-      IsConnected     =   0
-      Left            =   377
-      LockedInPosition=   False
-      Port            =   0
-      Scope           =   0
-      TabIndex        =   4
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   80
-      Visible         =   True
-      Width           =   32
-      yield           =   0
-   End
    Begin Canvas UpdateIcon
       AcceptFocus     =   ""
       AcceptTabs      =   ""
@@ -210,16 +186,13 @@ Begin Window UpdateWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
-      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   69
       Value           =   0
       Visible         =   True
       Width           =   388
    End
    Begin Timer GetTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   304
@@ -227,11 +200,8 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   250
       Scope           =   0
-      TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   80
-      Visible         =   True
       Width           =   32
    End
    Begin PushButton PushButton2
@@ -287,7 +257,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -322,7 +291,6 @@ Begin Window UpdateWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   0
       TextColor       =   8421504
@@ -336,7 +304,6 @@ Begin Window UpdateWindow
       Width           =   69
    End
    Begin Timer SpeedTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   341
@@ -344,11 +311,18 @@ Begin Window UpdateWindow
       Mode            =   0
       Period          =   1000
       Scope           =   0
-      TabIndex        =   11
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   80
-      Visible         =   True
+      Width           =   32
+   End
+   Begin cURLClient curl
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   3.77e+2
+      LockedInPosition=   False
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   8.0e+1
       Width           =   32
    End
 End
@@ -357,7 +331,7 @@ End
 #tag WindowCode
 	#tag Event
 		Function CancelClose(appQuitting as Boolean) As Boolean
-		  If Sock.IsConnected Or UBound(Files) > -1 Then
+		  If Not curl.IsTransferComplete Or UBound(Files) > -1 Then
 		    If appQuitting Or MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
 		      Self.Reset()
 		    Else
@@ -471,7 +445,7 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub Reset(Error As Boolean = False)
-		  Sock.Close
+		  'Sock.Close
 		  If DownloadDirectory <> Nil Then
 		    For i As Integer = DownloadDirectory.Count DownTo 1
 		      DownloadDirectory.Item(i).Delete
@@ -658,10 +632,10 @@ End
 		Sub Action()
 		  If Me.Caption = "Check" Then
 		    Me.Enabled = False
-		    If Sock.IsConnected Then Sock.Close
+		    'If Sock.IsConnected Then Sock.Close
 		    Me.Caption = "Checking..."
 		    CurrentAction.Text = "Checking..."
-		    Sock.Get(UpdateAddress)
+		    curl.Get(UpdateAddress)
 		    SocketMode = Mode_Checking
 		  ElseIf Me.Caption = "Cancel" Then
 		    If MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
@@ -672,10 +646,89 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Sock
+#tag Events UpdateIcon
 	#tag Event
-		Sub ReceiveProgress(bytesReceived as integer, totalBytes as integer, newData as string)
-		  #pragma Unused newData
+		Sub Paint(g As Graphics)
+		  If Self.Icon <> Nil Then
+		    g.DrawPicture(Self.Icon, 0, 0, g.Width, g.Height, 0, 0, Self.Icon.Width, Self.Icon.Height)
+		  Else
+		    g.ClearRect(0, 0, g.Width, g.Height)
+		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events GetTimer
+	#tag Event
+		Sub Action()
+		  PushButton1.Enabled = True
+		  PushButton1.Caption = "Cancel"
+		  If UBound(Files) <= -1 Then
+		    Me.Mode = Me.ModeOff
+		    If MsgBox("Download complete. Would you like to apply this update now?", 36, "VT Hash Check - An update is ready to be applied.") = 6 Then
+		      Self.Close
+		    Else
+		      Self.Reset()
+		      Status.Text = "Upgrade was cancelled."
+		      Status.TextColor = ErrorColor
+		      PushButton1.Caption = "Check"
+		    End If
+		    Return
+		  End If
+		  
+		  TempFile = GetTemporaryFolderItem()
+		  CurrentFile = Files(0)
+		  files.Remove(0)
+		  TempFile.Name = NthField(CurrentFile, "/", CountFields(CurrentFile, "/"))
+		  ProgressBar2.Value = ProgressBar2.Value + 1
+		  Dim url As String = BaseAddress + CurrentFile
+		  curl.Get(url)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton2
+	#tag Event
+		Sub Action()
+		  If Not curl.IsTransferComplete Or UBound(Files) > -1 Then
+		    If MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
+		      Self.Reset()
+		      Self.Close()
+		    End If
+		  Else
+		    Self.Close()
+		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SpeedTimer
+	#tag Event
+		Sub Action()
+		  Dim seconds As UInt64 = Microseconds - LastMS
+		  seconds = seconds / 1000000
+		  CurrentAction1.Text = FormatBytes(BytesDownloaded / seconds) + "/s"
+		  LastMS = Microseconds
+		  BytesDownloaded = 0
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events curl
+	#tag Event
+		Sub Connected(Socket As Integer)
+		  CurrentAction.Text = "Connected to update server " + Shorten(Me.EasyItem.URL)
+		  SpeedTimer.Mode = Timer.ModeMultiple
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Error(cURLCode As Integer)
+		  Self.Reset
+		  Status.Text = libcURL.FormatError(cURLCode)
+		  Status.TextColor = ErrorColor
+		  CurrentAction.Text = "Error while updating."
+		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		  
 		  If SocketMode <> Mode_Error Then
 		    Dim url As String = BaseAddress + CurrentFile
 		    If url.Trim <> "" Then
@@ -685,20 +738,16 @@ End
 		    End If
 		    Status.Text = "Downloading update package (" + Format(ProgressBar2.Value, "###,##0") + "/" + Format(ProgressBar2.Maximum, "###,##0") + ")"
 		    Status.TextColor = NetColor
-		    ProgressBar1.Value = bytesReceived * 100 / totalBytes
-		    BytesDownloaded = BytesDownloaded + bytesReceived
+		    ProgressBar1.Value = dlnow * 100 / dlTotal
 		  End If
-		End Sub
+		End Function
 	#tag EndEvent
 	#tag Event
-		Sub PageReceived(url as string, httpStatus as integer, headers as internetHeaders, content as string)
-		  #pragma Unused url
-		  #pragma Unused httpStatus
-		  #pragma Unused headers
+		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
 		  ProgressBar1.Value = 100
 		  Select Case SocketMode
 		  Case Mode_Checking
-		    UpdateInfo = New JSONItem(content)
+		    UpdateInfo = New JSONItem(Me.GetDownloadedData)
 		    BaseAddress = UpdateInfo.Value("BaseURL")
 		    LatestVersion = UpdateInfo.Value("Version")
 		    HandleOptionalValues(UpdateInfo)
@@ -744,124 +793,13 @@ End
 		    Dim bs As BinaryStream
 		    If TempFile = Nil Then TempFile = GetTemporaryFolderItem()
 		    bs = bs.Create(TempFile, True)
-		    bs.Write(content)
+		    bs.Write(Me.GetDownloadedData)
 		    bs.Close
 		    TempFile.MoveFileTo(DownloadDirectory)
 		    Call Win32.IO.DeleteOnReboot(TempFile)
 		    GetTimer.Mode = Timer.ModeSingle
 		    
 		  End Select
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub HeadersReceived(headers as internetHeaders, httpStatus as integer)
-		  Select Case httpStatus
-		  Case 200
-		    ProgressBar1.Value = 0
-		    CurrentAction.Text = "Data incoming..."
-		  Case 301, 302
-		    ProgressBar1.Value = 0
-		    CurrentAction.Text = "Following redirect..."
-		    Me.Get(headers.CommaSeparatedValues("Location"))
-		  Else
-		    Reset(True)
-		    Status.Text = "File skipped: HTTP error " + Str(httpStatus)
-		    Status.TextColor = ErrorColor
-		    CurrentAction.Text = "Error while downloading."
-		    
-		    
-		  End Select
-		  
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub Error(code as integer)
-		  Self.Reset
-		  Status.Text = "Socket error: " + Str(code)
-		  Status.TextColor = ErrorColor
-		  CurrentAction.Text = "Error while updating."
-		  
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub DownloadComplete(url as string, httpStatus as integer, headers as internetHeaders, file as folderItem)
-		  #pragma Unused url
-		  #pragma Unused httpStatus
-		  #pragma Unused headers
-		  #pragma Unused file
-		  Status.Text = "Download complete."
-		  Status.TextColor = OKColor
-		  CurrentAction.Text = ""
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub Connected()
-		  CurrentAction.Text = "Connected to update server " + Shorten(Me.Address)
-		  SpeedTimer.Mode = Timer.ModeMultiple
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events UpdateIcon
-	#tag Event
-		Sub Paint(g As Graphics)
-		  If Self.Icon <> Nil Then
-		    g.DrawPicture(Self.Icon, 0, 0, g.Width, g.Height, 0, 0, Self.Icon.Width, Self.Icon.Height)
-		  Else
-		    g.ClearRect(0, 0, g.Width, g.Height)
-		  End If
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events GetTimer
-	#tag Event
-		Sub Action()
-		  PushButton1.Enabled = True
-		  PushButton1.Caption = "Cancel"
-		  If UBound(Files) <= -1 Then
-		    Me.Mode = Me.ModeOff
-		    If MsgBox("Download complete. Would you like to apply this update now?", 36, "VT Hash Check - An update is ready to be applied.") = 6 Then
-		      Self.Close
-		    Else
-		      Self.Reset()
-		      Status.Text = "Upgrade was cancelled."
-		      Status.TextColor = ErrorColor
-		      PushButton1.Caption = "Check"
-		    End If
-		    Return
-		  End If
-		  
-		  TempFile = GetTemporaryFolderItem()
-		  CurrentFile = Files(0)
-		  files.Remove(0)
-		  TempFile.Name = NthField(CurrentFile, "/", CountFields(CurrentFile, "/"))
-		  ProgressBar2.Value = ProgressBar2.Value + 1
-		  Dim url As String = BaseAddress + CurrentFile
-		  Sock.Get(url)
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton2
-	#tag Event
-		Sub Action()
-		  If Sock.IsConnected Or UBound(Files) > -1 Then
-		    If MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
-		      Self.Reset()
-		      Self.Close()
-		    End If
-		  Else
-		    Self.Close()
-		  End If
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events SpeedTimer
-	#tag Event
-		Sub Action()
-		  Dim seconds As UInt64 = Microseconds - LastMS
-		  seconds = seconds / 1000000
-		  CurrentAction1.Text = FormatBytes(BytesDownloaded / seconds) + "/s"
-		  LastMS = Microseconds
-		  BytesDownloaded = 0
 		End Sub
 	#tag EndEvent
 #tag EndEvents
