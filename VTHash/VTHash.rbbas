@@ -141,6 +141,37 @@ Protected Module VTHash
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function IsConfigLoaded() As Boolean
+		  Return mConfig <> Nil
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub LoadConfig(DataFolder As FolderItem)
+		  Dim f As FolderItem = DataFolder.Child("config.dat")
+		  If f.Exists Then
+		    Dim bs As BinaryStream = BinaryStream.Open(f)
+		    Dim isvalid As Boolean = (bs.Read(4) = "VFSv")
+		    bs.Close
+		    If isvalid Then
+		      mConfig = PrefStore.Open(f)
+		    ElseIf MsgBox( _
+		      "Your configuration file must be converted to the new format." + EndOfLine + _
+		      "If for any reason this operation fails, your original configuration file is backed up to: " + _
+		      f.AbsolutePath + ".bak", 1 + 48, "VT Hash Check - Old-style config file detected") = 1 Then
+		      mConfig = ConvertOldConfig(f)
+		    Else
+		      App.mIsQuitting = True
+		      Quit()
+		    End If
+		  Else
+		    mConfig = PrefStore.Create(f)
+		    mConfig.SetValue("UseSSL") = True
+		  End If
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function PlatformString() As String
 		  //Returns a human-readable string corresponding to the version, SKU, service pack, and architecture of
 		  //the currently running version of Windows.
@@ -242,26 +273,7 @@ Protected Module VTHash
 		#tag Getter
 			Get
 			  If mConfig = Nil Then
-			    Dim f As FolderItem = App.DataFolder.Child("config.dat")
-			    If f.Exists Then
-			      Dim bs As BinaryStream = BinaryStream.Open(f)
-			      Dim isvalid As Boolean = (bs.Read(4) = "VFSv")
-			      bs.Close
-			      If isvalid Then
-			        mConfig = PrefStore.Open(f)
-			      ElseIf MsgBox( _
-			        "Your configuration file must be converted to the new format." + EndOfLine + _
-			        "If for any reason this operation fails, your original configuration file is backed up to: " + _
-			        f.AbsolutePath + ".bak", 1 + 48, "VT Hash Check - Old-style config file detected") = 1 Then
-			        mConfig = ConvertOldConfig(f)
-			      Else
-			        App.mIsQuitting = True
-			        Quit()
-			      End If
-			    Else
-			      mConfig = PrefStore.Create(f)
-			      mConfig.SetValue("UseSSL") = True
-			    End If
+			    LoadConfig(App.DataFolder.Child("config.dat"))
 			  End If
 			  Return mConfig
 			End Get
