@@ -198,7 +198,7 @@ Begin Window UpdateWindow
       Left            =   304
       LockedInPosition=   False
       Mode            =   0
-      Period          =   250
+      Period          =   10
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   80
@@ -318,11 +318,11 @@ Begin Window UpdateWindow
    Begin cURLClient curl
       Height          =   32
       Index           =   -2147483648
-      Left            =   377
+      Left            =   3.77e+2
       LockedInPosition=   False
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   80
+      Top             =   8.0e+1
       Width           =   32
    End
 End
@@ -331,7 +331,7 @@ End
 #tag WindowCode
 	#tag Event
 		Function CancelClose(appQuitting as Boolean) As Boolean
-		  If Not curl.IsTransferComplete Or UBound(Files) > -1 Then
+		  If Not mAborting And Not curl.IsTransferComplete Or UBound(Files) > -1 Then
 		    If appQuitting Or MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
 		      Self.Reset()
 		    Else
@@ -587,6 +587,10 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mAborting As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private SocketMode As Integer
 	#tag EndProperty
 
@@ -640,6 +644,7 @@ End
 		  ElseIf Me.Caption = "Cancel" Then
 		    If MsgBox("Abort update?", 52, "VT Hash Check - A download is in progress") = 6 Then
 		      Self.Reset()
+		      mAborting = True
 		      Self.Close
 		    End If
 		  End If
