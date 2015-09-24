@@ -55,9 +55,8 @@ Inherits Application
 		      Dim f As FolderItem = upd.CheckNow("www.boredomsoft.org/updates/vthash.json", VTHash.Version)
 		      If f <> Nil Then
 		        f.Child("vthashsetup.exe").Launch
-		        mIsQuitting = True
-		        Quit
 		      End If
+		      mIsQuitting = True
 		      
 		    Case "--about"
 		      AboutWindow.ShowModal
@@ -68,7 +67,7 @@ Inherits Application
 		    End Select
 		  Case item.Directory
 		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "VT Hash Check - Invalid file")
-		  Case item.Length > 128 * 1024 * 1024
+		  Case item.Length > 128 * 1024 * 1024 And Not mTridMode
 		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "VT Hash Check - Invalid file")
 		  Else
 		    If Not mTridMode Then
