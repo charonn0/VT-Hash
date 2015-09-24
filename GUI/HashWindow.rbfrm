@@ -89,7 +89,6 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "File:"
       TextAlign       =   2
       TextColor       =   0
@@ -124,7 +123,6 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "SHA512:"
       TextAlign       =   2
       TextColor       =   0
@@ -159,7 +157,6 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Z:\\My Folder\\MySubFolder\\MyFile.exe"
       TextAlign       =   0
       TextColor       =   0
@@ -231,7 +228,6 @@ Begin Window HashWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Version 0.86"
       TextAlign       =   0
       TextColor       =   8421504
@@ -245,7 +241,6 @@ Begin Window HashWindow
       Width           =   86
    End
    Begin Thread Hasher
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   425
@@ -253,30 +248,22 @@ Begin Window HashWindow
       Priority        =   5
       Scope           =   0
       StackSize       =   0
-      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -31
-      Visible         =   True
       Width           =   32
    End
    Begin VTHash.VTSession VTSocket
       APIKey          =   ""
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   425
       LockedInPosition=   False
       Scope           =   1
-      TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   34
-      Visible         =   True
       Width           =   32
    End
    Begin Timer HashGUITimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   462
@@ -284,15 +271,11 @@ Begin Window HashWindow
       Mode            =   0
       Period          =   1
       Scope           =   0
-      TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -31
-      Visible         =   True
       Width           =   32
    End
    Begin Thread Submitter
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   425
@@ -300,15 +283,11 @@ Begin Window HashWindow
       Priority        =   5
       Scope           =   0
       StackSize       =   0
-      TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   67
-      Visible         =   True
       Width           =   32
    End
    Begin Timer SubmitterGUITimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   462
@@ -316,11 +295,8 @@ Begin Window HashWindow
       Mode            =   0
       Period          =   1
       Scope           =   0
-      TabIndex        =   10
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   67
-      Visible         =   True
       Width           =   32
    End
    Begin ProgressBar HashProgress
@@ -338,9 +314,7 @@ Begin Window HashWindow
       LockTop         =   True
       Maximum         =   5
       Scope           =   0
-      TabIndex        =   11
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   39
       Value           =   0
       Visible         =   True

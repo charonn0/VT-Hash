@@ -318,11 +318,11 @@ Begin Window UpdateWindow
    Begin cURLClient curl
       Height          =   32
       Index           =   -2147483648
-      Left            =   3.77e+2
+      Left            =   377
       LockedInPosition=   False
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   8.0e+1
+      Top             =   80
       Width           =   32
    End
 End
