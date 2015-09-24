@@ -140,6 +140,12 @@ Protected Module VTHash
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function HasConfig(ConfigName As String) As Boolean
+		  Return Config.GetType(ConfigName) <> Config.TYPE_INVALID
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function IsConfigLoaded() As Boolean
 		  Return mConfig <> Nil
@@ -321,7 +327,7 @@ Protected Module VTHash
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.51", Scope = Protected
+	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.53", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public

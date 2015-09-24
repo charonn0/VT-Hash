@@ -135,7 +135,7 @@ Begin Window SettingsWindow
       Panels          =   ""
       Scope           =   0
       SmallTabs       =   ""
-      TabDefinition   =   "Virus Total\rResult Logs\rSearch Engine"
+      TabDefinition   =   "Virus Total\rResults Sort\rResult Logs\rSearch Engine"
       TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   0
+      Value           =   1
       Visible         =   True
       Width           =   344
       Begin Label Label2
@@ -417,7 +417,7 @@ Begin Window SettingsWindow
          Scope           =   0
          State           =   0
          TabIndex        =   0
-         TabPanelIndex   =   2
+         TabPanelIndex   =   3
          TabStop         =   True
          TextFont        =   "System"
          TextSize        =   11
@@ -446,7 +446,7 @@ Begin Window SettingsWindow
          LockTop         =   True
          Scope           =   0
          TabIndex        =   1
-         TabPanelIndex   =   2
+         TabPanelIndex   =   3
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
@@ -484,7 +484,7 @@ Begin Window SettingsWindow
             ReadOnly        =   ""
             Scope           =   0
             TabIndex        =   0
-            TabPanelIndex   =   2
+            TabPanelIndex   =   3
             TabStop         =   True
             Text            =   ""
             TextColor       =   &h000000
@@ -519,7 +519,7 @@ Begin Window SettingsWindow
             LockTop         =   True
             Scope           =   0
             TabIndex        =   1
-            TabPanelIndex   =   2
+            TabPanelIndex   =   3
             TabStop         =   True
             TextFont        =   "System"
             TextSize        =   0
@@ -551,7 +551,7 @@ Begin Window SettingsWindow
             LockTop         =   True
             Scope           =   0
             TabIndex        =   2
-            TabPanelIndex   =   2
+            TabPanelIndex   =   3
             TabStop         =   True
             TextFont        =   "System"
             TextSize        =   0
@@ -592,7 +592,7 @@ Begin Window SettingsWindow
          ReadOnly        =   ""
          Scope           =   0
          TabIndex        =   0
-         TabPanelIndex   =   3
+         TabPanelIndex   =   4
          TabStop         =   True
          Text            =   "https://encrypted.google.com/search?q=%PARAMETER%"
          TextColor       =   &h000000
@@ -635,7 +635,7 @@ Begin Window SettingsWindow
          ReadOnly        =   ""
          Scope           =   0
          TabIndex        =   1
-         TabPanelIndex   =   3
+         TabPanelIndex   =   4
          TabStop         =   True
          Text            =   "Google"
          TextColor       =   &h000000
@@ -669,7 +669,7 @@ Begin Window SettingsWindow
          Scope           =   0
          Selectable      =   False
          TabIndex        =   2
-         TabPanelIndex   =   3
+         TabPanelIndex   =   4
          Text            =   "URL:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -703,7 +703,7 @@ Begin Window SettingsWindow
          Scope           =   0
          Selectable      =   False
          TabIndex        =   3
-         TabPanelIndex   =   3
+         TabPanelIndex   =   4
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -748,6 +748,205 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   100
       End
+      Begin GroupBox GroupBox2
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Sort by"
+         Enabled         =   True
+         Height          =   120
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   5
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   0
+         TabPanelIndex   =   2
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   33
+         Underline       =   ""
+         Visible         =   True
+         Width           =   160
+         Begin RadioButton SortType1
+            AutoDeactivate  =   True
+            Bold            =   ""
+            Caption         =   "Scanner name"
+            Enabled         =   True
+            Height          =   20
+            HelpTag         =   ""
+            Index           =   -2147483648
+            InitialParent   =   "GroupBox2"
+            Italic          =   ""
+            Left            =   20
+            LockBottom      =   ""
+            LockedInPosition=   False
+            LockLeft        =   True
+            LockRight       =   ""
+            LockTop         =   True
+            Scope           =   0
+            TabIndex        =   0
+            TabPanelIndex   =   2
+            TabStop         =   True
+            TextFont        =   "System"
+            TextSize        =   0
+            TextUnit        =   0
+            Top             =   55
+            Underline       =   ""
+            Value           =   ""
+            Visible         =   True
+            Width           =   137
+         End
+         Begin RadioButton SortType2
+            AutoDeactivate  =   True
+            Bold            =   ""
+            Caption         =   "Scan result"
+            Enabled         =   True
+            Height          =   20
+            HelpTag         =   ""
+            Index           =   -2147483648
+            InitialParent   =   "GroupBox2"
+            Italic          =   ""
+            Left            =   20
+            LockBottom      =   ""
+            LockedInPosition=   False
+            LockLeft        =   True
+            LockRight       =   ""
+            LockTop         =   True
+            Scope           =   0
+            TabIndex        =   1
+            TabPanelIndex   =   2
+            TabStop         =   True
+            TextFont        =   "System"
+            TextSize        =   0
+            TextUnit        =   0
+            Top             =   87
+            Underline       =   ""
+            Value           =   ""
+            Visible         =   True
+            Width           =   100
+         End
+         Begin RadioButton SortType3
+            AutoDeactivate  =   True
+            Bold            =   ""
+            Caption         =   "Do not sort"
+            Enabled         =   True
+            Height          =   20
+            HelpTag         =   ""
+            Index           =   -2147483648
+            InitialParent   =   "GroupBox2"
+            Italic          =   ""
+            Left            =   20
+            LockBottom      =   ""
+            LockedInPosition=   False
+            LockLeft        =   True
+            LockRight       =   ""
+            LockTop         =   True
+            Scope           =   0
+            TabIndex        =   2
+            TabPanelIndex   =   2
+            TabStop         =   True
+            TextFont        =   "System"
+            TextSize        =   0
+            TextUnit        =   0
+            Top             =   119
+            Underline       =   ""
+            Value           =   True
+            Visible         =   True
+            Width           =   100
+         End
+      End
+      Begin GroupBox SortDirGroup
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Sort direction"
+         Enabled         =   False
+         Height          =   120
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   169
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   1
+         TabPanelIndex   =   2
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   33
+         Underline       =   ""
+         Visible         =   True
+         Width           =   160
+         Begin RadioButton SortDirection1
+            AutoDeactivate  =   True
+            Bold            =   ""
+            Caption         =   "Ascending (0->1)"
+            Enabled         =   True
+            Height          =   20
+            HelpTag         =   ""
+            Index           =   -2147483648
+            InitialParent   =   "SortDirGroup"
+            Italic          =   ""
+            Left            =   184
+            LockBottom      =   ""
+            LockedInPosition=   False
+            LockLeft        =   True
+            LockRight       =   ""
+            LockTop         =   True
+            Scope           =   0
+            TabIndex        =   0
+            TabPanelIndex   =   2
+            TabStop         =   True
+            TextFont        =   "System"
+            TextSize        =   0
+            TextUnit        =   0
+            Top             =   55
+            Underline       =   ""
+            Value           =   ""
+            Visible         =   True
+            Width           =   137
+         End
+         Begin RadioButton SortDirection2
+            AutoDeactivate  =   True
+            Bold            =   ""
+            Caption         =   "Descending (1->0)"
+            Enabled         =   True
+            Height          =   20
+            HelpTag         =   ""
+            Index           =   -2147483648
+            InitialParent   =   "SortDirGroup"
+            Italic          =   ""
+            Left            =   184
+            LockBottom      =   ""
+            LockedInPosition=   False
+            LockLeft        =   True
+            LockRight       =   ""
+            LockTop         =   True
+            Scope           =   0
+            TabIndex        =   1
+            TabPanelIndex   =   2
+            TabStop         =   True
+            TextFont        =   "System"
+            TextSize        =   0
+            TextUnit        =   0
+            Top             =   101
+            Underline       =   ""
+            Value           =   ""
+            Visible         =   True
+            Width           =   137
+         End
+      End
    End
    Begin VTHash.VTSession VTSession1
       APIKey          =   ""
@@ -790,6 +989,27 @@ End
 		  SearchDisplayName.Text = VTHash.GetConfig("SearchEngineName")
 		  SearchURL.Text = VTHash.GetConfig("SearchEngineURL")
 		  UseSSL.Value = VTHash.GetConfig("UseSSL")
+		  
+		  If HasConfig("SortType") Then
+		    SortDir = VTHash.GetConfig("SortDirection")
+		    SortType = VTHash.GetConfig("SortType")
+		  Else
+		    SortDir = Listbox.SortAscending
+		    SortType = -1
+		  End If
+		  If SortDir = Listbox.SortDescending Then
+		    SortDirection2.Value = True
+		  Else
+		    SortDirection1.Value = True
+		  End If
+		  
+		  Select Case SortType
+		  Case SORT_SCANNER
+		    SortType1.Value = True
+		  Case SORT_RESULT
+		    SortType2.Value = True
+		  End Select
+		  
 		End Sub
 	#tag EndEvent
 
@@ -810,8 +1030,22 @@ End
 		Private NewSearchURL As String
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private SortDir As Integer = -1
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private SortType As Integer = -1
+	#tag EndProperty
+
 
 	#tag Constant, Name = eicarhash, Type = String, Dynamic = False, Default = \"44D88612FEA8A8F36DE82E1278ABB02F", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SORT_RESULT, Type = Double, Dynamic = False, Default = \"2", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SORT_SCANNER, Type = Double, Dynamic = False, Default = \"0", Scope = Private
 	#tag EndConstant
 
 
@@ -857,6 +1091,8 @@ End
 		  VTHash.SetConfig("AutoSavePath", gf)
 		  VTHash.SetConfig("CommentSignature", CommentSig.Text)
 		  VTHash.SetConfig("UseSSL", UseSSL.Value)
+		  VTHash.SetConfig("SortDirection", SortDir)
+		  VTHash.SetConfig("SortType", SortType)
 		  Close()
 		End Sub
 	#tag EndEvent
@@ -957,6 +1193,44 @@ End
 		  If f <> Nil Then
 		    LogFile.Text = f.AbsolutePath
 		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortType1
+	#tag Event
+		Sub Action()
+		  SortDirGroup.Enabled = Me.Value
+		  SortType = SORT_SCANNER
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortType2
+	#tag Event
+		Sub Action()
+		  SortDirGroup.Enabled = Me.Value
+		  SortType = SORT_RESULT
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortType3
+	#tag Event
+		Sub Action()
+		  SortDirGroup.Enabled = Not Me.Value
+		  SortType = Listbox.SortNone
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortDirection1
+	#tag Event
+		Sub Action()
+		  SortDir = Listbox.SortAscending
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortDirection2
+	#tag Event
+		Sub Action()
+		  SortDir = Listbox.SortDescending
 		End Sub
 	#tag EndEvent
 #tag EndEvents

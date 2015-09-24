@@ -163,7 +163,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
       TextColor       =   255
@@ -177,7 +176,6 @@ Begin Window ResultWindow
       Width           =   101
    End
    Begin Timer TridTimer
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   555
@@ -185,11 +183,8 @@ Begin Window ResultWindow
       Mode            =   0
       Period          =   2500
       Scope           =   0
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   14
-      Visible         =   True
       Width           =   32
    End
    Begin GradientProgressBar ProgBar1
@@ -298,7 +293,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -375,7 +369,6 @@ Begin Window ResultWindow
       Selectable      =   False
       TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -442,7 +435,6 @@ Begin Window ResultWindow
       Selectable      =   ""
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
       TextColor       =   "&c0000FF"
@@ -484,36 +476,27 @@ Begin Window ResultWindow
    End
    Begin VTHash.VTSession RescanSession
       APIKey          =   ""
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
-      TabIndex        =   13
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -18
-      Visible         =   True
       Width           =   32
    End
    Begin VTHash.VTSession CommentSession
       APIKey          =   ""
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   525
       LockedInPosition=   False
       Scope           =   1
-      TabIndex        =   14
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   14
-      Visible         =   True
       Width           =   32
    End
    Begin Thread RescanThread
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   555
@@ -521,11 +504,8 @@ Begin Window ResultWindow
       Priority        =   5
       Scope           =   0
       StackSize       =   0
-      TabIndex        =   15
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -18
-      Visible         =   True
       Width           =   32
    End
 End
@@ -734,6 +714,13 @@ End
 		      End If
 		    Next
 		    
+		    If HasConfig("SortType") And GetConfig("SortType") <> -1 Then
+		      Dim sorttype As Integer = GetConfig("SortType")
+		      Listbox1.SortedColumn = sorttype
+		      Listbox1.ColumnSortDirection(sorttype) = GetConfig("SortDirection")
+		      Listbox1.Sort
+		    End If
+		    
 		    ProgBar1.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
 		    + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
 		    ProgBar1.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
@@ -823,7 +810,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
-		  Dim infection As String = Me.Cell(Me.RowFromXY(X, Y), 2).Trim
+		  Dim row As Integer = Me.RowFromXY(X, Y)
+		  Dim infection As String = Me.Cell(row, 2).Trim
 		  Dim searchname As String = VTHash.GetConfig("SearchEngineName")
 		  If infection <> "" Then
 		    Dim cp As New MenuItem("Copy to clipboard")
