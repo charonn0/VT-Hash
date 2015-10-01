@@ -582,6 +582,7 @@ End
 		    anon.Close
 		    anon = Nil
 		    ExtraData.Value("User's config.dat") = tmp
+		    VTHash.Config = PrefStore.Open(f)
 		  Else
 		    ExtraData.Value("User's config.dat") = "Not specified"
 		  End If
