@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   1
+      Value           =   0
       Visible         =   True
       Width           =   344
       Begin Label Label2
@@ -774,10 +774,10 @@ Begin Window SettingsWindow
          Underline       =   ""
          Visible         =   True
          Width           =   160
-         Begin RadioButton SortType1
+         Begin RadioButton SortType3
             AutoDeactivate  =   True
             Bold            =   ""
-            Caption         =   "Scanner name"
+            Caption         =   "Do not sort"
             Enabled         =   True
             Height          =   20
             HelpTag         =   ""
@@ -791,17 +791,17 @@ Begin Window SettingsWindow
             LockRight       =   ""
             LockTop         =   True
             Scope           =   0
-            TabIndex        =   0
+            TabIndex        =   2
             TabPanelIndex   =   2
             TabStop         =   True
             TextFont        =   "System"
             TextSize        =   0
             TextUnit        =   0
-            Top             =   55
+            Top             =   119
             Underline       =   ""
-            Value           =   ""
+            Value           =   True
             Visible         =   True
-            Width           =   137
+            Width           =   100
          End
          Begin RadioButton SortType2
             AutoDeactivate  =   True
@@ -832,10 +832,10 @@ Begin Window SettingsWindow
             Visible         =   True
             Width           =   100
          End
-         Begin RadioButton SortType3
+         Begin RadioButton SortType1
             AutoDeactivate  =   True
             Bold            =   ""
-            Caption         =   "Do not sort"
+            Caption         =   "Scanner name"
             Enabled         =   True
             Height          =   20
             HelpTag         =   ""
@@ -849,17 +849,17 @@ Begin Window SettingsWindow
             LockRight       =   ""
             LockTop         =   True
             Scope           =   0
-            TabIndex        =   2
+            TabIndex        =   0
             TabPanelIndex   =   2
             TabStop         =   True
             TextFont        =   "System"
             TextSize        =   0
             TextUnit        =   0
-            Top             =   119
+            Top             =   55
             Underline       =   ""
-            Value           =   True
+            Value           =   ""
             Visible         =   True
-            Width           =   100
+            Width           =   137
          End
       End
       Begin GroupBox SortDirGroup
@@ -964,6 +964,31 @@ End
 
 #tag WindowCode
 	#tag Event
+		Function KeyDown(Key As String) As Boolean
+		  mKonami = mKonami + Str(Asc(key))
+		  
+		  If InStr(mKonami, "30303131282928299897") > 0 Then
+		    mKonami = ""
+		    mKonamiCount = mKonamiCount + 1
+		    Select Case mKonamiCount
+		    Case 1
+		      Call MsgBox("There are no easter eggs in this program.", 16, "Do not do that again")
+		    Case 2
+		      Call MsgBox("I wasn't kidding, there are no easter eggs in this program.", 16, "Did I stutter?")
+		    Case 3
+		      Call MsgBox("Won't somebody please think of the children!?", 16, "Think of them!")
+		    Else
+		      If mKonamiCount Mod 2 = 0 Then
+		        Call MsgBox("I can't take much more of this!", 16, "No more!")
+		      Else
+		        Call MsgBox("Oh, wait. Yes, I can.", 16, "Whoops")
+		      End If
+		    End Select
+		  End If
+		End Function
+	#tag EndEvent
+
+	#tag Event
 		Sub Open()
 		  AlgSelect.AddRow("MD5")
 		  AlgSelect.AddRow("SHA1")
@@ -1016,6 +1041,14 @@ End
 
 	#tag Property, Flags = &h21
 		Private KeyValid As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mKonami As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mKonamiCount As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -1196,11 +1229,11 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events SortType1
+#tag Events SortType3
 	#tag Event
 		Sub Action()
-		  SortDirGroup.Enabled = Me.Value
-		  SortType = SORT_SCANNER
+		  SortDirGroup.Enabled = Not Me.Value
+		  SortType = Listbox.SortNone
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -1212,11 +1245,11 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events SortType3
+#tag Events SortType1
 	#tag Event
 		Sub Action()
-		  SortDirGroup.Enabled = Not Me.Value
-		  SortType = Listbox.SortNone
+		  SortDirGroup.Enabled = Me.Value
+		  SortType = SORT_SCANNER
 		End Sub
 	#tag EndEvent
 #tag EndEvents
