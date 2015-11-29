@@ -5,8 +5,15 @@ Protected Class Context
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386983%28v=vs.85%29.aspx
 		  If Not Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, 0) Then
 		    mLastError = Win32.LastError
-		    If mLastError = NTE_BAD_KEYSET And Not Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, CRYPT_NEWKEYSET) Then
-		      mLastError = Win32.LastError
+		    If mLastError = NTE_BAD_KEYSET Then
+		      Select Case True
+		      Case Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, CRYPT_NEWKEYSET)
+		        mLastError = 0
+		        
+		      Case Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, CRYPT_VERIFYCONTEXT)
+		        mLastError = 0
+		        
+		      End Select
 		    End If
 		  End If
 		  If mLastError <> 0 Then

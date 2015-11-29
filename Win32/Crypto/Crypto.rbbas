@@ -343,6 +343,9 @@ Protected Module Crypto
 	#tag Constant, Name = CRYPT_UPDATE_KEY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = CRYPT_VERIFYCONTEXT, Type = Double, Dynamic = False, Default = \"&hF0000000", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = MS_DEF_DH_SCHANNEL_PROV, Type = String, Dynamic = False, Default = \"Microsoft DH Schannel Cryptographic Provider", Scope = Private
 	#tag EndConstant
 
