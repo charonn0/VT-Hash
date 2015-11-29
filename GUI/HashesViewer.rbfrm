@@ -175,8 +175,10 @@ End
 		  
 		  DataStream = Data
 		  Me.Show()
-		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
-		  ShowCentered(Me, ScreenNumber)
+		  If ParentWindow <> Nil Then
+		    Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
+		    ShowCentered(Me, ScreenNumber)
+		  End If
 		End Sub
 	#tag EndMethod
 
@@ -195,6 +197,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private mLock As Semaphore
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mProcessors() As Win32.Crypto.HashProcessor
 	#tag EndProperty
 
 
@@ -268,13 +274,19 @@ End
 		  Wend
 		  Dim chunksz As Integer
 		  If DataStream.Length > 1024 * 1024 Then chunksz = 1024 * 1024 Else chunksz = 4 * 1024
+		  
+		  ReDim mProcessors(-1)
+		  For i As Integer = 0 To Listbox1.ListCount - 1
+		    mProcessors.Append(New Win32.Crypto.HashProcessor(Listbox1.CellTag(i, 0).Int32Value))
+		  Next
 		  Try
-		    Dim h As New Win32.Crypto.HashProcessor(mCurrentAlg)
 		    DataStream.Position = 0
 		    While Not DataStream.EOF
-		      h.Process(DataStream.Read(chunksz))
+		      Dim data As MemoryBlock = DataStream.Read(chunksz)
+		      For i As Integer = 0 To UBound(mProcessors)
+		        mProcessors(i).Process(data)
+		      Next
 		    Wend
-		    mHashValue = h.Value
 		  Finally
 		    mLock.Release
 		  End Try
@@ -284,33 +296,22 @@ End
 #tag Events HashTimer
 	#tag Event
 		Sub Action()
-		  If mLock.TrySignal Then
-		    Try
-		      If mCurrentAlg > 0 Then
+		  If UBound(mProcessors) > -1 Then
+		    If mLock.TrySignal Then
+		      Try
 		        For i As Integer = 0 To Listbox1.ListCount - 1
-		          If Listbox1.CellTag(i, 0) = mCurrentAlg Then
-		            Listbox1.Cell(i, 2) = EncodeHex(mHashValue)
-		            Exit For
+		          If Listbox1.CellTag(i, 0) = mProcessors(i).Algorithm Then
+		            Listbox1.Cell(i, 2) = EncodeHex(mProcessors(i).Value)
 		          End If
 		        Next
-		      End If
-		      
-		      For i As Integer = 0 To Listbox1.ListCount - 1
-		        If Listbox1.Cell(i, 2) = "Pending" Then
-		          mCurrentAlg = Listbox1.CellTag(i, 0)
-		          mHashValue = ""
-		          Listbox1.Cell(i, 2) = "Calculating..."
-		          Exit For
-		        ElseIf i = Listbox1.ListCount - 1 Then
-		          Me.Mode = Timer.ModeOff
-		        End If
-		      Next
-		      HashThread.Run
-		    Catch Err As ThreadAlreadyRunningException
-		      Me.Mode = Timer.ModeOff
-		    Finally
-		      mLock.Release
-		    End Try
+		      Finally
+		        mLock.Release
+		      End Try
+		    End If
+		    Me.Mode = Timer.ModeOff
+		  ElseIf mLock.TrySignal Then
+		    mLock.Release
+		    HashThread.Run
 		  End If
 		End Sub
 	#tag EndEvent
