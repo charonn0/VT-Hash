@@ -191,16 +191,14 @@ Protected Module VTHash
 
 	#tag Method, Flags = &h0
 		Function ScreenFromXY(X As Integer, Y As Integer) As Integer
-		  Dim rect As New REALbasic.Rect
-		  Dim pt As New REALbasic.Point
-		  pt.X = X
-		  pt.Y = Y
-		  For i As Integer = 0 To ScreenCount - 1
-		    rect.Top = Screen(i).Top
-		    rect.Left = Screen(i).Left
-		    rect.Width = Screen(i).Width
-		    rect.Height = Screen(i).Height
-		    If rect.Contains(pt) Then
+		  Dim pt As New REALbasic.Point(X, Y)
+		  Dim scren As Screen
+		  Dim c As Integer = ScreenCount
+		  
+		  For i As Integer = 0 To c - 1
+		    scren = Screen(i)
+		    Dim rect As New REALbasic.Rect(scren.Left, scren.Top, scren.Width, scren.Height)
+		    If rect.Contains(pt) Then 
 		      Return i
 		    End If
 		  Next
