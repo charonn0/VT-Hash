@@ -59,7 +59,7 @@ Begin Window ErrorWindow
       Width           =   387
    End
    Begin TextArea errorStack
-      AcceptTabs      =   False
+      AcceptTabs      =   True
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   True
@@ -84,7 +84,7 @@ Begin Window ErrorWindow
       LockTop         =   True
       Mask            =   ""
       Multiline       =   True
-      ReadOnly        =   False
+      ReadOnly        =   True
       Scope           =   0
       ScrollbarHorizontal=   False
       ScrollbarVertical=   True
@@ -229,8 +229,8 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  Me.Top = Window(0).Top + 111
-		  Me.Left = Window(0).Left + 87
+		  'Me.Top = Window(0).Top + 111
+		  'Me.Left = Window(0).Left + 87
 		End Sub
 	#tag EndEvent
 

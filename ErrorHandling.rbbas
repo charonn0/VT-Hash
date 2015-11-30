@@ -239,20 +239,20 @@ Protected Module ErrorHandling
 		    m = m + Err.Message
 		  End If
 		  Dim head As String = _
-		  "Runtime Exception:" + EndOfLine + _
-		  "Date: " + d.SQLDateTime + EndOfLine + _
-		  "Exception type: " + Introspection.GetType(Err).FullName + EndOfLine + _
-		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine + _
-		  m + EndOfLine + _
-		  "libcURL version: " + libcURL.Version.Name + EndOfLine + _
-		  EndOfLine
+		  "Runtime Exception:" + EndOfLine.Windows + _
+		  "Date: " + d.SQLDateTime + EndOfLine.Windows + _
+		  "Exception type: " + Introspection.GetType(Err).FullName + EndOfLine.Windows + _
+		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine.Windows + _
+		  m + EndOfLine.Windows + _
+		  "libcURL version: " + libcURL.Version.Name + EndOfLine.Windows + _
+		  EndOfLine.Windows
 		  
 		  Dim Error As String =_
-		  "Call stack at last call to Raise:" + EndOfLine + EndOfLine + _
-		  Join(stack, "     " + EndOfLine) + EndOfLine
+		  EndOfLine.Windows + "Call stack at last call to Raise:" + EndOfLine.Windows + EndOfLine.Windows + "   " _
+		  + Join(stack, EndOfLine.Windows + "   ") + EndOfLine.Windows
 		  
 		  Dim OsBlock As String = _
-		  "EXE Version: " + VTHash.VersionString + EndOfLine + "Algorithm: 0x" + Hex(VTHash.GetConfig("Algorithm")) + EndOfLine + "OS: " + OS + EndOfLine
+		  "EXE Version: " + VTHash.VersionString + EndOfLine.Windows + "Algorithm: 0x" + Hex(VTHash.GetConfig("Algorithm")) + EndOfLine.Windows + "OS: " + OS + EndOfLine.Windows
 		  
 		  Return head + OsBlock + Error
 		End Function

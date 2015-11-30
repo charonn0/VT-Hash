@@ -328,8 +328,8 @@ End
 		Sub ProcessFile(File As FolderItem)
 		  mTargetFile = File
 		  PathText.Text = mTargetFile.AbsolutePath.Shorten
-		  Hasher.Run
 		  Me.Show
+		  Hasher.Run
 		End Sub
 	#tag EndMethod
 
@@ -423,6 +423,12 @@ End
 		  End If
 		  Call MsgBox(msg, 16, "VT Hash Check - File Error")
 		  App.mIsQuitting = True
+		  Quit()
+		  
+		Exception Err 'As Win32.Win32Exception
+		  App.mIsQuitting = True
+		  Self.Visible = False
+		  Call ErrorWindow.ShowException(Err)
 		  Quit()
 		End Sub
 	#tag EndEvent
