@@ -164,14 +164,15 @@ End
 		  ListBox1.AddRow("", "SHA1", "Pending")
 		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA1
 		  
-		  ListBox1.AddRow("", "SHA256", "Pending")
-		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA256
-		  
-		  ListBox1.AddRow("", "SHA384", "Pending")
-		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA384
-		  
-		  ListBox1.AddRow("", "SHA512", "Pending")
-		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA512
+		  If Win32.KernelVersion >= 6.0 Then
+		    ListBox1.AddRow("", "SHA256", "Pending")
+		    ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA256
+		    ListBox1.AddRow("", "SHA384", "Pending")
+		    ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA384
+		    
+		    ListBox1.AddRow("", "SHA512", "Pending")
+		    ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA512
+		  End If
 		  
 		  DataStream = Data
 		  Me.Show()
