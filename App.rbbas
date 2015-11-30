@@ -26,6 +26,10 @@ Inherits Application
 		  End If
 		  
 		  If VTHash.Config.GetType("UseSSL") = PrefStore.TYPE_INVALID Then VTHash.SetConfig("UseSSL", True)
+		  If Win32.KernelVersion < 6.0  And VTHash.GetConfig("Algorithm") = Win32.Crypto.CALG_SHA256 Then
+		    ' XP doesn't support SHA256 or higher
+		    VTHash.SetConfig("Algorithm", Win32.Crypto.CALG_SHA1)
+		  End If
 		End Sub
 	#tag EndEvent
 

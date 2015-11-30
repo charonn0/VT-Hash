@@ -992,16 +992,24 @@ End
 		Sub Open()
 		  AlgSelect.AddRow("MD5")
 		  AlgSelect.AddRow("SHA1")
-		  AlgSelect.AddRow("SHA256")
+		  If Win32.KernelVersion >= 6.0 Then AlgSelect.AddRow("SHA256")
 		  Select Case VTHash.GetConfig("Algorithm")
 		  Case Win32.Crypto.CALG_MD5
 		    AlgSelect.ListIndex = 0
 		  Case Win32.Crypto.CALG_SHA1
 		    AlgSelect.ListIndex = 1
 		  Case Win32.Crypto.CALG_SHA256
-		    AlgSelect.ListIndex = 2
+		    If Win32.KernelVersion >= 6.0 Then
+		      AlgSelect.ListIndex = 2
+		    Else
+		      AlgSelect.ListIndex = 1
+		    End If
 		  Else
-		    AlgSelect.ListIndex = 2 ' default to sha256
+		    If Win32.KernelVersion >= 6.0 Then
+		      AlgSelect.ListIndex = 2 ' default to sha256
+		    Else
+		      AlgSelect.ListIndex = 1 ' XP doesn't support sha256
+		    End If
 		  End Select
 		  autolog.Value = VTHash.GetConfig("AutoSave")
 		  If VTHash.GetConfig("AutosavePath") <> Nil Then
