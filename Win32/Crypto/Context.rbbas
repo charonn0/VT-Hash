@@ -3,19 +3,20 @@ Protected Class Context
 	#tag Method, Flags = &h0
 		Sub Constructor(ProviderID As String, ProviderType As Integer)
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386983%28v=vs.85%29.aspx
-		  If Not Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, 0) Then
+		  Select Case True
+		  Case Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, 0)
+		    mLastError = 0
+		    
+		    'Case Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, CRYPT_NEWKEYSET)
+		    'mLastError = 0
+		    
+		  Case Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, CRYPT_VERIFYCONTEXT)
+		    mLastError = 0
+		    
+		  Else
 		    mLastError = Win32.LastError
-		    If mLastError = NTE_BAD_KEYSET Then
-		      Select Case True
-		      Case Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, CRYPT_NEWKEYSET)
-		        mLastError = 0
-		        
-		      Case Win32.Libs.AdvApi32.CryptAcquireContext(mProvider, 0, ProviderID, ProviderType, CRYPT_VERIFYCONTEXT)
-		        mLastError = 0
-		        
-		      End Select
-		    End If
-		  End If
+		  End Select
+		  
 		  If mLastError <> 0 Then
 		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
