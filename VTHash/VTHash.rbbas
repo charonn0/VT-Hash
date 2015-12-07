@@ -198,7 +198,7 @@ Protected Module VTHash
 		  For i As Integer = 0 To c - 1
 		    scren = Screen(i)
 		    Dim rect As New REALbasic.Rect(scren.Left, scren.Top, scren.Width, scren.Height)
-		    If rect.Contains(pt) Then 
+		    If rect.Contains(pt) Then
 		      Return i
 		    End If
 		  Next
@@ -325,7 +325,7 @@ Protected Module VTHash
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.54", Scope = Protected
+	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.55", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
