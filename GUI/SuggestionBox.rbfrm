@@ -639,6 +639,9 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
+		  #pragma Unused BytesRead
+		  #pragma Unused BytesWritten
+		  
 		  mWaiter.Close
 		  mWaiter = Nil
 		  If Me.GetStatusCode = 200 Then
@@ -779,6 +782,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub CellAction(row As Integer, column As Integer)
+		  #pragma Unused column
+		  
 		  Dim name, value As String
 		  name = Me.Cell(row, 0)
 		  value = Me.Cell(row, 1)

@@ -718,6 +718,8 @@ End
 #tag Events curl
 	#tag Event
 		Sub Connected(Socket As Integer)
+		  #pragma Unused Socket
+		  
 		  CurrentAction.Text = "Connected to update server " + Shorten(Me.EasyItem.URL)
 		  SpeedTimer.Mode = Timer.ModeMultiple
 		End Sub
@@ -733,6 +735,8 @@ End
 	#tag EndEvent
 	#tag Event
 		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		  #pragma Unused ulnow
+		  #pragma Unused ultotal
 		  
 		  If SocketMode <> Mode_Error Then
 		    Dim url As String = BaseAddress + CurrentFile
@@ -749,6 +753,9 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub TransferComplete(BytesRead As Integer, BytesWritten As Integer)
+		  #pragma Unused BytesRead
+		  #pragma Unused BytesWritten
+		  
 		  ProgressBar1.Value = 100
 		  Select Case SocketMode
 		  Case Mode_Checking
