@@ -459,14 +459,6 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
-		  #pragma Unused ulnow
-		  #pragma Unused ultotal
-		  'HashPercent = dlnow * 100 \ dlTotal
-		  'SubmitterGUITimer.Mode = Timer.ModeSingle
-		End Function
-	#tag EndEvent
-	#tag Event
 		Sub Error(cURLCode As Integer)
 		  VTHash.HandleCurlError(Me, cURLCode)
 		  Self.Close
