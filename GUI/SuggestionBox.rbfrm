@@ -25,17 +25,13 @@ Begin Window SuggestionBox
    Visible         =   True
    Width           =   4.27e+2
    Begin libcURL.cURLClient Socket
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   437
       LockedInPosition=   False
       Scope           =   0
-      TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -15
-      Visible         =   True
       Width           =   32
    End
    Begin PagePanel PagePanel1
@@ -56,7 +52,6 @@ Begin Window SuggestionBox
       Scope           =   0
       TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   0
       Value           =   0
       Visible         =   True
@@ -83,7 +78,6 @@ Begin Window SuggestionBox
          Selectable      =   True
          TabIndex        =   0
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Feedback, bug reports, praise, and criticisms are gratefully accepted. In addition to your comment, anonymous data about your computer will also be shared. Provide an e-mail address if you would like a reply."
          TextAlign       =   0
          TextColor       =   0
@@ -155,7 +149,7 @@ Begin Window SuggestionBox
          Index           =   -2147483648
          InitialParent   =   "PagePanel1"
          Italic          =   ""
-         Left            =   327
+         Left            =   234
          LockBottom      =   True
          LockedInPosition=   False
          LockLeft        =   False
@@ -168,7 +162,7 @@ Begin Window SuggestionBox
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   236
+         Top             =   235
          Underline       =   ""
          Visible         =   True
          Width           =   80
@@ -201,7 +195,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "What is being shared?"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -227,7 +220,7 @@ Begin Window SuggestionBox
          Index           =   -2147483648
          InitialParent   =   "PagePanel1"
          Italic          =   ""
-         Left            =   241
+         Left            =   148
          LockBottom      =   True
          LockedInPosition=   False
          LockLeft        =   False
@@ -240,7 +233,7 @@ Begin Window SuggestionBox
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   236
+         Top             =   235
          Underline       =   ""
          Visible         =   True
          Width           =   80
@@ -310,7 +303,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -388,7 +380,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   8
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "e-mail:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -429,7 +420,6 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   2
-         TabStop         =   True
          Text            =   "Go Back"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -521,6 +511,46 @@ Begin Window SuggestionBox
          Underline       =   ""
          Visible         =   True
          Width           =   95
+      End
+      Begin LinkLabel CommentShowPrivacyPolicy
+         ActiveColor     =   "&cFF0000"
+         AltText         =   ""
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Draggable       =   False
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         HilightColor    =   "&c00FFFF"
+         HoverPeriod     =   250
+         Index           =   -2147483648
+         InitialParent   =   "PagePanel1"
+         Italic          =   ""
+         Left            =   333
+         LockBottom      =   True
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   False
+         LockTop         =   False
+         Multiline       =   ""
+         ResetPeriod     =   1000
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   9
+         TabPanelIndex   =   1
+         Text            =   "Privacy policy"
+         TextAlign       =   2
+         TextColor       =   &h000000FF
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   238
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   88
       End
    End
 End
@@ -835,6 +865,13 @@ End
 		  Loop
 		  ExtraData.Value(name) = f
 		  PopulateExtraInfo()
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events CommentShowPrivacyPolicy
+	#tag Event
+		Sub Action()
+		  ShowURL("http://www.boredomsoft.org/privacy.bs")
 		End Sub
 	#tag EndEvent
 #tag EndEvents
