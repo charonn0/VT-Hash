@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   0
+      Value           =   1
       Visible         =   True
       Width           =   344
       Begin Label Label2
@@ -748,6 +748,158 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   100
       End
+      Begin ComboBox ComboBox1
+         AutoComplete    =   False
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         InitialValue    =   "\r\nGoogle\r\nYahoo\r\nBing\r\nDuckDuckGo\r\nBaidu\r\n"
+         Italic          =   ""
+         Left            =   91
+         ListIndex       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   4
+         TabPanelIndex   =   4
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   90
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   243
+      End
+      Begin Label Label6
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   10
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   5
+         TabPanelIndex   =   4
+         Text            =   "Preset:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   90
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   68
+      End
+      Begin GroupBox SortDirGroup
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Sort direction"
+         Enabled         =   False
+         Height          =   120
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   169
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   1
+         TabPanelIndex   =   2
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   33
+         Underline       =   ""
+         Visible         =   True
+         Width           =   160
+         Begin RadioButton SortDirection1
+            AutoDeactivate  =   True
+            Bold            =   ""
+            Caption         =   "Ascending (0->1)"
+            Enabled         =   True
+            Height          =   20
+            HelpTag         =   ""
+            Index           =   -2147483648
+            InitialParent   =   "SortDirGroup"
+            Italic          =   ""
+            Left            =   184
+            LockBottom      =   ""
+            LockedInPosition=   False
+            LockLeft        =   True
+            LockRight       =   ""
+            LockTop         =   True
+            Scope           =   0
+            TabIndex        =   0
+            TabPanelIndex   =   2
+            TabStop         =   True
+            TextFont        =   "System"
+            TextSize        =   0
+            TextUnit        =   0
+            Top             =   55
+            Underline       =   ""
+            Value           =   ""
+            Visible         =   True
+            Width           =   137
+         End
+         Begin RadioButton SortDirection2
+            AutoDeactivate  =   True
+            Bold            =   ""
+            Caption         =   "Descending (1->0)"
+            Enabled         =   True
+            Height          =   20
+            HelpTag         =   ""
+            Index           =   -2147483648
+            InitialParent   =   "SortDirGroup"
+            Italic          =   ""
+            Left            =   184
+            LockBottom      =   ""
+            LockedInPosition=   False
+            LockLeft        =   True
+            LockRight       =   ""
+            LockTop         =   True
+            Scope           =   0
+            TabIndex        =   1
+            TabPanelIndex   =   2
+            TabStop         =   True
+            TextFont        =   "System"
+            TextSize        =   0
+            TextUnit        =   0
+            Top             =   101
+            Underline       =   ""
+            Value           =   ""
+            Visible         =   True
+            Width           =   137
+         End
+      End
       Begin GroupBox GroupBox2
          AutoDeactivate  =   True
          Bold            =   ""
@@ -856,91 +1008,6 @@ Begin Window SettingsWindow
             TextSize        =   0
             TextUnit        =   0
             Top             =   55
-            Underline       =   ""
-            Value           =   ""
-            Visible         =   True
-            Width           =   137
-         End
-      End
-      Begin GroupBox SortDirGroup
-         AutoDeactivate  =   True
-         Bold            =   ""
-         Caption         =   "Sort direction"
-         Enabled         =   False
-         Height          =   120
-         HelpTag         =   ""
-         Index           =   -2147483648
-         InitialParent   =   "TabPanel1"
-         Italic          =   ""
-         Left            =   169
-         LockBottom      =   ""
-         LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   ""
-         LockTop         =   True
-         Scope           =   0
-         TabIndex        =   1
-         TabPanelIndex   =   2
-         TextFont        =   "System"
-         TextSize        =   0
-         TextUnit        =   0
-         Top             =   33
-         Underline       =   ""
-         Visible         =   True
-         Width           =   160
-         Begin RadioButton SortDirection1
-            AutoDeactivate  =   True
-            Bold            =   ""
-            Caption         =   "Ascending (0->1)"
-            Enabled         =   True
-            Height          =   20
-            HelpTag         =   ""
-            Index           =   -2147483648
-            InitialParent   =   "SortDirGroup"
-            Italic          =   ""
-            Left            =   184
-            LockBottom      =   ""
-            LockedInPosition=   False
-            LockLeft        =   True
-            LockRight       =   ""
-            LockTop         =   True
-            Scope           =   0
-            TabIndex        =   0
-            TabPanelIndex   =   2
-            TabStop         =   True
-            TextFont        =   "System"
-            TextSize        =   0
-            TextUnit        =   0
-            Top             =   55
-            Underline       =   ""
-            Value           =   ""
-            Visible         =   True
-            Width           =   137
-         End
-         Begin RadioButton SortDirection2
-            AutoDeactivate  =   True
-            Bold            =   ""
-            Caption         =   "Descending (1->0)"
-            Enabled         =   True
-            Height          =   20
-            HelpTag         =   ""
-            Index           =   -2147483648
-            InitialParent   =   "SortDirGroup"
-            Italic          =   ""
-            Left            =   184
-            LockBottom      =   ""
-            LockedInPosition=   False
-            LockLeft        =   True
-            LockRight       =   ""
-            LockTop         =   True
-            Scope           =   0
-            TabIndex        =   1
-            TabPanelIndex   =   2
-            TabStop         =   True
-            TextFont        =   "System"
-            TextSize        =   0
-            TextUnit        =   0
-            Top             =   101
             Underline       =   ""
             Value           =   ""
             Visible         =   True
@@ -1237,27 +1304,24 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events SortType3
+#tag Events ComboBox1
 	#tag Event
-		Sub Action()
-		  SortDirGroup.Enabled = Not Me.Value
-		  SortType = Listbox.SortNone
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events SortType2
-	#tag Event
-		Sub Action()
-		  SortDirGroup.Enabled = Me.Value
-		  SortType = SORT_RESULT
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events SortType1
-	#tag Event
-		Sub Action()
-		  SortDirGroup.Enabled = Me.Value
-		  SortType = SORT_SCANNER
+		Sub Change()
+		  SearchDisplayName.Text = Me.Text
+		  Select Case Me.Text
+		  Case "Google"
+		    SearchURL.Text = "https://encrypted.google.com/search?q=%PARAMETER%"
+		  Case "Yahoo"
+		    SearchURL.Text = "https://search.yahoo.com/search?p=%PARAMETER%"
+		  Case "Bing"
+		    SearchURL.Text = "https://www.bing.com/search?q=%PARAMETER%"
+		  Case "DuckDuckGo"
+		    SearchURL.Text = "https://duckduckgo.com/?q=%PARAMETER%"
+		  Case "Baidu"
+		    SearchURL.Text = "https://www.baidu.com/s?wd=%PARAMETER%"
+		  Else
+		    SearchURL.Text = ""
+		  End Select
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -1272,6 +1336,36 @@ End
 	#tag Event
 		Sub Action()
 		  SortDir = Listbox.SortDescending
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortType3
+	#tag Event
+		Sub Action()
+		  SortDirGroup.Enabled = Not Me.Value
+		  SortType = Listbox.SortNone
+		  SortDirection1.Caption = "Ascending (0->1)"
+		  SortDirection2.Caption = "Descending (1->0)"
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortType2
+	#tag Event
+		Sub Action()
+		  SortDirGroup.Enabled = Me.Value
+		  SortType = SORT_RESULT
+		  SortDirection1.Caption = "Negative on top"
+		  SortDirection2.Caption = "Positive on top"
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SortType1
+	#tag Event
+		Sub Action()
+		  SortDirGroup.Enabled = Me.Value
+		  SortType = SORT_SCANNER
+		  SortDirection1.Caption = "Alphabetical"
+		  SortDirection2.Caption = "Reverse Alphabetical"
 		End Sub
 	#tag EndEvent
 #tag EndEvents
