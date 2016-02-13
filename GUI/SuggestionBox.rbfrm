@@ -149,7 +149,7 @@ Begin Window SuggestionBox
          Index           =   -2147483648
          InitialParent   =   "PagePanel1"
          Italic          =   ""
-         Left            =   234
+         Left            =   216
          LockBottom      =   True
          LockedInPosition=   False
          LockLeft        =   False
@@ -220,7 +220,7 @@ Begin Window SuggestionBox
          Index           =   -2147483648
          InitialParent   =   "PagePanel1"
          Italic          =   ""
-         Left            =   148
+         Left            =   130
          LockBottom      =   True
          LockedInPosition=   False
          LockLeft        =   False
