@@ -812,6 +812,7 @@ End
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
 		  Dim row As Integer = Me.RowFromXY(X, Y)
+		  If row < 0 Then row = Me.ListIndex
 		  Dim infection As String = Me.Cell(row, 2).Trim
 		  Dim searchname As String = VTHash.GetConfig("SearchEngineName")
 		  If infection <> "" Then
