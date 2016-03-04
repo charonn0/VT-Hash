@@ -630,6 +630,7 @@ End
 		      savedAs = saveAs(VTHash.GetConfig("DefaultFormat"), f)
 		      saved.Visible = True
 		    Catch err
+		      If Err IsA EndException Or Err IsA ThreadEndException Then Raise Err
 		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
 		      Call MsgBox("An error of type " + t.Name + " occurred while saving the report to " + autosavepath.AbsolutePath, 16, "VT Hash Check - Unable to save report!")
 		    End Try
