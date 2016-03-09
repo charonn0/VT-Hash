@@ -11,7 +11,26 @@ Inherits Application
 
 	#tag Event
 		Sub Open()
-		  VTHash.LoadConfig(App.DataFolder)
+		  Try
+		    VTHash.LoadConfig(App.DataFolder)
+		  Catch Err
+		    If Err IsA EndException Or Err IsA ThreadEndException Then Raise Err
+		    Declare Function FormatMessageW Lib "Kernel32" (Flags As Integer, Source As Integer, MessageId As Integer, LanguageId As Integer, _
+		    Buffer As ptr, BufferSize As Integer, Arguments As Integer) As Integer
+		    Const FORMAT_MESSAGE_FROM_SYSTEM = &h1000
+		    Dim buffer As New MemoryBlock(2048)
+		    Dim s As String = "Unable to read configuration file."
+		    If err.ErrorNumber <> 0 Then
+		      s = s +" System error code: " + Str(Err.ErrorNumber)
+		      If FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, 0, Err.ErrorNumber, 0 , Buffer, Buffer.Size, 0) <> 0 Then
+		        s = s  + ", Message: " +  Buffer.WString(0)
+		      End If
+		    End If
+		    Call MsgBox(s, 16, "VT Hash Check - Cannot read configuration file")
+		    App.mIsQuitting = True
+		    Quit(1)
+		  End Try
+		  
 		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
 		    If Not mIsQuitting And MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
 		      SettingsWindow.ShowModal
