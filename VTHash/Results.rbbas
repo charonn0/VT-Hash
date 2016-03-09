@@ -132,7 +132,13 @@ Protected Class Results
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return Original.Value("scan_date").DateValue
+			  Dim d As Date
+			  Dim s As String = Original.Value("scan_date").StringValue + " GMT"
+			  s = s.ReplaceAll("-", "")
+			  If Not libcURL.ParseDate(s, d) Then Return Original.Value("scan_date").DateValue
+			  Dim d1 As New Date
+			  d.GMTOffset = d1.GMTOffset
+			  Return d
 			End Get
 		#tag EndGetter
 		ScanDate As Date
