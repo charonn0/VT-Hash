@@ -445,6 +445,16 @@ Protected Module libcURL
 	#tag EndConstant
 
 
+	#tag Enum, Name = CURLAUTH, Flags = &h1
+		BASIC=1
+		  DIGEST=2
+		  DIGEST_IE=16
+		  NEGOTIATE=4
+		  NTLM=8
+		  NTLM_WB=32
+		ANY=&hFFFFFFFF
+	#tag EndEnum
+
 	#tag Enum, Name = curl_infotype, Flags = &h1
 		text
 		  header_in
@@ -455,6 +465,15 @@ Protected Module libcURL
 		  ssl_out
 		  info_end
 		RB_libcURL
+	#tag EndEnum
+
+	#tag Enum, Name = ProxyType, Flags = &h1
+		HTTP=0
+		  HTTP1_0=1
+		  SOCKS4=4
+		  SOCKS4A=6
+		  SOCKS5=5
+		SOCKS5_HOSTNAME=7
 	#tag EndEnum
 
 

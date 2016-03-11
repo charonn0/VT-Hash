@@ -129,6 +129,9 @@ Protected Module Opts
 	#tag Constant, Name = HTTPPOST, Type = Double, Dynamic = False, Default = \"10024", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = HTTPPROXYTUNNEL, Type = Double, Dynamic = False, Default = \"61", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = HTTPVERSION, Type = Double, Dynamic = False, Default = \"84", Scope = Protected
 	#tag EndConstant
 
@@ -240,16 +243,28 @@ Protected Module Opts
 	#tag Constant, Name = PROXY, Type = Double, Dynamic = False, Default = \"10004", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = PROXYAUTH, Type = Double, Dynamic = False, Default = \"111", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = PROXYHEADER, Type = Double, Dynamic = False, Default = \"10228", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = PROXYPASSWORD, Type = Double, Dynamic = False, Default = \"10176", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = PROXYPORT, Type = Double, Dynamic = False, Default = \"59", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = PROXYTYPE, Type = Double, Dynamic = False, Default = \"101", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = PROXYUSERNAME, Type = Double, Dynamic = False, Default = \"10175", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = PROXYUSERPWD, Type = Double, Dynamic = False, Default = \"10006", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = PROXY_SERVICE_NAME, Type = Double, Dynamic = False, Default = \"10235", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = PUT, Type = Double, Dynamic = False, Default = \"54", Scope = Protected

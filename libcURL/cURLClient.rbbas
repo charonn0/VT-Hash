@@ -109,6 +109,13 @@ Inherits libcURL.cURLManager
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function ProxyEngine() As libcURL.ProxyEngine
+		  If mProxy = Nil Then mProxy = New libcURL.ProxyEngine(Me.EasyItem)
+		  Return mProxy
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub Put(URL As String, Data As MemoryBlock, WriteTo As Writeable = Nil)
 		  Dim bs As New BinaryStream(Data)
@@ -170,6 +177,11 @@ Inherits libcURL.cURLManager
 		bit of the transfer on every run of the event loop. Both versions will raise events, and both versions can ignore the events
 		by using the GetDownloadedData, GetResponseHeaders, and GetStatusCode methods.
 	#tag EndNote
+
+
+	#tag Property, Flags = &h1
+		Protected mProxy As libcURL.ProxyEngine
+	#tag EndProperty
 
 
 	#tag ViewBehavior
