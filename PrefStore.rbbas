@@ -130,6 +130,12 @@ Class PrefStore
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Flush()
+		  mVolume.Flush
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function GetType(Path As String) As Integer
 		  Dim meta As FolderItem = Me.Locate(Path, False)
 		  If meta <> Nil Then Return Me.ReadType(meta)
@@ -152,6 +158,7 @@ Class PrefStore
 		  Dim v As VirtualVolume = RegFile.OpenAsVirtualVolume()
 		  Dim f As FolderItem = v.Root.Child(".META")
 		  Return f.Exists And f.Directory
+		  
 		End Function
 	#tag EndMethod
 
