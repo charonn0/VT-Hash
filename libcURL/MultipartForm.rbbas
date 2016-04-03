@@ -10,9 +10,9 @@ Inherits libcURL.cURLHandle
 		  
 		  If Value.Exists And Not Value.Directory Then
 		    If ContentType <> "" Then
-		      mLastError = curl_formadd(FirstItem, LastItem, CURLFORM_COPYNAME, Name, CURLFORM_FILE, Value.AbsolutePath, CURLFORM_CONTENTTYPE, ContentType, CURLFORM_END)
+		      mLastError = curl_formadd(FirstItem, LastItem, CURLFORM_COPYNAME, Name, CURLFORM_FILE, Value.ShellPath, CURLFORM_FILENAME, Value.Name, CURLFORM_CONTENTTYPE, ContentType, CURLFORM_END)
 		    Else
-		      mLastError = curl_formadd(FirstItem, LastItem, CURLFORM_COPYNAME, Name, CURLFORM_FILE, Value.AbsolutePath, CURLFORM_END)
+		      mLastError = curl_formadd(FirstItem, LastItem, CURLFORM_COPYNAME, Name, CURLFORM_FILE, Value.ShellPath, CURLFORM_FILENAME, Value.Name, CURLFORM_END)
 		    End If
 		    Return mLastError = 0
 		  End If
@@ -191,6 +191,9 @@ Inherits libcURL.cURLHandle
 	#tag EndConstant
 
 	#tag Constant, Name = CURLFORM_FILECONTENT, Type = Double, Dynamic = False, Default = \"7", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = CURLFORM_FILENAME, Type = Double, Dynamic = False, Default = \"16", Scope = Protected
 	#tag EndConstant
 
 
