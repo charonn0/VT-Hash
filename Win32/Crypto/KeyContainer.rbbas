@@ -60,17 +60,34 @@ Inherits Win32.Crypto.Context
 
 	#tag Method, Flags = &h0
 		Function Encrypt(InputData As MemoryBlock, FinalBlock As Boolean = True, Hashcontainer As Win32.Crypto.HashProcessor = Nil) As MemoryBlock
-		  Dim sz As Integer = InputData.Size
+		  Const ERROR_MORE_DATA = &hEA
+		  
+		  Dim plaintxtsize As Integer = InputData.Size
 		  Dim h As Integer
 		  If Hashcontainer <> Nil Then h = Hashcontainer.Handle
-		  If Not Win32.Libs.AdvApi32.CryptEncrypt(Me.Handle, h, FinalBlock, 0, InputData, sz, InputData.Size) Then
-		    mLastError = Win32.LastError
-		    Dim err As New Win32Exception
+		  Dim tmp As Integer
+		  Do
+		    tmp = plaintxtsize
+		    If Not CryptEncrypt(Me.Handle, h, FinalBlock, 0, InputData, tmp, InputData.Size) Then
+		      mLastError = GetLastError()
+		      If mLastError = ERROR_MORE_DATA Then
+		        InputData.Size = tmp
+		        Continue
+		      Else
+		        Exit Do
+		      End If
+		    Else
+		      mLastError = 0
+		      Exit Do
+		    End If
+		  Loop
+		  If mLastError <> 0 Then
+		    Dim err As New RuntimeException
 		    err.ErrorNumber = mLastError
-		    err.Message = Win32.FormatError(mLastError)
+		    err.Message = FormatError(mLastError)
 		    Raise err
 		  End If
-		  Return InputData
+		  Return InputData.StringValue(0, tmp)
 		End Function
 	#tag EndMethod
 
