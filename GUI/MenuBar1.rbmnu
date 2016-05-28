@@ -7,7 +7,7 @@ Begin Menu MenuBar1
       AutoEnable = True
       Begin MenuItem RescanMenu
          SpecialMenu = 0
-         Text = "Request Rescan..."
+         Text = "&Request Rescan"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+R"
@@ -16,38 +16,38 @@ Begin Menu MenuBar1
       End
       Begin MenuItem exportmenu
          SpecialMenu = 0
-         Text = "&Export Results"
+         Text = "&Save report"
          Index = -2147483648
          AutoEnable = True
          SubMenu = True
          Begin MenuItem textmenu
             SpecialMenu = 0
-            Text = "&Text"
+            Text = "As &Text"
             Index = -2147483648
             AutoEnable = True
          End
          Begin MenuItem csvmenu
             SpecialMenu = 0
-            Text = "&CSV"
+            Text = "As &CSV"
             Index = -2147483648
             AutoEnable = True
          End
          Begin MenuItem jsonmenu
             SpecialMenu = 0
-            Text = "Original &JSON"
+            Text = "As original &JSON"
             Index = -2147483648
             AutoEnable = True
          End
          Begin MenuItem unpackedmenu
             SpecialMenu = 0
-            Text = "&Unpacked JSON"
+            Text = "As &unpacked JSON"
             Index = -2147483648
             AutoEnable = True
          End
       End
       Begin MenuItem tridmenu
          SpecialMenu = 0
-         Text = "Analyze with TrID..."
+         Text = "Analyze with &TrID..."
          Index = -2147483648
          ShortcutKey = "T"
          Shortcut = "Cmd+T"
@@ -56,7 +56,7 @@ Begin Menu MenuBar1
       End
       Begin MenuItem OpenFileMenu
          SpecialMenu = 0
-         Text = "Run Target File"
+         Text = "R&un target file"
          Index = -2147483648
          ShortcutKey = "K"
          Shortcut = "Cmd+K"
