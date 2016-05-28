@@ -53,7 +53,7 @@ Begin Window SuggestionBox
       TabIndex        =   9
       TabPanelIndex   =   0
       Top             =   0
-      Value           =   0
+      Value           =   1
       Visible         =   True
       Width           =   425
       Begin Label Label1
@@ -596,7 +596,6 @@ End
 		  ExtraData.Value("Version") = VTHash.VersionString
 		  'ExtraData.Value("Algorithm") = "0x" + Hex(VTHash.GetConfig("Algorithm"))
 		  ExtraData.Value("OS") = OS
-		  
 		  If VTHash.IsConfigLoaded Then
 		    Dim tmp As FolderItem = SpecialFolder.Temporary.Child("anonymized_config.dat")
 		    Dim bs As BinaryStream = BinaryStream.Create(tmp, True)
@@ -624,6 +623,9 @@ End
 		  For Each p As Pair In FormElements
 		    ExtraData.Value(p.Left) = p.Right
 		  Next
+		  If ExtraData.HasKey("Exception") Then
+		    CommentText.AppendText("An error report for VT Hash Check " + VTHash.VersionString + " is attached to this message.")
+		  End If
 		  Me.ShowModal
 		End Sub
 	#tag EndMethod
