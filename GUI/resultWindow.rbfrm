@@ -702,25 +702,44 @@ End
 		  Select Case result.ResponseCode
 		  Case VT_Code_OK
 		    VTResult = result
-		    For i As Integer = 1 To VTResult.ResultCount - 1
+		    Dim names(), values(), versions() As String
+		    
+		    For i As Integer = 0 To VTResult.ResultCount - 1
+		      names.Append(VTResult.ScannerName(i))
+		      versions.Append(VTResult.ScannerVersion(i))
 		      If VTResult.ScannerResult(i).Trim <> "" Then
-		        ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), VTResult.ScannerResult(i))
+		        values.Append(VTResult.ScannerResult(i))
+		      Else
+		        values.Append("")
+		      End If
+		    Next
+		    names.SortWith(values, versions)
+		    
+		    For i As Integer = 0 To UBound(names)
+		      ListBox1.AddRow(names(i), versions(i), values(i))
+		      If values(i).Trim <> "" Then
 		        ListBox1.RowPicture(ListBox1.LastIndex) = warn
 		        Listbox1.CellBold(ListBox1.LastIndex, 2) = True
 		        Listbox1.RowTag(Listbox1.LastIndex) = True
 		      Else
-		        ListBox1.AddRow(VTResult.ScannerName(i), VTResult.ScannerVersion(i), "")
-		        ListBox1.RowPicture(ListBox1.LastIndex) = clear
 		        Listbox1.RowTag(Listbox1.LastIndex) = False
 		      End If
 		    Next
 		    
 		    If HasConfig("SortType") And GetConfig("SortType") <> -1 Then
-		      Dim sorttype As Integer = GetConfig("SortType")
+		      Dim sorttype As Integer
+		      Dim sortdirection As Integer
+		      sorttype = GetConfig("SortType")
+		      If HasConfig("SortDirection") Then
+		        sortdirection = GetConfig("SortType")
+		      Else
+		        sortdirection = Listbox.SortAscending
+		      End If
 		      Listbox1.SortedColumn = sorttype
-		      Listbox1.ColumnSortDirection(sorttype) = GetConfig("SortDirection")
+		      Listbox1.ColumnSortDirection(sorttype) = sortdirection
 		      Listbox1.Sort
 		    End If
+		    
 		    
 		    ProgBar1.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
 		    + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
@@ -728,7 +747,13 @@ End
 		    ProgBar1.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
 		    
 		    FileHash.Text = VTResult.HashValue
-		    FilePath.Text = VTResult.TargetFile.AbsolutePath
+		    If VTResult.TargetFile <> Nil Then
+		      FilePath.Text = VTResult.TargetFile.AbsolutePath
+		    Else
+		      FilePath.Text = ""
+		      Canvas1.Enabled = False
+		      MoreHashes.Enabled = False
+		    End If
 		    
 		    Select Case VTResult.Algorithm
 		    Case Win32.Crypto.CALG_MD5
@@ -739,9 +764,9 @@ End
 		      HashType.Text = "SHA256:"
 		    End Select
 		    FileHash.Text = VTResult.HashValue
-		    DoAutosave()
+		    If Not App.ViewMode Then DoAutosave()
 		    
-		    Me.Show
+		    If App.ViewMode Then Me.ShowModal Else Me.Show
 		  Case VT_Code_Not_Found
 		    If result.TargetFile.Length >= 32 * 1024 * 1024 Then
 		      Select Case MsgBox(_

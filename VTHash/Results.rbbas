@@ -76,8 +76,23 @@ Protected Class Results
 		Algorithm As Integer
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If mHashValue.Trim = "" Then mHashValue = Original.Value("sha256")
+			  return mHashValue
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mHashValue = value
+			End Set
+		#tag EndSetter
 		HashValue As String
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h21
+		Private mHashValue As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

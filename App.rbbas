@@ -73,6 +73,9 @@ Inherits Application
 		    Case "--insecure"
 		      mInsecure = True
 		      
+		    Case "--view"
+		      mViewOld = True
+		      
 		    Case "--update"
 		      Dim upd As New UpdateWindow
 		      Dim f As FolderItem = upd.CheckNow("www.boredomsoft.org/updates/vthash.json", VTHash.Version)
@@ -93,10 +96,8 @@ Inherits Application
 		  Case item.Length > 128 * 1024 * 1024 And Not mTridMode
 		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "VT Hash Check - Invalid file")
 		  Else
-		    If Not mTridMode Then
-		      Dim w As New HashWindow
-		      w.ProcessFile(item)
-		    Else ' trid mode
+		    Select Case True
+		    Case mTridMode
 		      If TridLib.IsAvailable Then
 		        Dim s() As TridLib.FileType = item.TrIDTypes()
 		        Dim tridwin As New TridResultWindow
@@ -106,7 +107,20 @@ Inherits Application
 		        mIsQuitting = True
 		        Quit
 		      End If
-		    End If
+		    Case mViewOld
+		      Dim bs As BinaryStream = BinaryStream.Open(item)
+		      Dim data As String = bs.Read(bs.Length)
+		      bs.Close
+		      Dim js As New JSONItem(data)
+		      Dim res As New ResultWindow
+		      res.ShowResult(New VTHash.Results(js, Nil))
+		      mIsQuitting = True
+		      Quit()
+		    Else
+		      Dim w As New HashWindow
+		      w.ProcessFile(item)
+		    End Select
+		    
 		    mOpened = True
 		  End Select
 		End Sub
@@ -163,6 +177,12 @@ Inherits Application
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function ViewMode() As Boolean
+		  Return mViewOld
+		End Function
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h21
 		Private mDataFolder As FolderItem
@@ -182,6 +202,10 @@ Inherits Application
 
 	#tag Property, Flags = &h21
 		Private mTridMode As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mViewOld As Boolean
 	#tag EndProperty
 
 
