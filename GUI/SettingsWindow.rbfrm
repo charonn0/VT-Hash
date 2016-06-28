@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   1
+      Value           =   0
       Visible         =   True
       Width           =   344
       Begin Label Label2
@@ -742,7 +742,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   126
+         Top             =   115
          Underline       =   ""
          Value           =   False
          Visible         =   True
@@ -1014,6 +1014,38 @@ Begin Window SettingsWindow
             Width           =   137
          End
       End
+      Begin CheckBox UploadUnknown
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Permit file upload"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   20
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         State           =   0
+         TabIndex        =   8
+         TabPanelIndex   =   1
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   135
+         Underline       =   ""
+         Value           =   False
+         Visible         =   True
+         Width           =   130
+      End
    End
    Begin VTHash.VTSession VTSession1
       APIKey          =   ""
@@ -1089,6 +1121,12 @@ End
 		  SearchDisplayName.Text = VTHash.GetConfig("SearchEngineName")
 		  SearchURL.Text = VTHash.GetConfig("SearchEngineURL")
 		  UseSSL.Value = VTHash.GetConfig("UseSSL")
+		  
+		  If HasConfig("PermitUploads") Then
+		    UploadUnknown.Value = VTHash.GetConfig("PermitUploads")
+		  Else
+		    UploadUnknown.Value = True
+		  End If
 		  
 		  If HasConfig("SortType") Then
 		    SortDir = VTHash.GetConfig("SortDirection")
@@ -1199,6 +1237,7 @@ End
 		  VTHash.SetConfig("AutoSavePath", gf)
 		  VTHash.SetConfig("CommentSignature", CommentSig.Text)
 		  VTHash.SetConfig("UseSSL", UseSSL.Value)
+		  VTHash.SetConfig("PermitUploads", UploadUnknown.Value)
 		  VTHash.SetConfig("SortDirection", SortDir)
 		  VTHash.SetConfig("SortType", SortType)
 		  Close()

@@ -768,6 +768,11 @@ End
 		    
 		    If App.ViewMode Then Me.ShowModal Else Me.Show
 		  Case VT_Code_Not_Found
+		    If HasConfig("PermitUploads") And GetConfig("PermitUploads") = False Then
+		      Call MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database.", 48, "VT Hash Check - Not found")
+		      Self.Close
+		      Return
+		    End If
 		    If result.TargetFile.Length >= 32 * 1024 * 1024 Then
 		      Select Case MsgBox(_
 		        "The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Additionally, the file exceeds 32MB which is the default limit for uploading via the API." + EndOfLine + _
