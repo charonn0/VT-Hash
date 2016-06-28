@@ -199,7 +199,7 @@ Begin Window FileSubmitWindow
       Index           =   -2147483648
       Left            =   379
       LockedInPosition=   False
-      Mode            =   0
+      Mode            =   2
       Period          =   250
       Scope           =   0
       TabPanelIndex   =   0
@@ -257,6 +257,14 @@ End
 
 	#tag Property, Flags = &h1
 		Protected fLength As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mInfoCaption As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mPercentDone As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -329,13 +337,9 @@ End
 		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
 		  #pragma Unused dlnow
 		  #pragma Unused dlTotal
-		  ProgressBar1.Value = ulNow * 100 \ ultotal
-		  Percentages.Text = FormatBytes(ulNow) + " of " + FormatBytes(ultotal) + " sent"
-		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
-		    Label1.Text = "Awaiting response..."
-		  Else
-		    Label1.Text = "Sending file..."
-		  End If
+		  mPercentDone = ulNow * 100 \ ultotal
+		  Dim speed As Double = Me.GetInfo(libcURL.Info.SPEED_UPLOAD)
+		  mInfoCaption = FormatBytes(ulNow) + " of " + FormatBytes(ultotal) + " sent (" + FormatBytes(speed) + "/s)"
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -354,6 +358,13 @@ End
 		  ElseIf Right(Label1.Text, 1) = "." Then
 		    Label1.Text = Label1.Text + "."
 		  End If
+		  Percentages.Text = mInfoCaption
+		  ProgressBar1.Value = mPercentDone
+		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
+		    Label1.Text = "Awaiting response..."
+		  Else
+		    Label1.Text = "Sending file..."
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -364,10 +375,12 @@ End
 		    Call Socket.EasyItem.Pause
 		    Me.Caption = "Resume"
 		    Self.Title = "Submitting '" + TargetFile.Name + "' - Paused"
+		    GUITimer.Mode = Timer.ModeOff
 		  Else
 		    Call Socket.EasyItem.Resume
 		    Me.Caption = "Pause"
 		    Self.Title = "Submitting '" + TargetFile.Name + "'"
+		    GUITimer.Mode = Timer.ModeMultiple
 		  End If
 		End Sub
 	#tag EndEvent
