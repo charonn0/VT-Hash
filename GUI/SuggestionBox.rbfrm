@@ -53,7 +53,7 @@ Begin Window SuggestionBox
       TabIndex        =   9
       TabPanelIndex   =   0
       Top             =   0
-      Value           =   1
+      Value           =   0
       Visible         =   True
       Width           =   425
       Begin Label Label1

@@ -25,7 +25,7 @@ Begin Window CommentWindow
    Visible         =   True
    Width           =   3.31e+2
    Begin TextArea TextArea1
-      AcceptTabs      =   ""
+      AcceptTabs      =   True
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   True

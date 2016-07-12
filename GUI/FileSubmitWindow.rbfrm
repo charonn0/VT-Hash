@@ -314,6 +314,7 @@ End
 #tag Events Socket
 	#tag Event
 		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
+		  GUITimer.Mode = Timer.ModeOff
 		  If HTTPStatus = 200 And ResponseObject <> Nil Then
 		    If ResponseObject.Value("response_code") = VT_Code_OK Then
 		      PermaURL = ResponseObject.Value("permalink")
@@ -344,6 +345,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Error(cURLCode As Integer)
+		  GUITimer.Mode = Timer.ModeOff
 		  VTHash.HandleCurlError(Me, cURLCode)
 		End Sub
 	#tag EndEvent
