@@ -67,6 +67,16 @@ Inherits libcURL.cURLClient
 		  Me.EasyItem.UseErrorBuffer = True
 		  Me.EasyItem.Secure = App.Secure
 		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
+		  If VTHash.HasConfig("ProxyAddress") Then
+		    Me.ProxyEngine.Address = VTHash.GetConfig("ProxyAddress")
+		    Me.ProxyEngine.Port = VTHash.GetConfig("ProxyPort")
+		    Me.ProxyEngine.Username = VTHash.GetConfig("ProxyUsername")
+		    Me.ProxyEngine.Password = VTHash.GetConfig("ProxyPassword")
+		    Me.ProxyEngine.Type = libcURL.ProxyType(VTHash.GetConfig("ProxyType").Int32Value)
+		    'Me.ProxyEngine.ServiceName = VTHash.GetConfig("ProxyName")
+		  End If
+		  
+		  
 		  Dim APIURL As String
 		  If VTHash.GetConfig("UseSSL") Then
 		    APIURL = "https://www.virustotal.com"

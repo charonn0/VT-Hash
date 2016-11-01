@@ -23,7 +23,7 @@ Begin Window SettingsWindow
    Resizeable      =   False
    Title           =   "VT Hash Check - Settings"
    Visible         =   True
-   Width           =   3.5e+2
+   Width           =   3.64e+2
    Begin PushButton PushButton2
       AutoDeactivate  =   True
       Bold            =   ""
@@ -37,7 +37,7 @@ Begin Window SettingsWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   264
+      Left            =   279
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
@@ -68,7 +68,7 @@ Begin Window SettingsWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   177
+      Left            =   192
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
@@ -135,7 +135,7 @@ Begin Window SettingsWindow
       Panels          =   ""
       Scope           =   0
       SmallTabs       =   ""
-      TabDefinition   =   "Virus Total\rResults Sort\rResult Logs\rSearch Engine"
+      TabDefinition   =   "Virus Total\rResults Sort\rResult Logs\rSearch Engine\rNetwork"
       TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
@@ -144,9 +144,9 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   0
+      Value           =   4
       Visible         =   True
-      Width           =   344
+      Width           =   364
       Begin Label Label2
          AutoDeactivate  =   True
          Bold            =   ""
@@ -225,7 +225,7 @@ Begin Window SettingsWindow
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   243
+         Width           =   261
       End
       Begin Canvas Canvas1
          AcceptFocus     =   ""
@@ -239,7 +239,7 @@ Begin Window SettingsWindow
          HelpTag         =   "Test API Key"
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
-         Left            =   318
+         Left            =   343
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -295,7 +295,7 @@ Begin Window SettingsWindow
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   224
+         Width           =   242
       End
       Begin Label Label1
          AutoDeactivate  =   True
@@ -360,7 +360,7 @@ Begin Window SettingsWindow
          Top             =   125
          Underline       =   ""
          Visible         =   True
-         Width           =   117
+         Width           =   135
       End
       Begin Label Label5
          AutoDeactivate  =   True
@@ -453,7 +453,7 @@ Begin Window SettingsWindow
          Top             =   50
          Underline       =   ""
          Visible         =   True
-         Width           =   327
+         Width           =   345
          Begin TextField LogFile
             AcceptTabs      =   ""
             Alignment       =   0
@@ -495,7 +495,7 @@ Begin Window SettingsWindow
             Underline       =   ""
             UseFocusRing    =   True
             Visible         =   True
-            Width           =   239
+            Width           =   254
          End
          Begin ComboBox LogType
             AutoComplete    =   False
@@ -543,7 +543,7 @@ Begin Window SettingsWindow
             Index           =   -2147483648
             InitialParent   =   "GroupBox1"
             Italic          =   ""
-            Left            =   261
+            Left            =   279
             LockBottom      =   ""
             LockedInPosition=   False
             LockLeft        =   True
@@ -603,7 +603,7 @@ Begin Window SettingsWindow
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   243
+         Width           =   261
       End
       Begin TextField SearchDisplayName
          AcceptTabs      =   ""
@@ -646,7 +646,7 @@ Begin Window SettingsWindow
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   243
+         Width           =   261
       End
       Begin Label Label3
          AutoDeactivate  =   True
@@ -716,38 +716,6 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   68
       End
-      Begin CheckBox UseSSL
-         AutoDeactivate  =   True
-         Bold            =   ""
-         Caption         =   "Use SSL"
-         DataField       =   ""
-         DataSource      =   ""
-         Enabled         =   True
-         Height          =   20
-         HelpTag         =   ""
-         Index           =   -2147483648
-         InitialParent   =   "TabPanel1"
-         Italic          =   ""
-         Left            =   20
-         LockBottom      =   ""
-         LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   ""
-         LockTop         =   True
-         Scope           =   0
-         State           =   0
-         TabIndex        =   7
-         TabPanelIndex   =   1
-         TabStop         =   True
-         TextFont        =   "System"
-         TextSize        =   0
-         TextUnit        =   0
-         Top             =   115
-         Underline       =   ""
-         Value           =   False
-         Visible         =   True
-         Width           =   100
-      End
       Begin ComboBox ComboBox1
          AutoComplete    =   False
          AutoDeactivate  =   True
@@ -779,7 +747,7 @@ Begin Window SettingsWindow
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   243
+         Width           =   261
       End
       Begin Label Label6
          AutoDeactivate  =   True
@@ -825,7 +793,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   169
+         Left            =   183
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -851,7 +819,7 @@ Begin Window SettingsWindow
             Index           =   -2147483648
             InitialParent   =   "SortDirGroup"
             Italic          =   ""
-            Left            =   184
+            Left            =   198
             LockBottom      =   ""
             LockedInPosition=   False
             LockLeft        =   True
@@ -880,7 +848,7 @@ Begin Window SettingsWindow
             Index           =   -2147483648
             InitialParent   =   "SortDirGroup"
             Italic          =   ""
-            Left            =   184
+            Left            =   198
             LockBottom      =   ""
             LockedInPosition=   False
             LockLeft        =   True
@@ -910,7 +878,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   5
+         Left            =   19
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -936,7 +904,7 @@ Begin Window SettingsWindow
             Index           =   -2147483648
             InitialParent   =   "GroupBox2"
             Italic          =   ""
-            Left            =   20
+            Left            =   34
             LockBottom      =   ""
             LockedInPosition=   False
             LockLeft        =   True
@@ -965,7 +933,7 @@ Begin Window SettingsWindow
             Index           =   -2147483648
             InitialParent   =   "GroupBox2"
             Italic          =   ""
-            Left            =   20
+            Left            =   34
             LockBottom      =   ""
             LockedInPosition=   False
             LockLeft        =   True
@@ -994,7 +962,7 @@ Begin Window SettingsWindow
             Index           =   -2147483648
             InitialParent   =   "GroupBox2"
             Italic          =   ""
-            Left            =   20
+            Left            =   34
             LockBottom      =   ""
             LockedInPosition=   False
             LockLeft        =   True
@@ -1046,16 +1014,490 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   130
       End
+      Begin Label Label7
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   12
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   1
+         TabPanelIndex   =   5
+         Text            =   "Network interface:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   34
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   106
+      End
+      Begin ComboBox nic
+         AutoComplete    =   False
+         AutoDeactivate  =   True
+         Bold            =   False
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         InitialValue    =   ""
+         Italic          =   False
+         Left            =   124
+         ListIndex       =   0
+         LockBottom      =   True
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   False
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   2
+         TabPanelIndex   =   5
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0.0
+         TextUnit        =   0
+         Top             =   34
+         Underline       =   False
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   220
+      End
+      Begin Label Label9
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   185
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   5
+         TabPanelIndex   =   5
+         Text            =   "Proxy type:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   84
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   68
+      End
+      Begin Label Label8
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   12
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   3
+         TabPanelIndex   =   5
+         Text            =   "Proxy server:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   60
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   106
+      End
+      Begin TextField ProxyServer
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   False
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         CueText         =   "IP or Hostname"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   ""
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   124
+         LimitText       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Mask            =   ""
+         Password        =   ""
+         ReadOnly        =   ""
+         Scope           =   0
+         TabIndex        =   4
+         TabPanelIndex   =   5
+         TabStop         =   True
+         Text            =   ""
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   60
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   220
+      End
+      Begin ComboBox ProxyTypes
+         AutoComplete    =   False
+         AutoDeactivate  =   True
+         Bold            =   False
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         InitialValue    =   "HTTP\r\nHTTP 1.0\r\nSocks 4\r\nSocks 4A\r\nSocks 5\r\nSocks 5A"
+         Italic          =   False
+         Left            =   259
+         ListIndex       =   0
+         LockBottom      =   True
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   False
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   6
+         TabPanelIndex   =   5
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0.0
+         TextUnit        =   0
+         Top             =   83
+         Underline       =   False
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   85
+      End
+      Begin CheckBox UseSSL
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Use SSL"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   20
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         State           =   0
+         TabIndex        =   7
+         TabPanelIndex   =   1
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   115
+         Underline       =   ""
+         Value           =   False
+         Visible         =   True
+         Width           =   100
+      End
+      Begin Label Label10
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   12
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   7
+         TabPanelIndex   =   5
+         Text            =   "Proxy Port:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   84
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   106
+      End
+      Begin TextField ProxyPort
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   False
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         CueText         =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   ""
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   124
+         LimitText       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Mask            =   ""
+         Password        =   ""
+         ReadOnly        =   ""
+         Scope           =   0
+         TabIndex        =   8
+         TabPanelIndex   =   5
+         TabStop         =   True
+         Text            =   1080
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   84
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   56
+      End
+      Begin TextField ProxyUsername
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   False
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         CueText         =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   ""
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   123
+         LimitText       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Mask            =   ""
+         Password        =   ""
+         ReadOnly        =   ""
+         Scope           =   0
+         TabIndex        =   9
+         TabPanelIndex   =   5
+         TabStop         =   True
+         Text            =   ""
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   108
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   220
+      End
+      Begin Label Label11
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   12
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   10
+         TabPanelIndex   =   5
+         Text            =   "Proxy User:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   108
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   105
+      End
+      Begin Label Label12
+         AutoDeactivate  =   True
+         Bold            =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   12
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Multiline       =   ""
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   11
+         TabPanelIndex   =   5
+         Text            =   "Proxy Password:"
+         TextAlign       =   2
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   131
+         Transparent     =   True
+         Underline       =   ""
+         Visible         =   True
+         Width           =   105
+      End
+      Begin TextField ProxyPassword
+         AcceptTabs      =   ""
+         Alignment       =   0
+         AutoDeactivate  =   True
+         AutomaticallyCheckSpelling=   False
+         BackColor       =   &hFFFFFF
+         Bold            =   ""
+         Border          =   True
+         CueText         =   ""
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Format          =   ""
+         Height          =   22
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   123
+         LimitText       =   0
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Mask            =   ""
+         Password        =   True
+         ReadOnly        =   ""
+         Scope           =   0
+         TabIndex        =   12
+         TabPanelIndex   =   5
+         TabStop         =   True
+         Text            =   ""
+         TextColor       =   &h000000
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   131
+         Underline       =   ""
+         UseFocusRing    =   True
+         Visible         =   True
+         Width           =   220
+      End
    End
    Begin VTHash.VTSession VTSession1
       APIKey          =   ""
       Height          =   32
       Index           =   -2147483648
-      Left            =   364
+      Left            =   376
       LockedInPosition=   False
       Scope           =   1
       TabPanelIndex   =   0
-      Top             =   23
+      Top             =   22
       Width           =   32
    End
 End
@@ -1148,6 +1590,28 @@ End
 		    SortType2.Value = True
 		  End Select
 		  
+		  If VTHash.HasConfig("ProxyType") Then
+		    mProxyType = libcURL.ProxyType(VTHash.GetConfig("ProxyType").Int32Value)
+		    ProxyServer.Text = VTHash.GetConfig("ProxyAddress")
+		    Select Case mProxyType
+		    Case libcURL.ProxyType.HTTP
+		      ProxyTypes.ListIndex = 0
+		    Case libcURL.ProxyType.HTTP1_0
+		      ProxyTypes.ListIndex = 1
+		    Case libcURL.ProxyType.SOCKS4
+		      ProxyTypes.ListIndex = 2
+		    Case libcURL.ProxyType.SOCKS4A
+		      ProxyTypes.ListIndex = 3
+		    Case libcURL.ProxyType.SOCKS5
+		      ProxyTypes.ListIndex = 4
+		    Case libcURL.ProxyType.SOCKS5_HOSTNAME
+		      ProxyTypes.ListIndex = 5
+		    End Select
+		    ProxyPort.Text = Str(VTHash.GetConfig("ProxyPort"), "#####")
+		    ProxyUsername.Text = VTHash.GetConfig("ProxyUsername")
+		    ProxyPassword.Text = VTHash.GetConfig("ProxyPassword")
+		  End If
+		  
 		End Sub
 	#tag EndEvent
 
@@ -1162,6 +1626,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private mKonamiCount As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mProxyType As libcURL.ProxyType
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -1240,6 +1708,16 @@ End
 		  VTHash.SetConfig("PermitUploads", UploadUnknown.Value)
 		  VTHash.SetConfig("SortDirection", SortDir)
 		  VTHash.SetConfig("SortType", SortType)
+		  
+		  If nic.ListIndex > -1 And nic.RowTag(nic.ListIndex) IsA NetworkInterface Then
+		    Dim ip As String = NetworkInterface(nic.RowTag(nic.ListIndex)).IPAddress
+		    VTHash.SetConfig("NetworkInterface", ip)
+		  End If
+		  VTHash.SetConfig("ProxyAddress", ProxyServer.Text)
+		  VTHash.SetConfig("ProxyUsername", ProxyUsername.Text)
+		  VTHash.SetConfig("ProxyPassword", ProxyPassword.Text)
+		  VTHash.SetConfig("ProxyType", Integer(mProxyType))
+		  VTHash.SetConfig("ProxyPort", Val(ProxyPort.Text))
 		  Close()
 		End Sub
 	#tag EndEvent
@@ -1405,6 +1883,45 @@ End
 		  SortType = SORT_SCANNER
 		  SortDirection1.Caption = "Alphabetical"
 		  SortDirection2.Caption = "Reverse Alphabetical"
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events nic
+	#tag Event
+		Sub Open()
+		  Dim ip As String
+		  If VTHash.HasConfig("NetworkInterface") Then ip = VTHash.GetConfig("NetworkInterface")
+		  
+		  For i As Integer = 0 To System.NetworkInterfaceCount - 1
+		    Dim n As NetworkInterface = System.GetNetworkInterface(i)
+		    If n.IPAddress <> "0.0.0.0" Then
+		      Me.AddRow(n.IPAddress)
+		      Me.RowTag(i) = n
+		      If n.IPAddress = ip Then Me.ListIndex = i
+		    End If
+		  Next
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ProxyTypes
+	#tag Event
+		Sub Change()
+		  Select Case Me.Text
+		  Case "Socks 4"
+		    mProxyType = libcURL.ProxyType.SOCKS4
+		  Case "Socks 4A"
+		    mProxyType = libcURL.ProxyType.SOCKS4A
+		  Case "Socks 5"
+		    mProxyType = libcURL.ProxyType.SOCKS5
+		  Case "Socks 5A"
+		    mProxyType = libcURL.ProxyType.SOCKS5_HOSTNAME
+		  Case "HTTP"
+		    mProxyType = libcURL.ProxyType.HTTP
+		  Case "HTTP 1.0"
+		    mProxyType = libcURL.ProxyType.HTTP1_0
+		  End Select
 		End Sub
 	#tag EndEvent
 #tag EndEvents
