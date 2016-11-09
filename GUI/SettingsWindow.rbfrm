@@ -1034,7 +1034,7 @@ Begin Window SettingsWindow
          Multiline       =   ""
          Scope           =   0
          Selectable      =   False
-         TabIndex        =   5
+         TabIndex        =   9
          TabPanelIndex   =   5
          Text            =   "Proxy type:"
          TextAlign       =   2
@@ -1068,7 +1068,7 @@ Begin Window SettingsWindow
          Multiline       =   ""
          Scope           =   0
          Selectable      =   False
-         TabIndex        =   3
+         TabIndex        =   8
          TabPanelIndex   =   5
          Text            =   "Proxy server:"
          TextAlign       =   2
@@ -1111,7 +1111,7 @@ Begin Window SettingsWindow
          Password        =   ""
          ReadOnly        =   ""
          Scope           =   0
-         TabIndex        =   4
+         TabIndex        =   0
          TabPanelIndex   =   5
          TabStop         =   True
          Text            =   ""
@@ -1146,7 +1146,7 @@ Begin Window SettingsWindow
          LockRight       =   False
          LockTop         =   True
          Scope           =   0
-         TabIndex        =   6
+         TabIndex        =   2
          TabPanelIndex   =   5
          TabStop         =   True
          TextFont        =   "System"
@@ -1253,7 +1253,7 @@ Begin Window SettingsWindow
          Password        =   ""
          ReadOnly        =   ""
          Scope           =   0
-         TabIndex        =   8
+         TabIndex        =   1
          TabPanelIndex   =   5
          TabStop         =   True
          Text            =   1080
@@ -1296,7 +1296,7 @@ Begin Window SettingsWindow
          Password        =   ""
          ReadOnly        =   ""
          Scope           =   0
-         TabIndex        =   9
+         TabIndex        =   3
          TabPanelIndex   =   5
          TabStop         =   True
          Text            =   ""
@@ -1330,7 +1330,7 @@ Begin Window SettingsWindow
          Multiline       =   ""
          Scope           =   0
          Selectable      =   False
-         TabIndex        =   10
+         TabIndex        =   6
          TabPanelIndex   =   5
          Text            =   "Proxy User:"
          TextAlign       =   2
@@ -1364,7 +1364,7 @@ Begin Window SettingsWindow
          Multiline       =   ""
          Scope           =   0
          Selectable      =   False
-         TabIndex        =   11
+         TabIndex        =   5
          TabPanelIndex   =   5
          Text            =   "Proxy Password:"
          TextAlign       =   2
@@ -1407,7 +1407,7 @@ Begin Window SettingsWindow
          Password        =   True
          ReadOnly        =   ""
          Scope           =   0
-         TabIndex        =   12
+         TabIndex        =   4
          TabPanelIndex   =   5
          TabStop         =   True
          Text            =   ""
