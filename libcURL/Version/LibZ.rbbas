@@ -22,8 +22,7 @@ Protected Module LibZ
 
 	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
-		  Dim kLIBZ As Integer = ShiftLeft(1, 3)
-		  Return BitAnd(Features, kLIBZ) = kLIBZ // libz features are present
+		  Return BitAnd(Features, FEATURE_LIBZ) = FEATURE_LIBZ // libz features are present
 		End Function
 	#tag EndMethod
 
@@ -54,6 +53,10 @@ Protected Module LibZ
 		  Return Val(NthField(libcURL.Version.LibZ.Name, ".", 3))
 		End Function
 	#tag EndMethod
+
+
+	#tag Constant, Name = FEATURE_LIBZ, Type = Double, Dynamic = False, Default = \"8", Scope = Private
+	#tag EndConstant
 
 
 	#tag ViewBehavior

@@ -8,6 +8,9 @@ Protected Class ProxyEngine
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.Constructor
 		  
 		  mOwner = New WeakRef(Owner)
+		  mUnifiedHeaders = libcURL.Version.IsAtLeast(7, 42, 1)
+		  
+		  
 		End Sub
 	#tag EndMethod
 
@@ -67,15 +70,14 @@ Protected Class ProxyEngine
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.IsProxied
 		  
-		  If mAddress = "" Then
-		    Return False
-		  Else
-		    For Each host As String In mExclusions
-		      Dim h As String = Right(Hostname, host.Len)
-		      If h = host And Mid(Hostname, Hostname.Len - h.Len, 1) = "." Then Return False
-		    Next
-		    Return True
-		  End If
+		  If mAddress = "" Then Return False
+		  
+		  For Each host As String In mExclusions
+		    Dim h As String = Right(Hostname, host.Len)
+		    If h = host And Mid(Hostname, Hostname.Len - h.Len, 1) = "." Then Return False
+		  Next
+		  Return True
+		  
 		End Function
 	#tag EndMethod
 
@@ -236,6 +238,10 @@ Protected Class ProxyEngine
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mUnifiedHeaders As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mUsername As String
 	#tag EndProperty
 
@@ -317,13 +323,36 @@ Protected Class ProxyEngine
 			  ' See:
 			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.Type
 			  
-			  If Not Owner.SetOption(libcURL.Opts.PROXYTYPE, Integer(value)) Then 
-			    Raise New libcURL.cURLException(Owner)
-			  End If
+			  If Not Owner.SetOption(libcURL.Opts.PROXYTYPE, Integer(value)) Then Raise New libcURL.cURLException(Owner)
 			  mType = value
 			End Set
 		#tag EndSetter
 		Type As libcURL.ProxyType
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mUnifiedHeaders
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  If libcURL.Version.IsAtLeast(7, 37, 0) Then
+			    Const CURLHEADER_UNIFIED = 0
+			    Const CURLHEADER_SEPARATE = 1
+			    If value Then
+			      If Not Owner.SetOption(libcURL.Opts.HEADEROPT, CURLHEADER_UNIFIED) Then Raise New cURLException(Owner)
+			    Else
+			      If Not Owner.SetOption(libcURL.Opts.HEADEROPT, CURLHEADER_SEPARATE) Then Raise New cURLException(Owner)
+			    End If
+			    mUnifiedHeaders = value
+			  Else
+			    ErrorSetter(Owner).LastError = libcURL.Errors.FEATURE_UNAVAILABLE
+			  End If
+			End Set
+		#tag EndSetter
+		UnifiedHeaders As Boolean
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -408,6 +437,11 @@ Protected Class ProxyEngine
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UnifiedHeaders"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Username"

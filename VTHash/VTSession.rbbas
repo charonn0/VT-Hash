@@ -68,11 +68,11 @@ Inherits libcURL.cURLClient
 		  Me.EasyItem.Secure = App.Secure
 		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
 		  If VTHash.HasConfig("ProxyAddress") Then
-		    Me.ProxyEngine.Address = VTHash.GetConfig("ProxyAddress")
-		    Me.ProxyEngine.Port = VTHash.GetConfig("ProxyPort")
-		    Me.ProxyEngine.Username = VTHash.GetConfig("ProxyUsername")
-		    Me.ProxyEngine.Password = VTHash.GetConfig("ProxyPassword")
-		    Me.ProxyEngine.Type = libcURL.ProxyType(VTHash.GetConfig("ProxyType").Int32Value)
+		    Me.Proxy.Address = VTHash.GetConfig("ProxyAddress")
+		    Me.Proxy.Port = VTHash.GetConfig("ProxyPort")
+		    Me.Proxy.Username = VTHash.GetConfig("ProxyUsername")
+		    Me.Proxy.Password = VTHash.GetConfig("ProxyPassword")
+		    Me.Proxy.Type = libcURL.ProxyType(VTHash.GetConfig("ProxyType").Int32Value)
 		    'Me.ProxyEngine.ServiceName = VTHash.GetConfig("ProxyName")
 		  End If
 		  
@@ -123,7 +123,7 @@ Inherits libcURL.cURLClient
 		  If HTTPVerb = "POST" Then
 		    Me.Post(APIURL, Request)
 		  ElseIf HTTPVerb = "GET" Then
-		    Me.SetFormData(Request)
+		    Me.EasyItem.SetFormData(Request)
 		    Me.Get(APIURL)
 		  End If
 		End Sub

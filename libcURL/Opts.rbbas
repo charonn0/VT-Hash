@@ -3,10 +3,31 @@ Protected Module Opts
 	#tag Constant, Name = ACCEPT_ENCODING, Type = Double, Dynamic = False, Default = \"10102", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = APPEND, Type = Double, Dynamic = False, Default = \"50", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = AUTOREFERER, Type = Double, Dynamic = False, Default = \"58", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = BUFFERSIZE, Type = Double, Dynamic = False, Default = \"98", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = CAINFO, Type = Double, Dynamic = False, Default = \"10065", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = CAPATH, Type = Double, Dynamic = False, Default = \"10097", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = CERTINFO, Type = Double, Dynamic = False, Default = \"172", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = CHUNK_BGN_FUNCTION, Type = Double, Dynamic = False, Default = \"20198", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = CHUNK_DATA, Type = Double, Dynamic = False, Default = \"10201", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = CHUNK_END_FUNCTION, Type = Double, Dynamic = False, Default = \"20199", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = CLOSESOCKETDATA, Type = Double, Dynamic = False, Default = \"10209", Scope = Protected
@@ -39,6 +60,9 @@ Protected Module Opts
 	#tag Constant, Name = COPYPOSTFIELDS, Type = Double, Dynamic = False, Default = \"10165", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = CRLF, Type = Double, Dynamic = False, Default = \"27", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = CRLFILE, Type = Double, Dynamic = False, Default = \"10169", Scope = Protected
 	#tag EndConstant
 
@@ -55,6 +79,9 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = DEBUGFUNCTION, Type = Double, Dynamic = False, Default = \"20094", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = DEFAULT_PROTOCOL, Type = Double, Dynamic = False, Default = \"10238", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = DIRLISTONLY, Type = Double, Dynamic = False, Default = \"48", Scope = Protected
@@ -78,7 +105,19 @@ Protected Module Opts
 	#tag Constant, Name = ERRORBUFFER, Type = Double, Dynamic = False, Default = \"10010", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = EXPECT_100_TIMEOUT_MS, Type = Double, Dynamic = False, Default = \"227", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = FAILONERROR, Type = Double, Dynamic = False, Default = \"45", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = FILETIME, Type = Double, Dynamic = False, Default = \"69", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = FNMATCH_DATA, Type = Double, Dynamic = False, Default = \"10202", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = FNMATCH_FUNCTION, Type = Double, Dynamic = False, Default = \"20200", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = FOLLOWLOCATION, Type = Double, Dynamic = False, Default = \"52", Scope = Protected
@@ -88,15 +127,6 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = FRESH_CONNECT, Type = Double, Dynamic = False, Default = \"74", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = FTPMETHOD_MULTICWD, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = FTPMETHOD_NOCWD, Type = Double, Dynamic = False, Default = \"2", Scope = Protected
-	#tag EndConstant
-
-	#tag Constant, Name = FTPMETHOD_SINGLECWD, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = FTPPORT, Type = Double, Dynamic = False, Default = \"10017", Scope = Protected
@@ -114,10 +144,22 @@ Protected Module Opts
 	#tag Constant, Name = FTP_FILEMETHOD, Type = Double, Dynamic = False, Default = \"138", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = HEADER, Type = Double, Dynamic = False, Default = \"42", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = HEADERDATA, Type = Double, Dynamic = False, Default = \"10029", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = HEADERFUNCTION, Type = Double, Dynamic = False, Default = \"20079", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = HEADEROPT, Type = Double, Dynamic = False, Default = \"229", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = HTTP200ALIASES, Type = Double, Dynamic = False, Default = \"10104", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = HTTPAUTH, Type = Double, Dynamic = False, Default = \"107", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = HTTPGET, Type = Double, Dynamic = False, Default = \"80", Scope = Protected
@@ -135,6 +177,18 @@ Protected Module Opts
 	#tag Constant, Name = HTTPVERSION, Type = Double, Dynamic = False, Default = \"84", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = HTTP_CONTENT_DECODING, Type = Double, Dynamic = False, Default = \"158", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = HTTP_TRANSFER_DECODING, Type = Double, Dynamic = False, Default = \"157", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = IGNORE_CONTENT_LENGTH, Type = Double, Dynamic = False, Default = \"136", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = IPRESOLVE, Type = Double, Dynamic = False, Default = \"113", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = ISSUERCERT, Type = Double, Dynamic = False, Default = \"10170", Scope = Protected
 	#tag EndConstant
 
@@ -145,6 +199,12 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = LOCALPORT, Type = Double, Dynamic = False, Default = \"139", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LOW_SPEED_LIMIT, Type = Double, Dynamic = False, Default = \"19", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LOW_SPEED_TIME, Type = Double, Dynamic = False, Default = \"20", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = MAIL_FROM, Type = Double, Dynamic = False, Default = \"10186", Scope = Protected
@@ -213,6 +273,9 @@ Protected Module Opts
 	#tag Constant, Name = PASSWORD, Type = Double, Dynamic = False, Default = \"10174", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = PATH_AS_IS, Type = Double, Dynamic = False, Default = \"234", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = PIPELINING_SERVER_BL, Type = Double, Dynamic = False, Default = \"10012", Scope = Protected
 	#tag EndConstant
 
@@ -229,6 +292,9 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = POSTQUOTE, Type = Double, Dynamic = False, Default = \"10039", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = POSTREDIR, Type = Double, Dynamic = False, Default = \"161", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = PREQUOTE, Type = Double, Dynamic = False, Default = \"10093", Scope = Protected
@@ -294,6 +360,9 @@ Protected Module Opts
 	#tag Constant, Name = RESOLVE, Type = Double, Dynamic = False, Default = \"10203", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = RESUME_FROM, Type = Double, Dynamic = False, Default = \"21", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = RTSP_SESSION_ID, Type = Double, Dynamic = False, Default = \"10190", Scope = Protected
 	#tag EndConstant
 
@@ -357,6 +426,9 @@ Protected Module Opts
 	#tag Constant, Name = SSLKEYTYPE, Type = Double, Dynamic = False, Default = \"10088", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = SSLVERSION, Type = Double, Dynamic = False, Default = \"32", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = SSL_CIPHER_LIST, Type = Double, Dynamic = False, Default = \"10083", Scope = Protected
 	#tag EndConstant
 
@@ -364,6 +436,12 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = SSL_CTX_FUNCTION, Type = Double, Dynamic = False, Default = \"20108", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SSL_ENABLE_ALPN, Type = Double, Dynamic = False, Default = \"226", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SSL_ENABLE_NPN, Type = Double, Dynamic = False, Default = \"225", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = SSL_VERIFYHOST, Type = Double, Dynamic = False, Default = \"81", Scope = Protected
@@ -390,19 +468,22 @@ Protected Module Opts
 	#tag Constant, Name = USE_SSL, Type = Double, Dynamic = False, Default = \"119", Scope = Protected
 	#tag EndConstant
 
-	#tag Constant, Name = USE_SSL_ALL, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
+	#tag Constant, Name = USE_SSL_ALL, Type = Double, Dynamic = False, Default = \"3", Scope = Protected, Attributes = \"deprecated \x3D "libcURL.ConnectionType""
 	#tag EndConstant
 
-	#tag Constant, Name = USE_SSL_CONTROL, Type = Double, Dynamic = False, Default = \"2", Scope = Protected
+	#tag Constant, Name = USE_SSL_CONTROL, Type = Double, Dynamic = False, Default = \"2", Scope = Protected, Attributes = \"deprecated \x3D "libcURL.ConnectionType""
 	#tag EndConstant
 
-	#tag Constant, Name = USE_SSL_NONE, Type = Double, Dynamic = False, Default = \"0", Scope = Protected
+	#tag Constant, Name = USE_SSL_NONE, Type = Double, Dynamic = False, Default = \"0", Scope = Protected, Attributes = \"deprecated \x3D "libcURL.ConnectionType""
 	#tag EndConstant
 
-	#tag Constant, Name = USE_SSL_TRY, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
+	#tag Constant, Name = USE_SSL_TRY, Type = Double, Dynamic = False, Default = \"1", Scope = Protected, Attributes = \"deprecated \x3D "libcURL.ConnectionType""
 	#tag EndConstant
 
 	#tag Constant, Name = VERBOSE, Type = Double, Dynamic = False, Default = \"41", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WILDCARDMATCH, Type = Double, Dynamic = False, Default = \"197", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = WRITEDATA, Type = Double, Dynamic = False, Default = \"10001", Scope = Protected

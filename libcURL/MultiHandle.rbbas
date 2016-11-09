@@ -4,20 +4,21 @@ Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h0
 		Function AddItem(Item As libcURL.EasyHandle) As Boolean
 		  ' Add a EasyHandle to the multistack. The EasyHandle should have all of its options already set and ready to go.
-		  ' You may not add an item while a call to PerformOnce has not yet returned. Doing so will raise an IllegalLockingException.
 		  ' A EasyHandle may belong to only one MultiHandle object at a time. Passing an owned EasyHandle will fail.
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_multi_add_handle.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.AddItem
 		  
-		  StackLock.Enter
-		  Try
+		  If Not libcURL.Version.IsAtLeast(7, 32, 1) And Instances.HasKey(Item.Handle) Then
+		    ' This error code was not defined until 7.32.1, so we fake it
+		    Const CURLM_ADDED_ALREADY = 7
+		    mLastError = CURLM_ADDED_ALREADY
+		    
+		  Else
 		    mLastError = curl_multi_add_handle(mHandle, Item.Handle)
 		    If mLastError = 0 Then Instances.Value(Item.Handle) = Item
-		  Finally
-		    StackLock.Leave
-		  End Try
+		  End If
 		  Return mLastError = 0
 		End Function
 	#tag EndMethod
@@ -50,12 +51,11 @@ Inherits libcURL.cURLHandle
 		  Super.Constructor(GlobalInitFlags)
 		  
 		  mHandle = curl_multi_init()
-		  If Me.Handle <= 0 Then
+		  If mHandle <= 0 Then
 		    mLastError = libcURL.Errors.INIT_FAILED
 		    Raise New cURLException(Me)
 		  End If
 		  Instances = New Dictionary
-		  StackLock = New CriticalSection
 		End Sub
 	#tag EndMethod
 
@@ -81,7 +81,7 @@ Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherMulti As libcURL.MultiHandle) As Integer
 		  Dim i As Integer = Super.Operator_Compare(OtherMulti)
-		  If i = 0 Then Return Sign(mHandle - OtherMulti.Handle)
+		  If i = 0 Then i = Sign(mHandle - OtherMulti.Handle)
 		  Return i
 		End Function
 	#tag EndMethod
@@ -99,14 +99,8 @@ Inherits libcURL.cURLHandle
 		    PerformTimer = New Timer
 		    AddHandler PerformTimer.Action, WeakAddressOf PerformTimerHandler
 		  End If
-		  Dim i As Integer = QueryInterval
-		  If i > 0 Then
-		    PerformTimer.Period = i
-		  ElseIf i = 0 Then
-		    PerformTimer.Period = 1 ' immediately
-		  Else ' error
-		    Return
-		  End If
+		  Dim q As Integer = QueryInterval()
+		  PerformTimer.Period = Min(Max(q, 10), 100)
 		  PerformTimer.Mode = Timer.ModeMultiple
 		End Sub
 	#tag EndMethod
@@ -127,7 +121,11 @@ Inherits libcURL.cURLHandle
 		  ' http://curl.haxx.se/libcurl/c/curl_multi_info_read.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.PerformOnce
 		  
-		  StackLock.Enter
+		  If StackLocked Then
+		    mLastError = libcURL.Errors.CALL_LOOP_DETECTED
+		    Raise New libcURL.cURLException(Me) ' Called by an EasyHandle or MultiHandle event!
+		  End If
+		  StackLocked = True
 		  Try
 		    Dim c As Integer
 		    mLastError = curl_multi_perform(mHandle, c) ' on exit, 'c' will contain the number of easy handles with unfinished business.
@@ -145,7 +143,7 @@ Inherits libcURL.cURLHandle
 		      Loop Until c <= 0
 		    End If
 		  Finally
-		    StackLock.Leave
+		    StackLocked = False
 		  End Try
 		  Return ((mLastError = 0 Or mLastError = CURLM_CALL_MULTI_PERFORM) And Instances.Count > 0)
 		End Function
@@ -155,11 +153,14 @@ Inherits libcURL.cURLHandle
 		Private Sub PerformTimerHandler(Sender As Timer)
 		  ' This method handles the PerformTimer.Action event. It calls PerformOnce on the main thread until PerformOnce returns False.
 		  
-		  If Not Me.PerformOnce() Then
-		    Sender.Mode = Timer.ModeOff
-		  ElseIf Sender.Period > 50 Then
-		    Me.Perform() ' update interval
-		  End If
+		  For i As Integer = 0 To 4
+		    If Not Me.PerformOnce() Then
+		      Sender.Mode = Timer.ModeOff
+		      Exit For
+		    ElseIf i = 4 Then
+		      Sender.Period = QueryInterval()
+		    End If
+		  Next
 		  
 		Exception Err As RuntimeException
 		  #pragma BreakOnExceptions Off
@@ -170,28 +171,35 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function QueryInterval() As Integer
-		  ' Returns libcURL's best estimate for an optimum interval, in milliseconds, between calls to PerformOnce. An interval of 0 means
+		Function QueryInterval() As Double
+		  ' Returns libcURL's best estimate for an optimum interval, in milliseconds, between calls to PerformOnce. An interval of 1 means
 		  ' that PerformOnce may be called immediately.
+		  '
+		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_multi_timeout.html
-		  Dim i As Integer
-		  If libcURL.Version.IsAtLeast(7, 15, 4) Then
-		    mLastError = curl_multi_timeout(mHandle, i)
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.QueryInterval
+		  
+		  Static IsAvailable As Boolean
+		  If Not IsAvailable Then IsAvailable = libcURL.Version.IsAtLeast(7, 15, 4)
+		  Dim time As timeval
+		  If IsAvailable Then
+		    mLastError = curl_multi_timeout(mHandle, time)
 		  Else
 		    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
 		  End If
-		  If mLastError = 0 Then Return i Else Return -1
-		  
+		  If mLastError = 0 Then
+		    Dim d As Double = CDbl(Str(time.tv_sec) + "." + Str(time.tv_usec))
+		    If d < 0.0 Then d = 10.0
+		    Return d
+		  End If
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function ReadNextMsg(ByRef MsgsRemaining As Integer) As CURLMsg
-		  Dim mb As MemoryBlock = curl_multi_info_read(mHandle, MsgsRemaining)
-		  If mb <> Nil Then
-		    Dim msg As CURLMsg
-		    msg.StringValue(TargetLittleEndian) = mb.StringValue(0, msg.Size)
-		    Return msg
+		  Dim p As Ptr = curl_multi_info_read(mHandle, MsgsRemaining)
+		  If p <> Nil Then
+		    Return p.CURLMsg
 		  ElseIf MsgsRemaining = 0 Then
 		    MsgsRemaining = -1
 		  End If
@@ -201,20 +209,14 @@ Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h0
 		Function RemoveItem(Item As libcURL.EasyHandle) As Boolean
 		  ' Removes the passed EasyHandle from the multistack. If there no more EasyHandles then turns off the PerformTimer.
-		  ' You may not remove an item while a call to PerformOnce has not yet returned. Doing so will raise an IllegalLockingException.
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_multi_remove_handle.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.RemoveItem
 		  
-		  StackLock.Enter
-		  Try
-		    mLastError = curl_multi_remove_handle(mHandle, Item.Handle)
-		    If Instances.HasKey(Item.Handle) Then Instances.Remove(Item.Handle)
-		    If Instances.Count = 0 And PerformTimer <> Nil Then PerformTimer.Mode = Timer.ModeOff
-		  Finally
-		    StackLock.Leave
-		  End Try
+		  mLastError = curl_multi_remove_handle(mHandle, Item.Handle)
+		  If Instances.HasKey(Item.Handle) Then Instances.Remove(Item.Handle)
+		  If Instances.Count = 0 And PerformTimer <> Nil Then PerformTimer.Mode = Timer.ModeOff
 		  Return mLastError = 0
 		End Function
 	#tag EndMethod
@@ -250,7 +252,7 @@ Inherits libcURL.cURLHandle
 		    Select Case OptionNumber
 		    Case libcURL.Opts.PIPELINING_SITE_BL, libcURL.Opts.PIPELINING_SERVER_BL
 		      ' These option numbers explicitly accept NULL. Refer to the curl documentation on the individual option numbers for details.
-		      MarshalledValue = Nil
+		      Return Me.SetOptionPtr(OptionNumber, Nil)
 		    Else
 		      ' for all other option numbers reject NULL values.
 		      Dim err As New NilObjectException
@@ -289,7 +291,18 @@ Inherits libcURL.cURLHandle
 		    Raise err
 		  End Select
 		  
-		  mLastError = curl_multi_setopt(mHandle, OptionNumber, MarshalledValue)
+		  Return Me.SetOptionPtr(OptionNumber, MarshalledValue)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function SetOptionPtr(OptionNumber As Integer, NewValue As Ptr) As Boolean
+		  If Not libcURL.Version.IsAtLeast(7, 15, 4) Then
+		    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
+		    Raise New cURLException(Me)
+		  End If
+		  
+		  mLastError = curl_multi_setopt(mHandle, OptionNumber, NewValue)
 		  Return mLastError = 0
 		End Function
 	#tag EndMethod
@@ -320,6 +333,64 @@ Inherits libcURL.cURLHandle
 	#tag EndNote
 
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mHTTPMultiplexing
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ' Sets whether two (or more) HTTP requests which are added to the same MultiHandle can be
+			  ' multiplexed over the same connection (HTTP/2 required).
+			  '
+			  ' See:
+			  ' https://curl.haxx.se/libcurl/c/CURLMOPT_PIPELINING.html
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.HTTPMultiplexing
+			  
+			  If Not libcURL.Version.IsAtLeast(7, 43, 0) Or Not libcURL.Version.HTTP2 Then
+			    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
+			    Return
+			  End If
+			  
+			  If value Then
+			    If Not Me.SetOption(libcURL.Opts.Multi_PIPELINING, 2) Then Raise new libcURL.cURLException(Me)
+			  Else
+			    If Not Me.SetOption(libcURL.Opts.Multi_PIPELINING, mHTTPPipelining) Then Raise new libcURL.cURLException(Me)
+			  End If
+			  mHTTPMultiplexing = value
+			End Set
+		#tag EndSetter
+		HTTPMultiplexing As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mHTTPPipelining
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ' Sets whether two (or more) HTTP requests which are added to the same MultiHandle can be
+			  ' pipelined over the same connection (server support required).
+			  '
+			  ' See:
+			  ' https://curl.haxx.se/libcurl/c/CURLMOPT_PIPELINING.html
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.HTTPPipelining
+			  
+			  If Not libcURL.Version.IsAtLeast(7, 16, 0) Then
+			    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
+			    Return
+			  End If
+			  
+			  If Not Me.SetOption(libcURL.Opts.Multi_PIPELINING, value) Then Raise new libcURL.cURLException(Me)
+			  mHTTPPipelining = value
+			End Set
+		#tag EndSetter
+		HTTPPipelining As Boolean
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h21
 		Private Instances As Dictionary
 	#tag EndProperty
@@ -329,11 +400,19 @@ Inherits libcURL.cURLHandle
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mHTTPMultiplexing As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mHTTPPipelining As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private PerformTimer As Timer
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private StackLock As CriticalSection
+		Private StackLocked As Boolean
 	#tag EndProperty
 
 
@@ -341,7 +420,7 @@ Inherits libcURL.cURLHandle
 	#tag EndConstant
 
 
-	#tag Structure, Name = CURLMsg, Flags = &h21
+	#tag Structure, Name = CURLMsg, Flags = &h1
 		msg As Integer
 		  easy_handle As Integer
 		Data As Ptr
@@ -349,6 +428,16 @@ Inherits libcURL.cURLHandle
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="HTTPMultiplexing"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HTTPPipelining"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true

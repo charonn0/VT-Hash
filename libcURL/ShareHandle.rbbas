@@ -12,6 +12,9 @@ Inherits libcURL.cURLHandle
 		  If Not SharedHandles.HasKey(Item.Handle) And Item.SetOption(libcURL.Opts.SHARE, Me) Then
 		    SharedHandles.Value(Item.Handle) = Item
 		    Return True
+		  Else
+		    mLastError = Item.LastError
+		    Return False
 		  End If
 		End Function
 	#tag EndMethod
@@ -71,6 +74,55 @@ Inherits libcURL.cURLHandle
 	#tag EndDelegateDeclaration
 
 	#tag Method, Flags = &h21
+		Private Sub curl_Lock(Data As curl_lock_data, Access As curl_lock_access)
+		  #pragma Unused Access
+		  Select Case Data
+		  Case curl_lock_data.LOCK_COOKIE
+		    CookieLock.Enter
+		    
+		  Case curl_lock_data.LOCK_DNS
+		    DNSLock.Enter
+		    
+		  Case curl_lock_data.LOCK_SSL
+		    SSLLock.Enter
+		    
+		  Case curl_lock_data.LOCK_SHARE
+		    SSLLock.Enter
+		    DNSLock.Enter
+		    CookieLock.Enter
+		    
+		  Else
+		    Raise New IllegalLockingException
+		    
+		  End Select
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub curl_Unlock(Data As curl_lock_data)
+		  Select Case Data
+		  Case curl_lock_data.LOCK_COOKIE
+		    CookieLock.Leave
+		    
+		  Case curl_lock_data.LOCK_DNS
+		    DNSLock.Leave
+		    
+		  Case curl_lock_data.LOCK_SSL
+		    SSLLock.Leave
+		    
+		  Case curl_lock_data.LOCK_SHARE
+		    SSLLock.Leave
+		    DNSLock.Leave
+		    CookieLock.Leave
+		    
+		  Else
+		    Raise New IllegalLockingException
+		    
+		  End Select
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub Destructor()
 		  Me.Close
 		  If mHandle <> 0 Then
@@ -91,7 +143,7 @@ Inherits libcURL.cURLHandle
 		  
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
 		  If curl <> Nil And curl.Value <> Nil And curl.Value IsA ShareHandle Then
-		    ShareHandle(curl.Value)._Lock(Data, Access)
+		    ShareHandle(curl.Value).curl_Lock(Data, Access)
 		    Return
 		  End If
 		  Break 'UserData does not refer to a valid instance!
@@ -101,7 +153,7 @@ Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherShare As libcURL.ShareHandle) As Integer
 		  Dim i As Integer = Super.Operator_Compare(OtherShare)
-		  If i = 0 Then Return Sign(mHandle - OtherShare.Handle)
+		  If i = 0 Then i = Sign(mHandle - OtherShare.Handle)
 		  Return i
 		End Function
 	#tag EndMethod
@@ -109,7 +161,10 @@ Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h0
 		Function RemoveItem(Item As libcURL.EasyHandle) As Boolean
 		  ' Remove an easy handle from share handle.
-		  ' See: http://curl.haxx.se/libcurl/c/CURLOPT_SHARE.html
+		  '
+		  ' See:
+		  ' http://curl.haxx.se/libcurl/c/CURLOPT_SHARE.html
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ShareHandle.RemoveItem
 		  
 		  If SharedHandles.HasKey(Item.Handle) And Item.SetOption(libcURL.Opts.SHARE, Nil) Then
 		    SharedHandles.Remove(Item.Handle)
@@ -143,59 +198,10 @@ Inherits libcURL.cURLHandle
 		  
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
 		  If curl <> Nil And curl.Value <> Nil And curl.Value IsA ShareHandle Then
-		    ShareHandle(curl.Value)._Unlock(Data)
+		    ShareHandle(curl.Value).curl_Unlock(Data)
 		    Return
 		  End If
 		  Break 'UserData does not refer to a valid instance!
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Sub _Lock(Data As curl_lock_data, Access As curl_lock_access)
-		  #pragma Unused Access
-		  Select Case Data
-		  Case curl_lock_data.LOCK_COOKIE
-		    CookieLock.Enter
-		    
-		  Case curl_lock_data.LOCK_DNS
-		    DNSLock.Enter
-		    
-		  Case curl_lock_data.LOCK_SSL
-		    SSLLock.Enter
-		    
-		  Case curl_lock_data.LOCK_SHARE
-		    SSLLock.Enter
-		    DNSLock.Enter
-		    CookieLock.Enter
-		    
-		  Else
-		    Raise New IllegalLockingException
-		    
-		  End Select
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Sub _Unlock(Data As curl_lock_data)
-		  Select Case Data
-		  Case curl_lock_data.LOCK_COOKIE
-		    CookieLock.Leave
-		    
-		  Case curl_lock_data.LOCK_DNS
-		    DNSLock.Leave
-		    
-		  Case curl_lock_data.LOCK_SSL
-		    SSLLock.Leave
-		    
-		  Case curl_lock_data.LOCK_SHARE
-		    SSLLock.Leave
-		    DNSLock.Leave
-		    CookieLock.Leave
-		    
-		  Else
-		    Raise New IllegalLockingException
-		    
-		  End Select
 		End Sub
 	#tag EndMethod
 

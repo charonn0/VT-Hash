@@ -6,6 +6,7 @@ Inherits libcURL.cURLHandle
 		  ' Appends the passed string to the list. If the List is NULL it will be created.
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_slist_append.html
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Append
 		  
 		  Dim p As Ptr = curl_slist_append(List, s)
 		  If p <> Nil Then
@@ -19,6 +20,9 @@ Inherits libcURL.cURLHandle
 		Sub Constructor(ListPtr As Ptr = Nil, GlobalInitFlags As Integer = libcURL.CURL_GLOBAL_DEFAULT)
 		  ' Creates a linked list that is managed by libcURL. Pass a Ptr to the first item in an existing list,
 		  ' or Nil to create an empty list.
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Constructor
 		  
 		  // Calling the overridden superclass constructor.
 		  // Constructor(GlobalInitFlags As Integer) -- From libcURL.cURLHandle
@@ -46,19 +50,19 @@ Inherits libcURL.cURLHandle
 
 	#tag Method, Flags = &h21
 		Private Sub Destructor()
-		  Me.Free()
+		  If libcURL.IsAvailable And List <> Nil Then curl_slist_free_all(List)
+		  List = Nil
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Free()
+		Attributes( deprecated = "libcURL.ListPtr.Destructor" )  Sub Free()
 		  ' Frees the list.
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_slist_free_all.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Free
 		  
-		  If libcURL.IsAvailable And List <> Nil Then libcURL.curl_slist_free_all(List)
-		  List = Nil
+		  Me.Destructor
 		End Sub
 	#tag EndMethod
 
@@ -66,20 +70,26 @@ Inherits libcURL.cURLHandle
 		Function Item(Index As Integer) As String
 		  ' Reads the string located at Index. The first item is at Index=0
 		  ' If the list does not contain a string at Index, an OutOfBoundsException will be raised.
-		  ' If the next link points to an invalid Ptr, a NilObjectException will be raised.
+		  ' If the list is empty then a NilObjectException will be raised.
 		  '
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Item
+		  
+		  If List = Nil Then
+		    Dim err As New NilObjectException
+		    err.Message = "The list is empty."
+		    Raise err
+		  End If
 		  
 		  Dim p As Ptr = List
 		  Dim i As Integer
 		  Do
 		    If i < Index Then
-		      Dim nxt As Ptr = p.Ptr(4)
-		      If nxt <> Nil Then 
-		        p = nxt
-		      Else
-		        Raise New NilObjectException
+		      p = p.Ptr(4)
+		      If p = Nil Then
+		        Dim err As New OutOfBoundsException
+		        err.Message = "The list does not contain an entry at that index."
+		        Raise err
 		      End If
 		      
 		    ElseIf i = Index Then
@@ -88,7 +98,9 @@ Inherits libcURL.cURLHandle
 		      Return mb.CString(0)
 		      
 		    Else
-		      Raise New OutOfBoundsException
+		      Dim err As New OutOfBoundsException
+		      err.Message = "List indices must be greater than or equal to zero."
+		      Raise err
 		    End If
 		    i = i + 1
 		  Loop
@@ -97,7 +109,7 @@ Inherits libcURL.cURLHandle
 
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherList As libcURL.ListPtr) As Integer
-		  ' Overloads the comparison operator(=), permitting direct comparisons between instances of ListPtr
+		  ' Overloads the comparison operator(=), permitting direct comparisons between references to ListPtrs
 		  '
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Operator_Compare
@@ -119,10 +131,17 @@ Inherits libcURL.cURLHandle
 		  If mLastError = libcURL.Errors.NOT_INITIALIZED Then Raise New cURLException(Me)
 		  
 		  Dim ret() As String
-		  Dim c As Integer = Me.Count - 1
-		  For i As Integer = 0 To c
-		    ret.Append(Me.Item(i))
-		  Next
+		  Dim p As Ptr = List
+		  Do Until p = Nil
+		    Dim txt, nxt As Ptr
+		    txt = p.Ptr(0)
+		    nxt = p.Ptr(4)
+		    p = nxt
+		    Dim mb As MemoryBlock = txt
+		    If mb = Nil Then Continue
+		    ret.Append(mb.CString(0))
+		  Loop
+		  
 		  Return ret
 		End Function
 	#tag EndMethod
@@ -137,7 +156,7 @@ Inherits libcURL.cURLHandle
 		  If mLastError = libcURL.Errors.NOT_INITIALIZED Then
 		    Me.Constructor()
 		  Else
-		    Me.Free()
+		    Me.Destructor()
 		  End If
 		  For i As Integer = 0 To UBound(From)
 		    If Not Me.Append(From(i)) Then Raise New cURLException(Me)

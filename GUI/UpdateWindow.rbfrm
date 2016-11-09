@@ -318,11 +318,12 @@ Begin Window UpdateWindow
    Begin cURLClient curl
       Height          =   32
       Index           =   -2147483648
-      Left            =   3.77e+2
+      IsSSLCertOK     =   ""
+      Left            =   377
       LockedInPosition=   False
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   8.0e+1
+      Top             =   80
       Width           =   32
    End
 End
@@ -354,6 +355,15 @@ End
 		  
 		  Return Nil
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ConnectedHandler(Sender As libcURL.EasyHandle, Socket As Integer)
+		  '#pragma Unused Socket
+		  '
+		  'CurrentAction.Text = "Connected to update server " + Shorten(Me.EasyItem.URL)
+		  'SpeedTimer.Mode = Timer.ModeMultiple
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
@@ -717,14 +727,6 @@ End
 #tag EndEvents
 #tag Events curl
 	#tag Event
-		Sub Connected(Socket As Integer)
-		  #pragma Unused Socket
-		  
-		  CurrentAction.Text = "Connected to update server " + Shorten(Me.EasyItem.URL)
-		  SpeedTimer.Mode = Timer.ModeMultiple
-		End Sub
-	#tag EndEvent
-	#tag Event
 		Sub Error(cURLCode As Integer)
 		  Self.Reset
 		  Status.Text = libcURL.FormatError(cURLCode)
@@ -734,7 +736,7 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		Function Progress(dlTotal As Int64, dlNow As Int64, ulTotal As Int64, ulNow As Int64) As Boolean
 		  #pragma Unused ulnow
 		  #pragma Unused ultotal
 		  

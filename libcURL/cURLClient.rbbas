@@ -55,19 +55,18 @@ Inherits libcURL.cURLManager
 		  ' Asynchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
 		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
 		  ' may be a string or a FolderItem.
-		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
 		  ' The transfer will be performed on the event loop (main thread).
 		  
-		  Me.SetFormData(FormData)
+		  Me.EasyItem.SetFormData(FormData)
 		  Me.Perform(URL, Nil, WriteTo)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Post(URL As String, FormData As Dictionary, WriteTo As Writeable = Nil) As Boolean
-		  ' Asynchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
+		  ' Synchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
 		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
 		  ' may be a string or a FolderItem.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
@@ -75,7 +74,7 @@ Inherits libcURL.cURLManager
 		  ' This method will block the calling thread until the transfer completes. All events will be raised
 		  ' on the calling thread.
 		  
-		  Me.SetFormData(FormData)
+		  Me.EasyItem.SetFormData(FormData)
 		  Return Me.Perform(URL, Nil, WriteTo)
 		End Function
 	#tag EndMethod
@@ -85,34 +84,26 @@ Inherits libcURL.cURLManager
 		  ' Asynchronously POST the passed FormData via HTTP(S) using application/x-www-form-urlencoded. The FormData dictionary
 		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
 		  ' is a string containing the form-element value.
-		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
 		  ' The transfer will be performed on the event loop (main thread).
 		  
-		  Me.SetFormData(PostFields)
+		  Me.EasyItem.SetFormData(PostFields)
 		  Me.Perform(URL, Nil, WriteTo)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Post(URL As String, PostFields() As String, WriteTo As Writeable = Nil) As Boolean
-		  ' Asynchronously POST the passed PostFields via HTTP(S) using application/x-www-form-urlencoded. The PostFields array
+		  ' Synchronously POST the passed PostFields via HTTP(S) using application/x-www-form-urlencoded. The PostFields array
 		  ' contains "NAME=VALUE" strings comprising HTML form elements.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
 		  ' This method will block the calling thread until the transfer completes. All events will be raised
 		  ' on the calling thread.
 		  
-		  Me.SetFormData(PostFields)
+		  Me.EasyItem.SetFormData(PostFields)
 		  Return Me.Perform(URL, Nil, WriteTo)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function ProxyEngine() As libcURL.ProxyEngine
-		  If mProxy = Nil Then mProxy = New libcURL.ProxyEngine(Me.EasyItem)
-		  Return mProxy
 		End Function
 	#tag EndMethod
 
@@ -148,7 +139,7 @@ Inherits libcURL.cURLManager
 
 	#tag Method, Flags = &h0
 		Function Put(URL As String, ReadFrom As Readable, WriteTo As Writeable = Nil) As Boolean
-		  ' Asynchronously performs an upload using protocol-appropriate semantics (http PUT, ftp STOR, etc.)
+		  ' Synchronously performs an upload using protocol-appropriate semantics (http PUT, ftp STOR, etc.)
 		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
@@ -163,8 +154,8 @@ Inherits libcURL.cURLManager
 
 	#tag Note, Name = Using this class
 		This class provides synchronous and asynchronous transfers with full support for RB/Xojo threads. Transfers are initiated
-		by calling one of the transfer methods: Get, Post, and Put. Despite the HTTP-specific names, Get and Put can be used to tranfer 
-		files over any protocol libcURL supports.
+		by calling one of the transfer methods: Get, Head, Post, and Put. The names of these methods are borrowed from HTTP but do 
+		not imply HTTP as the protocol (except Post.) 
 		
 		There are two versions of each method: synchronous and asynchronous. When dealing with libcURL and REALbasic, a major issue
 		comes up with threading. RB/Xojo threads, being platform-generic abstractions, are not the sort of threads that libcURL understands. 
@@ -175,13 +166,8 @@ Inherits libcURL.cURLManager
 		The synchronous versions of the transfer methods will perform the entire transfer on the calling thread, and then return a
 		Boolean indicating success (True) or failure (False). The asynchronous versions will activate a Timer that performs a little
 		bit of the transfer on every run of the event loop. Both versions will raise events, and both versions can ignore the events
-		by using the GetDownloadedData, GetResponseHeaders, and GetStatusCode methods.
+		by using the IsTransferComplete, GetDownloadedData, GetResponseHeaders, and GetStatusCode methods.
 	#tag EndNote
-
-
-	#tag Property, Flags = &h1
-		Protected mProxy As libcURL.ProxyEngine
-	#tag EndProperty
 
 
 	#tag ViewBehavior
@@ -192,6 +178,12 @@ Inherits libcURL.cURLManager
 			InitialValue="-2147483648"
 			Type="Integer"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsSSLCertOK"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="libcURL.cURLManager"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -207,6 +199,13 @@ Inherits libcURL.cURLManager
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="Password"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+			InheritedFrom="libcURL.cURLManager"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
@@ -218,6 +217,13 @@ Inherits libcURL.cURLManager
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Username"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+			InheritedFrom="libcURL.cURLManager"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

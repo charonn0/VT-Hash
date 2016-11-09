@@ -8,22 +8,38 @@ Implements ErrorSetter
 		  ' libcURL if GlobalInitFlags is not among them.
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_global_init.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/cURLHandle.Constructor
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLHandle.Constructor
 		  
-		  If Not libcURL.IsAvailable Then
+		  Static available As Boolean = libcURL.IsAvailable
+		  If Not available Then
 		    Dim err As New PlatformNotSupportedException
 		    err.Message = "libcURL is not available or is an unsupported version."
 		    Raise err
 		  End If
 		  
 		  mLastError = 0 ' clears the NOT_INITIALIZED default value
-		  If InitFlags = Nil Then InitFlags = New Dictionary
-		  If Not InitFlags.HasKey(GlobalInitFlags) Then
-		    mLastError = curl_global_init(GlobalInitFlags)
-		    If mLastError <> 0 Then Raise New cURLException(Me)
-		  End If
-		  InitFlags.Value(GlobalInitFlags) = InitFlags.Lookup(GlobalInitFlags, 0) + 1
-		  mFlags = GlobalInitFlags
+		  
+		  If InitFlagsLock = Nil Then InitFlagsLock = New Semaphore
+		  Do Until InitFlagsLock.TrySignal
+		    #If TargetHasGUI Then
+		      App.YieldToNextThread
+		    #else
+		      If App.CurrentThread <> Nil Then App.YieldToNextThread Else App.DoEvents(100)
+		    #endif
+		  Loop
+		  
+		  Try
+		    If InitFlags = Nil Then InitFlags = New Dictionary
+		    If Not InitFlags.HasKey(GlobalInitFlags) Then
+		      mLastError = curl_global_init(GlobalInitFlags)
+		      If mLastError <> 0 Then Raise New cURLException(Me)
+		    End If
+		    InitFlags.Value(GlobalInitFlags) = InitFlags.Lookup(GlobalInitFlags, 0) + 1
+		    mFlags = GlobalInitFlags
+		  Finally
+		    InitFlagsLock.Release
+		  End Try
+		  
 		End Sub
 	#tag EndMethod
 
@@ -33,15 +49,22 @@ Implements ErrorSetter
 		  ' calls curl_global_cleanup.
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_global_cleanup.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/cURLHandle.Destructor
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLHandle.Destructor
 		  
 		  If InitFlags = Nil Then Return
-		  InitFlags.Value(mFlags) = InitFlags.Value(mFlags) - 1
-		  If InitFlags.Value(mFlags) <= 0 Then
-		    If libcURL.IsAvailable Then curl_global_cleanup()
-		    InitFlags.Remove(mFlags)
-		  End If
-		  If InitFlags.Count = 0 Then InitFlags = Nil
+		  Do Until InitFlagsLock.TrySignal
+		    App.YieldToNextThread
+		  Loop
+		  Try
+		    InitFlags.Value(mFlags) = InitFlags.Value(mFlags) - 1
+		    If InitFlags.Value(mFlags) <= 0 Then
+		      If libcURL.IsAvailable Then curl_global_cleanup()
+		      InitFlags.Remove(mFlags)
+		    End If
+		    If InitFlags.Count = 0 Then InitFlags = Nil
+		  Finally
+		    InitFlagsLock.Release
+		  End Try
 		  
 		End Sub
 	#tag EndMethod
@@ -50,7 +73,7 @@ Implements ErrorSetter
 		Function Flags() As Integer
 		  ' The global initialization flags that were passed to the instance Constructor
 		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/cURLHandle.Flags
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLHandle.Flags
 		  
 		  Return mFlags
 		End Function
@@ -67,7 +90,7 @@ Implements ErrorSetter
 		Function LastError() As Integer
 		  ' All calls into libcURL that return an error code will update LastError
 		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/cURLHandle.LastError
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLHandle.LastError
 		  
 		  Return mLastError
 		End Function
@@ -92,6 +115,10 @@ Implements ErrorSetter
 
 	#tag Property, Flags = &h21
 		Private Shared InitFlags As Dictionary
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Shared InitFlagsLock As Semaphore
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

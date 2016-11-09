@@ -3,7 +3,7 @@ Protected Class cURLException
 Inherits RuntimeException
 	#tag Method, Flags = &h1000
 		Sub Constructor(ErrantItem As libcURL.cURLHandle)
-		  If ErrantItem Is Nil Then 
+		  If ErrantItem Is Nil Then
 		    Me.Message = "Unknown error."
 		    Me.ErrorNumber = 0
 		    Return
@@ -15,6 +15,12 @@ Inherits RuntimeException
 		    
 		  Case Me.ErrorNumber = libcURL.Errors.FEATURE_UNAVAILABLE
 		    Me.Message = "A required feature is not available in the installed version of libcURL."
+		    
+		  Case Me.ErrorNumber = libcURL.Errors.CALL_LOOP_DETECTED
+		    Me.Message = "MultiHandle.PerformOnce was invoked by a MultiHandle or EasyHandle event handler."
+		    
+		  Case Me.ErrorNumber = libcURL.Errors.NO_COOKIEJAR
+		    Me.Message = "No cookie file was specified."
 		    
 		  Case Not libcURL.IsAvailable
 		    Me.Message = "libcURL is not available or is an unsupported version."
