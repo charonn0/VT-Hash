@@ -1014,73 +1014,6 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   130
       End
-      Begin Label Label7
-         AutoDeactivate  =   True
-         Bold            =   ""
-         DataField       =   ""
-         DataSource      =   ""
-         Enabled         =   True
-         Height          =   20
-         HelpTag         =   ""
-         Index           =   -2147483648
-         InitialParent   =   "TabPanel1"
-         Italic          =   ""
-         Left            =   12
-         LockBottom      =   ""
-         LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   ""
-         LockTop         =   True
-         Multiline       =   ""
-         Scope           =   0
-         Selectable      =   False
-         TabIndex        =   1
-         TabPanelIndex   =   5
-         Text            =   "Network interface:"
-         TextAlign       =   2
-         TextColor       =   &h000000
-         TextFont        =   "System"
-         TextSize        =   0
-         TextUnit        =   0
-         Top             =   34
-         Transparent     =   True
-         Underline       =   ""
-         Visible         =   True
-         Width           =   106
-      End
-      Begin ComboBox nic
-         AutoComplete    =   False
-         AutoDeactivate  =   True
-         Bold            =   False
-         DataField       =   ""
-         DataSource      =   ""
-         Enabled         =   True
-         Height          =   20
-         HelpTag         =   ""
-         Index           =   -2147483648
-         InitialParent   =   "TabPanel1"
-         InitialValue    =   ""
-         Italic          =   False
-         Left            =   124
-         ListIndex       =   0
-         LockBottom      =   True
-         LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   False
-         LockTop         =   True
-         Scope           =   0
-         TabIndex        =   2
-         TabPanelIndex   =   5
-         TabStop         =   True
-         TextFont        =   "System"
-         TextSize        =   0.0
-         TextUnit        =   0
-         Top             =   34
-         Underline       =   False
-         UseFocusRing    =   True
-         Visible         =   True
-         Width           =   220
-      End
       Begin Label Label9
          AutoDeactivate  =   True
          Bold            =   ""
@@ -1092,7 +1025,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   185
+         Left            =   189
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -1109,7 +1042,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   84
+         Top             =   65
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
@@ -1126,7 +1059,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   12
+         Left            =   16
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -1143,7 +1076,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   60
+         Top             =   41
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
@@ -1167,7 +1100,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   124
+         Left            =   128
          LimitText       =   0
          LockBottom      =   ""
          LockedInPosition=   False
@@ -1186,7 +1119,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   60
+         Top             =   41
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
@@ -1205,7 +1138,7 @@ Begin Window SettingsWindow
          InitialParent   =   "TabPanel1"
          InitialValue    =   "HTTP\r\nHTTP 1.0\r\nSocks 4\r\nSocks 4A\r\nSocks 5\r\nSocks 5A"
          Italic          =   False
-         Left            =   259
+         Left            =   263
          ListIndex       =   0
          LockBottom      =   True
          LockedInPosition=   False
@@ -1219,7 +1152,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0.0
          TextUnit        =   0
-         Top             =   83
+         Top             =   64
          Underline       =   False
          UseFocusRing    =   True
          Visible         =   True
@@ -1268,7 +1201,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   12
+         Left            =   16
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -1285,7 +1218,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   84
+         Top             =   65
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
@@ -1309,7 +1242,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   124
+         Left            =   128
          LimitText       =   0
          LockBottom      =   ""
          LockedInPosition=   False
@@ -1328,7 +1261,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   84
+         Top             =   65
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
@@ -1352,7 +1285,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   123
+         Left            =   127
          LimitText       =   0
          LockBottom      =   ""
          LockedInPosition=   False
@@ -1371,7 +1304,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   108
+         Top             =   89
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
@@ -1388,7 +1321,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   12
+         Left            =   16
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -1405,7 +1338,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   108
+         Top             =   89
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
@@ -1422,7 +1355,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   12
+         Left            =   16
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -1439,7 +1372,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   131
+         Top             =   112
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
@@ -1463,7 +1396,7 @@ Begin Window SettingsWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   123
+         Left            =   127
          LimitText       =   0
          LockBottom      =   ""
          LockedInPosition=   False
@@ -1482,7 +1415,7 @@ Begin Window SettingsWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   131
+         Top             =   112
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
@@ -1499,6 +1432,73 @@ Begin Window SettingsWindow
       TabPanelIndex   =   0
       Top             =   22
       Width           =   32
+   End
+   Begin ComboBox nic
+      AutoComplete    =   False
+      AutoDeactivate  =   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   False
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   124
+      ListIndex       =   0
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0.0
+      TextUnit        =   0
+      Top             =   -58
+      Underline       =   False
+      UseFocusRing    =   True
+      Visible         =   False
+      Width           =   220
+   End
+   Begin Label Label7
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   False
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   12
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      Text            =   "Network interface:"
+      TextAlign       =   2
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   -58
+      Transparent     =   True
+      Underline       =   ""
+      Visible         =   False
+      Width           =   106
    End
 End
 #tag EndWindow
@@ -1709,10 +1709,10 @@ End
 		  VTHash.SetConfig("SortDirection", SortDir)
 		  VTHash.SetConfig("SortType", SortType)
 		  
-		  If nic.ListIndex > -1 And nic.RowTag(nic.ListIndex) IsA NetworkInterface Then
-		    Dim ip As String = NetworkInterface(nic.RowTag(nic.ListIndex)).IPAddress
-		    VTHash.SetConfig("NetworkInterface", ip)
-		  End If
+		  'If nic.ListIndex > -1 And nic.RowTag(nic.ListIndex) IsA NetworkInterface Then
+		  'Dim ip As String = NetworkInterface(nic.RowTag(nic.ListIndex)).IPAddress
+		  'VTHash.SetConfig("NetworkInterface", ip)
+		  'End If
 		  VTHash.SetConfig("ProxyAddress", ProxyServer.Text)
 		  VTHash.SetConfig("ProxyUsername", ProxyUsername.Text)
 		  VTHash.SetConfig("ProxyPassword", ProxyPassword.Text)
@@ -1886,25 +1886,6 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events nic
-	#tag Event
-		Sub Open()
-		  Dim ip As String
-		  If VTHash.HasConfig("NetworkInterface") Then ip = VTHash.GetConfig("NetworkInterface")
-		  
-		  For i As Integer = 0 To System.NetworkInterfaceCount - 1
-		    Dim n As NetworkInterface = System.GetNetworkInterface(i)
-		    If n.IPAddress <> "0.0.0.0" Then
-		      Me.AddRow(n.IPAddress)
-		      Me.RowTag(i) = n
-		      If n.IPAddress = ip Then Me.ListIndex = i
-		    End If
-		  Next
-		  
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events ProxyTypes
 	#tag Event
 		Sub Change()
@@ -1951,6 +1932,25 @@ End
 		  Else
 		    Call MsgBox("API key test failed. (HTTP" + Str(Me.GetStatusCode, "000") +")", 16, "VT Hash Check - Invalid API key")
 		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events nic
+	#tag Event
+		Sub Open()
+		  'Dim ip As String
+		  'If VTHash.HasConfig("NetworkInterface") Then ip = VTHash.GetConfig("NetworkInterface")
+		  '
+		  'For i As Integer = 0 To System.NetworkInterfaceCount - 1
+		  'Dim n As NetworkInterface = System.GetNetworkInterface(i)
+		  'If n.IPAddress <> "0.0.0.0" Then
+		  'Me.AddRow(n.IPAddress)
+		  'Me.RowTag(i) = n
+		  'If n.IPAddress = ip Then Me.ListIndex = i
+		  'End If
+		  'Next
+		  '
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents

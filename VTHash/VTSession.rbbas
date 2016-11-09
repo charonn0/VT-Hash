@@ -76,6 +76,19 @@ Inherits libcURL.cURLClient
 		    'Me.ProxyEngine.ServiceName = VTHash.GetConfig("ProxyName")
 		  End If
 		  
+		  'If VTHash.HasConfig("NetworkInterface") Then
+		  'Dim n As NetworkInterface 
+		  'For i As Integer = 0 To System.NetworkInterfaceCount - 1
+		  'n = System.GetNetworkInterface(i)
+		  'If n.IPAddress = VTHash.GetConfig("NetworkInterface") Then
+		  'Exit For
+		  'Else
+		  'n = Nil
+		  'End If
+		  'Next
+		  'If n <> Nil Then Me.EasyItem.NetworkInterface = n
+		  'End If
+		  
 		  
 		  Dim APIURL As String
 		  If VTHash.GetConfig("UseSSL") Then
