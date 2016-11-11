@@ -560,6 +560,15 @@ End
 	#tag Event
 		Sub Open()
 		  PopulateInfo()
+		  If VTHash.HasConfig("ProxyAddress") Then
+		    Socket.Proxy.Address = VTHash.GetConfig("ProxyAddress")
+		    Socket.Proxy.Port = VTHash.GetConfig("ProxyPort")
+		    Socket.Proxy.Username = VTHash.GetConfig("ProxyUsername")
+		    Socket.Proxy.Password = VTHash.GetConfig("ProxyPassword")
+		    Socket.Proxy.Type = libcURL.ProxyType(VTHash.GetConfig("ProxyType").Int32Value)
+		  End If
+		  Socket.EasyItem.Verbose = True
+		  Socket.EasyItem.UseErrorBuffer = True
 		End Sub
 	#tag EndEvent
 
@@ -685,7 +694,7 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		Function Progress(dlTotal As Int64, dlNow As Int64, ulTotal As Int64, ulNow As Int64) As Boolean
 		  #pragma Unused dlTotal
 		  #pragma Unused dlnow
 		  mWaiter.SetProgress(ulnow, ultotal)

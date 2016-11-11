@@ -342,6 +342,18 @@ End
 		End Function
 	#tag EndEvent
 
+	#tag Event
+		Sub Open()
+		  If VTHash.HasConfig("ProxyAddress") Then
+		    curl.Proxy.Address = VTHash.GetConfig("ProxyAddress")
+		    curl.Proxy.Port = VTHash.GetConfig("ProxyPort")
+		    curl.Proxy.Username = VTHash.GetConfig("ProxyUsername")
+		    curl.Proxy.Password = VTHash.GetConfig("ProxyPassword")
+		    curl.Proxy.Type = libcURL.ProxyType(VTHash.GetConfig("ProxyType").Int32Value)
+		  End If
+		End Sub
+	#tag EndEvent
+
 
 	#tag Method, Flags = &h0
 		Function CheckNow(UpdateURL As String, CurrentVersion As Double) As FolderItem
