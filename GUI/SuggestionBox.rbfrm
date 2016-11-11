@@ -675,7 +675,13 @@ End
 		  If Me.EasyItem.ErrorBuffer <> "" Then
 		    System.DebugLog(CurrentMethodName + ":curl(0x" + Hex(Me.EasyItem.Handle) + "): " + Me.EasyItem.ErrorBuffer)
 		  End If
-		  Call MsgBox("Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode), 16, "VT Hash Check - Unable to connect")
+		  Dim msg As String = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode) + "%1"
+		  If cURLCode = 22 Then ' HTTP error
+		    msg = Replace(msg, "%1", "(" + Str(Me.GetStatusCode) + ")")
+		  Else
+		    msg = Replace(msg, "%1", "")
+		  End If
+		  Call MsgBox(msg, 16, "VT Hash Check - Unable to connect")
 		End Sub
 	#tag EndEvent
 	#tag Event
