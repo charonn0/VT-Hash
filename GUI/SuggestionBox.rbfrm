@@ -205,7 +205,7 @@ Begin Window SuggestionBox
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
-         Width           =   152
+         Width           =   122
       End
       Begin PushButton PushButton2
          AutoDeactivate  =   True
