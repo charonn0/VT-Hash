@@ -1,5 +1,5 @@
-VT Hash Check 1.57
-Copyright ©2009-16 Boredom Software, All Rights Reserved
+VT Hash Check 1.58
+Copyright ©2009-16 Andrew Lambert, All Rights Reserved
 
 1. Purpose
 2. Installing

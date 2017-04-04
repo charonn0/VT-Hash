@@ -107,7 +107,7 @@ Begin Window AboutWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
-      Text            =   "Copyright ©2009-15 Andrew Lambert, All Rights Reserved."
+      Text            =   "Copyright ©2009-16 Andrew Lambert, All Rights Reserved."
       TextAlign       =   0
       TextColor       =   0
       TextFont        =   "System"
