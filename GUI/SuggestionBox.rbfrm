@@ -16,9 +16,9 @@ Begin Window SuggestionBox
    MaxWidth        =   32000
    MenuBar         =   1731862527
    MenuBarVisible  =   True
-   MinHeight       =   64
+   MinHeight       =   259
    MinimizeButton  =   True
-   MinWidth        =   64
+   MinWidth        =   427
    Placement       =   0
    Resizeable      =   True
    Title           =   "Suggestion Box"
@@ -541,8 +541,8 @@ Begin Window SuggestionBox
          Left            =   333
          LockBottom      =   True
          LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   False
+         LockLeft        =   False
+         LockRight       =   True
          LockTop         =   False
          Multiline       =   ""
          ResetPeriod     =   1000
