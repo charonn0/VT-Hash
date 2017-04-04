@@ -348,7 +348,7 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function Progress(dlTotal As UInt64, dlnow As UInt64, ultotal As UInt64, ulnow As UInt64) As Boolean
+		Function Progress(dlTotal As Int64, dlNow As Int64, ulTotal As Int64, ulNow As Int64) As Boolean
 		  #pragma Unused dlnow
 		  #pragma Unused dlTotal
 		  mPercentDone = ulNow * 100 \ ultotal
