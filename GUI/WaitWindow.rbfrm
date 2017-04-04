@@ -46,6 +46,7 @@ Begin Window WaitWindow
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Thinking..."
       TextAlign       =   1
       TextColor       =   &h000000
@@ -93,7 +94,9 @@ Begin Window WaitWindow
          LockTop         =   False
          Maximum         =   0
          Scope           =   0
+         TabIndex        =   1
          TabPanelIndex   =   0
+         TabStop         =   True
          Top             =   56
          Value           =   0
          Visible         =   True

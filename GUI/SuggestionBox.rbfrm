@@ -25,13 +25,17 @@ Begin Window SuggestionBox
    Visible         =   True
    Width           =   4.27e+2
    Begin libcURL.cURLClient Socket
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   437
       LockedInPosition=   False
       Scope           =   0
+      TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -15
+      Visible         =   True
       Width           =   32
    End
    Begin PagePanel PagePanel1
@@ -52,6 +56,7 @@ Begin Window SuggestionBox
       Scope           =   0
       TabIndex        =   9
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   0
       Value           =   0
       Visible         =   True
@@ -78,6 +83,7 @@ Begin Window SuggestionBox
          Selectable      =   True
          TabIndex        =   0
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Feedback, bug reports, praise, and criticisms are gratefully accepted. In addition to your comment, anonymous data about your computer will also be shared. Provide an e-mail address if you would like a reply."
          TextAlign       =   0
          TextColor       =   0
@@ -195,6 +201,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "What is being shared?"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -303,6 +310,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -380,6 +388,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   8
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "e-mail:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -420,6 +429,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   2
+         TabStop         =   True
          Text            =   "Go Back"
          TextAlign       =   0
          TextColor       =   &h000000FF
@@ -540,6 +550,7 @@ Begin Window SuggestionBox
          Selectable      =   False
          TabIndex        =   9
          TabPanelIndex   =   1
+         TabStop         =   True
          Text            =   "Privacy policy"
          TextAlign       =   2
          TextColor       =   &h000000FF

@@ -39,7 +39,9 @@ Begin Window FileSubmitWindow
       LockTop         =   True
       Maximum         =   100
       Scope           =   0
+      TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   23
       Value           =   0
       Visible         =   True
@@ -67,6 +69,7 @@ Begin Window FileSubmitWindow
       Selectable      =   False
       TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Uploading to VirusTotal.com..."
       TextAlign       =   0
       TextColor       =   &h000000
@@ -106,6 +109,7 @@ Begin Window FileSubmitWindow
       Selectable      =   ""
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Permalink to results"
       TextAlign       =   1
       TextColor       =   "&c0000FF"
@@ -171,6 +175,7 @@ Begin Window FileSubmitWindow
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "%0 of %0 bytes sent"
       TextAlign       =   0
       TextColor       =   &h00808080
@@ -185,16 +190,21 @@ Begin Window FileSubmitWindow
    End
    Begin VTHash.VTSession Socket
       APIKey          =   ""
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   379
       LockedInPosition=   False
       Scope           =   0
+      TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   -21
+      Visible         =   True
       Width           =   32
    End
    Begin Timer GUITimer
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   379
@@ -202,8 +212,11 @@ Begin Window FileSubmitWindow
       Mode            =   2
       Period          =   250
       Scope           =   0
+      TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   17
+      Visible         =   True
       Width           =   32
    End
    Begin PushButton PauseButton
