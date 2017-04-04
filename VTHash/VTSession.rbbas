@@ -25,6 +25,7 @@ Inherits libcURL.cURLClient
 		  frm.Value("apikey") = APIKey
 		  frm.Value("resource") = ResourceID
 		  frm.Value("comment") = Comment
+		  Call Me.SetRequestHeader("Expect", "")
 		  SendRequest(RequestType.Comment, frm)
 		End Sub
 	#tag EndMethod
@@ -47,6 +48,7 @@ Inherits libcURL.cURLClient
 		  Case RequestType.DomainReport
 		    frm.Value("domain") = ResourceID
 		  End Select
+		  Call Me.SetRequestHeader("Expect", "")
 		  SendRequest(Type, frm)
 		End Sub
 	#tag EndMethod
@@ -58,6 +60,7 @@ Inherits libcURL.cURLClient
 		  Dim frm As New Dictionary
 		  frm.Value("resource") = ResourceID
 		  frm.Value("apikey") = APIKey
+		  Call Me.SetRequestHeader("Expect", "")
 		  SendRequest(RequestType.Rescan, frm)
 		End Sub
 	#tag EndMethod
@@ -134,6 +137,7 @@ Inherits libcURL.cURLClient
 		  Dim frm As New Dictionary
 		  frm.Value("apikey") = APIKey
 		  frm.Value("file") = File
+		  Call Me.SetRequestHeader("Expect", "100-Continue")
 		  SendRequest(RequestType.FileSubmit, frm)
 		End Sub
 	#tag EndMethod
