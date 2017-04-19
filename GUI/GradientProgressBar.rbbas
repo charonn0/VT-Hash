@@ -563,8 +563,12 @@ Inherits Canvas
 			Set
 			  //Calculates x, where x/Control.Width = val/maximum
 			  //Invokes the drawing methods
-			  #pragma BreakOnExceptions Off
+			  
 			  mvalue = value
+			  If Me.Width <= 0 Or Me.Height <= 0 Then
+			    Me.Invalidate(False)
+			    Return
+			  End If
 			  If mvalue > maximum Then mvalue = maximum
 			  Dim filledWidth As Integer = (((value * 100) / maximum) * (Me.Width / 100))
 			  
