@@ -209,9 +209,11 @@ Inherits libcURL.cURLHandle
 		  ' DO NOT CALL THIS METHOD
 		  
 		  Const CURL_SOCKOPT_BAD = 1
+		  Const CURLSOCKTYPE_IPCXN = 0
+		  Const CURLSOCKTYPE_ACCEPT = 1
 		  
 		  Select Case SocketType
-		  Case libcURL.Opts.CURLSOCKTYPE_IPCXN, libcURL.Opts.CURLSOCKTYPE_ACCEPT
+		  Case CURLSOCKTYPE_IPCXN, CURLSOCKTYPE_ACCEPT
 		    RaiseEvent CreateSocket(Socket)
 		    mConnectionCount = mConnectionCount + 1
 		    Return CURL_SOCKOPT_OK

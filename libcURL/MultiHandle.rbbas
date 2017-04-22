@@ -354,9 +354,9 @@ Inherits libcURL.cURLHandle
 			  End If
 			  
 			  If value Then
-			    If Not Me.SetOption(libcURL.Opts.Multi_PIPELINING, 2) Then Raise new libcURL.cURLException(Me)
+			    If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, 2) Then Raise new libcURL.cURLException(Me)
 			  Else
-			    If Not Me.SetOption(libcURL.Opts.Multi_PIPELINING, mHTTPPipelining) Then Raise new libcURL.cURLException(Me)
+			    If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, mHTTPPipelining) Then Raise new libcURL.cURLException(Me)
 			  End If
 			  mHTTPMultiplexing = value
 			End Set
@@ -384,7 +384,7 @@ Inherits libcURL.cURLHandle
 			    Return
 			  End If
 			  
-			  If Not Me.SetOption(libcURL.Opts.Multi_PIPELINING, value) Then Raise new libcURL.cURLException(Me)
+			  If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, value) Then Raise new libcURL.cURLException(Me)
 			  mHTTPPipelining = value
 			End Set
 		#tag EndSetter

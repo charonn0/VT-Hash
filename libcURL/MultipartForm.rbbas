@@ -20,6 +20,31 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function AddElement(Name As String, ValueCallbackHandler As libcURL.EasyHandle, ValueSize As Integer) As Boolean
+		  ' Adds an element using the specified name, with contents which will be read from the passed EasyHandle's
+		  ' DataNeeded event (or UploadStream object).
+		  ' See:
+		  ' http://curl.haxx.se/libcurl/c/curl_formadd.html
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultipartForm.AddElement
+		  
+		  Dim lenflag As Integer
+		  ' CURLFORM_CONTENTLEN is supposed to supercede CURLFORM_CONTENTSLENGTH as of 7.46.0,
+		  ' but it doesn't seem to work for me...
+		  //If libcURL.Version.IsAtLeast(7, 46, 0) Then
+		  //lenflag = CURLFORM_CONTENTLEN
+		  //Else
+		  lenflag = CURLFORM_CONTENTSLENGTH
+		  //End If
+		  Dim n As MemoryBlock = Name + Chr(0)
+		  If ValueSize = 0 Then
+		    Return FormAddPtr(CURLFORM_COPYNAME, n, CURLFORM_STREAM, Ptr(ValueCallbackHandler.Handle))
+		  Else
+		    Return FormAddPtr(CURLFORM_COPYNAME, n, CURLFORM_STREAM, Ptr(ValueCallbackHandler.Handle), lenflag, Ptr(ValueSize))
+		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function AddElement(Name As String, Value As String) As Boolean
 		  ' Adds the passed Value to the form using the specified name.
 		  ' See:
@@ -41,6 +66,18 @@ Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h21
 		Private Function curlFormGet(Data As MemoryBlock, Length As Integer) As Integer
 		  Return RaiseEvent SerializePart(Data, Length)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function Deserialize(FormData As Readable) As libcURL.MultipartForm
+		  Dim data As New MemoryBlock(0)
+		  Dim bs As New BinaryStream(data)
+		  Do Until FormData.EOF
+		    bs.Write(FormData.Read(64 * 1024))
+		  Loop
+		  bs.Close
+		  Return Deserialize(data)
 		End Function
 	#tag EndMethod
 
@@ -90,7 +127,7 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function FormAdd(Option As Integer, Value As String, Option1 As Integer = CURLFORM_END, Value1 As String = "", Option2 As Integer = CURLFORM_END, Value2 As String = "", Option3 As Integer = CURLFORM_END, Value3 As String = "", Option4 As Integer = CURLFORM_END, Value4 As String = "", Option5 As Integer = CURLFORM_END, Value5 As String = "") As Boolean
+		Protected Function FormAdd(Option As Integer, Value As MemoryBlock, Option1 As Integer = CURLFORM_END, Value1 As MemoryBlock = Nil, Option2 As Integer = CURLFORM_END, Value2 As MemoryBlock = Nil, Option3 As Integer = CURLFORM_END, Value3 As MemoryBlock = Nil, Option4 As Integer = CURLFORM_END, Value4 As MemoryBlock = Nil, Option5 As Integer = CURLFORM_END, Value5 As MemoryBlock = Nil) As Boolean
 		  ' This helper function is a wrapper for the variadic external method curl_formadd. Since external methods
 		  ' can't be variadic, this method simulates it by accepting a finite number of optional arguments.
 		  '
@@ -108,6 +145,34 @@ Inherits libcURL.cURLHandle
 		  ' http://curl.haxx.se/libcurl/c/curl_formadd.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultipartForm.FormAdd
 		  
+		  'mLastError = curl_formadd(mHandle, LastItem, Option, Value, Option1, Value1, Option2, Value2, Option3, Value3, Option4, Value4, Option5, Value5, CURLFORM_END)
+		  'Return mLastError = 0
+		  If Value <> Nil Then Value = Value + Chr(0)
+		  If Value1 <> Nil Then Value1 = Value1 + Chr(0)
+		  If Value2 <> Nil Then Value2 = Value2 + Chr(0)
+		  If Value3 <> Nil Then Value3 = Value3 + Chr(0)
+		  If Value4 <> Nil Then Value4 = Value4 + Chr(0)
+		  If Value5 <> Nil Then Value5 = Value5 + Chr(0)
+		  
+		  Select Case True
+		  Case Option1 = CURLFORM_END
+		    Return FormAddPtr(Option, Value)
+		  Case Option2 = CURLFORM_END
+		    Return FormAddPtr(Option, Value, Option1, Value1)
+		  Case Option3 = CURLFORM_END
+		    Return FormAddPtr(Option, Value, Option1, Value1, Option2, Value2)
+		  Case Option4 = CURLFORM_END
+		    Return FormAddPtr(Option, Value, Option1, Value1, Option2, Value2, Option3, Value3)
+		  Case Option5 = CURLFORM_END
+		    Return FormAddPtr(Option, Value, Option1, Value1, Option2, Value2, Option3, Value3, Option4, Value4)
+		  Else
+		    Return FormAddPtr(Option, Value, Option1, Value1, Option2, Value2, Option3, Value3, Option4, Value4, Option5, Value5)
+		  End Select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function FormAddPtr(Option As Integer, Value As Ptr, Option1 As Integer = CURLFORM_END, Value1 As Ptr = Nil, Option2 As Integer = CURLFORM_END, Value2 As Ptr = Nil, Option3 As Integer = CURLFORM_END, Value3 As Ptr = Nil, Option4 As Integer = CURLFORM_END, Value4 As Ptr = Nil, Option5 As Integer = CURLFORM_END, Value5 As Ptr = Nil) As Boolean
 		  mLastError = curl_formadd(mHandle, LastItem, Option, Value, Option1, Value1, Option2, Value2, Option3, Value3, Option4, Value4, Option5, Value5, CURLFORM_END)
 		  Return mLastError = 0
 		  
@@ -1561,7 +1626,8 @@ Inherits libcURL.cURLHandle
 		Sub Operator_Convert(FromDict As Dictionary)
 		  ' Overloads the conversion operator(=), permitting implicit and explicit conversion from a Dictionary
 		  ' into a MultipartForm. The dictionary contains NAME:VALUE pairs comprising HTML form elements: NAME
-		  ' is a string containing the form-element name; VALUE may be a string or a FolderItem.
+		  ' is a string containing the form-element name; VALUE may be a string, FolderItem, or an instance of
+		  ' EasyHandle whose DataNeeded event will be raised when the form is actually used.
 		  '
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultipartForm.Operator_Convert
@@ -1572,17 +1638,23 @@ Inherits libcURL.cURLHandle
 		    Me.Destructor() ' free the previous form data
 		  End If
 		  If FromDict = Nil Then Return
+		  
+		  ' loop over the dictionary
 		  For Each item As String In FromDict.Keys
 		    Dim value As Variant = FromDict.Value(item)
-		    If VarType(value) = Variant.TypeString Then
+		    Select Case True
+		    Case VarType(value) = Variant.TypeString
 		      If Not Me.AddElement(item, value.StringValue) Then Raise New cURLException(Me)
 		      
-		    ElseIf VarType(value) = Variant.TypeObject And value IsA FolderItem Then
+		    Case value IsA FolderItem
 		      If Not Me.AddElement(item, FolderItem(value)) Then Raise New cURLException(Me)
+		      
+		    Case value IsA libcURL.EasyHandle ' rtfm about CURLFORM_STREAM before using this
+		      If Not Me.AddElement(item, EasyHandle(value), 0) Then Raise New cURLException(Me)
 		      
 		    Else
 		      Raise New UnsupportedFormatException
-		    End If
+		    End Select
 		  Next
 		End Sub
 	#tag EndMethod
@@ -1609,8 +1681,9 @@ Inherits libcURL.cURLHandle
 
 	#tag Method, Flags = &h0
 		Function Serialize(WriteTo As Writeable) As Boolean
-		  ' Serialize the form structure into the passed object. The serialized form may be used with
-		  ' other HTTP libraries, including the built-in HTTPSocket.
+		  ' Serialize the form and write the output to WriteTo. The serialized form may be used with
+		  ' other HTTP libraries, including the built-in HTTPSocket. If WriteTo is Nil then the
+		  ' SerializePart event will be raised in lieu of writing the data to a stream.
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_formget.html
@@ -1674,6 +1747,12 @@ Inherits libcURL.cURLHandle
 	#tag EndProperty
 
 
+	#tag Constant, Name = CURLFORM_CONTENTLEN, Type = Double, Dynamic = False, Default = \"20", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = CURLFORM_CONTENTSLENGTH, Type = Double, Dynamic = False, Default = \"6", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = CURLFORM_CONTENTTYPE, Type = Double, Dynamic = False, Default = \"14", Scope = Protected
 	#tag EndConstant
 
@@ -1693,6 +1772,9 @@ Inherits libcURL.cURLHandle
 	#tag EndConstant
 
 	#tag Constant, Name = CURLFORM_FILENAME, Type = Double, Dynamic = False, Default = \"16", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = CURLFORM_STREAM, Type = Double, Dynamic = False, Default = \"19", Scope = Protected
 	#tag EndConstant
 
 

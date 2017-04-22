@@ -11,14 +11,10 @@ Inherits libcURL.EasyHandle
 		  
 		  #pragma X86CallingConvention CDecl
 		  
-		  If Instances = Nil Then Return 0
+		  If Instances = Nil Then Return CURL_CHUNK_BGN_FUNC_FAIL
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
-		  If curl <> Nil And curl.Value <> Nil And curl.Value IsA FTPWildCard Then
-		    If TransferInfo <> Nil Then
-		      Return FTPWildCard(curl.Value).curlChunkBegin(TransferInfo.FileInfo, Remaining)
-		    Else
-		      Return CURL_CHUNK_BGN_FUNC_FAIL
-		    End If
+		  If curl <> Nil And curl.Value <> Nil And curl.Value IsA FTPWildCard And TransferInfo <> Nil Then
+		    Return FTPWildCard(curl.Value).curlChunkBegin(TransferInfo.FileInfo, Remaining)
 		  End If
 		  
 		  Break ' UserData does not refer to a valid instance!
@@ -330,7 +326,8 @@ Inherits libcURL.EasyHandle
 	#tag Property, Flags = &h0
 		#tag Note
 			If set to True then existing children of the 'LocalRoot' directory will be overwritten if they have the same name as a file
-			being downloaded from the server. The default is False, in which case existing children will raise an IOException in curlChunkBegin
+			being downloaded from the server. The default is False, in which case existing children will cause the transfer to fail with
+			curl error code CURLE_CHUNK_FAILED(88)
 			
 			See:
 			https://github.com/charonn0/RB-libcURL/wiki/libcURL.Protocols.FTPWildCard.OverwriteLocalFiles

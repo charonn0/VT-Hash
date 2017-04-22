@@ -1,66 +1,26 @@
 #tag Module
 Protected Module Version
-	#tag Method, Flags = &h21
-		Private Function Features() As Integer
-		  Return Struct.Features
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h1
 		Protected Function IsAtLeast(Major As Integer, Minor As Integer, Patch As Integer) As Boolean
 		  ' Returns True if libcURL is available and at least the version specified.
 		  
-		  Select Case True
-		  Case Not System.IsFunctionAvailable("curl_global_init", "libcurl")
-		    Return False
-		    
-		  Case MajorNumber > Major
-		    Return True
-		    
-		  Case MajorNumber = Major
-		    If MinorNumber > Minor Or (MinorNumber = Minor And PatchNumber >= Patch) Then Return True
-		    
-		  End Select
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function MajorNumber() As Integer
-		  ' libcurl's major version; e.g. if the version is 1.2.3 then the MajorNumber is 1
+		  Static min, maj, pat As Integer
+		  Static avail As Boolean = System.IsFunctionAvailable("curl_global_init", "libcurl")
+		  If Not avail Then Return False
+		  If maj = 0 Then
+		    Dim n As String = UserAgent()
+		    maj = Val(NthField(NthField(NthField(n, " ", 1), "/", 2), ".", 1))
+		    min = Val(NthField(NthField(NthField(n, " ", 1), "/", 2), ".", 2))
+		    pat = Val(NthField(NthField(NthField(n, " ", 1), "/", 2), ".", 3))
+		  End If
 		  
-		  Static Major As Integer
-		  If Major = 0 Then Major = Val(NthField(NthField(NthField(libcURL.Version.Name, " ", 1), "/", 2), ".", 1))
-		  Return Major
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function MinorNumber() As Integer
-		  ' libcurl's minor version; e.g. if the version is 1.2.3 then the MinorNumber is 2
-		  
-		  Static Minor As Integer
-		  If Minor = 0 Then Minor = Val(NthField(NthField(NthField(libcURL.Version.Name, " ", 1), "/", 2), ".", 2))
-		  Return Minor
+		  Return maj > Major Or (maj = Major And (min > Minor Or (min = Minor And pat >= Patch)))
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Name() As String
-		  If Not System.IsFunctionAvailable("curl_version", "libcurl") Then Return ""
-		  Static p As MemoryBlock
-		  If p = Nil Then
-		    p = curl_version()
-		  End If
-		  Return p.CString(0)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function PatchNumber() As Integer
-		  ' libcurl's patch version; e.g. if the version is 1.2.3 then the PatchNumber is 3
-		  Static Patch As Integer
-		  If Patch = 0 Then Patch = Val(NthField(NthField(NthField(libcURL.Version.Name, " ", 1), "/", 2), ".", 3))
-		  Return Patch
+		Attributes( deprecated = "libcurl.Version.UserAgent" ) Protected Function Name() As String
+		  Return UserAgent()
 		End Function
 	#tag EndMethod
 
@@ -73,10 +33,10 @@ Protected Module Version
 
 	#tag Method, Flags = &h1
 		Protected Function Protocols() As String()
-		  Dim prots() As String
-		  If Not System.IsFunctionAvailable("curl_version", "libcurl") Then Return prots
-		  Dim ve As CURLVersion = libcURL.Version.Struct
-		  Dim mb As MemoryBlock = ve.Protocols.Ptr(0)
+		  Static prots() As String
+		  If UBound(prots) > -1 Or Not System.IsFunctionAvailable("curl_version", "libcurl") Then Return prots
+		  
+		  Dim mb As MemoryBlock = Struct.Protocols.Ptr(0)
 		  Dim s As String
 		  Dim i As Integer
 		  Do
@@ -111,31 +71,14 @@ Protected Module Version
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function Struct() As CURLVersion
-		  Static mStruct As CURLVersion
-		  Static init As Boolean
-		  If Not init And System.IsFunctionAvailable("curl_version_info", "libcurl") Then
-		    Dim error As Integer = curl_global_init(CURL_GLOBAL_DEFAULT) ' do not try to replace with cURLHandle, which performs version checks
-		    If error = 0 Then
-		      init = True
-		      Dim ve As Ptr = curl_version_info(CURLVERSION_FOURTH)
-		      Try
-		        mStruct = ve.CURLVersion
-		      Catch err
-		        If err.Message = "" Then err.Message = "Unable to read libcURL version information."
-		        Raise err
-		      Finally
-		        curl_global_cleanup()
-		      End Try
-		    Else
-		      Dim err As New cURLException(Nil)
-		      err.ErrorNumber = error
-		      err.Message = libcURL.FormatError(error)
-		      Raise err
-		    End If
+	#tag Method, Flags = &h1
+		Protected Function UserAgent() As String
+		  If Not System.IsFunctionAvailable("curl_version", "libcurl") Then Return ""
+		  Static p As MemoryBlock
+		  If p = Nil Then
+		    p = curl_version()
 		  End If
-		  If init Then Return mStruct
+		  Return p.CString(0)
 		End Function
 	#tag EndMethod
 
@@ -143,7 +86,9 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_ASYNCHDNS) = FEATURE_ASYNCHDNS  // asynchronous dns resolves
+			  ' See: https://curl.haxx.se/libcurl/c/curl_version_info.html#CURLVERSIONASYNCHDNS
+			  
+			  Return BitAnd(Struct.Features, FEATURE_ASYNCHDNS) = FEATURE_ASYNCHDNS  // asynchronous dns resolves
 			End Get
 		#tag EndGetter
 		Protected ASYNCHDNS As Boolean
@@ -152,7 +97,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_CONV) = FEATURE_CONV // character conversions are supported
+			  Return BitAnd(Struct.Features, FEATURE_CONV) = FEATURE_CONV // character conversions are supported
 			End Get
 		#tag EndGetter
 		Protected CONV As Boolean
@@ -161,7 +106,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_CURLDEBUG) = FEATURE_CURLDEBUG // built with memory tracking debug capabilities
+			  Return BitAnd(Struct.Features, FEATURE_CURLDEBUG) = FEATURE_CURLDEBUG // built with memory tracking debug capabilities
 			End Get
 		#tag EndGetter
 		Protected CURLDEBUG As Boolean
@@ -170,7 +115,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_DEBUG) = FEATURE_DEBUG // built with debug capabilities
+			  Return BitAnd(Struct.Features, FEATURE_DEBUG) = FEATURE_DEBUG // built with debug capabilities
 			End Get
 		#tag EndGetter
 		Protected DEBUG As Boolean
@@ -179,7 +124,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_GSSNEGOTIATE) = FEATURE_GSSNEGOTIATE // Negotiate auth support
+			  Return BitAnd(Struct.Features, FEATURE_GSSNEGOTIATE) = FEATURE_GSSNEGOTIATE // Negotiate auth support
 			End Get
 		#tag EndGetter
 		Protected GSSNEGOTIATE As Boolean
@@ -188,7 +133,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_HTTP2) = FEATURE_HTTP2 // HTTP2.0 support
+			  Return BitAnd(Struct.Features, FEATURE_HTTP2) = FEATURE_HTTP2 // HTTP2.0 support
 			End Get
 		#tag EndGetter
 		Protected HTTP2 As Boolean
@@ -197,7 +142,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_IDN) = FEATURE_IDN // International Domain Names support
+			  Return BitAnd(Struct.Features, FEATURE_IDN) = FEATURE_IDN // International Domain Names support
 			End Get
 		#tag EndGetter
 		Protected IDN As Boolean
@@ -206,7 +151,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_IPV6) = FEATURE_IPV6 // IPv6-enabled
+			  Return BitAnd(Struct.Features, FEATURE_IPV6) = FEATURE_IPV6 // IPv6-enabled
 			End Get
 		#tag EndGetter
 		Protected IPV6 As Boolean
@@ -215,7 +160,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_KERBEROS4) = FEATURE_KERBEROS4 // kerberos 4 auth is supported
+			  Return BitAnd(Struct.Features, FEATURE_KERBEROS4) = FEATURE_KERBEROS4 // kerberos 4 auth is supported
 			End Get
 		#tag EndGetter
 		Protected KERBEROS4 As Boolean
@@ -224,7 +169,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_KERBEROS5) = FEATURE_KERBEROS5 // kerberos 5 auth is supported
+			  Return BitAnd(Struct.Features, FEATURE_KERBEROS5) = FEATURE_KERBEROS5 // kerberos 5 auth is supported
 			End Get
 		#tag EndGetter
 		Protected KERBEROS5 As Boolean
@@ -233,7 +178,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_LARGEFILE) = FEATURE_LARGEFILE // supports files bigger than 2GB
+			  Return BitAnd(Struct.Features, FEATURE_LARGEFILE) = FEATURE_LARGEFILE // supports files bigger than 2GB
 			End Get
 		#tag EndGetter
 		Protected LARGEFILE As Boolean
@@ -242,7 +187,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_NTLM) = FEATURE_NTLM // NTLM auth is supported
+			  Return BitAnd(Struct.Features, FEATURE_NTLM) = FEATURE_NTLM // NTLM auth is supported
 			End Get
 		#tag EndGetter
 		Protected NTLM As Boolean
@@ -251,7 +196,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_SPNEGO) = FEATURE_SPNEGO // SPNEGO auth
+			  Return BitAnd(Struct.Features, FEATURE_SPNEGO) = FEATURE_SPNEGO // SPNEGO auth
 			End Get
 		#tag EndGetter
 		Protected SPNEGO As Boolean
@@ -260,7 +205,7 @@ Protected Module Version
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_SSL) = FEATURE_SSL // SSL options are present
+			  Return BitAnd(Struct.Features, FEATURE_SSL) = FEATURE_SSL // SSL options are present
 			End Get
 		#tag EndGetter
 		Protected SSL As Boolean
@@ -270,16 +215,47 @@ Protected Module Version
 		#tag Getter
 			Get
 			  Dim kSSPI As Integer = ShiftLeft(1, 11)
-			  Return BitAnd(Features, kSSPI) = kSSPI // SSPI is supported
+			  Return BitAnd(Struct.Features, kSSPI) = kSSPI // SSPI is supported
 			End Get
 		#tag EndGetter
 		Protected SSPI As Boolean
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h21
+		#tag Getter
+			Get
+			  Static mStruct As CURLVersion
+			  Static init As Boolean
+			  If Not init And System.IsFunctionAvailable("curl_version_info", "libcurl") Then
+			    Dim error As Integer = curl_global_init(CURL_GLOBAL_DEFAULT) ' do not try to replace with cURLHandle, which performs version checks
+			    If error = 0 Then
+			      init = True
+			      Dim ve As Ptr = curl_version_info(CURLVERSION_FOURTH)
+			      Try
+			        mStruct = ve.CURLVersion
+			      Catch err
+			        If err.Message = "" Then err.Message = "Unable to read libcURL version information."
+			        Raise err
+			      Finally
+			        curl_global_cleanup()
+			      End Try
+			    Else
+			      Dim err As New cURLException(Nil)
+			      err.ErrorNumber = error
+			      err.Message = libcURL.FormatError(error)
+			      Raise err
+			    End If
+			  End If
+			  If init Then Return mStruct
+			End Get
+		#tag EndGetter
+		Private Struct As CURLVersion
+	#tag EndComputedProperty
+
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return BitAnd(Features, FEATURE_TLSAUTH_SRP) = FEATURE_TLSAUTH_SRP // TLS-SRP support
+			  Return BitAnd(Struct.Features, FEATURE_TLSAUTH_SRP) = FEATURE_TLSAUTH_SRP // TLS-SRP support
 			End Get
 		#tag EndGetter
 		Protected TLS_SRP As Boolean

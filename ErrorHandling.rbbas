@@ -244,7 +244,7 @@ Protected Module ErrorHandling
 		  "Exception type: " + Introspection.GetType(Err).FullName + EndOfLine.Windows + _
 		  "Error number: " + Str(Err.ErrorNumber) + EndOfLine.Windows + _
 		  m + EndOfLine.Windows + _
-		  "libcURL version: " + libcURL.Version.Name + EndOfLine.Windows + _
+		  "libcURL version: " + libcURL.Version.UserAgent + EndOfLine.Windows + _
 		  EndOfLine.Windows
 		  
 		  Dim Error As String =_

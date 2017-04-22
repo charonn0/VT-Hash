@@ -22,7 +22,7 @@ Protected Module LibZ
 
 	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
-		  Return BitAnd(Features, FEATURE_LIBZ) = FEATURE_LIBZ // libz features are present
+		  Return BitAnd(Struct.Features, FEATURE_LIBZ) = FEATURE_LIBZ // libz features are present
 		End Function
 	#tag EndMethod
 

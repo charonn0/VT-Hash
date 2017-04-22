@@ -26,7 +26,7 @@ Inherits libcURL.cURLHandle
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ShareHandle.Close
 		  
-		  If SharedHandles <> Nil And libcURL.IsAvailable Then
+		  If SharedHandles <> Nil Then
 		    For Each h As Integer In SharedHandles.Keys
 		      Call Me.RemoveItem(SharedHandles.Value(h))
 		    Next
@@ -51,17 +51,17 @@ Inherits libcURL.cURLHandle
 		    Raise New cURLException(Me)
 		  End If
 		  SharedHandles = New Dictionary
-		  #If ENABLE_MUTEX Then
-		    If Instances = Nil Then Instances = New Dictionary
-		    Instances.Value(mHandle) = New WeakRef(Me)
-		    CookieLock = New Mutex(Hex(mHandle) + "_Cookie")
-		    SSLLock = New Mutex(Hex(mHandle) + "_SSL")
-		    DNSLock = New Mutex(Hex(mHandle) + "_DNS")
-		    
-		    If Not Me.SetOption(libcURL.Opts.SHOPT_USERDATA, mHandle) Then Raise New cURLException(Me)
-		    If Not Me.SetOption(libcURL.Opts.SHOPT_LOCKFUNC, AddressOf LockCallback) Then Raise New cURLException(Me)
-		    If Not Me.SetOption(libcURL.Opts.SHOPT_UNLOCKFUNC, AddressOf UnlockCallback) Then Raise New cURLException(Me)
-		  #endif
+		  
+		  If Instances = Nil Then Instances = New Dictionary
+		  Instances.Value(mHandle) = New WeakRef(Me)
+		  CookieLock = New Mutex(Hex(mHandle) + "_Cookie")
+		  SSLLock = New Mutex(Hex(mHandle) + "_SSL")
+		  DNSLock = New Mutex(Hex(mHandle) + "_DNS")
+		  
+		  If Not Me.SetOption(libcURL.Opts.SHOPT_USERDATA, mHandle) Then Raise New cURLException(Me)
+		  If Not Me.SetOption(libcURL.Opts.SHOPT_LOCKFUNC, AddressOf LockCallback) Then Raise New cURLException(Me)
+		  If Not Me.SetOption(libcURL.Opts.SHOPT_UNLOCKFUNC, AddressOf UnlockCallback) Then Raise New cURLException(Me)
+		  
 		End Sub
 	#tag EndMethod
 
@@ -138,7 +138,7 @@ Inherits libcURL.cURLHandle
 
 	#tag Method, Flags = &h21
 		Private Shared Sub LockCallback(ShareItem As Integer, Data As curl_lock_data, Access As curl_lock_access, UserData As Integer)
-		  #pragma X86CallingConvention StdCall
+		  #pragma X86CallingConvention CDecl
 		  #pragma Unused ShareItem
 		  
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
@@ -193,7 +193,7 @@ Inherits libcURL.cURLHandle
 
 	#tag Method, Flags = &h21
 		Private Shared Sub UnlockCallback(ShareItem As Integer, Data As curl_lock_data, UserData As Integer)
-		  #pragma X86CallingConvention StdCall
+		  #pragma X86CallingConvention CDecl
 		  #pragma Unused ShareItem
 		  
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
@@ -207,8 +207,11 @@ Inherits libcURL.cURLHandle
 
 
 	#tag Note, Name = About this class
+		This class wraps the curl_share interface. It allows you to share cookies, DNS results, and SSL session data among
+		two or more EasyHandles. By default, nothing is shared. You must enabled each type of sharing by modifying the
+		appropriate property of this class (ShareCookies, ShareDNSCache, and ShareSSL.)
 		
-		s
+		You must enable the sharing types you want before the first EasyHandle is added.
 	#tag EndNote
 
 
@@ -300,9 +303,6 @@ Inherits libcURL.cURLHandle
 	#tag EndConstant
 
 	#tag Constant, Name = CURLSHOPT_UNSHARE, Type = Double, Dynamic = False, Default = \"2", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = ENABLE_MUTEX, Type = Boolean, Dynamic = False, Default = \"False", Scope = Private
 	#tag EndConstant
 
 

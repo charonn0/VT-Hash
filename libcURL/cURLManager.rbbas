@@ -22,22 +22,27 @@ Protected Class cURLManager
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLManager.Close
 		  
 		  If mMultiItem <> Nil Then mMultiItem.Close()
-		  If mEasyItem <> Nil And mRemoveHandlers Then
+		  If mEasyItem <> Nil Then
 		    #pragma BreakOnExceptions Off
 		    Try
-		      RemoveHandler mEasyItem.DebugMessage, WeakAddressOf _DebugMessageHandler
+		      If mRemoveDebugHandler Then RemoveHandler mEasyItem.DebugMessage, WeakAddressOf _DebugMessageHandler
 		    Catch
+		    Finally
+		      mRemoveDebugHandler = False
 		    End Try
 		    Try
-		      RemoveHandler mEasyItem.HeaderReceived, WeakAddressOf _HeaderReceivedHandler
+		      If mRemoveHeaderHandler Then RemoveHandler mEasyItem.HeaderReceived, WeakAddressOf _HeaderReceivedHandler
 		    Catch
+		    Finally
+		      mRemoveHeaderHandler = False
 		    End Try
 		    Try
-		      RemoveHandler mEasyItem.Progress, WeakAddressOf _ProgressHandler
+		      If mRemoveProgressHandler Then RemoveHandler mEasyItem.Progress, WeakAddressOf _ProgressHandler
 		    Catch
+		    Finally
+		      mRemoveProgressHandler = False
 		    End Try
 		    #pragma BreakOnExceptions On
-		    mRemoveHandlers = False
 		  End If
 		  
 		  mEasyItem = Nil
@@ -51,21 +56,9 @@ Protected Class cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLManager.Constructor
 		  
-		  If mEasyItem = Nil Then
-		    mEasyItem = New libcURL.EasyHandle
-		    mEasyItem.UserAgent = libcURL.Version.Name
-		    mEasyItem.Secure = True
-		    mEasyItem.CA_ListFile = libcURL.Default_CA_File
-		    mEasyItem.FailOnServerError = True
-		    mEasyItem.FollowRedirects = True
-		    mEasyItem.AutoReferer = True
-		    mEasyItem.HTTPCompression = libcURL.Version.LibZ.IsAvailable
-		  End If
-		  
 		  mMultiItem = New libcURL.MultiHandle
 		  AddHandler mMultiItem.TransferComplete, WeakAddressOf _TransferCompleteHandler
-		  
-		  Me.EasyItem = mEasyItem
+		  Me.Reset()
 		End Sub
 	#tag EndMethod
 
@@ -284,6 +277,20 @@ Protected Class cURLManager
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Reset()
+		  If mEasyItem = Nil Then mEasyItem = New libcURL.EasyHandle Else mEasyItem.Reset
+		  Me.EasyItem = mEasyItem
+		  mEasyItem.UserAgent = libcURL.Version.UserAgent
+		  mEasyItem.Secure = True
+		  mEasyItem.CA_ListFile = libcURL.Default_CA_File
+		  mEasyItem.FailOnServerError = True
+		  mEasyItem.FollowRedirects = True
+		  mEasyItem.AutoReferer = True
+		  mEasyItem.HTTPCompression = libcURL.Version.LibZ.IsAvailable
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function SetCookie(Name As String, Value As String, Domain As String, Expires As Date = Nil, Path As String = "", HTTPOnly As Boolean = False) As Boolean
 		  ' Sets or updates a cookie. The cookie engine must be enabled.
 		  '
@@ -309,6 +316,9 @@ Protected Class cURLManager
 		Function SetRequestHeader(Name As String, Value As String) As Boolean
 		  ' Subsequent calls to this method will append the headers to the previously set headers. Headers will persist from transfer
 		  ' to transfer. Pass an empty value to clear the named header. Pass an empty name to clear all headers.
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLManager.SetRequestHeader
 		  
 		  mRequestHeaders = mEasyItem.SetRequestHeader(mRequestHeaders, Name, Value)
 		  Return (mRequestHeaders <> Nil Or Name = "")
@@ -380,17 +390,20 @@ Protected Class cURLManager
 		  If mDownloadMB <> Nil And mEasyItem.DownloadStream <> Nil And mEasyItem.DownloadStream IsA BinaryStream Then
 		    BinaryStream(mEasyItem.DownloadStream).Close
 		  End If
-		  Dim status As Integer = Item.LastError
-		  If status <> 0 Then
-		    RaiseEvent Error(status)
+		  
+		  mLastTransferError = Item.LastError
+		  mIsTransferComplete = True
+		  If Cookies.Enabled Then Cookies.Invalidate
+		  
+		  If mLastTransferError <> 0 Then
+		    RaiseEvent Error(mLastTransferError)
 		  Else
 		    RaiseEvent TransferComplete(Me.GetInfo(libcURL.Info.SIZE_DOWNLOAD).Int32Value, Me.GetInfo(libcURL.Info.SIZE_UPLOAD).Int32Value)
 		  End If
-		  mIsTransferComplete = True
+		  
 		  mEasyItem.ClearFormData()
 		  mUploadMB = Nil
-		  If Cookies.Enabled Then Cookies.Invalidate
-		  If Item.LastError <> status Then ErrorSetter(Item).LastError = status
+		  ErrorSetter(Item).LastError = mLastTransferError
 		End Sub
 	#tag EndMethod
 
@@ -428,18 +441,23 @@ Protected Class cURLManager
 			  Me.Close()
 			  Try
 			    AddHandler value.DebugMessage, WeakAddressOf _DebugMessageHandler
+			    mRemoveDebugHandler = True
 			  Catch
+			    mRemoveDebugHandler = False
 			  End Try
 			  Try
 			    AddHandler value.HeaderReceived, WeakAddressOf _HeaderReceivedHandler
+			    mRemoveHeaderHandler = True
 			  Catch
+			    mRemoveHeaderHandler = False
 			  End Try
 			  Try
 			    AddHandler value.Progress, WeakAddressOf _ProgressHandler
+			    mRemoveProgressHandler = True
 			  Catch
+			    mRemoveProgressHandler = False
 			  End Try
 			  mEasyItem = value
-			  mRemoveHandlers = True
 			End Set
 		#tag EndSetter
 		EasyItem As libcURL.EasyHandle
@@ -501,11 +519,23 @@ Protected Class cURLManager
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mLastTransferError As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mMultiItem As libcURL.MultiHandle
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mRemoveHandlers As Boolean
+		Private mRemoveDebugHandler As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRemoveHeaderHandler As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRemoveProgressHandler As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

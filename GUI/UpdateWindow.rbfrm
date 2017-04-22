@@ -389,15 +389,6 @@ End
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub ConnectedHandler(Sender As libcURL.EasyHandle, Socket As Integer)
-		  '#pragma Unused Socket
-		  '
-		  'CurrentAction.Text = "Connected to update server " + Shorten(Me.EasyItem.URL)
-		  'SpeedTimer.Mode = Timer.ModeMultiple
-		End Sub
-	#tag EndMethod
-
 	#tag Method, Flags = &h21
 		Private Function ConvertIcon(data As String) As Picture
 		  //Decodes the data part of a data: URI
