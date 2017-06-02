@@ -729,6 +729,12 @@ Inherits libcURL.cURLHandle
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.EasyHandle.SetFormData
 		  
 		  Me.ClearFormData
+		  Dim m() As libcURL.MultipartFormElement
+		  Dim d As libcURL.MultipartFormElement = FormData.FirstElement
+		  Do Until d = Nil
+		    m.Append(d)
+		    d = d.NextElement()
+		  Loop
 		  If Not Me.SetOption(libcURL.Opts.HTTPPOST, FormData) Then Raise New libcURL.cURLException(Me)
 		  mForm = FormData
 		End Sub
