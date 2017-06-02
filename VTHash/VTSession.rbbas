@@ -70,6 +70,7 @@ Inherits libcURL.cURLClient
 		  Me.EasyItem.UseErrorBuffer = True
 		  Me.EasyItem.Secure = App.Secure
 		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
+		  Call Me.SetRequestHeader("Content-Type", "multipart/form-data; charset=UTF-8")
 		  If VTHash.HasConfig("ProxyAddress") Then
 		    Me.Proxy.Address = VTHash.GetConfig("ProxyAddress")
 		    Me.Proxy.Port = VTHash.GetConfig("ProxyPort")
