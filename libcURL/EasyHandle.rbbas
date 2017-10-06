@@ -169,6 +169,16 @@ Inherits libcURL.cURLHandle
 		  ' This method is the intermediary between DebugCallback and the DebugMessage event.
 		  ' DO NOT CALL THIS METHOD
 		  
+		  #If LOG_DEBUG Then
+		    ' writes debug messages to System.DebugLog
+		    Select Case info
+		    Case libcURL.curl_infotype.data_in, libcURL.curl_infotype.data_out, libcURL.curl_infotype.ssl_in, libcURL.curl_infotype.ssl_out
+		      ' skip raw data messages
+		    Else
+		      System.DebugLog(curl_infoname(info) + ": " + DefineEncoding(data.StringValue(0, size), Encodings.UTF8).Trim)
+		    End Select
+		  #endif
+		  
 		  RaiseEvent DebugMessage(info, DefineEncoding(data.StringValue(0, size), Encodings.UTF8))
 		  Return size
 		  
@@ -183,14 +193,12 @@ Inherits libcURL.cURLHandle
 	#tag EndDelegateDeclaration
 
 	#tag Method, Flags = &h21
-		Private Function curlHeader(char As Ptr, size As Integer, nmemb As Integer) As Integer
+		Private Function curlHeader(char As MemoryBlock, size As Integer, nmemb As Integer) As Integer
 		  ' This method is the intermediary between HeaderCallback and the HeaderReceived event.
 		  ' DO NOT CALL THIS METHOD
 		  
 		  Dim sz As Integer = nmemb * size
-		  Dim data As MemoryBlock = char
-		  Dim s As String = data.StringValue(0, sz)
-		  RaiseEvent HeaderReceived(s)
+		  RaiseEvent HeaderReceived(char.StringValue(0, sz))
 		  Return sz
 		  
 		Exception Err As RuntimeException
@@ -417,7 +425,7 @@ Inherits libcURL.cURLHandle
 		    
 		  Case libcURL.Info.SSL_ENGINES, libcURL.Info.COOKIELIST
 		    mb = New MemoryBlock(8)
-		    If Me.GetInfo(InfoType, mb) And mb.Ptr(0) <> Nil Then Return New libcURL.ListPtr(mb.Ptr(0))
+		    If Me.GetInfo(InfoType, mb) And mb.Ptr(0) <> Nil Then Return New ListPtr(mb.Ptr(0), Me.Flags)
 		    
 		  Else
 		    Dim err As New TypeMismatchException
@@ -518,6 +526,7 @@ Inherits libcURL.cURLHandle
 		  End If
 		  
 		  Break ' UserData does not refer to a valid instance!
+		  
 		  Return CURL_SOCKET_BAD
 		End Function
 	#tag EndMethod
@@ -662,7 +671,7 @@ Inherits libcURL.cURLHandle
 		  mFollowRedirects = False
 		  mForm = Nil
 		  mHTTPCompression = False
-		  mHTTPVersion = 0
+		  mHTTPVersion = libcURL.HTTPVersion.None
 		  mMaxRedirects = -1
 		  mPassword = ""
 		  mProxyEngine = Nil
@@ -1105,6 +1114,10 @@ Inherits libcURL.cURLHandle
 			    If Not Me.SetOption(libcURL.Opts.CAINFO, Nil) Then Raise New cURLException(Me)
 			    If Not Me.SetOption(libcURL.Opts.CAPATH, Nil) Then Raise New cURLException(Me)
 			    
+			  Case Not value.Exists
+			    mLastError = libcURL.Errors.INVALID_LOCAL_FILE
+			    Return
+			    
 			  Case value.Directory
 			    If Not Me.SetOption(libcURL.Opts.CAPATH, value) Then Raise New cURLException(Me)
 			    
@@ -1173,29 +1186,6 @@ Inherits libcURL.cURLHandle
 			End Get
 		#tag EndGetter
 		CookieEngine As libcURL.CookieEngine
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  ' Gets the local file to be used as cookie storage. If no file/folder is specified (default) then returns Nil.
-			  
-			  return Me.CookieEngine.CookieJar
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ' Sets the local file to be used as cookie storage.
-			  '
-			  ' See:
-			  ' http://curl.haxx.se/libcurl/c/CURLOPT_COOKIEJAR.html
-			  ' http://curl.haxx.se/libcurl/c/CURLOPT_COOKIEFILE.html
-			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.EasyHandle.CookieJar
-			  
-			  Me.CookieEngine.CookieJar = value
-			End Set
-		#tag EndSetter
-		Attributes( deprecated = "libcURL.EasyHandle.CookieEngine.CookieJar" ) CookieJar As FolderItem
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -1338,7 +1328,7 @@ Inherits libcURL.cURLHandle
 			  mHTTPVersion = value
 			End Set
 		#tag EndSetter
-		HTTPVersion As Integer
+		HTTPVersion As libcURL.HTTPVersion
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h1
@@ -1443,7 +1433,7 @@ Inherits libcURL.cURLHandle
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mHTTPVersion As Integer
+		Private mHTTPVersion As libcURL.HTTPVersion
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -1873,6 +1863,9 @@ Inherits libcURL.cURLHandle
 	#tag Constant, Name = HTTP_VERSION_NONE, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = LOG_DEBUG, Type = Boolean, Dynamic = False, Default = \"True", Scope = Private
+	#tag EndConstant
+
 
 	#tag ViewBehavior
 		#tag ViewProperty
@@ -1909,11 +1902,6 @@ Inherits libcURL.cURLHandle
 			Name="HTTPPreserveMethod"
 			Group="Behavior"
 			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HTTPVersion"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"

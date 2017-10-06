@@ -38,11 +38,11 @@ Inherits libcURL.cURLHandle
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ListPtr.Count
 		  
-		  Dim p As Ptr = List
+		  Dim nxt As Ptr = List
 		  Dim i As Integer
-		  Do Until p = Nil
+		  Do Until nxt = Nil
 		    i = i + 1
-		    p = p.Ptr(4)
+		    nxt = nxt.Ptr(4)
 		  Loop
 		  Return i
 		End Function
@@ -50,7 +50,7 @@ Inherits libcURL.cURLHandle
 
 	#tag Method, Flags = &h21
 		Private Sub Destructor()
-		  If libcURL.IsAvailable And List <> Nil Then curl_slist_free_all(List)
+		  If List <> Nil Then curl_slist_free_all(List)
 		  List = Nil
 		End Sub
 	#tag EndMethod
@@ -81,21 +81,21 @@ Inherits libcURL.cURLHandle
 		    Raise err
 		  End If
 		  
-		  Dim p As Ptr = List
+		  Dim nxt As Ptr = List
 		  Dim i As Integer
 		  Do
 		    If i < Index Then
-		      p = p.Ptr(4)
-		      If p = Nil Then
+		      nxt = nxt.Ptr(4)
+		      If nxt = Nil Then
 		        Dim err As New OutOfBoundsException
 		        err.Message = "The list does not contain an entry at that index."
 		        Raise err
 		      End If
 		      
 		    ElseIf i = Index Then
-		      Dim mb As MemoryBlock = p.Ptr(0)
-		      If mb = Nil Then Return ""
-		      Return mb.CString(0)
+		      Dim txt As MemoryBlock = nxt.Ptr(0)
+		      If txt = Nil Then Return ""
+		      Return txt.CString(0)
 		      
 		    Else
 		      Dim err As New OutOfBoundsException
@@ -131,15 +131,12 @@ Inherits libcURL.cURLHandle
 		  If mLastError = libcURL.Errors.NOT_INITIALIZED Then Raise New cURLException(Me)
 		  
 		  Dim ret() As String
-		  Dim p As Ptr = List
-		  Do Until p = Nil
-		    Dim txt, nxt As Ptr
-		    txt = p.Ptr(0)
-		    nxt = p.Ptr(4)
-		    p = nxt
-		    Dim mb As MemoryBlock = txt
-		    If mb = Nil Then Continue
-		    ret.Append(mb.CString(0))
+		  Dim nxt As Ptr = List
+		  Do Until nxt = Nil
+		    Dim txt As MemoryBlock = nxt.Ptr(0)
+		    nxt = nxt.Ptr(4)
+		    If txt = Nil Then Continue
+		    ret.Append(txt.CString(0))
 		  Loop
 		  
 		  Return ret

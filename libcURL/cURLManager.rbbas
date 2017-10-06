@@ -230,7 +230,7 @@ Protected Class cURLManager
 		  
 		  QueueTransfer(URL, ReadFrom, WriteTo)
 		  Do Until Not mMultiItem.PerformOnce()
-		    If Rnd > 0.99 Then
+		    If Yield And Rnd > 0.99 Then
 		      #If TargetHasGUI Then
 		        App.SleepCurrentThread(50)
 		      #Else
@@ -467,14 +467,14 @@ Protected Class cURLManager
 		#tag Getter
 			Get
 			  ' Gets the version of HTTP to be used. Returns HTTP_VERSION_1_0, HTTP_VERSION_1_1, HTTP_VERSION_2_0, or HTTP_VERSION_NONE
-			  return libcURL.HTTPVersion(EasyItem.HTTPVersion)
+			  return EasyItem.HTTPVersion
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
 			  ' Sets the version of HTTP to be used.
 			  
-			  EasyItem.HTTPVersion = Integer(value)
+			  EasyItem.HTTPVersion = value
 			End Set
 		#tag EndSetter
 		HTTPVersion As libcURL.HTTPVersion
@@ -574,6 +574,10 @@ Protected Class cURLManager
 		Username As String
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h0
+		Yield As Boolean = True
+	#tag EndProperty
+
 
 	#tag ViewBehavior
 		#tag ViewProperty
@@ -625,6 +629,12 @@ Protected Class cURLManager
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Yield"
+			Group="Behavior"
+			InitialValue="True"
+			Type="Boolean"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

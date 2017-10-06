@@ -129,6 +129,12 @@ Protected Module Errors
 	#tag Constant, Name = INTERFACE_FAILED, Type = Double, Dynamic = False, Default = \"45", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = INVALID_LOCAL_FILE, Type = Double, Dynamic = False, Default = \"-8", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = INVALID_STATE, Type = Double, Dynamic = False, Default = \"-9", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = LDAP_CANNOT_BIND, Type = Double, Dynamic = False, Default = \"38", Scope = Protected
 	#tag EndConstant
 

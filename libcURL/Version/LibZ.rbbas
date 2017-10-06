@@ -4,19 +4,22 @@ Protected Module LibZ
 		Protected Function IsAtLeast(Major As Integer, Minor As Integer, Patch As Integer) As Boolean
 		  ' Returns True if LibZ is available and at least the version specified.
 		  
-		  Select Case True
-		  Case Not libcURL.Version.LibZ.IsAvailable
-		    Return False
-		    
-		  Case libcURL.Version.LibZ.MajorNumber > Minor
-		    Return True
-		    
-		  Case libcURL.Version.LibZ.MajorNumber = Major
-		    If libcURL.Version.LibZ.MinorNumber > Minor Or (libcURL.Version.LibZ.MinorNumber = Minor And libcURL.Version.LibZ.PatchNumber >= Patch) Then
-		      Return True
-		    End If
-		    
-		  End Select
+		  Static avail As Boolean = libcURL.Version.LibZ.IsAvailable
+		  If Not avail Then Return False
+		  
+		  Static versionname As String
+		  If versionname = "" And Struct.libzVersion <> Nil Then
+		    Dim mb As MemoryBlock = Struct.libzVersion
+		    versionname = mb.CString(0)
+		  End If
+		  Static min, maj, pat As Integer
+		  If maj = 0 Then
+		    maj = Val(NthField(versionname, ".", 1))
+		    min = Val(NthField(versionname, ".", 2))
+		    pat = Val(NthField(versionname, ".", 3))
+		  End If
+		  
+		  Return maj > Major Or (maj = Major And (min > Minor Or (min = Minor And pat >= Patch)))
 		End Function
 	#tag EndMethod
 
@@ -26,31 +29,10 @@ Protected Module LibZ
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function MajorNumber() As Integer
-		  ' libcurl's major version; e.g. if the version is 1.2.3 then the MajorNumber is 1
-		  Return Val(NthField(libcURL.Version.LibZ.Name, ".", 1))
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function MinorNumber() As Integer
-		  ' libcurl's minor version; e.g. if the version is 1.2.3 then the MinorNumber is 2
-		  Return Val(NthField(libcURL.Version.LibZ.Name, ".", 2))
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h1
-		Protected Function Name() As String
+		Attributes( deprecated ) Protected Function Name() As String
 		  Dim data As MemoryBlock = Struct.libzVersion
 		  If data <> Nil Then Return data.CString(0)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function PatchNumber() As Integer
-		  ' libcurl's patch version; e.g. if the version is 1.2.3 then the PatchNumber is 3
-		  Return Val(NthField(libcURL.Version.LibZ.Name, ".", 3))
 		End Function
 	#tag EndMethod
 

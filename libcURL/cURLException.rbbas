@@ -19,8 +19,11 @@ Inherits RuntimeException
 		  Case Me.ErrorNumber = libcURL.Errors.CALL_LOOP_DETECTED
 		    Me.Message = "MultiHandle.PerformOnce was invoked by a MultiHandle or EasyHandle event handler."
 		    
-		  Case Me.ErrorNumber = libcURL.Errors.NO_COOKIEJAR
-		    Me.Message = "No cookie file was specified."
+		  Case Me.ErrorNumber = libcURL.Errors.INVALID_STATE
+		    Me.Message = "The requested operation is illegal in the current context."
+		    
+		  Case Me.ErrorNumber = libcURL.Errors.INVALID_LOCAL_FILE
+		    Me.Message = "The specified local file is invalid or does not exist."
 		    
 		  Case Not libcURL.IsAvailable
 		    Me.Message = "libcURL is not available or is an unsupported version."

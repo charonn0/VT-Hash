@@ -37,25 +37,6 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Attributes( deprecated = "libcURL.CookieEngine.NewSession" )  Function DeleteSession() As Boolean
-		  ' Note: This method has been deprecated in favor of CookieEngine.NewSession
-		  ' Deletes all session cookies. Session cookies are those without an explicit expiration date.
-		  '
-		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.CookieEngine.DeleteSession
-		  
-		  If libcURL.Version.IsAtLeast(7, 17, 1) Then
-		    Me.Invalidate
-		    Return Owner.SetOption(libcURL.Opts.COOKIELIST, "SESS")
-		  Else
-		    ErrorSetter(Owner).LastError = libcURL.Errors.FEATURE_UNAVAILABLE
-		    Return False
-		  End If
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function Domain(Index As Integer) As String
 		  ' Returns the domain for the cookie at Index. If the domain is empty then the cookie is sent to all hosts and will not
 		  ' be updated should a server send the Set-Cookie header.
@@ -105,33 +86,6 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Flush(CookieFile As FolderItem = Nil) As Boolean
-		  ' Flushes all cookies to a file. If no CookieFile is specified as a parameter then the cookiejar property is used.
-		  '
-		  ' See:
-		  ' https://curl.haxx.se/libcurl/c/CURLOPT_COOKIELIST.html
-		  ' https://curl.haxx.se/libcurl/c/CURLOPT_COOKIEJAR.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.CookieEngine.Flush
-		  
-		  If Not libcURL.Version.IsAtLeast(7, 17, 1) Then
-		    ErrorSetter(Owner).LastError = libcURL.Errors.FEATURE_UNAVAILABLE
-		    Return False
-		  End If
-		  
-		  If CookieFile = Nil Then CookieFile = mCookieJar
-		  If CookieFile = Nil Then
-		    ErrorSetter(Owner).LastError = libcURL.Errors.NO_COOKIEJAR
-		    Return False
-		  End If
-		  Dim OK As Boolean = Owner.SetOption(libcURL.Opts.COOKIEJAR, CookieFile)
-		  If OK Then OK = Owner.SetOption(libcURL.Opts.COOKIELIST, "FLUSH")
-		  If OK Then OK = Owner.SetOption(libcURL.Opts.COOKIEJAR, mCookieJar)
-		  Me.Invalidate
-		  Return OK
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function HTTPOnly(Index As Integer) As Boolean
 		  ' Returns True if the cookie at Index should not be available to non-HTTP APIs (e.g. Javascript)
 		  '
@@ -173,11 +127,9 @@ Protected Class CookieEngine
 		      d = Me.Domain(i)
 		      If d = "" And CookieDomain = "" Then Return i
 		      If Strict Then
-		        If Not CompareDomains(CookieDomain, d, Owner) Then Continue For i
-		        Return i
+		        If CompareDomains(CookieDomain, d, Owner) Then Return i
 		      Else
-		        If CookieDomain <> "" And CookieDomain <> d And "." + CookieDomain <> d And InStr(d, CookieDomain) = 0 Then Continue For i
-		        Return i
+		        If CookieDomain = "" Or CookieDomain = d Or "." + CookieDomain = d Or (Not Strict And InStr(d, CookieDomain) > 0) Then Return i
 		      End If
 		    End If
 		  Next
@@ -235,28 +187,35 @@ Protected Class CookieEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Reload(CookieFile As FolderItem = Nil) As Boolean
-		  ' Reloads the cookie list from the CookieFile. If no CookieFile is specified then the CookieJar is used.
+		Sub ReadCookies(CookieFile As FolderItem)
+		  ' Reads cookies from a file and adds them to the cookie list. Calling this multiple times
+		  ' simply adds more cookies. To write the cookie list to a file, use the WriteCookies method.
+		  '
+		  ' See:
+		  ' http://curl.haxx.se/libcurl/c/CURLOPT_COOKIEFILE.html
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.CookieEngine.ReadCookies
+		  
+		  If Not Owner.SetOption(libcURL.Opts.COOKIEFILE, CookieFile) Then Raise New cURLException(Owner)
+		  mEnabled = True
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Reload() As Boolean
+		  ' Reloads the cookie list from the previously-set CookieFile(s).
 		  '
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.CookieEngine.Reload
 		  
-		  If Not libcURL.Version.IsAtLeast(7, 17, 1) Then
+		  If Not libcURL.Version.IsAtLeast(7, 39, 0) Then
 		    ErrorSetter(Owner).LastError = libcURL.Errors.FEATURE_UNAVAILABLE
 		    Return False
+		    
+		  ElseIf Owner.SetOption(libcURL.Opts.COOKIELIST, "RELOAD") Then
+		    Me.Invalidate
+		    Return True
+		    
 		  End If
-		  
-		  Dim OK As Boolean
-		  If CookieFile <> Nil Then
-		    Dim tmp As FolderItem = Me.CookieJar
-		    Me.CookieJar = CookieFile
-		    OK = Owner.SetOption(libcURL.Opts.COOKIELIST, "RELOAD")
-		    Me.CookieJar = tmp
-		  ElseIf Me.CookieJar <> Nil Then
-		    OK = Owner.SetOption(libcURL.Opts.COOKIELIST, "RELOAD")
-		  End If
-		  Me.Invalidate
-		  Return OK
 		End Function
 	#tag EndMethod
 
@@ -360,6 +319,28 @@ Protected Class CookieEngine
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function WriteCookies(CookieFile As FolderItem) As Boolean
+		  ' Writes the cookie list to the CookieFile. If CookieFile is Nil then cookies will be flushed
+		  ' to the most recently set cookie file. If an error occurs during the operation then this method
+		  ' will return false. Check Owner.LastError for details if this method returns false.
+		  '
+		  ' See:
+		  ' http://curl.haxx.se/libcurl/c/CURLOPT_COOKIEJAR.html
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.CookieEngine.WriteCookies
+		  
+		  If CookieFile <> Nil Then
+		    Return Owner.SetOption(libcURL.Opts.COOKIEJAR, CookieFile)
+		  ElseIf libcURL.Version.IsAtLeast(7, 17, 1) Then
+		    Return Owner.SetOption(libcURL.Opts.COOKIELIST, "FLUSH")
+		  Else
+		    ErrorSetter(Owner).LastError = libcURL.Errors.FEATURE_UNAVAILABLE
+		  End If
+		  
+		  
+		End Function
+	#tag EndMethod
+
 
 	#tag Note, Name = About this class
 		This class provides accessor methods to control libcurl's internal cookie engine.
@@ -377,39 +358,6 @@ Protected Class CookieEngine
 	#tag EndNote
 
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  ' Gets the local file to be used as cookie storage. If no file/folder is specified (default) then returns Nil.
-			  
-			  return mCookieJar
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  ' Sets the local file to be used as cookie storage.
-			  '
-			  ' See:
-			  ' http://curl.haxx.se/libcurl/c/CURLOPT_COOKIEJAR.html
-			  ' http://curl.haxx.se/libcurl/c/CURLOPT_COOKIEFILE.html
-			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.CookieEngine.CookieJar
-			  
-			  If value = Nil Or value.Directory Then
-			    If Not Owner.SetOption(libcURL.Opts.COOKIEFILE, Nil) Then Raise New cURLException(Owner)
-			    If Not Owner.SetOption(libcURL.Opts.COOKIEJAR, Nil) Then Raise New cURLException(Owner)
-			  Else
-			    If Not Owner.SetOption(libcURL.Opts.COOKIEFILE, value) Then Raise New cURLException(Owner)
-			    If Not Owner.SetOption(libcURL.Opts.COOKIEJAR, value) Then Raise New cURLException(Owner)
-			    mEnabled = True
-			  End If
-			  
-			  mCookieJar = value
-			  
-			End Set
-		#tag EndSetter
-		CookieJar As FolderItem
-	#tag EndComputedProperty
-
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
@@ -426,7 +374,7 @@ Protected Class CookieEngine
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mEnabled Or mCookieJar <> Nil
+			  return mEnabled
 			End Get
 		#tag EndGetter
 		#tag Setter
@@ -438,18 +386,14 @@ Protected Class CookieEngine
 			  
 			  If value Then
 			    If Not Owner.SetOption(libcURL.Opts.COOKIEFILE, "") Then Raise New cURLException(Owner)
-			  Else
-			    CookieJar = Nil
+			    mEnabled = value
+			  ElseIf mEnabled Then
+			    ErrorSetter(Owner).LastError = libcURL.Errors.INVALID_STATE 'once turned on it can't be turned off
 			  End If
-			  mEnabled = value
 			End Set
 		#tag EndSetter
 		Enabled As Boolean
 	#tag EndComputedProperty
-
-	#tag Property, Flags = &h21
-		Private mCookieJar As FolderItem
-	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mCookieList As libcURL.ListPtr

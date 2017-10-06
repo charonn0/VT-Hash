@@ -124,15 +124,16 @@ Inherits libcURL.EasyHandle
 
 	#tag Method, Flags = &h21
 		Private Function curlFNMatch(Pattern As MemoryBlock, FileName As MemoryBlock) As Integer
-		  If FileName.CString(0) = "." Or FileName.CString(0) = ".." Then Return CURL_FNMATCHFUNC_NOMATCH
-		  If RaiseEvent PatternMatch(Pattern.CString(0), FileName.CString(0)) Then Return CURL_FNMATCHFUNC_MATCH
+		  Dim fn As String = FileName.CString(0)
+		  If fn = "." Or fn = ".." Then Return CURL_FNMATCHFUNC_NOMATCH
+		  If RaiseEvent PatternMatch(Pattern.CString(0), fn) Then Return CURL_FNMATCHFUNC_MATCH
 		  Return CURL_FNMATCHFUNC_NOMATCH
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Shared Function FNMatchCallback(UserData As Integer, Pattern As Ptr, FileName As Ptr) As Integer
-		  ' This method handles the CURLOPT_FNMATCH_FUNCTION callback by invoking curlChunkEnd
+		  ' This method handles the CURLOPT_FNMATCH_FUNCTION callback by invoking curlFNMatch
 		  ' on the appropriate instance of FTPWildCard
 		  '
 		  ' See:
@@ -175,17 +176,6 @@ Inherits libcURL.EasyHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Remaining() As Integer
-		  ' Returns the number of LIST entries which remain to be processed.
-		  '
-		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.Protocols.FTPWildCard.Remaining
-		  
-		  Return mRemaining
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub Reset()
 		  ' Resets the curl_easy handle to a pristine state. You may reuse the handle immediately.
 		  ' See:
@@ -194,7 +184,6 @@ Inherits libcURL.EasyHandle
 		  
 		  Super.Reset
 		  CustomMatch = mCustomMatch
-		  LocalRoot = Nil
 		  mLastFile = Nil
 		  mLastFileName = ""
 		  mLastError = 0
@@ -335,6 +324,20 @@ Inherits libcURL.EasyHandle
 		OverwriteLocalFiles As Boolean = False
 	#tag EndProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  ' Returns the number of LIST entries which remain to be processed.
+			  '
+			  ' See:
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.Protocols.FTPWildCard.Remaining
+			  
+			  Return mRemaining
+			End Get
+		#tag EndGetter
+		Remaining As Integer
+	#tag EndComputedProperty
+
 
 	#tag Constant, Name = CURL_CHUNK_BGN_FUNC_FAIL, Type = Double, Dynamic = False, Default = \"1", Scope = Private
 	#tag EndConstant
@@ -443,12 +446,6 @@ Inherits libcURL.EasyHandle
 			InheritedFrom="libcURL.EasyHandle"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="HTTPVersion"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="libcURL.EasyHandle"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -498,6 +495,11 @@ Inherits libcURL.EasyHandle
 			Group="Behavior"
 			Type="Integer"
 			InheritedFrom="libcURL.EasyHandle"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Remaining"
+			Group="Behavior"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="RemoteIP"

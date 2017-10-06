@@ -87,7 +87,7 @@ Protected Module libcURL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function curl_formadd Lib "libcurl" (ByRef FirstItem As Integer, ByRef LastItem As Ptr, Option As Integer, Value As Ptr, Option1 As Integer, Value1 As Ptr, Option2 As Integer, Value2 As Ptr, Option3 As Integer, Value3 As Ptr, Option4 As Integer, Value4 As Ptr, Option5 As Integer, Value5 As Ptr, FinalOption As Integer) As Integer
+		Private Soft Declare Function curl_formadd Lib "libcurl" (ByRef FirstItem As Integer, ByRef LastItem As Ptr, Option As Integer, Value As Ptr, Option1 As Integer, Value1 As Ptr, Option2 As Integer, Value2 As Ptr, Option3 As Integer, Value3 As Ptr, Option4 As Integer, Value4 As Ptr, Option5 As Integer, Value5 As Ptr, Option6 As Integer, Value6 As Ptr, Option7 As Integer, Value7 As Ptr, Option8 As Integer, Value8 As Ptr, Option9 As Integer, Value9 As Ptr, Option10 As Integer, Value10 As Ptr, FinalOption As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -287,25 +287,6 @@ Protected Module libcURL
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Attributes( deprecated = "libcURL.cURLClient.Get" ) Protected Function Get(URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
-		  ' Note: This method has been deprecated in favor of cURLClient.Get
-		  ' Synchronously performs a retrieval using protocol-appropriate semantics (http GET, ftp RETR, etc.)
-		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses.
-		  ' Pass a connection TimeOut interval (in seconds), or 0 to wait forever. Pass an InternetHeaders instance and
-		  ' an Integer by reference to contain the response headers (if any) and final result code (if any). Headers and
-		  ' StatusCode are mandatory and MUST NOT be Nil. Pass a username or password if a username and/or password will
-		  ' be required to complete the transfer. Returns a MemoryBlock containing any downloaded data.
-		  
-		  Dim out As New MemoryBlock(0)
-		  Dim outstream As New BinaryStream(out)
-		  Dim c As libcURL.EasyHandle = libcURL.SynchronousHelpers.Get(URL, TimeOut, outstream, Headers, Username, Password)
-		  StatusCode = c.LastError
-		  outstream.Close
-		  Return out
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
 		  ' Returns True if libcURL is available and at least version 7.15.2. Prior versions require that curl_global_init and
 		  ' curl_global_cleanup be called only once each, which we aren't doing.
@@ -349,7 +330,7 @@ Protected Module libcURL
 		      i = i + 1
 		      
 		    Case arg = "--cookie-jar", StrComp("-c", arg, 1) = 0
-		      Client.Cookies.CookieJar = GetFolderItem(output(i + 1))
+		      If Not Client.Cookies.WriteCookies(GetFolderItem(output(i + 1))) Then GoTo ParseError
 		      i = i + 1
 		      If Client.EasyItem.LastError <> 0 Then GoTo ParseError
 		      
@@ -496,15 +477,15 @@ Protected Module libcURL
 		      i = i + 1
 		      
 		    Case arg = "--http1.0", arg = "-0"
-		      Client.EasyItem.HTTPVersion = Client.EasyItem.HTTP_VERSION_1_0
+		      Client.HTTPVersion = HTTPVersion.HTTP1_0
 		      If Client.EasyItem.LastError <> 0 Then GoTo ParseError
 		      
 		    Case arg = "--http1.1"
-		      Client.EasyItem.HTTPVersion = Client.EasyItem.HTTP_VERSION_1_1
+		      Client.HTTPVersion = HTTPVersion.HTTP1_1
 		      If Client.EasyItem.LastError <> 0 Then GoTo ParseError
 		      
 		    Case arg = "--http2"
-		      Client.EasyItem.HTTPVersion = Client.EasyItem.HTTP_VERSION_2_0
+		      Client.HTTPVersion = HTTPVersion.HTTP2
 		      If Client.EasyItem.LastError <> 0 Then GoTo ParseError
 		      
 		    Case arg = "--include", StrComp("-i", arg, 1) = 0
@@ -531,6 +512,11 @@ Protected Module libcURL
 		    Case arg = "--mail-rcpt"
 		      If Not Client.SetOption(libcURL.Opts.MAIL_RCPT, output(i + 1)) Then GoTo ParseError
 		      i = i + 1
+		      
+		    Case arg = "--max-time", StrComp("-m", arg, 1) = 0
+		      Client.EasyItem.Timeout = Val(output(i + 1))
+		      i = i + 1
+		      If Client.EasyItem.LastError <> 0 Then GoTo ParseError
 		      
 		    Case arg = "--negotiate"
 		      Dim ha As libcURL.HTTPAuthMethods = 0
@@ -582,6 +568,11 @@ Protected Module libcURL
 		      If Not Client.Proxy.SetProxyHeader(name, value) Then GoTo ParseError
 		      i = i + 1
 		      
+		    Case arg = "--proxy-pass"
+		      Client.Proxy.Password = output(i + 1)
+		      If Client.EasyItem.LastError <> 0 Then GoTo ParseError
+		      i = i + 1
+		      
 		    Case arg = "--proxytunnel", StrComp("-p", arg, 1) = 0
 		      Client.Proxy.HTTPTunnel = True
 		      If Client.EasyItem.LastError <> 0 Then GoTo ParseError
@@ -609,6 +600,27 @@ Protected Module libcURL
 		      
 		    Case arg = "--request", StrComp("-X", arg, 1) = 0
 		      If Not Client.SetRequestMethod(output(i + 1)) Then GoTo ParseError
+		      i = i + 1
+		      
+		    Case arg = "--socks4", arg = "--socks4a", arg = "--socks5-hostname", arg = "--socks5"
+		      Dim host As String = output(i + 1)
+		      Dim port As String
+		      If InStr(host, ":") > 0 Then
+		        port = NthField(host, ":", 2)
+		        host = NthField(host, ":", 1)
+		      End If
+		      Client.Proxy.Address = host
+		      If port <> "" Then Client.Proxy.Port = Val(port)
+		      Select Case arg
+		      Case "--socks4"
+		        Client.Proxy.Type = libcURL.ProxyType.SOCKS4
+		      Case "--socks4a"
+		        Client.Proxy.Type = libcURL.ProxyType.SOCKS4A
+		      Case "--socks5"
+		        Client.Proxy.Type = libcURL.ProxyType.SOCKS5
+		      Case "--socks5-hostname"
+		        Client.Proxy.Type = libcURL.ProxyType.SOCKS5_HOSTNAME
+		      End Select
 		      i = i + 1
 		      
 		    Case arg = "--ssl"
@@ -790,48 +802,6 @@ Protected Module libcURL
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Attributes( deprecated = "libcURL.cURLClient.Post" ) Protected Function Post(FormData As Dictionary, URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
-		  ' Note: This method has been deprecated in favor of cURLClient.Post
-		  ' Synchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
-		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
-		  ' may be a string or a FolderItem. Pass a connection TimeOut interval (in seconds), or 0 to wait forever. Pass an
-		  ' InternetHeaders instance and an Integer by reference to contain the response headers (if any) and final result
-		  ' code (if any). Headers and StatusCode are mandatory and MUST NOT be Nil. Pass a username or password if a username
-		  ' and/or password will be required to complete the transfer. Returns a MemoryBlock containing any downloaded data.
-		  
-		  Dim out As New MemoryBlock(0)
-		  Dim outstream As New BinaryStream(out)
-		  Dim c As libcURL.EasyHandle = libcURL.SynchronousHelpers.Post(FormData, URL, TimeOut, outstream, Headers, Username, Password)
-		  StatusCode = c.LastError
-		  outstream.Close
-		  Return out
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Attributes( deprecated = "libcURL.cURLClient.Put" ) Protected Function Put(File As FolderItem, URL As String, TimeOut As Integer, ByRef Headers As InternetHeaders, ByRef StatusCode As Integer, Username As String = "", Password As String = "") As MemoryBlock
-		  ' Note: This method has been deprecated in favor of cURLClient.Put
-		  ' Synchronously uploads the passed FolderItem using protocol-appropriate semantics (http PUT, ftp STOR, etc.)
-		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses. The
-		  ' path part of the URL specifies the remote directory and file name to store the file under. Pass a connection
-		  ' TimeOut interval (in seconds), or 0 to wait forever. Pass an InternetHeaders instance and an Integer by reference
-		  ' to contain the response headers (if any) and final result code (if any). Headers and StatusCode are mandatory
-		  ' and MUST NOT be Nil. Pass a username or password if a username and/or password will be required to complete
-		  ' the transfer. Returns a MemoryBlock containing any downloaded data.
-		  
-		  Dim out As New MemoryBlock(0)
-		  Dim outstream As New BinaryStream(out)
-		  Dim instream As BinaryStream = BinaryStream.Open(File)
-		  
-		  Dim c As libcURL.EasyHandle = libcURL.SynchronousHelpers.Put(URL, TimeOut, instream, outstream, Headers, Username, Password)
-		  StatusCode = c.LastError
-		  outstream.Close
-		  instream.Close
-		  Return out
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h21
 		Private Function SplitQuoted(Data As String) As String()
 		  Dim output() As String
@@ -928,8 +898,8 @@ Protected Module libcURL
 
 
 	#tag Note, Name = Copying
-		RB-libcURL 
-		Copyright (c)2014-16 Andrew Lambert, all rights reserved.
+		RB-libcURL (https://github.com/charonn0/RB-libcURL)
+		Copyright (c)2014-17 Andrew Lambert, all rights reserved.
 		
 		 Permission to use, copy, modify, and distribute this software for any purpose
 		 with or without fee is hereby granted, provided that the above copyright
@@ -981,6 +951,23 @@ Protected Module libcURL
 	#tag EndConstant
 
 
+	#tag Structure, Name = curl_httppost, Flags = &h21
+		NextItem As Ptr
+		  Name As Ptr
+		  NameLen As Integer
+		  Contents As Ptr
+		  ContentsLen As Integer
+		  Buffer As Ptr
+		  BufferLen As Integer
+		  ContentType As Ptr
+		  ContentHeader As Ptr
+		  MoreFiles As Ptr
+		  Flags As Integer
+		  ShowFileName As Ptr
+		  UserData As Ptr
+		ContentsLenLarge As Int64
+	#tag EndStructure
+
 	#tag Structure, Name = timeval, Flags = &h21
 		tv_sec As Integer
 		tv_usec As Integer
@@ -1020,6 +1007,13 @@ Protected Module libcURL
 		Multi=1
 		  None
 		Single
+	#tag EndEnum
+
+	#tag Enum, Name = FormElementType, Flags = &h1
+		MemoryBlock
+		  Stream
+		  String
+		File
 	#tag EndEnum
 
 	#tag Enum, Name = HTTPVersion, Type = Integer, Flags = &h1

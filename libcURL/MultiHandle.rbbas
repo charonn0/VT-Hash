@@ -30,7 +30,7 @@ Inherits libcURL.cURLHandle
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.Close
 		  
-		  If Instances <> Nil And libcURL.IsAvailable Then
+		  If Instances <> Nil Then
 		    For Each h As Integer In Instances.Keys
 		      Call Me.RemoveItem(Instances.Value(h))
 		    Next
@@ -57,6 +57,14 @@ Inherits libcURL.cURLHandle
 		  End If
 		  Instances = New Dictionary
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Count() As Integer
+		  ' Returns the number of EasyHandles currently being managed by the MultiHandle.
+		  
+		  Return Instances.Count
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
@@ -189,7 +197,7 @@ Inherits libcURL.cURLHandle
 		  End If
 		  If mLastError = 0 Then
 		    Dim d As Double = CDbl(Str(time.tv_sec) + "." + Str(time.tv_usec))
-		    If d < 0.0 Then d = 10.0
+		    If d < 0.0 Or d > 1000.0 Then d = 10.0
 		    Return d
 		  End If
 		End Function
