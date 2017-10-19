@@ -7,17 +7,14 @@ Inherits Canvas
 		  //This event fires whenever the control has been painted by something other than itself
 		  //calculates and draws a new buffer with val=0 or recalculates the old buffer and paints it, or simply repaints the old buffer
 		  
-		  Static myHeight As Integer
-		  Static mywidth As Integer
-		  
-		  If mywidth <> Me.Width Or myHeight <> Me.Height Then
+		  If mLastWidth <> Me.Width Or mLastHeight <> Me.Height Then
 		    drawingBuffer = New Picture(Me.Width, Me.Height, 24)
 		    Me.Value = mvalue
 		  Else
 		    g.DrawPicture(drawingBuffer, 0, 0)
 		  End If
-		  mywidth = Me.Width
-		  myHeight = Me.Height
+		  mLastWidth = Me.Width
+		  mLastHeight = Me.Height
 		End Sub
 	#tag EndEvent
 
@@ -444,6 +441,14 @@ Inherits Canvas
 
 	#tag Property, Flags = &h21
 		Private mitalic As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mLastHeight As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mLastWidth As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
