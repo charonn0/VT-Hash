@@ -60,7 +60,7 @@ Inherits Label
 
 	#tag Event
 		Sub MouseMove(X As Integer, Y As Integer)
-		  If HoverTimer.Mode <> Timer.ModeOff Then HoverTimer.Reset()
+		  If HoverTimer <> Nil And HoverTimer.Mode <> Timer.ModeOff Then HoverTimer.Reset()
 		  RaiseEvent MouseMove(X, Y)
 		End Sub
 	#tag EndEvent
