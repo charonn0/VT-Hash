@@ -66,7 +66,7 @@ Inherits libcURL.cURLClient
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub SendRequest(Type As RequestType, Request As Dictionary)
+		Sub SendRequest(Type As RequestType, Request As libcURL.MultipartForm)
 		  Me.EasyItem.UseErrorBuffer = True
 		  Me.EasyItem.Secure = App.Secure
 		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
@@ -134,9 +134,10 @@ Inherits libcURL.cURLClient
 
 	#tag Method, Flags = &h0
 		Sub SubmitFile(File As FolderItem)
-		  Dim frm As New Dictionary
-		  frm.Value("apikey") = APIKey
-		  frm.Value("file") = File
+		  Dim frm As New libcURL.MultipartForm
+		  Call frm.AddElement("apikey", APIKey)
+		  Dim bs As BinaryStream = BinaryStream.Open(File)
+		  Call frm.AddElement("file", bs, bs.Length, File.Name)
 		  Call Me.SetRequestHeader("Expect", "100-Continue")
 		  SendRequest(RequestType.FileSubmit, frm)
 		End Sub
