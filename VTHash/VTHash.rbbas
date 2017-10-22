@@ -303,7 +303,7 @@ Protected Module VTHash
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return Format(VTHash.Version, "0.0#")
+			  Return Format(VTHash.Version, "0.00")
 			End Get
 		#tag EndGetter
 		Protected VersionString As String
@@ -325,7 +325,7 @@ Protected Module VTHash
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.59", Scope = Protected
+	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.60", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
