@@ -1,3 +1,3 @@
-# VT Hash Check 
+**VT Hash Check** ("VTHC") is a Windows Explorer context menu extension that allows you to query the Virus Total malware scanning service simply by right-clicking on a file. If the file has already been scanned by Virus Total then the most recent results are displayed, otherwise VTCH will allow you to upload the file for analysis.
 
-This project is a Windows utility for checking local files against Virus Total's database. Visit the [offical web page](http://www.boredomsoft.org/vt-hash-check.bs) for details and the latest built version.
+[**Download the latest release**](https://github.com/charonn0/VT-Hash/releases/latest)
