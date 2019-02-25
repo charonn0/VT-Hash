@@ -371,6 +371,8 @@ End
 		    curl.Proxy.Password = VTHash.GetConfig("ProxyPassword")
 		    curl.Proxy.Type = libcURL.ProxyType(VTHash.GetConfig("ProxyType").Int32Value)
 		  End If
+		  mTaskBar = New TaskBar(Self)
+		  mTaskBar.SetProgressState(TaskBar.TaskBarStates.Normal)
 		End Sub
 	#tag EndEvent
 
@@ -624,6 +626,10 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mTaskBar As TaskBar
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private SocketMode As Integer
 	#tag EndProperty
 
@@ -718,6 +724,7 @@ End
 		  files.Remove(0)
 		  TempFile.Name = NthField(CurrentFile, "/", CountFields(CurrentFile, "/"))
 		  OverallProgress.Value = OverallProgress.Value + 1
+		  mTaskBar.SetProgressValue(CurrentProgress.Value, CurrentProgress.Maximum)
 		  Dim url As String = BaseAddress + CurrentFile
 		  curl.Get(url)
 		End Sub
@@ -770,9 +777,12 @@ End
 		    Else
 		      CurrentAction.Text = ""
 		    End If
-		    Status.Text = "Downloading update package (" + Format(ProgressBar2.Value, "###,##0") + "/" + Format(ProgressBar2.Maximum, "###,##0") + ")"
+		    Status.Text = "Downloading update package (" + Format(OverallProgress.Value, "###,##0") + "/" + Format(OverallProgress.Maximum, "###,##0") + ")"
 		    Status.TextColor = NetColor
+		    If dlNow > 0 Then
 		      CurrentProgress.Value = dlnow * 100 / dlTotal
+		      mTaskBar.SetProgressValue(CurrentProgress.Value, CurrentProgress.Maximum)
+		    End If
 		  End If
 		End Function
 	#tag EndEvent
