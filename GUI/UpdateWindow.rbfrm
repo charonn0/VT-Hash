@@ -24,7 +24,7 @@ Begin Window UpdateWindow
    Title           =   "Check for updates"
    Visible         =   True
    Width           =   416
-   Begin ProgressBar ProgressBar1
+   Begin ProgressBar CurrentProgress
       AutoDeactivate  =   True
       Enabled         =   True
       Height          =   10
@@ -175,7 +175,7 @@ Begin Window UpdateWindow
       Visible         =   True
       Width           =   48
    End
-   Begin ProgressBar ProgressBar2
+   Begin ProgressBar OverallProgress
       AutoDeactivate  =   True
       Enabled         =   True
       Height          =   10
@@ -493,8 +493,8 @@ End
 		    ReDim Files(-1)
 		    SocketMode = Mode_Checking
 		    TempFile = Nil
-		    ProgressBar1.Value = 0
-		    ProgressBar2.Value = 0
+		    CurrentProgress.Value = 0
+		    OverallProgress.Value = 0
 		    PushButton1.Enabled = True
 		    PushButton1.Caption = "Check"
 		    CurrentAction.Text = ""
@@ -505,7 +505,7 @@ End
 		    PushButton1.Enabled = True
 		    PushButton1.Caption = "Check"
 		    CurrentAction.Text = "Error while downloading"
-		    Status.Text = "Download error (" + Format(ProgressBar2.Value, "###,##0") + "/" + Format(ProgressBar2.Maximum, "###,##0") + ")"
+		    Status.Text = "Download error (" + Format(OverallProgress.Value, "###,##0") + "/" + Format(OverallProgress.Maximum, "###,##0") + ")"
 		    Status.TextColor = ErrorColor
 		  End If
 		  GetTimer.Mode = Timer.ModeOff
@@ -536,7 +536,7 @@ End
 		    For i = 0 To items.Count - 1
 		      Files.Append(items(i))
 		    Next
-		    ProgressBar2.Maximum = i
+		    OverallProgress.Maximum = i
 		    SocketMode = Mode_Downloading
 		    GetTimer.Mode = Timer.ModeSingle
 		    PushButton1.Caption = "Cancel"
@@ -717,7 +717,7 @@ End
 		  CurrentFile = Files(0)
 		  files.Remove(0)
 		  TempFile.Name = NthField(CurrentFile, "/", CountFields(CurrentFile, "/"))
-		  ProgressBar2.Value = ProgressBar2.Value + 1
+		  OverallProgress.Value = OverallProgress.Value + 1
 		  Dim url As String = BaseAddress + CurrentFile
 		  curl.Get(url)
 		End Sub
@@ -772,7 +772,7 @@ End
 		    End If
 		    Status.Text = "Downloading update package (" + Format(ProgressBar2.Value, "###,##0") + "/" + Format(ProgressBar2.Maximum, "###,##0") + ")"
 		    Status.TextColor = NetColor
-		    ProgressBar1.Value = dlnow * 100 / dlTotal
+		      CurrentProgress.Value = dlnow * 100 / dlTotal
 		  End If
 		End Function
 	#tag EndEvent
@@ -781,7 +781,7 @@ End
 		  #pragma Unused BytesRead
 		  #pragma Unused BytesWritten
 		  
-		  ProgressBar1.Value = 100
+		  CurrentProgress.Value = 100
 		  Select Case SocketMode
 		  Case Mode_Checking
 		    UpdateInfo = New JSONItem(Me.GetDownloadedData)
@@ -807,7 +807,7 @@ End
 		        For i = 0 To items.Count - 1
 		          Files.Append(items(i))
 		        Next
-		        ProgressBar2.Maximum = i
+		        OverallProgress.Maximum = i
 		        SocketMode = Mode_Downloading
 		        GetTimer.Mode = Timer.ModeSingle
 		        

@@ -80,7 +80,7 @@ Inherits libcURL.cURLClient
 		  End If
 		  
 		  'If VTHash.HasConfig("NetworkInterface") Then
-		  'Dim n As NetworkInterface 
+		  'Dim n As NetworkInterface
 		  'For i As Integer = 0 To System.NetworkInterfaceCount - 1
 		  'n = System.GetNetworkInterface(i)
 		  'If n.IPAddress = VTHash.GetConfig("NetworkInterface") Then
@@ -170,6 +170,12 @@ Inherits libcURL.cURLClient
 			InheritedFrom="SSLSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="IsSSLCertOK"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="libcURL.cURLManager"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
@@ -183,6 +189,13 @@ Inherits libcURL.cURLClient
 			InheritedFrom="SSLSocket"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="Password"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+			InheritedFrom="libcURL.cURLManager"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
@@ -194,6 +207,20 @@ Inherits libcURL.cURLClient
 			Group="Position"
 			Type="Integer"
 			InheritedFrom="SSLSocket"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Username"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+			InheritedFrom="libcURL.cURLManager"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Yield"
+			Group="Behavior"
+			InitialValue="True"
+			Type="Boolean"
+			InheritedFrom="libcURL.cURLManager"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
