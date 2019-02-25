@@ -254,6 +254,14 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  mTaskBar = New TaskBar(Self)
+		  mTaskBar.SetProgressState(TaskBar.TaskBarStates.Normal)
+		End Sub
+	#tag EndEvent
+
+
 	#tag Method, Flags = &h0
 		Sub SubmitFile(parentWindow As Window, File As FolderItem, APIKey As String)
 		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
@@ -278,6 +286,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private mPercentDone As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mTaskBar As TaskBar
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -375,6 +387,7 @@ End
 		  End If
 		  Percentages.Text = mInfoCaption
 		  ProgressBar1.Value = mPercentDone
+		  mTaskBar.SetProgressValue(mPercentDone, 100)
 		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
 		    Label1.Text = "Awaiting response..."
 		  Else
@@ -391,11 +404,13 @@ End
 		    Me.Caption = "Resume"
 		    Self.Title = "Submitting '" + TargetFile.Name + "' - Paused"
 		    GUITimer.Mode = Timer.ModeOff
+		    mTaskBar.SetProgressState(TaskBar.TaskBarStates.Paused)
 		  Else
 		    Call Socket.EasyItem.Resume
 		    Me.Caption = "Pause"
 		    Self.Title = "Submitting '" + TargetFile.Name + "'"
 		    GUITimer.Mode = Timer.ModeMultiple
+		    mTaskBar.SetProgressState(TaskBar.TaskBarStates.Normal)
 		  End If
 		End Sub
 	#tag EndEvent
