@@ -79,6 +79,7 @@ Class=cURLManager;libcURL/cURLManager.rbbas;&h1C41FFFF;&h1C033FFF;false
 Class=FTPWildCard;libcURL/Protocols/FTPWildCard.rbbas;&h7D6117FF;&h1AC5AFFF;false
 Module=Multi;libcURL/Opts/Multi.rbbas;&h20C977FF;&h4B3B07FF;false
 Module=LibZ;libcURL/Version/LibZ.rbbas;&h1A2E97FF;&h2B3D6FFF;false
+Class=TaskBar;TaskBar.rbbas;&h413BC7FF;&h0;false
 MajorVersion=1
 MinorVersion=0
 SubVersion=0
