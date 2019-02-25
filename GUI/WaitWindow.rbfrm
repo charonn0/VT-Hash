@@ -107,12 +107,22 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  mTaskBar = New TaskBar(Self)
+		  mTaskBar.SetProgressState(TaskBar.TaskBarStates.Indeterminate)
+		  mTaskBar.SetProgressValue(50, 100)
+		End Sub
+	#tag EndEvent
+
+
 	#tag Method, Flags = &h0
 		Sub SetProgress(Value As Integer, Max As Integer)
 		  If Self.Visible Then
 		    ProgressBar1.Maximum = 100
 		    ProgressBar1.Value = Value * 100 / Max
-		    'Self.Refresh(False)
+		    mTaskBar.SetProgressState(TaskBar.TaskBarStates.Normal)
+		    mTaskBar.SetProgressValue(Value, Max)
 		  End If
 		End Sub
 	#tag EndMethod
@@ -127,6 +137,11 @@ End
 		  Me.Top = h
 		End Sub
 	#tag EndMethod
+
+
+	#tag Property, Flags = &h21
+		Private mTaskBar As TaskBar
+	#tag EndProperty
 
 
 #tag EndWindowCode
