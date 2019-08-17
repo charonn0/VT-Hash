@@ -25,13 +25,18 @@ Protected Module LibZ
 
 	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
-		  Return BitAnd(Struct.Features, FEATURE_LIBZ) = FEATURE_LIBZ // libz features are present
+		  Return BitAnd(Features, FEATURE_LIBZ) = FEATURE_LIBZ // libz features are present
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Attributes( deprecated ) Protected Function Name() As String
-		  Dim data As MemoryBlock = Struct.libzVersion
+		  #If Target32Bit Then
+		    Dim data As MemoryBlock = Struct.libzVersion
+		  #Else
+		    Dim data As MemoryBlock = Struct64.libzVersion
+		  #EndIf
+		  
 		  If data <> Nil Then Return data.CString(0)
 		End Function
 	#tag EndMethod

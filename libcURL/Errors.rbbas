@@ -21,11 +21,50 @@ Protected Module Errors
 		  "CURLE_SSL_CRL_BADFILE", "CURLE_SSL_ISSUER_ERROR", "CURLE_FTP_PRET_FAILED", "CURLE_RTSP_CSEQ_ERROR", "CURLE_RTSP_SESSION_ERROR", _
 		  "CURLE_FTP_BAD_FILE_LIST", "CURLE_CHUNK_FAILED", "CURLE_NO_CONNECTION_AVAILABLE", "CURLE_SSL_PINNEDPUBKEYNOTMATCH")
 		  Static bound As Integer = UBound(names)
-		  If CURLCODE <= bound And CURLCODE > -1 Then
-		    Return names(CURLCODE)
-		  Else
-		    Return "UNKNOWN_CURL_CODE"
-		  End If
+		  Select Case CURLCODE
+		  Case Is >= 0
+		    If CURLCODE <= bound Then Return names(CURLCODE)
+		  Case Is < -2
+		    Dim s As String = WrapperErrorName(CURLCODE)
+		    If s <> "" Then Return s
+		  End Select
+		  Return "UNKNOWN_CURL_CODE"
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function WrapperErrorName(CURLCODE As Integer) As String
+		  Select Case CURLCODE
+		  Case INIT_FAILED
+		    Return "INIT_FAILED"
+		    
+		  Case FEATURE_UNAVAILABLE
+		    Return "FEATURE_UNAVAILABLE"
+		    
+		  Case NOT_INITIALIZED
+		    Return "NOT_INITIALIZED"
+		    
+		  Case CALL_LOOP_DETECTED
+		    Return "CALL_LOOP_DETECTED"
+		    
+		  Case NO_COOKIEJAR ' deprecated
+		    Return "NO_COOKIEJAR"
+		    
+		  Case INVALID_LOCAL_FILE
+		    Return "INVALID_LOCAL_FILE"
+		    
+		  Case INVALID_STATE
+		    Return "INVALID_STATE"
+		    
+		  Case MIME_ADD_FAILED
+		    Return "MIME_ADD_FAILED"
+		    
+		  Case MIME_OWNER_MISSING
+		    Return "MIME_OWNER_MISSING"
+		    
+		  Case MIME_MANUAL_ONLY
+		    Return "MIME_MANUAL_ONLY"
+		  End Select
 		End Function
 	#tag EndMethod
 
@@ -145,6 +184,15 @@ Protected Module Errors
 	#tag EndConstant
 
 	#tag Constant, Name = LOGIN_DENIED, Type = Double, Dynamic = False, Default = \"67", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MIME_ADD_FAILED, Type = Double, Dynamic = False, Default = \"-10", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MIME_MANUAL_ONLY, Type = Double, Dynamic = False, Default = \"-12", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MIME_OWNER_MISSING, Type = Double, Dynamic = False, Default = \"-11", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = NOT_BUILT_IN, Type = Double, Dynamic = False, Default = \"4", Scope = Protected

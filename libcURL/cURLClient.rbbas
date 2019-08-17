@@ -63,43 +63,8 @@ Inherits libcURL.cURLManager
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Post(URL As String, FormData As Dictionary, WriteTo As Writeable = Nil)
-		  ' Asynchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
-		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
-		  ' may be a string or a FolderItem.
-		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
-		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
-		  ' The transfer will be performed on the event loop (main thread).
-		  '
-		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
-		  
-		  Dim frm As libcURL.MultipartForm = FormData
-		  Me.Post(URL, frm, WriteTo)
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Post(URL As String, FormData As Dictionary, WriteTo As Writeable = Nil) As Boolean
-		  ' Synchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
-		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
-		  ' may be a string or a FolderItem.
-		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
-		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
-		  ' This method will block the calling thread until the transfer completes. All events will be raised
-		  ' on the calling thread.
-		  '
-		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
-		  
-		  Dim frm As libcURL.MultipartForm = FormData
-		  Return Me.Post(URL, frm, WriteTo)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Post(URL As String, FormData As libcurl.MultipartForm, WriteTo As Writeable = Nil)
-		  ' Asynchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding.
+		Sub Post(URL As String, FormData As libcurl.MIMEMessage, WriteTo As Writeable = Nil)
+		  ' (libcURL 7.56.0 or greater) Asynchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
 		  ' The transfer will be performed on the event loop (main thread).
@@ -113,10 +78,8 @@ Inherits libcURL.cURLManager
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Post(URL As String, FormData As libcurl.MultipartForm, WriteTo As Writeable = Nil) As Boolean
-		  ' Synchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData dictionary
-		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
-		  ' may be a string or a FolderItem.
+		Function Post(URL As String, FormData As libcurl.MIMEMessage, WriteTo As Writeable = Nil) As Boolean
+		  ' (libcURL 7.56.0 or greater) Synchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
 		  ' This method will block the calling thread until the transfer completes. All events will be raised
@@ -131,9 +94,43 @@ Inherits libcURL.cURLManager
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Post(URL As String, FormData As libcurl.MultipartForm, WriteTo As Writeable = Nil)
+		  ' Asynchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData parameter
+		  ' may be an instace of MultipartForm, or a Dictionary of NAME:VALUE pairs comprising HTTP form elements: NAME is
+		  ' a string containing the form-element name; VALUE may be a string or a FolderItem. WriteTo is an optional
+		  ' Writeable object (e.g. BinaryStream); downloaded data will be written to this object directly. If WriteTo is
+		  ' Nil then use the GetDownloadedData method to get any downloaded data. The transfer will be performed on the
+		  ' event loop (main thread).
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
+		  
+		  Me.EasyItem.SetFormData(FormData)
+		  Me.Perform(URL, Nil, WriteTo)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Post(URL As String, FormData As libcurl.MultipartForm, WriteTo As Writeable = Nil) As Boolean
+		  ' Synchronously POST the passed FormData via HTTP(S) using multipart/form-data encoding. The FormData parameter
+		  ' may be an instace of MultipartForm, or a Dictionary of NAME:VALUE pairs comprising HTTP form elements: NAME is
+		  ' a string containing the form-element name; VALUE may be a string or a FolderItem. WriteTo is an optional Writeable
+		  ' object (e.g. BinaryStream); downloaded data will be written to this object directly. If WriteTo is Nil then use
+		  ' the GetDownloadedData method to get any downloaded data. This method will block the calling thread until the
+		  ' transfer completes. All events will be raised on the calling thread.
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
+		  
+		  Me.EasyItem.SetFormData(FormData)
+		  Return Me.Perform(URL, Nil, WriteTo)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Post(URL As String, PostFields() As String, WriteTo As Writeable = Nil)
 		  ' Asynchronously POST the passed FormData via HTTP(S) using application/x-www-form-urlencoded. The FormData dictionary
-		  ' contains NAME:VALUE pairs comprising HTML form elements. NAME is a string containing the form-element name; VALUE
+		  ' contains NAME:VALUE pairs comprising HTTP form elements. NAME is a string containing the form-element name; VALUE
 		  ' is a string containing the form-element value.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
@@ -150,7 +147,7 @@ Inherits libcURL.cURLManager
 	#tag Method, Flags = &h0
 		Function Post(URL As String, PostFields() As String, WriteTo As Writeable = Nil) As Boolean
 		  ' Synchronously POST the passed PostFields via HTTP(S) using application/x-www-form-urlencoded. The PostFields array
-		  ' contains "NAME=VALUE" strings comprising HTML form elements.
+		  ' contains "NAME=VALUE" strings comprising HTTP form elements.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
 		  ' This method will block the calling thread until the transfer completes. All events will be raised
@@ -170,8 +167,7 @@ Inherits libcURL.cURLManager
 		  ' The protocol is inferred from the URL; explictly specify the protocol in the URL to avoid bad guesses.
 		  ' WriteTo is an optional Writeable object (e.g. BinaryStream); downloaded data will be written to this
 		  ' object directly. If WriteTo is Nil then use the GetDownloadedData method to get any downloaded data.
-		  ' This method will block the calling thread until the transfer completes. The transfer will be performed
-		  ' on the event loop (main thread).
+		  ' The transfer will be performed on the event loop (main thread).
 		  '
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Put

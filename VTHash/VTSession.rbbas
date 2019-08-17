@@ -25,8 +25,18 @@ Inherits libcURL.cURLClient
 		  frm.Value("apikey") = APIKey
 		  frm.Value("resource") = ResourceID
 		  frm.Value("comment") = Comment
-		  Call Me.SetRequestHeader("Expect", "")
+		  Me.RequestHeaders.RemoveHeader("Expect")
 		  SendRequest(RequestType.Comment, frm)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1000
+		Sub Constructor()
+		  // Calling the overridden superclass constructor.
+		  // Constructor() -- From cURLManager
+		  Super.Constructor()
+		  EasyItem.Verbose = VTHash.CurlVerbose
+		  
 		End Sub
 	#tag EndMethod
 
@@ -48,7 +58,7 @@ Inherits libcURL.cURLClient
 		  Case RequestType.DomainReport
 		    frm.Value("domain") = ResourceID
 		  End Select
-		  Call Me.SetRequestHeader("Expect", "")
+		  Me.RequestHeaders.RemoveHeader("Expect")
 		  SendRequest(Type, frm)
 		End Sub
 	#tag EndMethod
@@ -60,7 +70,7 @@ Inherits libcURL.cURLClient
 		  Dim frm As New Dictionary
 		  frm.Value("resource") = ResourceID
 		  frm.Value("apikey") = APIKey
-		  Call Me.SetRequestHeader("Expect", "")
+		  Me.RequestHeaders.RemoveHeader("Expect")
 		  SendRequest(RequestType.Rescan, frm)
 		End Sub
 	#tag EndMethod
@@ -138,7 +148,7 @@ Inherits libcURL.cURLClient
 		  Call frm.AddElement("apikey", APIKey)
 		  Dim bs As BinaryStream = BinaryStream.Open(File)
 		  Call frm.AddElement("file", bs, bs.Length, File.Name)
-		  Call Me.SetRequestHeader("Expect", "100-Continue")
+		  Me.RequestHeaders.SetHeader("Expect", "100-Continue")
 		  SendRequest(RequestType.FileSubmit, frm)
 		End Sub
 	#tag EndMethod

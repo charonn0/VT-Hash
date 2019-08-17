@@ -66,6 +66,9 @@ Protected Module Opts
 	#tag Constant, Name = CRLFILE, Type = Double, Dynamic = False, Default = \"10169", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = CURLU, Type = Double, Dynamic = False, Default = \"10282", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = CUSTOMREQUEST, Type = Double, Dynamic = False, Default = \"10036", Scope = Protected
 	#tag EndConstant
 
@@ -81,6 +84,12 @@ Protected Module Opts
 	#tag Constant, Name = DIRLISTONLY, Type = Double, Dynamic = False, Default = \"48", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = DISALLOW_USERNAME_IN_URL, Type = Double, Dynamic = False, Default = \"278", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = DNS_CACHE_TIMEOUT, Type = Double, Dynamic = False, Default = \"92", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = DNS_INTERFACE, Type = Double, Dynamic = False, Default = \"10221", Scope = Protected
 	#tag EndConstant
 
@@ -91,6 +100,9 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = DNS_SERVERS, Type = Double, Dynamic = False, Default = \"10211", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = DNS_SHUFFLE_ADDRESSES, Type = Double, Dynamic = False, Default = \"275", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = EGDSOCKET, Type = Double, Dynamic = False, Default = \"10077", Scope = Protected
@@ -136,6 +148,9 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = FTP_FILEMETHOD, Type = Double, Dynamic = False, Default = \"138", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = HAPROXYPROTOCOL, Type = Double, Dynamic = False, Default = \"274", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = HEADER, Type = Double, Dynamic = False, Default = \"42", Scope = Protected
@@ -213,6 +228,9 @@ Protected Module Opts
 	#tag Constant, Name = MAXREDIRS, Type = Double, Dynamic = False, Default = \"68", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = MIMEPOST, Type = Double, Dynamic = False, Default = \"10269", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = NETINTERFACE, Type = Double, Dynamic = False, Default = \"10062", Scope = Protected
 	#tag EndConstant
 
@@ -246,6 +264,9 @@ Protected Module Opts
 	#tag Constant, Name = PIPELINING_SITE_BL, Type = Double, Dynamic = False, Default = \"10011", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = PIPEWAIT, Type = Double, Dynamic = False, Default = \"237", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = PORT, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
 	#tag EndConstant
 
@@ -264,10 +285,16 @@ Protected Module Opts
 	#tag Constant, Name = PREQUOTE, Type = Double, Dynamic = False, Default = \"10093", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = PRIVATE_, Type = Double, Dynamic = False, Default = \"10103", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = PROGRESSDATA, Type = Double, Dynamic = False, Default = \"10057", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = PROGRESSFUNCTION, Type = Double, Dynamic = False, Default = \"20056", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = PROTOCOLS, Type = Double, Dynamic = False, Default = \"181", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = PROXY, Type = Double, Dynamic = False, Default = \"10004", Scope = Protected
@@ -363,6 +390,9 @@ Protected Module Opts
 	#tag Constant, Name = SOCKS5_GSSAPI_SERVICE, Type = Double, Dynamic = False, Default = \"10179", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = SSH_AUTH_TYPES, Type = Double, Dynamic = False, Default = \"151", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = SSH_COMPRESSION, Type = Double, Dynamic = False, Default = \"268", Scope = Protected
 	#tag EndConstant
 
@@ -420,7 +450,13 @@ Protected Module Opts
 	#tag Constant, Name = TIMEOUT, Type = Double, Dynamic = False, Default = \"13", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = UPKEEP_INTERVAL_MS, Type = Double, Dynamic = False, Default = \"281", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = UPLOAD, Type = Double, Dynamic = False, Default = \"46", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = UPLOAD_BUFFERSIZE, Type = Double, Dynamic = False, Default = \"280", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = URL, Type = Double, Dynamic = False, Default = \"10002", Scope = Protected

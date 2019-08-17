@@ -131,7 +131,7 @@ Inherits libcURL.cURLHandle
 		  
 		  If StackLocked Then
 		    mLastError = libcURL.Errors.CALL_LOOP_DETECTED
-		    Raise New libcURL.cURLException(Me) ' Called by an EasyHandle or MultiHandle event!
+		    Raise New cURLException(Me) ' Called by an EasyHandle or MultiHandle event!
 		  End If
 		  StackLocked = True
 		  Try
@@ -161,6 +161,7 @@ Inherits libcURL.cURLHandle
 		Private Sub PerformTimerHandler(Sender As Timer)
 		  ' This method handles the PerformTimer.Action event. It calls PerformOnce on the main thread until PerformOnce returns False.
 		  
+		  ' this loop calls PerformOnce 3 times and then updates the Timer's period.
 		  For i As Integer = 0 To 4
 		    If Not Me.PerformOnce() Then
 		      Sender.Mode = Timer.ModeOff
@@ -203,8 +204,8 @@ Inherits libcURL.cURLHandle
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Function ReadNextMsg(ByRef MsgsRemaining As Integer) As CURLMsg
+	#tag Method, Flags = &h21
+		Private Function ReadNextMsg(ByRef MsgsRemaining As Integer) As CURLMsg
 		  Dim p As Ptr = curl_multi_info_read(mHandle, MsgsRemaining)
 		  If p <> Nil Then
 		    Return p.CURLMsg
@@ -277,6 +278,11 @@ Inherits libcURL.cURLHandle
 		    
 		  Case Variant.TypePtr, Variant.TypeInteger
 		    MarshalledValue = NewValue.PtrValue
+		    
+		    #If Target64Bit Then
+		  Case Variant.TypeInt64
+		    MarshalledValue = NewValue.PtrValue
+		    #EndIf
 		    
 		  Case Variant.TypeString
 		    MarshalledValue = NewValue.StringValue + Chr(0)
@@ -362,9 +368,9 @@ Inherits libcURL.cURLHandle
 			  End If
 			  
 			  If value Then
-			    If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, 2) Then Raise new libcURL.cURLException(Me)
+			    If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, 2) Then Raise New cURLException(Me)
 			  Else
-			    If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, mHTTPPipelining) Then Raise new libcURL.cURLException(Me)
+			    If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, mHTTPPipelining) Then Raise New cURLException(Me)
 			  End If
 			  mHTTPMultiplexing = value
 			End Set
@@ -392,7 +398,7 @@ Inherits libcURL.cURLHandle
 			    Return
 			  End If
 			  
-			  If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, value) Then Raise new libcURL.cURLException(Me)
+			  If Not Me.SetOption(libcURL.Opts.Multi.PIPELINING, value) Then Raise New cURLException(Me)
 			  mHTTPPipelining = value
 			End Set
 		#tag EndSetter

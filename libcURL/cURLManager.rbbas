@@ -2,7 +2,7 @@
 Protected Class cURLManager
 	#tag Method, Flags = &h0
 		Sub Abort()
-		  ' Aborts the current transfer by automatically returning `True` from the Progress event the
+		  ' Aborts the current transfer by automatically returning True from the Progress event the
 		  ' next time it is raised. If no transfer is in progress or if the Progress event has been disabled
 		  ' then this method has no effect.
 		  '
@@ -15,7 +15,7 @@ Protected Class cURLManager
 
 	#tag Method, Flags = &h0
 		Sub Close()
-		  ' Explicitly closes all libcURL handles associated with the cURLManager instance.
+		  ' Explicitly frees the EasyHandle associated with the cURLManager instance.
 		  ' Automatically called by the Destructor.
 		  '
 		  ' See:
@@ -59,26 +59,6 @@ Protected Class cURLManager
 		  mMultiItem = New libcURL.MultiHandle
 		  AddHandler mMultiItem.TransferComplete, WeakAddressOf _TransferCompleteHandler
 		  Me.Reset()
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Attributes( deprecated )  Sub Constructor(CopyOpts As libcURL.cURLManager)
-		  ' This method is deprecated. To duplicate an instance of cURLManager, duplicate its EasyItem
-		  ' and pass the duplicate to cURLManager.Constructor(EasyHandle) instead.
-		  '
-		  ' Creates a new instance of cURLManager by cloning the passed cURLManager
-		  '
-		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLManager.Constructor
-		  
-		  Select Case CopyOpts.EasyItem
-		  Case IsA libcURL.Protocols.FTPWildCard
-		    mEasyItem = New libcURL.Protocols.FTPWildCard(CopyOpts.EasyItem)
-		  Else
-		    mEasyItem = New libcURL.EasyHandle(CopyOpts.EasyItem)
-		  End Select
-		  Me.Constructor()
 		End Sub
 	#tag EndMethod
 
@@ -256,7 +236,7 @@ Protected Class cURLManager
 
 	#tag Method, Flags = &h21
 		Private Sub QueueTransfer(URL As String, ReadFrom As Readable, WriteTo As Writeable)
-		  If Not mMultiItem.AddItem(mEasyItem) Then Raise New libcURL.cURLException(mMultiItem)
+		  If Not mMultiItem.AddItem(mEasyItem) Then Raise New cURLException(mMultiItem)
 		  
 		  mIsTransferComplete = False
 		  mAbort = False
@@ -277,6 +257,18 @@ Protected Class cURLManager
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function RequestHeaders() As libcURL.RequestHeaderEngine
+		  ' Returns a reference to a RequestHeaderEngine instance
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLManager.RequestHeaders
+		  
+		  If mRequestHeaderEngine = Nil Then mRequestHeaderEngine = New RequestHeaderEngine(Me.EasyItem)
+		  Return mRequestHeaderEngine
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Reset()
 		  If mEasyItem = Nil Then mEasyItem = New libcURL.EasyHandle Else mEasyItem.Reset
 		  Me.EasyItem = mEasyItem
@@ -287,6 +279,8 @@ Protected Class cURLManager
 		  mEasyItem.FollowRedirects = True
 		  mEasyItem.AutoReferer = True
 		  mEasyItem.HTTPCompression = libcURL.Version.LibZ.IsAvailable
+		  Me.Yield = True
+		  Me.RequestHeaders.Reset()
 		End Sub
 	#tag EndMethod
 
@@ -313,22 +307,9 @@ Protected Class cURLManager
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function SetRequestHeader(Name As String, Value As String) As Boolean
-		  ' Subsequent calls to this method will append the headers to the previously set headers. Headers will persist from transfer
-		  ' to transfer. Pass an empty value to clear the named header. Pass an empty name to clear all headers.
-		  '
-		  ' See:
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLManager.SetRequestHeader
-		  
-		  mRequestHeaders = mEasyItem.SetRequestHeader(mRequestHeaders, Name, Value)
-		  Return (mRequestHeaders <> Nil Or Name = "")
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function SetRequestMethod(RequestMethod As String) As Boolean
 		  ' Overrides the request method used by libcurl. The behavior of this feature depends on which protocol
-		  ' is being used, and not all protocols are supported. Pass the empty string to clear custom methods.
+		  ' is being used, and not all protocols are supported. Pass the empty string to reset.
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/CURLOPT_CUSTOMREQUEST.html#DESCRIPTION
@@ -539,7 +520,7 @@ Protected Class cURLManager
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mRequestHeaders As libcURL.ListPtr
+		Private mRequestHeaderEngine As libcURL.RequestHeaderEngine
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
