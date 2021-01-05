@@ -7,7 +7,7 @@ Begin Menu MenuBar1
       AutoEnable = True
       Begin MenuItem RescanMenu
          SpecialMenu = 0
-         Text = "&Request Rescan"
+         Text = "&Request Rescan 🔒"
          Index = -2147483648
          ShortcutKey = "R"
          Shortcut = "Cmd+R"

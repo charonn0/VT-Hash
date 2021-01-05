@@ -1080,7 +1080,11 @@ End
 	#tag Event
 		Sub Error(cURLCode As Integer)
 		  If mWaiter <> Nil Then mWaiter.Close
-		  VTHash.HandleCurlError(Me, cURLCode)
+		  If Me.GetStatusCode = 403 Then
+		    Call MsgBox("Your rescan request was denied by VirusTotal. Rescanning is no longer available with free API keys.", 16, "VT Hash Check - Paywall")
+		  Else
+		    VTHash.HandleCurlError(Me, cURLCode)
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -1100,6 +1104,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Error(cURLCode As Integer)
+		  If mWaiter <> Nil Then mWaiter.Close
 		  VTHash.HandleCurlError(Me, cURLCode)
 		End Sub
 	#tag EndEvent
