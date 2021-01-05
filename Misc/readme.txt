@@ -1,5 +1,5 @@
-VT Hash Check 1.60
-Copyright ©2009-17 Andrew Lambert, All Rights Reserved
+VT Hash Check 1.61
+Copyright ©2009-21 Andrew Lambert, All Rights Reserved
 
 1. Purpose
 2. Installing
