@@ -1079,6 +1079,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Error(cURLCode As Integer)
+		  If mWaiter <> Nil Then mWaiter.Close
 		  VTHash.HandleCurlError(Me, cURLCode)
 		End Sub
 	#tag EndEvent
