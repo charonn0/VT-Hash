@@ -23,7 +23,7 @@ Inherits libcURL.cURLClient
 		  
 		  Dim frm As New Dictionary
 		  frm.Value("apikey") = APIKey
-		  frm.Value("resource") = ResourceID
+		  frm.Value("resource") = ResourceID.Lowercase
 		  frm.Value("comment") = Comment
 		  Me.RequestHeaders.RemoveHeader("Expect")
 		  SendRequest(RequestType.Comment, frm)
