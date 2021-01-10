@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1E579B65-503B-4184-B481-5138124BEE1D}
 AppName=VT Hash Check
-AppVersion=1.60
+AppVersion=1.62
 ;AppVerName=VT Hash Check 1.22
 AppPublisher=Boredom Software
 AppPublisherURL=http://www.boredomsoft.org
@@ -23,11 +23,11 @@ SetupIconFile=..\GUI\Images\VTHash_102.ico
 Compression=lzma/ultra
 SolidCompression=true
 AppCopyright=Boredom Software
-AppVerName=VT Hash Check 1.61
+AppVerName=VT Hash Check 1.62
 AllowUNCPath=false
 UsePreviousGroup=false
 UninstallDisplayIcon={app}\VTHash.exe
-UninstallDisplayName=VT Hash Check 1.61
+UninstallDisplayName=VT Hash Check 1.62
 ShowLanguageDialog=no
 ;WizardImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\SetupModern21.bmp
 ;WizardSmallImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\Small\SetupModernSmall26.bmp
@@ -36,20 +36,23 @@ ShowLanguageDialog=no
 Name: english; MessagesFile: compiler:Default.isl
 
 [Files]
-Source: ..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\*; DestDir: {app}; Flags: ignoreversion replacesameversion touch
-Source: ..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\VTHash Libs\*; DestDir: {app}\VTHash Libs; Flags: ignoreversion recursesubdirs createallsubdirs touch; Languages: 
+Source: "..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\*"; DestDir: "{app}"; Flags: ignoreversion replacesameversion touch
+Source: "..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\VTHash Libs\*"; DestDir: "{app}\VTHash Libs"; Flags: ignoreversion recursesubdirs createallsubdirs touch
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: readme.txt; DestDir: {app}; DestName: readme.txt; Flags: touch
-Source: license.txt; DestDir: {app}; DestName: license.txt; Flags: touch
-Source: ..\GUI\Images\VTHash_102.ico; DestDir: {app}; MinVersion: 0,6.0.6000
-Source: triddefs.trd; DestDir: {app}; Flags: overwritereadonly
-Source: TrIDLib.dll; DestDir: {app}; Flags: overwritereadonly
-Source: libcurl.dll; DestDir: {app}; Flags: overwritereadonly
-Source: libeay32.dll; DestDir: {app}; Flags: overwritereadonly
-Source: libidn-11.dll; DestDir: {app}; Flags: overwritereadonly
-Source: ssleay32.dll; DestDir: {app}; Flags: overwritereadonly
-Source: zlib1.dll; DestDir: {app}; Flags: overwritereadonly
-
+Source: "readme.txt"; DestDir: "{app}"; DestName: "readme.txt"; Flags: touch
+Source: "license.txt"; DestDir: "{app}"; DestName: "license.txt"; Flags: touch
+Source: "..\GUI\Images\VTHash_102.ico"; DestDir: "{app}"; MinVersion: 0,6.0.6000
+Source: "triddefs.trd"; DestDir: "{app}"; Flags: overwritereadonly
+Source: "TrIDLib.dll"; DestDir: "{app}"; Flags: overwritereadonly
+Source: "libbrotlicommon.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "libbrotlidec.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "libbrotlienc.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "libcrypto-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "libcurl.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "libssh2.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "libssl-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "TrIDLib.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
+Source: "zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion overwritereadonly
 
 [Registry]
 Root: HKCR; SubKey: *\shell\vthash; ValueType: string; ValueData: Check File Hash...; Flags: uninsdeletekey
