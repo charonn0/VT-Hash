@@ -50,13 +50,13 @@ Inherits libcURL.cURLClient
 		  
 		  Select Case Type
 		  Case RequestType.FileReport
-		    frm.Value("resource") = ResourceID
+		    frm.Value("resource") = ResourceID.Lowercase
 		  Case VTHash.RequestType.URLReport
-		    frm.Value("url") = ResourceID
+		    frm.Value("url") = ResourceID.Lowercase
 		  Case RequestType.IPReport
-		    frm.Value("ip") = ResourceID
+		    frm.Value("ip") = ResourceID.Lowercase
 		  Case RequestType.DomainReport
-		    frm.Value("domain") = ResourceID
+		    frm.Value("domain") = ResourceID.Lowercase
 		  End Select
 		  Me.RequestHeaders.RemoveHeader("Expect")
 		  SendRequest(Type, frm)
@@ -68,7 +68,7 @@ Inherits libcURL.cURLClient
 		  'ResourceID is either a file hash or a URL
 		  
 		  Dim frm As New Dictionary
-		  frm.Value("resource") = ResourceID
+		  frm.Value("resource") = ResourceID.Lowercase
 		  frm.Value("apikey") = APIKey
 		  Me.RequestHeaders.RemoveHeader("Expect")
 		  SendRequest(RequestType.Rescan, frm)
