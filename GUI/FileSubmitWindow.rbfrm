@@ -372,6 +372,7 @@ End
 		Sub Error(cURLCode As Integer)
 		  GUITimer.Mode = Timer.ModeOff
 		  VTHash.HandleCurlError(Me, cURLCode)
+		  Self.Close()
 		End Sub
 	#tag EndEvent
 #tag EndEvents
