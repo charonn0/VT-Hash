@@ -131,6 +131,24 @@ Protected Module VTHash
 		    caption = "Invalid SSL Certificate"
 		    msg = msg + "invalid SSL certificate. The operation has been aborted."
 		    
+		  Case libcURL.Errors.HTTP_RETURNED_ERROR
+		    Dim status As Integer = Sender.GetStatusCode()
+		    Select Case status
+		    Case 413 ' payload too large
+		      msg = "Virus Total refused to accept the upload because it is too large."
+		      caption = "Upload limit exceeded"
+		    Case 204
+		      msg = "Virus Total refused to accept your query at this time. Please try again in a few minutes."
+		      caption = "Rate limit exceeded"
+		    Case 403
+		      msg = "Your Virus Total account is not allowed to perform that action."
+		      caption = "Access denied"
+		    Else
+		      msg = "Virus Total responded with HTTP status code " + Str(status)
+		      If Sender.EasyItem.ErrorBuffer.Trim <> "" Then msg = msg + EndOfLine + Sender.EasyItem.ErrorBuffer
+		      caption = "HTTP error"
+		    End Select
+		    
 		  Else
 		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
 		    caption = "Unable to connect to Virus Total"
