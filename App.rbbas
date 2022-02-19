@@ -93,8 +93,6 @@ Inherits Application
 		    End Select
 		  Case item.Directory
 		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "VT Hash Check - Invalid file")
-		  Case item.Length > 128 * 1024 * 1024 And Not mTridMode
-		    Call MsgBox(item.AbsolutePath + " is too large for VirusTotal.", 16, "VT Hash Check - Invalid file")
 		  Else
 		    Select Case True
 		    Case mTridMode

@@ -793,9 +793,9 @@ End
 		      Self.Close
 		      Return
 		    End If
-		    If result.TargetFile.Length >= 32 * 1024 * 1024 Then
+		    If (Not HasConfig("ConfirmLargeUploads") Or GetConfig("ConfirmLargeUploads") = True) And result.TargetFile.Length >= 128 * 1024 * 1024 Then
 		      Select Case MsgBox(_
-		        "The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Additionally, the file exceeds 32MB which is the default limit for uploading via the API." + EndOfLine + _
+		        "The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Additionally, the file exceeds 128MB which is the default limit for uploading via the API." + EndOfLine + _
 		        "Some users do not have this limit, would you like to attempt to upload anyway?", 48 + 3, "VT Hash Check - File too large for API")
 		      Case 6 ' Yes
 		        Dim ul As New FileSubmitWindow

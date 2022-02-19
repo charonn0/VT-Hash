@@ -7,7 +7,7 @@ Begin Window SettingsWindow
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   1.86e+2
+   Height          =   1.98e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -50,7 +50,7 @@ Begin Window SettingsWindow
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   165
+      Top             =   177
       Underline       =   ""
       Visible         =   True
       Width           =   80
@@ -81,7 +81,7 @@ Begin Window SettingsWindow
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   165
+      Top             =   177
       Underline       =   ""
       Visible         =   True
       Width           =   80
@@ -112,7 +112,7 @@ Begin Window SettingsWindow
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   165
+      Top             =   177
       Underline       =   ""
       Visible         =   True
       Width           =   85
@@ -121,7 +121,7 @@ Begin Window SettingsWindow
       AutoDeactivate  =   True
       Bold            =   ""
       Enabled         =   True
-      Height          =   160
+      Height          =   172
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -144,7 +144,7 @@ Begin Window SettingsWindow
       TextUnit        =   0
       Top             =   0
       Underline       =   ""
-      Value           =   4
+      Value           =   0
       Visible         =   True
       Width           =   364
       Begin Label Label2
@@ -169,7 +169,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Comment Signature (optional): "
          TextAlign       =   2
          TextColor       =   &h000000
@@ -320,7 +319,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   4
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "API Key:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -386,7 +384,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   1
-         TabStop         =   True
          Text            =   "Algorithm:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -450,7 +447,6 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   3
-         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
@@ -674,7 +670,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   2
          TabPanelIndex   =   4
-         TabStop         =   True
          Text            =   "URL:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -709,7 +704,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   4
-         TabStop         =   True
          Text            =   "Name:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -777,7 +771,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   5
          TabPanelIndex   =   4
-         TabStop         =   True
          Text            =   "Preset:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -809,7 +802,6 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   2
-         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
@@ -895,7 +887,6 @@ Begin Window SettingsWindow
          Scope           =   0
          TabIndex        =   0
          TabPanelIndex   =   2
-         TabStop         =   True
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
@@ -1045,7 +1036,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   9
          TabPanelIndex   =   5
-         TabStop         =   True
          Text            =   "Proxy type:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -1080,7 +1070,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   8
          TabPanelIndex   =   5
-         TabStop         =   True
          Text            =   "Proxy server:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -1143,7 +1132,7 @@ Begin Window SettingsWindow
          DataField       =   ""
          DataSource      =   ""
          Enabled         =   True
-         Height          =   20
+         Height          =   32
          HelpTag         =   ""
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
@@ -1223,7 +1212,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   7
          TabPanelIndex   =   5
-         TabStop         =   True
          Text            =   "Proxy Port:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -1344,7 +1332,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   5
-         TabStop         =   True
          Text            =   "Proxy User:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -1379,7 +1366,6 @@ Begin Window SettingsWindow
          Selectable      =   False
          TabIndex        =   5
          TabPanelIndex   =   5
-         TabStop         =   True
          Text            =   "Proxy Password:"
          TextAlign       =   2
          TextColor       =   &h000000
@@ -1435,21 +1421,51 @@ Begin Window SettingsWindow
          Visible         =   True
          Width           =   220
       End
+      Begin CheckBox ConfirmLargeUploadChkBx
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "Confirm large uploads"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   20
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         State           =   0
+         TabIndex        =   9
+         TabPanelIndex   =   1
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   152
+         Underline       =   ""
+         Value           =   False
+         Visible         =   True
+         Width           =   185
+      End
    End
    Begin VTHash.VTSession VTSession1
       APIKey          =   ""
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
+      IsSSLCertOK     =   ""
       Left            =   376
       LockedInPosition=   False
       Scope           =   1
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   22
-      Visible         =   True
       Width           =   32
+      Yield           =   True
    End
    Begin ComboBox nic
       AutoComplete    =   False
@@ -1458,7 +1474,7 @@ Begin Window SettingsWindow
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   False
-      Height          =   20
+      Height          =   32
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -1506,7 +1522,6 @@ Begin Window SettingsWindow
       Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Network interface:"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -1587,6 +1602,12 @@ End
 		    UploadUnknown.Value = VTHash.GetConfig("PermitUploads")
 		  Else
 		    UploadUnknown.Value = True
+		  End If
+		  
+		  If HasConfig("ConfirmLargeUploads") Then
+		    ConfirmLargeUploadChkBx.Value = VTHash.GetConfig("ConfirmLargeUploads")
+		  Else
+		    ConfirmLargeUploadChkBx.Value = True
 		  End If
 		  
 		  If HasConfig("SortType") Then
@@ -1725,6 +1746,7 @@ End
 		  VTHash.SetConfig("CommentSignature", CommentSig.Text)
 		  VTHash.SetConfig("UseSSL", UseSSL.Value)
 		  VTHash.SetConfig("PermitUploads", UploadUnknown.Value)
+		  VTHash.SetConfig("ConfirmLargeUploads", ConfirmLargeUploadChkBx.Value)
 		  VTHash.SetConfig("SortDirection", SortDir)
 		  VTHash.SetConfig("SortType", SortType)
 		  
