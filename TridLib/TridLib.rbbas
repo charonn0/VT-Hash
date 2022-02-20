@@ -14,7 +14,7 @@ Protected Module TridLib
 
 	#tag Method, Flags = &h1
 		Protected Function GetInfo(InfoType As Integer, InfoIndex As Integer, Output As MemoryBlock = Nil) As Integer
-		  If Output = Nil Then Output = New MemoryBlock(0)
+		  If Output = Nil Then Output = New MemoryBlock(64)
 		  If TridLib.IsAvailable Then Return TrID_GetInfo(InfoType, InfoIndex, Output)
 		End Function
 	#tag EndMethod
