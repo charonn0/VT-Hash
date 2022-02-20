@@ -129,9 +129,9 @@ Inherits libcURL.cURLHandle
 		  RaiseEvent DebugMessage(info, DefineEncoding(data.StringValue(0, size), Encodings.UTF8))
 		  Return size
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return 0
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return 0
 		End Function
 	#tag EndMethod
 
@@ -148,9 +148,9 @@ Inherits libcURL.cURLHandle
 		  RaiseEvent HeaderReceived(char.StringValue(0, sz))
 		  Return sz
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return 0
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return 0
 		End Function
 	#tag EndMethod
 
@@ -166,9 +166,9 @@ Inherits libcURL.cURLHandle
 		  
 		  If RaiseEvent Progress(dlTotal, dlnow, ultotal, ulnow) Then Return 1
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return 1
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return 1
 		End Function
 	#tag EndMethod
 
@@ -190,9 +190,9 @@ Inherits libcURL.cURLHandle
 		    Return mb.Size
 		  End If
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return CURL_READFUNC_ABORT
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return CURL_READFUNC_ABORT
 		End Function
 	#tag EndMethod
 
@@ -213,9 +213,9 @@ Inherits libcURL.cURLHandle
 		  
 		  Return 2 ' fail seek, but libcURL can try to work around it.
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return 1
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return 1
 		End Function
 	#tag EndMethod
 
@@ -235,9 +235,9 @@ Inherits libcURL.cURLHandle
 		    Return nmemb * size
 		  End If
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return 0
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return 0
 		End Function
 	#tag EndMethod
 
@@ -376,8 +376,8 @@ Inherits libcURL.cURLHandle
 		    Raise err
 		  End Select
 		  
-		Exception Err As NilObjectException
-		  If mLastError <> 0 Then Raise New cURLException(Me) Else Raise Err
+		  Exception Err As NilObjectException
+		    If mLastError <> 0 Then Raise New cURLException(Me) Else Raise Err
 		End Function
 	#tag EndMethod
 
@@ -742,7 +742,7 @@ Inherits libcURL.cURLHandle
 		      Return Me.SetOptionPtr(OptionNumber, NewValue.PtrValue)
 		      
 		    Case IsA FolderItem
-		      Return Me.SetOption(OptionNumber, FolderItem(NewValue).AbsolutePath)
+		      Return Me.SetOption(OptionNumber, FolderItem(NewValue).NativePath)
 		      
 		    Case IsA Dictionary ' assume a multipart form
 		      Dim form As Dictionary = NewValue
@@ -1864,48 +1864,75 @@ Inherits libcURL.cURLHandle
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="AutoDisconnect"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="AutoReferer"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="BufferSize"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="BufferSizeUpload"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ConnectionTimeout"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="FailOnServerError"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="FollowRedirects"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="HTTPCompression"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="HTTPPreserveMethod"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -1913,113 +1940,232 @@ Inherits libcURL.cURLHandle
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
-			InheritedFrom="Object"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="LocalPort"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="MaxRedirects"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Password"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="PipeWait"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Port"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="RemoteIP"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Secure"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="TimeOut"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="UploadMode"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="URL"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="UseErrorBuffer"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="UseProgressEvent"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="UserAgent"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Username"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Verbose"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ConnectionType"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="libcURL.ConnectionType"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - NoSSL"
+				"1 - AttemptSSL"
+				"2 - SSLControlConnectionOnly"
+				"3 - SSLForceAll"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="CWDMethod"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="libcURL.CWDMethod"
+			EditorType="Enum"
+			#tag EnumValues
+				"1 - Multi"
+				"2 - None"
+				"3 - Single"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HTTPVersion"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="libcURL.HTTPVersion"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - None"
+				"1 - HTTP1_0"
+				"2 - HTTP1_1"
+				"3 - HTTP2"
+				"4 - HTTP2TLS"
+				"5 - HTTP2PriorKnowledge"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IPVersion"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="libcURL.IPVersion"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - Whatever"
+				"1 - V4"
+				"2 - V6"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="SSLVersion"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="libcURL.SSLVersion"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - Default"
+				"1 - TLSv1"
+				"2 - SSLv2"
+				"3 - SSLv3"
+				"4 - TLSv1_0"
+				"5 - TLSv1_1"
+				"6 - TLSv1_2"
+			#tag EndEnumValues
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

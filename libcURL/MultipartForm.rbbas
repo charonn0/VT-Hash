@@ -192,7 +192,7 @@ Implements FormStreamGetter
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Deserialize(FormData As Readable) As libcURL.MultipartForm
+		Shared Function Deserialize(FormData As Readable) As libcURL.MultipartForm
 		  Dim data As New MemoryBlock(0)
 		  Dim bs As New BinaryStream(data)
 		  Do Until FormData.EOF
@@ -204,7 +204,7 @@ Implements FormStreamGetter
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Deserialize(FormData As String) As libcURL.MultipartForm
+		Shared Function Deserialize(FormData As String) As libcURL.MultipartForm
 		  Dim form As New MultipartForm
 		  Dim Boundary As String = NthField(FormData, EndOfLine.Windows, 1)
 		  If Left(Boundary, Len("Content-Type:")) <> "Content-Type:" Then Raise New UnsupportedFormatException
@@ -321,7 +321,7 @@ Implements FormStreamGetter
 		    Case Variant.TypeObject
 		      Select Case v(i)
 		      Case IsA FolderItem
-		        Dim mb As MemoryBlock = FolderItem(v(i)).AbsolutePath + Chr(0) ' make doubleplus sure it's null terminated
+		        Dim mb As MemoryBlock = FolderItem(v(i)).NativePath + Chr(0) ' make doubleplus sure it's null terminated
 		        m.Append(mb)
 		      Case IsA cURLHandle
 		        m.Append(Ptr(cURLHandle(v(i)).Handle))
@@ -377,9 +377,9 @@ Implements FormStreamGetter
 		  End Select
 		  
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return 0
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return 0
 		End Function
 	#tag EndMethod
 
@@ -707,33 +707,40 @@ Implements FormStreamGetter
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

@@ -31,7 +31,9 @@ Inherits Application
 		    Quit(1)
 		  End Try
 		  
-		  If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
+		  Dim k As Variant = VTHash.GetConfig("APIKey")'.StringValue
+		  Dim ks As String = k
+		  If ks.LenB <> 64 Then
 		    If Not mIsQuitting And MsgBox("A VirusTotal.com API key is required in order to use this application. Would you like to open the settings window and enter a key now?", 4 + 48, "No API key configured") = 6 Then
 		      SettingsWindow.ShowModal
 		      If VTHash.GetConfig("APIKey").StringValue.Len <> 64 Then
@@ -56,10 +58,10 @@ Inherits Application
 		Sub OpenDocument(item As FolderItem)
 		  If mIsQuitting Then Return
 		  Select Case True
-		  Case item = Nil, item.AbsolutePath.Trim = ""
+		  Case item = Nil, item.NativePath.Trim = ""
 		    Return
 		  Case Not item.Exists
-		    Select Case item.AbsolutePath
+		    Select Case item.NativePath
 		    Case "--debug"
 		      VTHash.CurlVerbose = True
 		      
@@ -89,10 +91,10 @@ Inherits Application
 		      mIsQuitting = True
 		      
 		    Else
-		      Call MsgBox(item.AbsolutePath + " does not exist.", 16, "VT Hash Check - File not found")
+		      Call MsgBox(item.NativePath + " does not exist.", 16, "VT Hash Check - File not found")
 		    End Select
 		  Case item.Directory
-		    Call MsgBox(item.AbsolutePath + " is a directory.", 16, "VT Hash Check - Invalid file")
+		    Call MsgBox(item.NativePath + " is a directory.", 16, "VT Hash Check - Invalid file")
 		  Else
 		    Select Case True
 		    Case mTridMode
@@ -228,8 +230,11 @@ Inherits Application
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="mIsQuitting"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

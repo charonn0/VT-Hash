@@ -56,7 +56,7 @@ Class PrefStore
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Create(RegFile As FolderItem) As PrefStore
+		Shared Function Create(RegFile As FolderItem) As PrefStore
 		  Dim v As VirtualVolume = RegFile.CreateVirtualVolume()
 		  Dim f As FolderItem = v.Root.Child(".META")
 		  f.CreateAsFolder
@@ -112,7 +112,7 @@ Class PrefStore
 
 	#tag Method, Flags = &h1
 		Protected Function Delete(Item As FolderItem) As Boolean
-		  If Item <> Nil And Item.AbsolutePath <> mVolume.Root.AbsolutePath Then
+		  If Item <> Nil And Item.NativePath <> mVolume.Root.NativePath Then
 		    If Item.Directory And Item.Count > 0 Then Return False
 		    Item.Parent.Child(Item.Name + ".META").Delete
 		    Item.Delete
@@ -151,7 +151,7 @@ Class PrefStore
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function IsAPrefStore(RegFile As FolderItem) As Boolean
+		Shared Function IsAPrefStore(RegFile As FolderItem) As Boolean
 		  Dim bs As BinaryStream = BinaryStream.Open(RegFile, True)
 		  If bs.Read(4) <> "VFSv" Then Return False ' Not a PrefStore
 		  bs.Close
@@ -221,13 +221,13 @@ Class PrefStore
 		    End Select
 		    item = child
 		  Next
-		  If item.AbsolutePath = mVolume.Root.AbsolutePath And Dereference Then Return Nil
+		  If item.NativePath = mVolume.Root.NativePath And Dereference Then Return Nil
 		  Return item
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Open(RegFile As FolderItem) As PrefStore
+		Shared Function Open(RegFile As FolderItem) As PrefStore
 		  If RegFile = Nil Then Return Nil
 		  If Not IsAPrefStore(RegFile) Then Return Nil
 		  Dim v As VirtualVolume = RegFile.OpenAsVirtualVolume()
@@ -244,7 +244,7 @@ Class PrefStore
 
 	#tag Method, Flags = &h1
 		Protected Function ReadType(File As FolderItem) As Integer
-		  If File.AbsolutePath = mVolume.Root.AbsolutePath Then Return TYPE_DIRECTORY
+		  If File.NativePath = mVolume.Root.NativePath Then Return TYPE_DIRECTORY
 		  If File <> Nil And File.Parent <> Nil Then File = File.Parent.Child(File.Name + ".META")
 		  If File = Nil Or Not File.Exists Then Return TYPE_INVALID
 		  If File.Directory Then Return TYPE_DIRECTORY
@@ -258,7 +258,7 @@ Class PrefStore
 
 	#tag Method, Flags = &h1
 		Protected Function ReadValue(File As FolderItem) As Variant
-		  If File.AbsolutePath = mVolume.Root.AbsolutePath Then Return mVolume.Root
+		  If File.NativePath = mVolume.Root.NativePath Then Return mVolume.Root
 		  Dim reader As BinaryStream
 		  Try
 		    #pragma BreakOnExceptions Off
@@ -335,7 +335,7 @@ Class PrefStore
 
 	#tag Method, Flags = &h1
 		Protected Sub WriteType(File As FolderItem, Type As Integer)
-		  If File.AbsolutePath = mVolume.Root.AbsolutePath Then Return
+		  If File.NativePath = mVolume.Root.NativePath Then Return
 		  If File <> Nil And File.Parent <> Nil Then File = File.Parent.Child(File.Name + ".META")
 		  If File = Nil Then Raise New IOException
 		  If File.Exists Then File.Delete
@@ -349,7 +349,7 @@ Class PrefStore
 
 	#tag Method, Flags = &h1
 		Protected Sub WriteValue(File As FolderItem, Value As Variant)
-		  If File.AbsolutePath = mVolume.Root.AbsolutePath Then Raise New IOException
+		  If File.NativePath = mVolume.Root.NativePath Then Raise New IOException
 		  If File.Exists Then File.Delete
 		  Dim writer As BinaryStream = BinaryStream.Create(File, True)
 		  Dim type As Integer = VarType(Value)
@@ -385,7 +385,7 @@ Class PrefStore
 		      type = TYPE_PNG
 		    Case Value IsA FolderItem
 		      Dim source As FolderItem = Value
-		      writer.Write(source.AbsolutePath)
+		      writer.Write(source.NativePath)
 		      type = TYPE_FILE
 		    Else
 		      If Not RaiseEvent SerializeValue(writer, type, Value) Then Raise New UnsupportedFormatException
@@ -529,24 +529,30 @@ Class PrefStore
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="PathSeparator"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -554,14 +560,17 @@ Class PrefStore
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

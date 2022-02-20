@@ -111,9 +111,11 @@ Protected Module VTHash
 
 	#tag Method, Flags = &h0
 		Function GetConfig(ConfigName As String) As Variant
-		  Return Config.GetValue(ConfigName)
-		Exception
-		  Return Nil
+		  Dim v As Variant = Config.GetValue(ConfigName)
+		  If VarType(v) = Variant.TypeString Then v = Trim(v.StringValue)
+		  Return v
+		  Exception
+		    Return Nil
 		End Function
 	#tag EndMethod
 
@@ -182,7 +184,7 @@ Protected Module VTHash
 		    ElseIf MsgBox( _
 		      "Your configuration file must be converted to the new format." + EndOfLine + _
 		      "If for any reason this operation fails, your original configuration file is backed up to: " + _
-		      f.AbsolutePath + ".bak", 1 + 48, "VT Hash Check - Old-style config file detected") = 1 Then
+		      f.NativePath + ".bak", 1 + 48, "VT Hash Check - Old-style config file detected") = 1 Then
 		      mConfig = ConvertOldConfig(f)
 		    Else
 		      App.mIsQuitting = True
@@ -251,8 +253,8 @@ Protected Module VTHash
 		    Return shortdata
 		  End If
 		  
-		Exception err
-		  Return data
+		  Exception err
+		    Return data
 		End Function
 	#tag EndMethod
 
@@ -280,9 +282,9 @@ Protected Module VTHash
 		  //Shows the file in Windows Explorer
 		  
 		  Dim e As FolderItem = SpecialFolder.System.Child("explorer.exe")
-		  e.Launch("/select, """ + f.AbsolutePath + """")
+		  e.Launch("/select, """ + f.NativePath + """")
 		  'Dim sh As New Shell
-		  'sh.Execute("explorer.exe /select, """ + f.AbsolutePath + """")
+		  'sh.Execute("explorer.exe /select, """ + f.NativePath + """")
 		End Sub
 	#tag EndMethod
 
@@ -343,7 +345,7 @@ Protected Module VTHash
 	#tag Constant, Name = Mode_Unp_JSON, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.62", Scope = Protected
+	#tag Constant, Name = Version, Type = Double, Dynamic = False, Default = \"1.63", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = VT_Code_Not_Found, Type = Double, Dynamic = False, Default = \"0", Scope = Public
@@ -395,7 +397,7 @@ Protected Module VTHash
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
-			InheritedFrom="Object"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -403,21 +405,23 @@ Protected Module VTHash
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
-			InheritedFrom="Object"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
-			InheritedFrom="Object"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="String"
-			InheritedFrom="Object"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
@@ -425,7 +429,7 @@ Protected Module VTHash
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
-			InheritedFrom="Object"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

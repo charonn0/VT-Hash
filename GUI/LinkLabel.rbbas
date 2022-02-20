@@ -261,251 +261,65 @@ Inherits Label
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="ActiveColor"
+			Name="TabStop"
 			Visible=true
-			Group="Behavior"
-			InitialValue="&cFF0000"
-			Type="Color"
+			Group="Position"
+			InitialValue="True"
+			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="AltText"
-			Visible=true
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="AutoDeactivate"
+			Name="AllowAutoDeactivate"
 			Visible=true
 			Group="Appearance"
 			InitialValue="True"
 			Type="Boolean"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Bold"
-			Visible=true
-			Group="Font"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="DataField"
-			Visible=true
-			Group="Database Binding"
-			Type="String"
-			EditorType="DataField"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="DataSource"
-			Visible=true
-			Group="Database Binding"
-			Type="String"
-			EditorType="DataSource"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Draggable"
-			Visible=true
-			Group="Behavior"
-			InitialValue="False"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Enabled"
+			Name="Tooltip"
 			Visible=true
 			Group="Appearance"
-			InitialValue="True"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Height"
-			Visible=true
-			Group="Position"
-			InitialValue="20"
-			Type="Integer"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HelpTag"
-			Group="Appearance"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
-			InheritedFrom="Label"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="HilightColor"
-			Visible=true
-			Group="Behavior"
-			InitialValue="&c00FFFF"
-			Type="Color"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HoverPeriod"
-			Visible=true
-			Group="Behavior"
-			InitialValue="250"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Index"
-			Visible=true
-			Group="ID"
-			Type="Integer"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="InitialParent"
-			Group="Initial State"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Italic"
-			Visible=true
-			Group="Font"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Left"
-			Visible=true
-			Group="Position"
-			Type="Integer"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LockBottom"
-			Visible=true
-			Group="Position"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LockLeft"
-			Visible=true
-			Group="Position"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LockRight"
-			Visible=true
-			Group="Position"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LockTop"
-			Visible=true
-			Group="Position"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Multiline"
-			Visible=true
-			Group="Appearance"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Name"
-			Visible=true
-			Group="ID"
-			Type="String"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ResetPeriod"
-			Visible=true
-			Group="Behavior"
-			InitialValue="1000"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Selectable"
-			Group="Appearance"
-			Type="Boolean"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Super"
-			Visible=true
-			Group="ID"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TabIndex"
-			Visible=true
-			Group="Position"
-			InitialValue="0"
-			Type="Integer"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TabPanelIndex"
-			Group="Position"
-			InitialValue="0"
-			Type="Integer"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Text"
-			Visible=true
-			Group="Appearance"
-			InitialValue="Untitled"
-			Type="String"
-			EditorType="MultiLineEditor"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TextAlign"
+			Name="TextAlignment"
 			Visible=true
 			Group="Appearance"
 			InitialValue="0"
-			Type="Integer"
+			Type="TextAlignments"
 			EditorType="Enum"
-			InheritedFrom="Label"
 			#tag EnumValues
 				"0 - Left"
-				"1 - Center"
-				"2 - Right"
+				"2 - Center"
+				"3 - Right"
 			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="TextColor"
-			Visible=true
-			Group="Appearance"
-			InitialValue="&c0000FF"
-			Type="Color"
-			InheritedFrom="Label"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TextFont"
+			Name="FontName"
 			Visible=true
 			Group="Font"
 			InitialValue="System"
 			Type="String"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="TextSize"
+			Name="FontSize"
 			Visible=true
 			Group="Font"
 			InitialValue="0"
 			Type="Single"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="TextUnit"
+			Name="FontUnit"
 			Visible=true
 			Group="Font"
 			InitialValue="0"
 			Type="FontUnits"
 			EditorType="Enum"
-			InheritedFrom="Label"
 			#tag EnumValues
 				"0 - Default"
 				"1 - Pixel"
@@ -515,11 +329,228 @@ Inherits Label
 			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="ActiveColor"
+			Visible=true
+			Group="Behavior"
+			InitialValue="&cFF0000"
+			Type="Color"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="AltText"
+			Visible=true
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Bold"
+			Visible=true
+			Group="Font"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="DataField"
+			Visible=true
+			Group="Database Binding"
+			InitialValue=""
+			Type="String"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="DataSource"
+			Visible=true
+			Group="Database Binding"
+			InitialValue=""
+			Type="String"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Draggable"
+			Visible=true
+			Group="Behavior"
+			InitialValue="False"
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Enabled"
+			Visible=true
+			Group="Appearance"
+			InitialValue="True"
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Height"
+			Visible=true
+			Group="Position"
+			InitialValue="20"
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HilightColor"
+			Visible=true
+			Group="Behavior"
+			InitialValue="&c00FFFF"
+			Type="Color"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HoverPeriod"
+			Visible=true
+			Group="Behavior"
+			InitialValue="250"
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Index"
+			Visible=true
+			Group="ID"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="InitialParent"
+			Visible=false
+			Group="Initial State"
+			InitialValue=""
+			Type="String"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Italic"
+			Visible=true
+			Group="Font"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Left"
+			Visible=true
+			Group="Position"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LockBottom"
+			Visible=true
+			Group="Position"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LockLeft"
+			Visible=true
+			Group="Position"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LockRight"
+			Visible=true
+			Group="Position"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LockTop"
+			Visible=true
+			Group="Position"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Multiline"
+			Visible=true
+			Group="Appearance"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Name"
+			Visible=true
+			Group="ID"
+			InitialValue=""
+			Type="String"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ResetPeriod"
+			Visible=true
+			Group="Behavior"
+			InitialValue="1000"
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Selectable"
+			Visible=false
+			Group="Appearance"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			InitialValue=""
+			Type="String"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TabIndex"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TabPanelIndex"
+			Visible=false
+			Group="Position"
+			InitialValue="0"
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Text"
+			Visible=true
+			Group="Appearance"
+			InitialValue="Untitled"
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TextColor"
+			Visible=true
+			Group="Appearance"
+			InitialValue="&c0000FF"
+			Type="Color"
+			EditorType="Color"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
+			InitialValue=""
 			Type="Integer"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Transparent"
@@ -527,17 +558,21 @@ Inherits Label
 			Group="Appearance"
 			InitialValue="True"
 			Type="Boolean"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Underline"
+			Visible=false
 			Group="Font"
+			InitialValue=""
 			Type="Boolean"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="URL"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -547,7 +582,7 @@ Inherits Label
 			Group="Appearance"
 			InitialValue="True"
 			Type="Boolean"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Width"
@@ -555,7 +590,7 @@ Inherits Label
 			Group="Position"
 			InitialValue="100"
 			Type="Integer"
-			InheritedFrom="Label"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

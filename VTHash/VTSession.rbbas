@@ -166,9 +166,26 @@ Inherits libcURL.cURLClient
 
 	#tag ViewBehavior
 		#tag ViewProperty
+			Name="HTTPVersion"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="libcURL.HTTPVersion"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - None"
+				"1 - HTTP1_0"
+				"2 - HTTP1_1"
+				"3 - HTTP2"
+				"4 - HTTP2TLS"
+				"5 - HTTP2PriorKnowledge"
+			#tag EndEnumValues
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="APIKey"
 			Visible=true
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -176,61 +193,73 @@ Inherits libcURL.cURLClient
 			Name="Index"
 			Visible=true
 			Group="ID"
+			InitialValue=""
 			Type="Integer"
-			InheritedFrom="SSLSocket"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="IsSSLCertOK"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
-			InheritedFrom="libcURL.cURLManager"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
+			InitialValue=""
 			Type="Integer"
-			InheritedFrom="SSLSocket"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="SSLSocket"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Password"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
-			InheritedFrom="libcURL.cURLManager"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="SSLSocket"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
+			InitialValue=""
 			Type="Integer"
-			InheritedFrom="SSLSocket"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Username"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
-			InheritedFrom="libcURL.cURLManager"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Yield"
+			Visible=false
 			Group="Behavior"
 			InitialValue="True"
 			Type="Boolean"
-			InheritedFrom="libcURL.cURLManager"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

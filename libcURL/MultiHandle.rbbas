@@ -171,11 +171,11 @@ Inherits libcURL.cURLHandle
 		    End If
 		  Next
 		  
-		Exception Err As RuntimeException
-		  #pragma BreakOnExceptions Off
-		  If Err IsA EndException Or Err IsA ThreadEndException Then Raise Err
-		  If Sender <> Nil Then Sender.Mode = Timer.ModeOff
-		  Raise Err
+		  Exception Err As RuntimeException
+		    #pragma BreakOnExceptions Off
+		    If Err IsA EndException Or Err IsA ThreadEndException Then Raise Err
+		    If Sender <> Nil Then Sender.Mode = Timer.ModeOff
+		    Raise Err
 		End Sub
 	#tag EndMethod
 
@@ -434,7 +434,7 @@ Inherits libcURL.cURLHandle
 	#tag EndConstant
 
 
-	#tag Structure, Name = CURLMsg, Flags = &h1
+	#tag Structure, Name = CURLMsg, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		msg As Integer
 		  easy_handle As Integer
 		Data As Ptr
@@ -444,13 +444,19 @@ Inherits libcURL.cURLHandle
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="HTTPMultiplexing"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="HTTPPipelining"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -458,33 +464,39 @@ Inherits libcURL.cURLHandle
 			Group="ID"
 			InitialValue="-2147483648"
 			Type="Integer"
-			InheritedFrom="Object"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

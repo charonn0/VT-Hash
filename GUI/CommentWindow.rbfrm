@@ -1,20 +1,21 @@
 #tag Window
 Begin Window CommentWindow
-   BackColor       =   &hFFFFFF
-   Backdrop        =   ""
+   BackColor       =   &cFFFFFF00
+   Backdrop        =   0
    CloseButton     =   False
    Composite       =   False
    Frame           =   3
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   1.1e+2
+   HasFullScreenButton=   False
+   Height          =   110
    ImplicitInstance=   True
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   False
@@ -23,14 +24,14 @@ Begin Window CommentWindow
    Resizeable      =   True
    Title           =   "VirusTotal Community - Comment On This Result"
    Visible         =   True
-   Width           =   3.31e+2
-   Begin TextArea TextArea1
+   Width           =   331
+   Begin TextArea CommentTextArea
       AcceptTabs      =   True
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   True
-      BackColor       =   &hFFFFFF
-      Bold            =   ""
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
       Border          =   True
       DataField       =   ""
       DataSource      =   ""
@@ -40,9 +41,11 @@ Begin Window CommentWindow
       HelpTag         =   ""
       HideSelection   =   True
       Index           =   -2147483648
-      Italic          =   ""
+      Italic          =   False
       Left            =   0
       LimitText       =   0
+      LineHeight      =   0.0
+      LineSpacing     =   1.0
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
@@ -50,30 +53,32 @@ Begin Window CommentWindow
       LockTop         =   True
       Mask            =   ""
       Multiline       =   True
-      ReadOnly        =   ""
+      ReadOnly        =   False
       Scope           =   0
-      ScrollbarHorizontal=   ""
+      ScrollbarHorizontal=   False
       ScrollbarVertical=   True
       Styled          =   True
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   0
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
+      UnicodeMode     =   0
       UseFocusRing    =   True
       Visible         =   True
       Width           =   331
    End
-   Begin PushButton PushButton1
+   Begin PushButton SubmitBtn
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "Submit"
       Default         =   True
       Enabled         =   True
@@ -81,53 +86,55 @@ Begin Window CommentWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   165
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   False
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   82
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
-   Begin PushButton PushButton2
+   Begin PushButton CancelBtn
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
       Cancel          =   True
       Caption         =   "Cancel"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   85
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   False
       Scope           =   0
       TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   82
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
@@ -135,10 +142,9 @@ Begin Window CommentWindow
       AcceptFocus     =   True
       AcceptTabs      =   True
       AutoDeactivate  =   True
-      Backdrop        =   ""
+      Backdrop        =   0
       DoubleBuffer    =   True
       Enabled         =   True
-      EraseBackground =   False
       Height          =   19
       HelpTag         =   ""
       Index           =   -2147483648
@@ -147,13 +153,14 @@ Begin Window CommentWindow
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   False
       Scope           =   0
       TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   82
+      Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
       Width           =   22
@@ -162,10 +169,9 @@ Begin Window CommentWindow
       AcceptFocus     =   True
       AcceptTabs      =   True
       AutoDeactivate  =   True
-      Backdrop        =   ""
+      Backdrop        =   0
       DoubleBuffer    =   True
       Enabled         =   True
-      EraseBackground =   False
       Height          =   19
       HelpTag         =   ""
       Index           =   -2147483648
@@ -174,13 +180,14 @@ Begin Window CommentWindow
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   False
       Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   82
+      Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
       Width           =   22
@@ -200,8 +207,8 @@ End
 
 	#tag Method, Flags = &h1
 		Protected Sub SetMalwareVote()
-		  Dim comment As String = TextArea1.Text
-		  Dim caretpos As Integer = TextArea1.SelStart
+		  Dim comment As String = CommentTextArea.Text
+		  Dim caretpos As Integer = CommentTextArea.SelStart
 		  While InStr(comment, "#malware ") > 0
 		    comment = Replace(comment, "#malware ", "")
 		  Wend
@@ -212,20 +219,20 @@ End
 		  
 		  Select Case VoteState
 		  Case 1 ' safe
-		    TextArea1.Text = "#goodware " + comment
+		    CommentTextArea.Text = "#goodware " + comment
 		    VoteSafe.HelpTag = "Remove safe tag"
 		    VoteDangerous.HelpTag = "Tag this file as dangerous"
 		  Case 2 ' bad
-		    TextArea1.Text = "#malware " + comment
+		    CommentTextArea.Text = "#malware " + comment
 		    VoteSafe.HelpTag = "Tag this file as safe"
 		    VoteDangerous.HelpTag = "Remove dangerous tag"
 		  Else ' no vote
-		    TextArea1.Text = comment
+		    CommentTextArea.Text = comment
 		    VoteSafe.HelpTag = "Tag this file as safe"
 		    VoteDangerous.HelpTag = "Tag this file as dangerous"
 		  End Select
-		  If caretpos > TextArea1.Text.Len Then caretpos = TextArea1.Text.Len
-		  TextArea1.SelStart = caretpos
+		  If caretpos > CommentTextArea.Text.Len Then caretpos = CommentTextArea.Text.Len
+		  CommentTextArea.SelStart = caretpos
 		End Sub
 	#tag EndMethod
 
@@ -249,7 +256,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events TextArea1
+#tag Events CommentTextArea
 	#tag Event
 		Sub TextChange()
 		  Dim t1, t2 As Integer
@@ -267,11 +274,11 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton1
+#tag Events SubmitBtn
 	#tag Event
 		Sub Action()
-		  If TextArea1.Text.Trim <> "" Then
-		    Comment = TextArea1.Text.Trim + EndOfLine + VTHash.GetConfig("CommentSignature").Trim
+		  If CommentTextArea.Text.Trim <> "" Then
+		    Comment = Trim(CommentTextArea.Text) + EndOfLine + VTHash.GetConfig("CommentSignature")
 		  Else
 		    Comment = ""
 		  End If
@@ -279,7 +286,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton2
+#tag Events CancelBtn
 	#tag Event
 		Sub Action()
 		  Comment = ""
@@ -289,7 +296,8 @@ End
 #tag EndEvents
 #tag Events VoteSafe
 	#tag Event
-		Sub Paint(g As Graphics)
+		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
+		  #pragma Unused areas
 		  If VSOver Or VoteState = 1 Then
 		    g.DrawPicture(greenshield, 0, 0)
 		  Else
@@ -347,7 +355,8 @@ End
 #tag EndEvents
 #tag Events VoteDangerous
 	#tag Event
-		Sub Paint(g As Graphics)
+		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
+		  #pragma Unused areas
 		  If VBOver Or VoteState = 2 Then
 		    g.DrawPicture(redshield, 0, 0)
 		  Else

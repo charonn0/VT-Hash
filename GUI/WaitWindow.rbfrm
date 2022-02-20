@@ -1,20 +1,21 @@
 #tag Window
 Begin Window WaitWindow
-   BackColor       =   &hFFFFFF
-   Backdrop        =   ""
+   BackColor       =   &cFFFFFF00
+   Backdrop        =   0
    CloseButton     =   False
    Composite       =   False
    Frame           =   4
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   6.4e+1
+   HasFullScreenButton=   False
+   Height          =   64
    ImplicitInstance=   False
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   False
@@ -23,10 +24,10 @@ Begin Window WaitWindow
    Resizeable      =   False
    Title           =   "Deep Thoughts"
    Visible         =   True
-   Width           =   1.6e+2
+   Width           =   160
    Begin Label Label1
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -34,14 +35,14 @@ Begin Window WaitWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   0
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   0
@@ -49,13 +50,13 @@ Begin Window WaitWindow
       TabStop         =   True
       Text            =   "Thinking..."
       TextAlign       =   1
-      TextColor       =   &h000000
+      TextColor       =   &c000000
       TextFont        =   "System"
-      TextSize        =   24
+      TextSize        =   24.0
       TextUnit        =   0
       Top             =   0
       Transparent     =   False
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   160
       Begin ProgressWheel ProgressWheel1
@@ -66,16 +67,17 @@ Begin Window WaitWindow
          Index           =   -2147483648
          InitialParent   =   "Label1"
          Left            =   9
-         LockBottom      =   ""
+         LockBottom      =   False
          LockedInPosition=   False
          LockLeft        =   True
-         LockRight       =   ""
+         LockRight       =   False
          LockTop         =   True
          Scope           =   0
          TabIndex        =   0
          TabPanelIndex   =   0
          TabStop         =   True
          Top             =   28
+         Transparent     =   True
          Visible         =   True
          Width           =   16
       End
@@ -84,6 +86,7 @@ Begin Window WaitWindow
          Enabled         =   True
          Height          =   8
          HelpTag         =   ""
+         Indeterminate   =   False
          Index           =   -2147483648
          InitialParent   =   "Label1"
          Left            =   0
@@ -96,9 +99,10 @@ Begin Window WaitWindow
          Scope           =   0
          TabIndex        =   1
          TabPanelIndex   =   0
-         TabStop         =   True
+         TabStop         =   "True"
          Top             =   56
-         Value           =   0
+         Transparent     =   True
+         Value           =   0.0
          Visible         =   True
          Width           =   160
       End

@@ -21,7 +21,7 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Create(Key As Win32.Crypto.KeyContainer, Output As Writeable, Hash As Win32.Crypto.HashProcessor = Nil) As Win32.Crypto.Stream
+		Shared Function Create(Key As Win32.Crypto.KeyContainer, Output As Writeable, Hash As Win32.Crypto.HashProcessor = Nil) As Win32.Crypto.Stream
 		  Dim c As New Win32.Crypto.Stream(Key)
 		  c.mWriter = Output
 		  c.mHash = Hash
@@ -33,6 +33,13 @@ Implements Readable,Writeable
 		Private Sub Destructor()
 		  Me.Close()
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function EndOfFile() As Boolean
+		  // Part of the Readable interface.
+		  Return Me.EOF
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -62,7 +69,7 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Open(Key As Win32.Crypto.KeyContainer, InputData As Readable) As Win32.Crypto.Stream
+		Shared Function Open(Key As Win32.Crypto.KeyContainer, InputData As Readable) As Win32.Crypto.Stream
 		  Dim c As New Win32.Crypto.Stream(Key)
 		  c.mReader = InputData
 		  Return c
@@ -135,33 +142,40 @@ Implements Readable,Writeable
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

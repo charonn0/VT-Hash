@@ -1,15 +1,16 @@
 #tag Window
 Begin Window ResultWindow
-   BackColor       =   14211288
-   Backdrop        =   ""
+   BackColor       =   &cD8D8D800
+   Backdrop        =   0
    CloseButton     =   False
    Composite       =   False
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   5.05e+2
+   HasFullScreenButton=   False
+   Height          =   505
    ImplicitInstance=   False
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
@@ -23,69 +24,72 @@ Begin Window ResultWindow
    Resizeable      =   True
    Title           =   "Virus Total Report"
    Visible         =   True
-   Width           =   4.96e+2
+   Width           =   496
    Begin PrettyListBox Listbox1
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
-      Bold            =   ""
+      Bold            =   False
       Border          =   True
       ColumnCount     =   3
-      ColumnsResizable=   ""
+      ColumnsResizable=   False
       ColumnWidths    =   "40%, 20%, 40%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
-      EnableDrag      =   ""
-      EnableDragReorder=   ""
+      EnableDrag      =   False
+      EnableDragReorder=   False
       GridLinesHorizontal=   0
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   399
       HelpTag         =   ""
-      Hierarchical    =   ""
+      Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
       InitialValue    =   "Scanner	Version	Result"
-      Italic          =   ""
+      Italic          =   False
       Left            =   0
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      RequiresSelection=   ""
+      RequiresSelection=   False
       Scope           =   0
-      ScrollbarHorizontal=   ""
+      ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   26
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   496
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin PushButton closeButton
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
       Cancel          =   True
       Caption         =   "Close"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   117
       LockBottom      =   True
       LockedInPosition=   False
@@ -97,18 +101,19 @@ Begin Window ResultWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   482
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   126
    End
    Begin PushButton PushButton2
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "&Full Results"
       Default         =   True
       Enabled         =   True
@@ -116,7 +121,7 @@ Begin Window ResultWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   253
       LockBottom      =   True
       LockedInPosition=   False
@@ -128,36 +133,37 @@ Begin Window ResultWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   482
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   126
    End
    Begin LinkLabel saved
-      ActiveColor     =   "&cFF0000"
+      ActiveColor     =   &cFF000000
       AltText         =   ""
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Draggable       =   False
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
-      HilightColor    =   "&c00FFFF"
+      HilightColor    =   &c00FFFF00
       HoverPeriod     =   250
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   391
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   False
       LockRight       =   True
       LockTop         =   False
-      Multiline       =   ""
+      Multiline       =   False
       ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   False
@@ -166,44 +172,37 @@ Begin Window ResultWindow
       TabStop         =   True
       Text            =   "Report Saved"
       TextAlign       =   2
-      TextColor       =   255
+      TextColor       =   &c0000FF00
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   483
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
+      URL             =   ""
       Visible         =   False
       Width           =   101
    End
    Begin Timer TridTimer
-      Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   555
       LockedInPosition=   False
       Mode            =   0
       Period          =   2500
       Scope           =   0
-      TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   14
-      Visible         =   True
-      Width           =   32
    End
    Begin GradientProgressBar ProgBar1
-      AcceptFocus     =   ""
-      AcceptTabs      =   ""
+      AcceptFocus     =   False
+      AcceptTabs      =   False
       AutoDeactivate  =   True
-      barColor        =   &h0000FF00
-      barWell         =   "&cC0C0C0"
+      Backdrop        =   0
+      barColor        =   &c00FF0000
+      barWell         =   &cC0C0C000
       bold            =   False
-      boxColor        =   "&c000000"
-      DoubleBuffer    =   ""
+      boxColor        =   &c00000000
+      DoubleBuffer    =   False
       Enabled         =   True
-      EraseBackground =   ""
-      gradientEnd     =   &h00004000
+      gradientEnd     =   &c00400000
       hasBox          =   True
       hasGradient     =   True
       hasText         =   True
@@ -223,24 +222,26 @@ Begin Window ResultWindow
       TabIndex        =   10
       TabPanelIndex   =   0
       TabStop         =   True
-      textColor       =   "&c000000"
+      Text            =   ""
+      textColor       =   &c00000000
       textFont        =   "System"
       textFormat      =   "###.0\\%"
       textSize        =   0
       Top             =   0
+      Transparent     =   True
       underline       =   False
       UseFocusRing    =   True
-      value           =   ""
+      value           =   0
       Visible         =   True
       Width           =   495
    End
    Begin TextField FilePath
-      AcceptTabs      =   ""
+      AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &hFFFFFF
-      Bold            =   ""
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
       Border          =   True
       CueText         =   ""
       DataField       =   ""
@@ -250,7 +251,7 @@ Begin Window ResultWindow
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
-      Italic          =   ""
+      Italic          =   False
       Left            =   49
       LimitText       =   0
       LockBottom      =   True
@@ -259,26 +260,27 @@ Begin Window ResultWindow
       LockRight       =   True
       LockTop         =   False
       Mask            =   ""
-      Password        =   ""
+      Password        =   False
       ReadOnly        =   True
       Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   429
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   427
    End
    Begin Label Label1
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -286,14 +288,14 @@ Begin Window ResultWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   0
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   False
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   8
@@ -301,23 +303,23 @@ Begin Window ResultWindow
       TabStop         =   True
       Text            =   "Path:"
       TextAlign       =   2
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   428
       Transparent     =   False
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   47
    End
    Begin TextField FileHash
-      AcceptTabs      =   ""
+      AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &hFFFFFF
-      Bold            =   ""
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
       Border          =   True
       CueText         =   ""
       DataField       =   ""
@@ -327,7 +329,7 @@ Begin Window ResultWindow
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
-      Italic          =   ""
+      Italic          =   False
       Left            =   49
       LimitText       =   0
       LockBottom      =   True
@@ -336,26 +338,27 @@ Begin Window ResultWindow
       LockRight       =   True
       LockTop         =   False
       Mask            =   ""
-      Password        =   ""
+      Password        =   False
       ReadOnly        =   True
       Scope           =   0
       TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   451
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   427
    End
    Begin Label HashType
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -363,14 +366,14 @@ Begin Window ResultWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   0
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   False
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   9
@@ -378,24 +381,23 @@ Begin Window ResultWindow
       TabStop         =   True
       Text            =   "Hash:"
       TextAlign       =   2
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   450
       Transparent     =   False
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   47
    End
    Begin Canvas Canvas1
-      AcceptFocus     =   ""
-      AcceptTabs      =   ""
+      AcceptFocus     =   False
+      AcceptTabs      =   False
       AutoDeactivate  =   True
-      Backdrop        =   ""
+      Backdrop        =   0
       DoubleBuffer    =   False
       Enabled         =   True
-      EraseBackground =   True
       Height          =   16
       HelpTag         =   "Open parent directory"
       Index           =   -2147483648
@@ -411,58 +413,60 @@ Begin Window ResultWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   431
+      Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
       Width           =   16
    End
    Begin LinkLabel LinkLabel1
-      ActiveColor     =   "&cFF0000"
+      ActiveColor     =   &cFF000000
       AltText         =   ""
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Draggable       =   False
       Enabled         =   True
       Height          =   20
-      HilightColor    =   "&c00FFFF"
+      HelpTag         =   ""
+      HilightColor    =   &c00FFFF00
       HoverPeriod     =   250
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   4
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   False
-      Multiline       =   ""
+      Multiline       =   False
       ResetPeriod     =   1000
       Scope           =   0
-      Selectable      =   ""
+      Selectable      =   False
       TabIndex        =   5
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Add a comment..."
       TextAlign       =   0
-      TextColor       =   "&c0000FF"
+      TextColor       =   &c0000FF00
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   484
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
+      URL             =   ""
       Visible         =   True
       Width           =   109
    End
    Begin Canvas MoreHashes
-      AcceptFocus     =   ""
-      AcceptTabs      =   ""
+      AcceptFocus     =   False
+      AcceptTabs      =   False
       AutoDeactivate  =   True
-      Backdrop        =   ""
+      Backdrop        =   0
       DoubleBuffer    =   False
       Enabled         =   True
-      EraseBackground =   True
       Height          =   16
       HelpTag         =   "Calculate more hashes..."
       Index           =   -2147483648
@@ -478,55 +482,42 @@ Begin Window ResultWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   453
+      Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
       Width           =   16
    End
    Begin VTHash.VTSession RescanSession
       APIKey          =   ""
-      Enabled         =   True
-      Height          =   32
+      HTTPVersion     =   ""
       Index           =   -2147483648
-      Left            =   525
+      IsSSLCertOK     =   False
       LockedInPosition=   False
+      Password        =   ""
       Scope           =   1
-      TabIndex        =   13
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   -18
-      Visible         =   True
-      Width           =   32
+      Username        =   ""
+      Yield           =   True
    End
    Begin VTHash.VTSession CommentSession
       APIKey          =   ""
-      Enabled         =   True
-      Height          =   32
+      HTTPVersion     =   ""
       Index           =   -2147483648
-      Left            =   525
+      IsSSLCertOK     =   False
       LockedInPosition=   False
+      Password        =   ""
       Scope           =   1
-      TabIndex        =   14
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   14
-      Visible         =   True
-      Width           =   32
+      Username        =   ""
+      Yield           =   True
    End
    Begin Thread RescanThread
-      Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   555
       LockedInPosition=   False
       Priority        =   5
       Scope           =   0
       StackSize       =   0
-      TabIndex        =   15
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   -18
-      Visible         =   True
-      Width           =   32
    End
 End
 #tag EndWindow
@@ -652,7 +643,7 @@ End
 		    Catch err
 		      If Err IsA EndException Or Err IsA ThreadEndException Then Raise Err
 		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
-		      Call MsgBox("An error of type " + t.Name + " occurred while saving the report to " + autosavepath.AbsolutePath, 16, "VT Hash Check - Unable to save report!")
+		      Call MsgBox("An error of type " + t.Name + " occurred while saving the report to " + autosavepath.NativePath, 16, "VT Hash Check - Unable to save report!")
 		    End Try
 		  End If
 		End Sub
@@ -768,7 +759,7 @@ End
 		    
 		    FileHash.Text = VTResult.HashValue
 		    If VTResult.TargetFile <> Nil Then
-		      FilePath.Text = VTResult.TargetFile.AbsolutePath
+		      FilePath.Text = VTResult.TargetFile.NativePath
 		    Else
 		      FilePath.Text = ""
 		      Canvas1.Enabled = False
@@ -789,13 +780,13 @@ End
 		    If App.ViewMode Then Me.ShowModal Else Me.Show
 		  Case VT_Code_Not_Found
 		    If HasConfig("PermitUploads") And GetConfig("PermitUploads") = False Then
-		      Call MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database.", 48, "VT Hash Check - Not found")
+		      Call MsgBox("The file '" + Result.TargetFile.NativePath + "' is not present in Virus Total's database.", 48, "VT Hash Check - Not found")
 		      Self.Close
 		      Return
 		    End If
 		    If (Not HasConfig("ConfirmLargeUploads") Or GetConfig("ConfirmLargeUploads") = True) And result.TargetFile.Length >= 128 * 1024 * 1024 Then
 		      Select Case MsgBox(_
-		        "The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Additionally, the file exceeds 128MB which is the default limit for uploading via the API." + EndOfLine + _
+		        "The file '" + Result.TargetFile.NativePath + "' is not present in Virus Total's database. Additionally, the file exceeds 128MB which is the default limit for uploading via the API." + EndOfLine + _
 		        "Some users do not have this limit, would you like to attempt to upload anyway?", 48 + 3, "VT Hash Check - File too large for API")
 		      Case 6 ' Yes
 		        Dim ul As New FileSubmitWindow
@@ -809,13 +800,13 @@ End
 		      Case 2 ' Cancel
 		        Self.Close
 		      End Select
-		    ElseIf MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is not present in Virus Total's database. Would you like to upload this file?", 52, "VT Hash Check - Not found") = 6 Then
+		    ElseIf MsgBox("The file '" + Result.TargetFile.NativePath + "' is not present in Virus Total's database. Would you like to upload this file?", 52, "VT Hash Check - Not found") = 6 Then
 		      Dim ul As New FileSubmitWindow
 		      ul.SubmitFile(Self, Result.TargetFile, VTHash.GetConfig("APIKey"))
 		    End If
 		    Self.Close
 		  Case VT_Code_Still_Proccessing
-		    Call MsgBox("The file '" + Result.TargetFile.AbsolutePath + "' is still waiting to be analyzed. Please try again later.", 64, "VT Hash Check - Still processing")
+		    Call MsgBox("The file '" + Result.TargetFile.NativePath + "' is still waiting to be analyzed. Please try again later.", 64, "VT Hash Check - Still processing")
 		    Self.Close
 		    
 		  End Select
@@ -864,6 +855,7 @@ End
 		  Dim row As Integer = Me.RowFromXY(X, Y)
 		  If row < 0 Then row = Me.ListIndex
 		  Dim infection As String = Me.Cell(row, 2).Trim
+		  Dim engine As String = Me.Cell(row, 0).Trim
 		  Dim searchname As String = VTHash.GetConfig("SearchEngineName")
 		  If infection <> "" Then
 		    Dim cp As New MenuItem("Copy to clipboard")
@@ -873,9 +865,15 @@ End
 		    cp.Tag = infection
 		    base.Append(cp)
 		    If searchname <> "" Then base.Append(se)
-		    'base.Append(ch)
-		    Return True
+		    
+		    base.Append(New MenuItem(base.TextSeparator))
 		  End If
+		  
+		  Dim ignore As New MenuItem("Ignore this engine")
+		  ignore.Tag = engine:row
+		  base.Append(ignore)
+		  base.Tag = row
+		  Return True
 		End Function
 	#tag EndEvent
 	#tag Event
@@ -884,8 +882,19 @@ End
 		  Case "Copy "
 		    Dim cb As New Clipboard
 		    cb.Text = hitItem.Tag
+		    Return True
 		  Case "Searc"
 		    ShowURL(Replace(VTHash.GetConfig("SearchEngineURL"), "%PARAMETER%", hitItem.Tag))
+		    Return True
+		    
+		  Case "Ignor"
+		    Dim tag As Pair = hitItem.Tag
+		    Dim engine As String = tag.Left
+		    VTHash.SetConfig("Ignored/Engines/" + engine, True)
+		    Dim row As Integer = tag.Right
+		    Me.RemoveRow(row)
+		    Return True
+		    
 		  End Select
 		End Function
 	#tag EndEvent
@@ -970,7 +979,8 @@ End
 #tag EndEvents
 #tag Events Canvas1
 	#tag Event
-		Sub Paint(g As Graphics)
+		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
+		  #pragma Unused areas
 		  g.DrawPicture(explore, 0, 0)
 		End Sub
 	#tag EndEvent
@@ -1025,7 +1035,8 @@ End
 #tag EndEvents
 #tag Events MoreHashes
 	#tag Event
-		Sub Paint(g As Graphics)
+		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
+		  #pragma Unused areas
 		  g.DrawPicture(Hashtag_Icon, 0, 0, g.Width, g.Height, 0, 0, Hashtag_Icon.Width, Hashtag_Icon.Height)
 		End Sub
 	#tag EndEvent
@@ -1047,15 +1058,15 @@ End
 		  Dim h As New HashesViewer
 		  h.ShowHashes(bs, Self)
 		  
-		Exception Err As IOException
-		  Dim msg As String = "Unable to open the target file: "
-		  If Err.ErrorNumber <> 0 Then
-		    msg = msg + Win32.FormatError(Err.ErrorNumber) + "(" + Str(Err.ErrorNumber) + ")"
-		  Else
-		    Err.Message = "Unknown error."
-		  End If
-		  Call MsgBox(msg, 16, "VT Hash Check - File Error")
-		  
+		  Exception Err As IOException
+		    Dim msg As String = "Unable to open the target file: "
+		    If Err.ErrorNumber <> 0 Then
+		      msg = msg + Win32.FormatError(Err.ErrorNumber) + "(" + Str(Err.ErrorNumber) + ")"
+		    Else
+		      Err.Message = "Unknown error."
+		    End If
+		    Call MsgBox(msg, 16, "VT Hash Check - File Error")
+		    
 		End Function
 	#tag EndEvent
 #tag EndEvents

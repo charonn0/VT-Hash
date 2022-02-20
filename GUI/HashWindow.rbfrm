@@ -1,20 +1,21 @@
 #tag Window
 Begin Window HashWindow
-   BackColor       =   16777215
-   Backdrop        =   ""
+   BackColor       =   &cFFFFFF00
+   Backdrop        =   0
    CloseButton     =   True
    Composite       =   False
    Frame           =   3
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   7.2e+1
+   HasFullScreenButton=   False
+   Height          =   72
    ImplicitInstance=   False
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   True
@@ -23,14 +24,14 @@ Begin Window HashWindow
    Resizeable      =   False
    Title           =   "Calculating hash..."
    Visible         =   True
-   Width           =   3.19e+2
+   Width           =   319
    Begin TextField HashText
-      AcceptTabs      =   ""
+      AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   False
-      BackColor       =   &hFFFFFF
-      Bold            =   ""
+      BackColor       =   &cFFFFFF00
+      Bold            =   False
       Border          =   False
       CueText         =   ""
       DataField       =   ""
@@ -41,35 +42,36 @@ Begin Window HashWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   57
       LimitText       =   0
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
       Mask            =   ""
-      Password        =   ""
+      Password        =   False
       ReadOnly        =   True
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   00000000000000000000000000000000000000000000000000000000000000000000
-      TextColor       =   0
+      Text            =   "00000000000000000000000000000000000000000000000000000000000000000000"
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11
+      TextSize        =   11.0
       TextUnit        =   0
       Top             =   17
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   False
       Visible         =   True
       Width           =   262
    End
    Begin Label StaticText1
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -77,14 +79,14 @@ Begin Window HashWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   2
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   3
@@ -92,19 +94,19 @@ Begin Window HashWindow
       TabStop         =   True
       Text            =   "File:"
       TextAlign       =   2
-      TextColor       =   0
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11
+      TextSize        =   11.0
       TextUnit        =   0
       Top             =   -3
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   49
    End
    Begin Label HashName
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -112,14 +114,14 @@ Begin Window HashWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   2
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   4
@@ -127,19 +129,19 @@ Begin Window HashWindow
       TabStop         =   True
       Text            =   "SHA512:"
       TextAlign       =   2
-      TextColor       =   0
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11
+      TextSize        =   11.0
       TextUnit        =   0
       Top             =   14
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   49
    End
    Begin Label PathText
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -147,14 +149,14 @@ Begin Window HashWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   57
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   2
@@ -162,19 +164,19 @@ Begin Window HashWindow
       TabStop         =   True
       Text            =   "Z:\\My Folder\\MySubFolder\\MyFile.exe"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11
+      TextSize        =   11.0
       TextUnit        =   0
       Top             =   -3
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   262
    End
    Begin PushButton CancelButton
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
       Cancel          =   True
       Caption         =   "Cancel"
@@ -184,48 +186,49 @@ Begin Window HashWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   120
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
       Scope           =   0
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   11
+      TextSize        =   11.0
       TextUnit        =   0
       Top             =   52
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
    Begin LinkLabel VersionText
-      ActiveColor     =   "&cFF0000"
+      ActiveColor     =   &cFF000000
       AltText         =   ""
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Draggable       =   False
       Enabled         =   True
       Height          =   20
       HelpTag         =   ""
-      HilightColor    =   "&c00FFFF"
+      HilightColor    =   &c00FFFF00
       HoverPeriod     =   250
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   3
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   False
@@ -234,126 +237,112 @@ Begin Window HashWindow
       TabStop         =   True
       Text            =   "Version 0.86"
       TextAlign       =   0
-      TextColor       =   8421504
+      TextColor       =   &c80808000
       TextFont        =   "System"
-      TextSize        =   9
+      TextSize        =   9.0
       TextUnit        =   0
       Top             =   52
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
+      URL             =   ""
       Visible         =   True
       Width           =   86
    End
    Begin Thread Hasher
-      Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   425
       LockedInPosition=   False
       Priority        =   5
       Scope           =   0
       StackSize       =   0
-      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   -31
-      Visible         =   True
-      Width           =   32
    End
    Begin VTHash.VTSession VTSocket
       APIKey          =   ""
-      Enabled         =   True
-      Height          =   32
+      HTTPVersion     =   ""
       Index           =   -2147483648
-      Left            =   425
+      IsSSLCertOK     =   False
       LockedInPosition=   False
+      Password        =   ""
       Scope           =   1
-      TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   34
-      Visible         =   True
-      Width           =   32
+      Username        =   ""
+      Yield           =   True
    End
    Begin Timer HashGUITimer
-      Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   462
       LockedInPosition=   False
       Mode            =   0
       Period          =   1
       Scope           =   0
-      TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   -31
-      Visible         =   True
-      Width           =   32
-   End
-   Begin Thread Submitter
-      Enabled         =   True
-      Height          =   32
-      Index           =   -2147483648
-      Left            =   425
-      LockedInPosition=   False
-      Priority        =   5
-      Scope           =   0
-      StackSize       =   0
-      TabIndex        =   9
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   67
-      Visible         =   True
-      Width           =   32
    End
    Begin Timer SubmitterGUITimer
-      Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   462
       LockedInPosition=   False
       Mode            =   0
       Period          =   1
       Scope           =   0
-      TabIndex        =   10
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   67
-      Visible         =   True
-      Width           =   32
    End
    Begin ProgressBar HashProgress
       AutoDeactivate  =   True
       Enabled         =   True
       Height          =   12
       HelpTag         =   ""
+      Indeterminate   =   False
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   2
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
       Maximum         =   5
       Scope           =   0
       TabIndex        =   11
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   39
-      Value           =   0
+      Transparent     =   True
+      Value           =   0.0
       Visible         =   True
       Width           =   317
+   End
+   Begin Timer ErrorTimer
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   0
+      Period          =   1
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin Timer SubmitTimer
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Mode            =   0
+      Period          =   1
+      Scope           =   0
+      TabPanelIndex   =   0
    End
 End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Close()
+		  If Hasher.State <> Thread.NotRunning Then Hasher.Kill()
+		  ErrorTimer.Mode = Timer.ModeOff
+		  HashGUITimer.Mode = Timer.ModeOff
+		  SubmitterGUITimer.Mode = Timer.ModeOff
+		  SubmitTimer.Mode = Timer.ModeOff
+		End Sub
+	#tag EndEvent
+
+
 	#tag Method, Flags = &h0
 		Sub ProcessFile(File As FolderItem)
 		  mTargetFile = File
-		  PathText.Text = mTargetFile.AbsolutePath.Shorten
+		  PathText.Text = mTargetFile.NativePath.Shorten
 		  Me.Show
 		  Hasher.Run
 		End Sub
@@ -362,6 +351,14 @@ End
 
 	#tag Property, Flags = &h21
 		Private HashPercent As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mError As RuntimeException
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mErrorMessage As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -437,25 +434,21 @@ End
 		  bs.Close
 		  mHash = ConvertEncoding(Win32.Crypto.EncodeHex(hp.Value).Uppercase, Encodings.UTF8)
 		  HashGUITimer.Mode = Timer.ModeSingle
-		  App.YieldToNextThread
-		  Submitter.Run
+		  SubmitTimer.Mode = Timer.ModeSingle
 		  
-		Exception Err As IOException
-		  Dim msg As String = "Unable to open the target file: "
-		  If Err.ErrorNumber <> 0 Then
-		    msg = msg + Win32.FormatError(Err.ErrorNumber) + "(" + Str(Err.ErrorNumber) + ")"
-		  Else
-		    Err.Message = "Unknown error."
-		  End If
-		  Call MsgBox(msg, 16, "VT Hash Check - File Error")
-		  App.mIsQuitting = True
-		  Quit()
-		  
-		Exception Err 'As Win32.Win32Exception
-		  App.mIsQuitting = True
-		  Self.Visible = False
-		  Call ErrorWindow.ShowException(Err)
-		  Quit()
+		  Exception Err As IOException
+		    mErrorMessage = "Unable to open the target file: "
+		    If Err.ErrorNumber <> 0 Then
+		      mErrorMessage = mErrorMessage + Win32.FormatError(Err.ErrorNumber) + "(" + Str(Err.ErrorNumber) + ")"
+		    Else
+		      mErrorMessage = "Unknown error."
+		    End If
+		    mError = Nil
+		    ErrorTimer.Mode = Timer.ModeSingle
+		    
+		  Exception Err 'As Win32.Win32Exception
+		    mError = Err
+		    ErrorTimer.Mode = Timer.ModeSingle
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -501,14 +494,6 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Submitter
-	#tag Event
-		Sub Run()
-		  VTSocket.APIKey = VTHash.GetConfig("APIKey")
-		  VTSocket.GetReport(mHash, VTHash.RequestType.FileReport)
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events SubmitterGUITimer
 	#tag Event
 		Sub Action()
@@ -517,3 +502,265 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
+#tag Events ErrorTimer
+	#tag Event
+		Sub Action()
+		  If mError = Nil Then
+		    Call MsgBox(mErrorMessage, 16, "VT Hash Check - File Error")
+		    App.mIsQuitting = True
+		    Quit()
+		  Else
+		    App.mIsQuitting = True
+		    Self.Visible = False
+		    Call ErrorWindow.ShowException(mError)
+		    Quit()
+		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events SubmitTimer
+	#tag Event
+		Sub Action()
+		  VTSocket.APIKey = VTHash.GetConfig("APIKey")
+		  VTSocket.GetReport(mHash, VTHash.RequestType.FileReport)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag ViewBehavior
+	#tag ViewProperty
+		Name="Name"
+		Visible=true
+		Group="ID"
+		InitialValue=""
+		Type="String"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Interfaces"
+		Visible=true
+		Group="ID"
+		InitialValue=""
+		Type="String"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Super"
+		Visible=true
+		Group="ID"
+		InitialValue=""
+		Type="String"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Width"
+		Visible=true
+		Group="Size"
+		InitialValue="600"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Height"
+		Visible=true
+		Group="Size"
+		InitialValue="400"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinimumWidth"
+		Visible=true
+		Group="Size"
+		InitialValue="64"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MinimumHeight"
+		Visible=true
+		Group="Size"
+		InitialValue="64"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaximumWidth"
+		Visible=true
+		Group="Size"
+		InitialValue="32000"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MaximumHeight"
+		Visible=true
+		Group="Size"
+		InitialValue="32000"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Type"
+		Visible=true
+		Group="Frame"
+		InitialValue="0"
+		Type="Types"
+		EditorType="Enum"
+		#tag EnumValues
+			"0 - Document"
+			"1 - Movable Modal"
+			"2 - Modal Dialog"
+			"3 - Floating Window"
+			"4 - Plain Box"
+			"5 - Shadowed Box"
+			"6 - Rounded Window"
+			"7 - Global Floating Window"
+			"8 - Sheet Window"
+			"9 - Metal Window"
+			"11 - Modeless Dialog"
+		#tag EndEnumValues
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Title"
+		Visible=true
+		Group="Frame"
+		InitialValue="Untitled"
+		Type="String"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasCloseButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasMaximizeButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasMinimizeButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasFullScreenButton"
+		Visible=true
+		Group="Frame"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Resizeable"
+		Visible=true
+		Group="Frame"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Composite"
+		Visible=false
+		Group="OS X (Carbon)"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MacProcID"
+		Visible=false
+		Group="OS X (Carbon)"
+		InitialValue="0"
+		Type="Integer"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="FullScreen"
+		Visible=false
+		Group="Behavior"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="ImplicitInstance"
+		Visible=true
+		Group="Behavior"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="DefaultLocation"
+		Visible=true
+		Group="Behavior"
+		InitialValue="0"
+		Type="Locations"
+		EditorType="Enum"
+		#tag EnumValues
+			"0 - Default"
+			"1 - Parent Window"
+			"2 - Main Screen"
+			"3 - Parent Window Screen"
+			"4 - Stagger"
+		#tag EndEnumValues
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Visible"
+		Visible=true
+		Group="Behavior"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="HasBackgroundColor"
+		Visible=true
+		Group="Background"
+		InitialValue="False"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="BackgroundColor"
+		Visible=true
+		Group="Background"
+		InitialValue="&hFFFFFF"
+		Type="Color"
+		EditorType="Color"
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="Backdrop"
+		Visible=true
+		Group="Background"
+		InitialValue=""
+		Type="Picture"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBar"
+		Visible=true
+		Group="Menus"
+		InitialValue=""
+		Type="MenuBar"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="MenuBarVisible"
+		Visible=true
+		Group="Deprecated"
+		InitialValue="True"
+		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+#tag EndViewBehavior

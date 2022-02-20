@@ -159,7 +159,7 @@ Protected Module Win32
 	#tag EndConstant
 
 
-	#tag Structure, Name = OSVERSIONINFOEX, Flags = &h1
+	#tag Structure, Name = OSVERSIONINFOEX, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		StructSize As UInt32
 		  MajorVersion As Integer
 		  MinorVersion As Integer
@@ -173,13 +173,13 @@ Protected Module Win32
 		Reserved As Byte
 	#tag EndStructure
 
-	#tag Structure, Name = SECURITY_ATTRIBUTES, Flags = &h1
+	#tag Structure, Name = SECURITY_ATTRIBUTES, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		Length As Integer
 		  secDescriptor As Ptr
 		InheritHandle As Boolean
 	#tag EndStructure
 
-	#tag Structure, Name = SYSTEM_INFO, Flags = &h1
+	#tag Structure, Name = SYSTEM_INFO, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		OEMID As Integer
 		  pageSize As Integer
 		  minApplicationAddress As Ptr
@@ -199,33 +199,40 @@ Protected Module Win32
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

@@ -1,20 +1,21 @@
 #tag Window
 Begin Window TridResultWindow
-   BackColor       =   &hFFFFFF
-   Backdrop        =   ""
+   BackColor       =   &cFFFFFF00
+   Backdrop        =   0
    CloseButton     =   True
    Composite       =   False
    Frame           =   1
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   1.13e+2
+   HasFullScreenButton=   False
+   Height          =   113
    ImplicitInstance=   False
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   False
@@ -23,84 +24,88 @@ Begin Window TridResultWindow
    Resizeable      =   True
    Title           =   "Trid Says"
    Visible         =   True
-   Width           =   3.48e+2
-   Begin PrettyListBox Listbox1
+   Width           =   348
+   Begin PrettyListBox TridResultList
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
-      Bold            =   ""
+      Bold            =   False
       Border          =   True
       ColumnCount     =   2
-      ColumnsResizable=   ""
+      ColumnsResizable=   False
       ColumnWidths    =   "80%,*"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
-      EnableDrag      =   ""
-      EnableDragReorder=   ""
+      EnableDrag      =   False
+      EnableDragReorder=   False
       GridLinesHorizontal=   0
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   113
       HelpTag         =   ""
-      Hierarchical    =   ""
+      Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
       InitialValue    =   "Guess	Certainty"
-      Italic          =   ""
+      Italic          =   False
       Left            =   0
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      RequiresSelection=   ""
+      RequiresSelection=   False
       Scope           =   0
-      ScrollbarHorizontal=   ""
+      ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   0
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   348
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
-   Begin PushButton PushButton1
+   Begin PushButton CancelBtn
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
       Cancel          =   True
-      Caption         =   "Untitled"
+      Caption         =   "Cancel"
       Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   103
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   -57
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
@@ -110,22 +115,22 @@ End
 #tag WindowCode
 	#tag Method, Flags = &h0
 		Sub ShowResult(Results() As TridLib.FileType, File As FolderItem, ParentWindow As Window)
-		  Listbox1.DeleteAllRows
+		  TridResultList.DeleteAllRows
 		  Self.Title = "TrID Analysis of " + File.Name
 		  If UBound(Results) > -1 Then
 		    Dim total As Integer
 		    For i As Integer = 0 To UBound(Results)
 		      Dim rs As TridLib.FileType = Results(i)
-		      Listbox1.AddRow("(" + rs.Extension + ")" + rs.Description)
-		      Listbox1.RowTag(Listbox1.LastIndex) = rs
+		      TridResultList.AddRow("(" + rs.Extension + ")" + rs.Description)
+		      TridResultList.RowTag(TridResultList.LastIndex) = rs
 		      total = total + rs.Points
 		    Next
-		    For i As Integer = 0 To Listbox1.ListCount - 1
-		      Dim rs As TridLib.FileType = Listbox1.RowTag(i)
-		      Listbox1.Cell(i, 1) = Format(rs.Points * 100 / total, "##0.0#") + "%"
+		    For i As Integer = 0 To TridResultList.ListCount - 1
+		      Dim rs As TridLib.FileType = TridResultList.RowTag(i)
+		      TridResultList.Cell(i, 1) = Format(rs.Points * 100 / total, "##0.0#") + "%"
 		    Next
 		  Else
-		    Listbox1.AddRow("Unknown (plain text?)", "100%")
+		    TridResultList.AddRow("Unknown (plain text?)", "100%")
 		  End If
 		  
 		  
@@ -139,7 +144,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events Listbox1
+#tag Events TridResultList
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
 		  Dim tridtype As String = Me.Cell(Me.RowFromXY(X, Y), 0).Trim
@@ -166,7 +171,7 @@ End
 		End Function
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton1
+#tag Events CancelBtn
 	#tag Event
 		Sub Action()
 		  Self.Close

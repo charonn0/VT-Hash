@@ -1,20 +1,21 @@
 #tag Window
 Begin Window UpdateWindow
-   BackColor       =   16777215
-   Backdrop        =   ""
+   BackColor       =   &cFFFFFF00
+   Backdrop        =   0
    CloseButton     =   True
    Composite       =   False
    Frame           =   3
    FullScreen      =   False
    HasBackColor    =   False
+   HasFullScreenButton=   False
    Height          =   114
    ImplicitInstance=   False
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   False
@@ -29,10 +30,11 @@ Begin Window UpdateWindow
       Enabled         =   True
       Height          =   10
       HelpTag         =   ""
+      Indeterminate   =   False
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   14
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
@@ -41,9 +43,10 @@ Begin Window UpdateWindow
       Scope           =   0
       TabIndex        =   0
       TabPanelIndex   =   0
-      TabStop         =   True
+      TabStop         =   "True"
       Top             =   50
-      Value           =   0
+      Transparent     =   True
+      Value           =   0.0
       Visible         =   True
       Width           =   388
    End
@@ -57,14 +60,14 @@ Begin Window UpdateWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   62
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   3
@@ -72,19 +75,19 @@ Begin Window UpdateWindow
       TabStop         =   True
       Text            =   "Ready."
       TextAlign       =   0
-      TextColor       =   32768
+      TextColor       =   &c00800000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   9
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   256
    End
    Begin Label Status1
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -92,14 +95,14 @@ Begin Window UpdateWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   14
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   4
@@ -107,31 +110,31 @@ Begin Window UpdateWindow
       TabStop         =   True
       Text            =   "Status:"
       TextAlign       =   2
-      TextColor       =   0
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   9
       Transparent     =   False
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   43
    End
    Begin PushButton PushButton1
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "Check"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   168
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   False
       LockRight       =   True
@@ -141,27 +144,27 @@ Begin Window UpdateWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   90
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
    Begin Canvas UpdateIcon
-      AcceptFocus     =   ""
-      AcceptTabs      =   ""
+      AcceptFocus     =   False
+      AcceptTabs      =   False
       AutoDeactivate  =   True
-      Backdrop        =   ""
+      Backdrop        =   0
       DoubleBuffer    =   False
       Enabled         =   True
-      EraseBackground =   True
       Height          =   48
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   368
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   False
       LockRight       =   True
@@ -171,6 +174,7 @@ Begin Window UpdateWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   0
+      Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
       Width           =   48
@@ -180,10 +184,11 @@ Begin Window UpdateWindow
       Enabled         =   True
       Height          =   10
       HelpTag         =   ""
+      Indeterminate   =   False
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   14
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
@@ -192,62 +197,57 @@ Begin Window UpdateWindow
       Scope           =   0
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
+      TabStop         =   "True"
       Top             =   69
-      Value           =   0
+      Transparent     =   True
+      Value           =   0.0
       Visible         =   True
       Width           =   388
    End
    Begin Timer GetTimer
       Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   304
       LockedInPosition=   False
       Mode            =   0
       Period          =   10
       Scope           =   0
-      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   80
-      Visible         =   True
-      Width           =   32
    End
    Begin PushButton PushButton2
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
       Cancel          =   True
       Caption         =   "Cancel"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   223
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   -46
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
    Begin Label CurrentAction
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -257,12 +257,12 @@ Begin Window UpdateWindow
       InitialParent   =   ""
       Italic          =   True
       Left            =   19
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   5
@@ -270,19 +270,19 @@ Begin Window UpdateWindow
       TabStop         =   True
       Text            =   ""
       TextAlign       =   0
-      TextColor       =   8421504
+      TextColor       =   &c80808000
       TextFont        =   "System"
-      TextSize        =   10
+      TextSize        =   10.0
       TextUnit        =   0
       Top             =   28
       Transparent     =   False
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   273
    End
    Begin Label CurrentAction1
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -292,12 +292,12 @@ Begin Window UpdateWindow
       InitialParent   =   ""
       Italic          =   True
       Left            =   296
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   6
@@ -305,46 +305,36 @@ Begin Window UpdateWindow
       TabStop         =   True
       Text            =   ""
       TextAlign       =   0
-      TextColor       =   8421504
+      TextColor       =   &c80808000
       TextFont        =   "System"
-      TextSize        =   10
+      TextSize        =   10.0
       TextUnit        =   0
       Top             =   28
       Transparent     =   False
-      Underline       =   ""
+      Underline       =   False
       Visible         =   False
       Width           =   69
    End
    Begin Timer SpeedTimer
       Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   341
       LockedInPosition=   False
       Mode            =   0
       Period          =   1000
       Scope           =   0
-      TabIndex        =   10
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   80
-      Visible         =   True
-      Width           =   32
    End
    Begin cURLClient curl
       Enabled         =   True
-      Height          =   32
+      HTTPVersion     =   ""
       Index           =   -2147483648
-      IsSSLCertOK     =   ""
-      Left            =   377
+      IsSSLCertOK     =   False
       LockedInPosition=   False
+      Password        =   ""
       Scope           =   0
-      TabIndex        =   11
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   80
-      Visible         =   True
-      Width           =   32
+      Username        =   ""
+      Yield           =   True
    End
 End
 #tag EndWindow
@@ -384,10 +374,10 @@ End
 		  Self.ShowModal
 		  Return DownloadDirectory
 		  
-		Exception err
-		  If err IsA EndException Or Err IsA ThreadEndException Then Raise Err
-		  
-		  Return Nil
+		  Exception err
+		    If err IsA EndException Or Err IsA ThreadEndException Then Raise Err
+		    
+		    Return Nil
 		End Function
 	#tag EndMethod
 
@@ -417,7 +407,7 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function FormatBytes(bytes As UInt64, precision As Integer = 2) As String
+		Shared Function FormatBytes(bytes As UInt64, precision As Integer = 2) As String
 		  //Converts raw byte counts into SI formatted strings. 1KB = 1024 bytes.
 		  //Optionally pass an integer representing the number of decimal places to return. The default is two decimal places. You may specify
 		  //between 0 and 16 decimal places. Specifying more than 16 will append extra zeros to make up the length. Passing 0
@@ -575,8 +565,8 @@ End
 		    Return shortdata
 		  End If
 		  
-		Exception err
-		  Return data
+		  Exception err
+		    Return data
 		End Function
 	#tag EndMethod
 
@@ -692,7 +682,8 @@ End
 #tag EndEvents
 #tag Events UpdateIcon
 	#tag Event
-		Sub Paint(g As Graphics)
+		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
+		  #pragma Unused areas
 		  If Self.Icon <> Nil Then
 		    g.DrawPicture(Self.Icon, 0, 0, g.Width, g.Height, 0, 0, Self.Icon.Width, Self.Icon.Height)
 		  Else

@@ -1,20 +1,21 @@
 #tag Window
 Begin Window FileSubmitWindow
-   BackColor       =   &hFFFFFF
-   Backdrop        =   ""
+   BackColor       =   &cFFFFFF00
+   Backdrop        =   0
    CloseButton     =   False
    Composite       =   False
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   1.1e+2
+   HasFullScreenButton=   False
+   Height          =   110
    ImplicitInstance=   False
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   False
@@ -23,16 +24,17 @@ Begin Window FileSubmitWindow
    Resizeable      =   False
    Title           =   "Upload File"
    Visible         =   True
-   Width           =   3.49e+2
-   Begin ProgressBar ProgressBar1
+   Width           =   349
+   Begin ProgressBar UploadProgressBar
       AutoDeactivate  =   True
       Enabled         =   True
       Height          =   10
       HelpTag         =   ""
+      Indeterminate   =   False
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   14
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
@@ -43,13 +45,14 @@ Begin Window FileSubmitWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   23
-      Value           =   0
+      Transparent     =   True
+      Value           =   0.0
       Visible         =   True
       Width           =   315
    End
-   Begin Label Label1
+   Begin Label StatusLbl
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -57,14 +60,14 @@ Begin Window FileSubmitWindow
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   10
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   0
@@ -72,33 +75,34 @@ Begin Window FileSubmitWindow
       TabStop         =   True
       Text            =   "Uploading to VirusTotal.com..."
       TextAlign       =   0
-      TextColor       =   &h000000
+      TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   1
       Transparent     =   False
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   329
    End
    Begin LinkLabel Permalink
-      ActiveColor     =   "&cFF0000"
+      ActiveColor     =   &cFF000000
       AltText         =   ""
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Draggable       =   False
       Enabled         =   True
       Height          =   20
-      HilightColor    =   "&c00FFFF"
+      HelpTag         =   ""
+      HilightColor    =   &c00FFFF00
       HoverPeriod     =   250
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   14
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
@@ -106,37 +110,38 @@ Begin Window FileSubmitWindow
       Multiline       =   False
       ResetPeriod     =   1000
       Scope           =   0
-      Selectable      =   ""
+      Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Permalink to results"
       TextAlign       =   1
-      TextColor       =   "&c0000FF"
+      TextColor       =   &c0000FF00
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   61
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
+      URL             =   ""
       Visible         =   False
       Width           =   315
    End
-   Begin PushButton PushButton1
+   Begin PushButton CancelBtn
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   True
       Caption         =   "Cancel"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   174
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
@@ -146,16 +151,17 @@ Begin Window FileSubmitWindow
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   82
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   82
    End
-   Begin Label Percentages
+   Begin Label PercentagesLbl
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
@@ -165,12 +171,12 @@ Begin Window FileSubmitWindow
       InitialParent   =   ""
       Italic          =   True
       Left            =   14
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      Multiline       =   ""
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   3
@@ -178,54 +184,45 @@ Begin Window FileSubmitWindow
       TabStop         =   True
       Text            =   "%0 of %0 bytes sent"
       TextAlign       =   0
-      TextColor       =   &h00808080
+      TextColor       =   &c80808000
       TextFont        =   "System"
-      TextSize        =   10
+      TextSize        =   10.0
       TextUnit        =   0
       Top             =   33
       Transparent     =   True
-      Underline       =   ""
+      Underline       =   False
       Visible         =   True
       Width           =   315
    End
    Begin VTHash.VTSession Socket
       APIKey          =   ""
       Enabled         =   True
-      Height          =   32
+      HTTPVersion     =   ""
       Index           =   -2147483648
-      Left            =   379
+      IsSSLCertOK     =   False
       LockedInPosition=   False
+      Password        =   ""
       Scope           =   0
-      TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   -21
-      Visible         =   True
-      Width           =   32
+      Username        =   ""
+      Yield           =   True
    End
    Begin Timer GUITimer
       Enabled         =   True
-      Height          =   32
       Index           =   -2147483648
-      Left            =   379
       LockedInPosition=   False
       Mode            =   2
       Period          =   250
       Scope           =   0
-      TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
-      Top             =   17
-      Visible         =   True
-      Width           =   32
    End
    Begin PushButton PauseButton
       AutoDeactivate  =   True
       Bold            =   False
       ButtonStyle     =   0
-      Cancel          =   ""
+      Cancel          =   False
       Caption         =   "Pause"
-      Default         =   ""
+      Default         =   False
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
@@ -233,19 +230,20 @@ Begin Window FileSubmitWindow
       InitialParent   =   ""
       Italic          =   False
       Left            =   87
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
       Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   ""
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   82
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   82
@@ -318,7 +316,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton1
+#tag Events CancelBtn
 	#tag Event
 		Sub Action()
 		  'If Me.Caption = "Cancel" Then
@@ -345,18 +343,18 @@ End
 		      PermaURL = ResponseObject.Value("permalink")
 		      Permalink.Visible = True
 		      Permalink.URL = PermaURL
-		      Label1.Text = "Upload complete."
+		      StatusLbl.Text = "Upload complete."
 		    Else
-		      Label1.Text = "Upload error."
+		      StatusLbl.Text = "Upload error."
 		      MsgBox("Virus Total says: (" + Str(ResponseObject.Value("response_code").Int32Value) + ") " + ResponseObject.Value("verbose_msg"))
 		    End If
 		  Else
-		    Label1.Text = "Upload error."
+		    StatusLbl.Text = "Upload error."
 		    MsgBox("Error: " + Str(HTTPStatus) + ".")
 		  End If
-		  PushButton1.Caption = "Close"
+		  CancelBtn.Caption = "Close"
 		  PauseButton.Enabled = False
-		  ProgressBar1.Value = ProgressBar1.Maximum
+		  UploadProgressBar.Value = UploadProgressBar.Maximum
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -379,20 +377,20 @@ End
 #tag Events GUITimer
 	#tag Event
 		Sub Action()
-		  If Right(Label1.Text, 3) = "..." Then
-		    Label1.Text = Left(Label1.Text, Label1.Text.Len - 3)
-		  ElseIf Right(Label1.Text, 2) = ".." Then
-		    Label1.Text = Label1.Text + "."
-		  ElseIf Right(Label1.Text, 1) = "." Then
-		    Label1.Text = Label1.Text + "."
+		  If Right(StatusLbl.Text, 3) = "..." Then
+		    StatusLbl.Text = Left(StatusLbl.Text, StatusLbl.Text.Len - 3)
+		  ElseIf Right(StatusLbl.Text, 2) = ".." Then
+		    StatusLbl.Text = StatusLbl.Text + "."
+		  ElseIf Right(StatusLbl.Text, 1) = "." Then
+		    StatusLbl.Text = StatusLbl.Text + "."
 		  End If
-		  Percentages.Text = mInfoCaption
-		  ProgressBar1.Value = mPercentDone
+		  PercentagesLbl.Text = mInfoCaption
+		  UploadProgressBar.Value = mPercentDone
 		  mTaskBar.SetProgressValue(mPercentDone, 100)
-		  If ProgressBar1.Value >= ProgressBar1.Maximum Then
-		    Label1.Text = "Awaiting response..."
+		  If UploadProgressBar.Value >= UploadProgressBar.Maximum Then
+		    StatusLbl.Text = "Awaiting response..."
 		  Else
-		    Label1.Text = "Sending file..."
+		    StatusLbl.Text = "Sending file..."
 		  End If
 		End Sub
 	#tag EndEvent

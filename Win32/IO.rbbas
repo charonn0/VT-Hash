@@ -8,14 +8,14 @@ Protected Module IO
 		  //Or if the user does not have write access to the Target file.
 		  
 		  #If TargetWin32
-		    Return Win32.Libs.Kernel32.MoveFileEx(source.AbsolutePath, Nil, MOVEFILE_DELAY_UNTIL_REBOOT)
+		    Return Win32.Libs.Kernel32.MoveFileEx(source.NativePath, Nil, MOVEFILE_DELAY_UNTIL_REBOOT)
 		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function IsExecutable(File As FolderItem) As Boolean
-		  Return Win32.Libs.AdvApi32.SaferiIsExecutableFileType(File.AbsolutePath, False)
+		  Return Win32.Libs.AdvApi32.SaferiIsExecutableFileType(File.NativePath, False)
 		End Function
 	#tag EndMethod
 
@@ -24,24 +24,24 @@ Protected Module IO
 	#tag EndConstant
 
 
-	#tag Structure, Name = FILETIME, Flags = &h1
+	#tag Structure, Name = FILETIME, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		HighDateTime As Integer
 		LowDateTime As Integer
 	#tag EndStructure
 
-	#tag Structure, Name = IO_STATUS_BLOCK, Flags = &h1
+	#tag Structure, Name = IO_STATUS_BLOCK, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		Status As Int32
 		Info As Int32
 	#tag EndStructure
 
-	#tag Structure, Name = OVERLAPPED, Flags = &h1
+	#tag Structure, Name = OVERLAPPED, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		Internal As Integer
 		  InternalHigh As Integer
 		  Offset As UInt64
 		hEvent As Integer
 	#tag EndStructure
 
-	#tag Structure, Name = WIN32_FIND_DATA, Flags = &h1
+	#tag Structure, Name = WIN32_FIND_DATA, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		Attribs As Integer
 		  CreationTime As FILETIME
 		  LastAccess As FILETIME
@@ -54,7 +54,7 @@ Protected Module IO
 		AlternateName As String*14
 	#tag EndStructure
 
-	#tag Structure, Name = WIN32_FIND_STREAM_DATA, Flags = &h1
+	#tag Structure, Name = WIN32_FIND_STREAM_DATA, Flags = &h1, Attributes = \"StructureAlignment \x3D 1"
 		StreamSize As Int64
 		StreamName As String*1024
 	#tag EndStructure
@@ -66,33 +66,40 @@ Protected Module IO
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

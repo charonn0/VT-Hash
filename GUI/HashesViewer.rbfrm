@@ -1,20 +1,21 @@
 #tag Window
 Begin Window HashesViewer
-   BackColor       =   &hFFFFFF
-   Backdrop        =   ""
+   BackColor       =   &cFFFFFF00
+   Backdrop        =   0
    CloseButton     =   True
    Composite       =   False
    Frame           =   3
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   1.31e+2
+   HasFullScreenButton=   False
+   Height          =   131
    ImplicitInstance=   False
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   32000
    MaximizeButton  =   False
    MaxWidth        =   32000
-   MenuBar         =   ""
+   MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
    MinimizeButton  =   True
@@ -23,108 +24,106 @@ Begin Window HashesViewer
    Resizeable      =   True
    Title           =   "Additional hashes"
    Visible         =   True
-   Width           =   4.64e+2
-   Begin PrettyListBox Listbox1
+   Width           =   464
+   Begin PrettyListBox HashResultList
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
-      Bold            =   ""
+      Bold            =   False
       Border          =   True
       ColumnCount     =   3
-      ColumnsResizable=   ""
+      ColumnsResizable=   False
       ColumnWidths    =   "0%, 15%"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
       Enabled         =   True
-      EnableDrag      =   ""
-      EnableDragReorder=   ""
+      EnableDrag      =   False
+      EnableDragReorder=   False
       GridLinesHorizontal=   0
       GridLinesVertical=   0
       HasHeading      =   True
       HeadingIndex    =   -1
       Height          =   131
       HelpTag         =   ""
-      Hierarchical    =   ""
+      Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
       InitialValue    =   " 	Algorithm	Value"
-      Italic          =   ""
+      Italic          =   False
       Left            =   0
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
-      RequiresSelection=   ""
+      RequiresSelection=   False
       Scope           =   0
-      ScrollbarHorizontal=   ""
+      ScrollbarHorizontal=   False
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   0
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       UseFocusRing    =   True
       Visible         =   True
       Width           =   464
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin Thread HashThread
-      Height          =   32
+      Enabled         =   True
       Index           =   -2147483648
-      Left            =   599
       LockedInPosition=   False
       Priority        =   5
       Scope           =   0
       StackSize       =   0
       TabPanelIndex   =   0
-      Top             =   0
-      Width           =   32
    End
    Begin Timer HashTimer
-      Height          =   32
+      Enabled         =   True
       Index           =   -2147483648
-      Left            =   599
       LockedInPosition=   False
       Mode            =   2
       Period          =   50
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   44
-      Width           =   32
    End
-   Begin PushButton PushButton1
+   Begin PushButton CancelBtn
       AutoDeactivate  =   True
-      Bold            =   ""
+      Bold            =   False
       ButtonStyle     =   0
       Cancel          =   True
-      Caption         =   "Untitled"
+      Caption         =   "Cancel"
       Default         =   True
       Enabled         =   True
       Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      Italic          =   ""
+      Italic          =   False
       Left            =   203
-      LockBottom      =   ""
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   ""
+      LockRight       =   False
       LockTop         =   True
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   0
+      TextSize        =   0.0
       TextUnit        =   0
       Top             =   -54
-      Underline       =   ""
+      Transparent     =   True
+      Underline       =   False
       Visible         =   True
       Width           =   80
    End
@@ -134,8 +133,8 @@ End
 #tag WindowCode
 	#tag Method, Flags = &h1
 		Protected Function CompareHash(Hash As String) As Integer
-		  For i As Integer = 0 To Listbox1.ListCount - 1
-		    If Listbox1.Cell(i, 2) = Hash Then Return i
+		  For i As Integer = 0 To HashResultList.ListCount - 1
+		    If HashResultList.Cell(i, 2) = Hash Then Return i
 		  Next
 		  Return -1
 		End Function
@@ -144,34 +143,34 @@ End
 	#tag Method, Flags = &h0
 		Sub ShowHashes(Data As BinaryStream, ParentWindow As Window)
 		  mLock = New Semaphore
-		  ListBox1.DeleteAllRows
+		  HashResultList.DeleteAllRows
 		  
-		  ListBox1.AddRow("", "MD5", "Pending")
-		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_MD5
+		  HashResultList.AddRow("", "MD5", "Pending")
+		  HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_MD5
 		  
-		  ListBox1.AddRow("", "MD4", "Pending")
-		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_MD4
+		  HashResultList.AddRow("", "MD4", "Pending")
+		  HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_MD4
 		  
-		  ListBox1.AddRow("", "MD2", "Pending")
-		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_MD2
+		  HashResultList.AddRow("", "MD2", "Pending")
+		  HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_MD2
 		  
-		  'ListBox1.AddRow("", "CRC32", "Pending")
-		  'ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_
+		  'HashResultList.AddRow("", "CRC32", "Pending")
+		  'HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_
 		  
-		  'ListBox1.AddRow("", "Adler32", "Pending")
-		  'ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_
+		  'HashResultList.AddRow("", "Adler32", "Pending")
+		  'HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_
 		  
-		  ListBox1.AddRow("", "SHA1", "Pending")
-		  ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA1
+		  HashResultList.AddRow("", "SHA1", "Pending")
+		  HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_SHA1
 		  
 		  If Win32.KernelVersion >= 6.0 Then
-		    ListBox1.AddRow("", "SHA256", "Pending")
-		    ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA256
-		    ListBox1.AddRow("", "SHA384", "Pending")
-		    ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA384
+		    HashResultList.AddRow("", "SHA256", "Pending")
+		    HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_SHA256
+		    HashResultList.AddRow("", "SHA384", "Pending")
+		    HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_SHA384
 		    
-		    ListBox1.AddRow("", "SHA512", "Pending")
-		    ListBox1.CellTag(ListBox1.LastIndex, 0) = Win32.Crypto.CALG_SHA512
+		    HashResultList.AddRow("", "SHA512", "Pending")
+		    HashResultList.CellTag(HashResultList.LastIndex, 0) = Win32.Crypto.CALG_SHA512
 		  End If
 		  
 		  DataStream = Data
@@ -203,7 +202,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events Listbox1
+#tag Events HashResultList
 	#tag Event
 		Function ConstructContextualMenu(base as MenuItem, x as Integer, y as Integer) As Boolean
 		  Dim row As Integer = Me.RowFromXY(X, Y)
@@ -291,21 +290,21 @@ End
 		  If mLock.TrySignal Then
 		    Try
 		      If mCurrentAlg > 0 Then
-		        For i As Integer = 0 To Listbox1.ListCount - 1
-		          If Listbox1.CellTag(i, 0) = mCurrentAlg Then
-		            Listbox1.Cell(i, 2) = EncodeHex(mHashValue)
+		        For i As Integer = 0 To HashResultList.ListCount - 1
+		          If HashResultList.CellTag(i, 0) = mCurrentAlg Then
+		            HashResultList.Cell(i, 2) = EncodeHex(mHashValue)
 		            Exit For
 		          End If
 		        Next
 		      End If
 		      
-		      For i As Integer = 0 To Listbox1.ListCount - 1
-		        If Listbox1.Cell(i, 2) = "Pending" Then
-		          mCurrentAlg = Listbox1.CellTag(i, 0)
+		      For i As Integer = 0 To HashResultList.ListCount - 1
+		        If HashResultList.Cell(i, 2) = "Pending" Then
+		          mCurrentAlg = HashResultList.CellTag(i, 0)
 		          mHashValue = ""
-		          Listbox1.Cell(i, 2) = "Calculating..."
+		          HashResultList.Cell(i, 2) = "Calculating..."
 		          Exit For
-		        ElseIf i = Listbox1.ListCount - 1 Then
+		        ElseIf i = HashResultList.ListCount - 1 Then
 		          Me.Mode = Timer.ModeOff
 		        End If
 		      Next
@@ -319,7 +318,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton1
+#tag Events CancelBtn
 	#tag Event
 		Sub Action()
 		  Self.Close

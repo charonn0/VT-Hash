@@ -28,8 +28,8 @@ Protected Module TridLib
 	#tag Method, Flags = &h1
 		Protected Function LoadDefsPack(Directory As FolderItem) As Integer
 		  If TridLib.IsAvailable Then
-		    Dim mb As New MemoryBlock(Directory.AbsolutePath.LenB * 2)
-		    mb.CString(0) = Directory.AbsolutePath
+		    Dim mb As New MemoryBlock(Directory.NativePath.LenB * 2)
+		    mb.CString(0) = Directory.NativePath
 		    If DefCount = 0 Then
 		      Return TrID_LoadDefsPack(mb)
 		    Else
@@ -53,8 +53,8 @@ Protected Module TridLib
 	#tag Method, Flags = &h1
 		Protected Function SubmitFile(File As FolderItem) As Integer
 		  If TridLib.IsAvailable Then
-		    Dim mb As New MemoryBlock(File.AbsolutePath.LenB + 1)
-		    mb.CString(0) = File.AbsolutePath
+		    Dim mb As New MemoryBlock(File.NativePath.LenB + 1)
+		    mb.CString(0) = File.NativePath
 		    Return TrID_SubmitFileA(mb)
 		  End If
 		End Function
@@ -197,33 +197,40 @@ Protected Module TridLib
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

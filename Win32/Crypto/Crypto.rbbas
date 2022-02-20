@@ -29,19 +29,15 @@ Protected Module Crypto
 		  If Win32.KernelVersion >= 6.0 Then
 		    Return BinaryToString(Data, CRYPT_STRING_HEXRAW)
 		  Else
-		    #If RBVersion >= 2010.03 Then
-		      Return REALbasic.EncodeHex(Data)
-		    #Else
-		      Dim formattedhex As String = BinaryToString(Data, CRYPT_STRING_HEX) ' CRYPT_STRING_HEX has extra formatting chars we need to strip
-		      formattedhex = ConvertEncoding(formattedhex, Encodings.ASCII)
-		      For i As Integer = 0 To 122
-		        If i = 48 Then i = 58
-		        If i = 65 Then i = 91
-		        If i = 97 Then i = 123
-		        formattedhex = ReplaceAll(formattedhex, Chr(i), "")
-		      Next
-		      Return formattedhex.Trim
-		    #endif
+		    Dim formattedhex As String = BinaryToString(Data, CRYPT_STRING_HEX) ' CRYPT_STRING_HEX has extra formatting chars we need to strip
+		    formattedhex = ConvertEncoding(formattedhex, Encodings.ASCII)
+		    For i As Integer = 0 To 122
+		      If i = 48 Then i = 58
+		      If i = 65 Then i = 91
+		      If i = 97 Then i = 123
+		      formattedhex = ReplaceAll(formattedhex, Chr(i), "")
+		    Next
+		    Return formattedhex.Trim
 		  End If
 		End Function
 	#tag EndMethod
@@ -395,33 +391,40 @@ Protected Module Crypto
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

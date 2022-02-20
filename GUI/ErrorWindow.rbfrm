@@ -1,15 +1,16 @@
 #tag Window
 Begin Window ErrorWindow
-   BackColor       =   "&cFFFFFF00"
+   BackColor       =   &cFFFFFF00
    Backdrop        =   0
    CloseButton     =   False
    Composite       =   False
    Frame           =   1
    FullScreen      =   False
    HasBackColor    =   False
+   HasFullScreenButton=   False
    Height          =   171
    ImplicitInstance=   True
-   LiveResize      =   True
+   LiveResize      =   "True"
    MacProcID       =   0
    MaxHeight       =   300
    MaximizeButton  =   False
@@ -24,7 +25,7 @@ Begin Window ErrorWindow
    Title           =   "Error"
    Visible         =   True
    Width           =   469
-   Begin Label StaticText1
+   Begin Label BoilerPlateText
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
@@ -46,9 +47,10 @@ Begin Window ErrorWindow
       Selectable      =   False
       TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "An unhandled error has caused VT Hash to crash. \r\nTechnical details follow:"
       TextAlign       =   0
-      TextColor       =   "&c00000000"
+      TextColor       =   &c00000000
       TextFont        =   "System"
       TextSize        =   11.0
       TextUnit        =   0
@@ -58,12 +60,12 @@ Begin Window ErrorWindow
       Visible         =   True
       Width           =   387
    End
-   Begin TextArea errorStack
+   Begin TextArea ErrorStack
       AcceptTabs      =   True
       Alignment       =   0
       AutoDeactivate  =   True
       AutomaticallyCheckSpelling=   True
-      BackColor       =   "&cFFFFFF00"
+      BackColor       =   &cFFFFFF00
       Bold            =   False
       Border          =   True
       DataField       =   ""
@@ -77,6 +79,8 @@ Begin Window ErrorWindow
       Italic          =   False
       Left            =   13
       LimitText       =   0
+      LineHeight      =   0.0
+      LineSpacing     =   1.0
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
@@ -93,17 +97,19 @@ Begin Window ErrorWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   ""
-      TextColor       =   "&c00000000"
+      TextColor       =   &c00000000
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   46
+      Transparent     =   True
       Underline       =   False
+      UnicodeMode     =   0
       UseFocusRing    =   True
       Visible         =   True
       Width           =   443
    End
-   Begin PushButton PushButton1
+   Begin PushButton QuitBtn
       AutoDeactivate  =   True
       Bold            =   False
       ButtonStyle     =   0
@@ -130,11 +136,12 @@ Begin Window ErrorWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   143
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   135
    End
-   Begin PushButton PushButton2
+   Begin PushButton CopyErrBtn
       AutoDeactivate  =   True
       Bold            =   False
       ButtonStyle     =   0
@@ -161,11 +168,12 @@ Begin Window ErrorWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   143
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   83
    End
-   Begin PushButton PushButton3
+   Begin PushButton SendErrBtn
       AutoDeactivate  =   True
       Bold            =   False
       ButtonStyle     =   0
@@ -192,18 +200,18 @@ Begin Window ErrorWindow
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   143
+      Transparent     =   True
       Underline       =   False
       Visible         =   True
       Width           =   83
    End
-   Begin Canvas Canvas1
+   Begin Canvas ErrorIcon
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoDeactivate  =   True
       Backdrop        =   0
       DoubleBuffer    =   False
       Enabled         =   True
-      EraseBackground =   True
       Height          =   35
       HelpTag         =   ""
       Index           =   -2147483648
@@ -219,6 +227,7 @@ Begin Window ErrorWindow
       TabPanelIndex   =   0
       TabStop         =   True
       Top             =   5
+      Transparent     =   True
       UseFocusRing    =   True
       Visible         =   True
       Width           =   35
@@ -247,7 +256,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events PushButton1
+#tag Events QuitBtn
 	#tag Event
 		Sub Action()
 		  App.mIsQuitting = True
@@ -255,7 +264,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton2
+#tag Events CopyErrBtn
 	#tag Event
 		Sub Action()
 		  Dim cb As New Clipboard
@@ -263,17 +272,17 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton3
+#tag Events SendErrBtn
 	#tag Event
 		Sub Action()
-		  'ShowURL("http://www.boredomsoft.org/contactus.bs")
-		  SuggestionBox.ShowData("Exception":ReplaceLineEndings(errorStack.Text, EndOfLine.Windows))
+		  ShowURL("https://github.com/charonn0/VT-Hash/issues")
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Canvas1
+#tag Events ErrorIcon
 	#tag Event
-		Sub Paint(g As Graphics)
+		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
+		  #pragma Unused areas
 		  g.DrawStopIcon(0, 0)
 		End Sub
 	#tag EndEvent

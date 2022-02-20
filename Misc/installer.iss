@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1E579B65-503B-4184-B481-5138124BEE1D}
 AppName=VT Hash Check
-AppVersion=1.62
+AppVersion=1.63
 ;AppVerName=VT Hash Check 1.22
 AppPublisher=Boredom Software
 AppPublisherURL=http://www.boredomsoft.org
@@ -23,11 +23,11 @@ SetupIconFile=..\GUI\Images\VTHash_102.ico
 Compression=lzma/ultra
 SolidCompression=true
 AppCopyright=Boredom Software
-AppVerName=VT Hash Check 1.62
+AppVerName=VT Hash Check 1.63
 AllowUNCPath=false
 UsePreviousGroup=false
 UninstallDisplayIcon={app}\VTHash.exe
-UninstallDisplayName=VT Hash Check 1.62
+UninstallDisplayName=VT Hash Check 1.63
 ShowLanguageDialog=no
 ;WizardImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\SetupModern21.bmp
 ;WizardSmallImageFile=D:\Program Files\Inno Setup 5\Wizard Images\Modern\Small\SetupModernSmall26.bmp
@@ -36,8 +36,9 @@ ShowLanguageDialog=no
 Name: english; MessagesFile: compiler:Default.isl
 
 [Files]
-Source: "..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\*"; DestDir: "{app}"; Flags: ignoreversion replacesameversion touch
-Source: "..\Builds - virusTotal_RELEASE.rbvcp\Windows\VTHash\VTHash Libs\*"; DestDir: "{app}\VTHash Libs"; Flags: ignoreversion recursesubdirs createallsubdirs touch
+Source: "D:\Git Repository\VT-Hash\Builds - virusTotal_RELEASE\Windows\VTHash\*"; DestDir: "{app}"; Flags: ignoreversion replacesameversion touch
+Source: "D:\Git Repository\VT-Hash\Builds - virusTotal_RELEASE\Windows\VTHash\VTHash Libs\*"; DestDir: "{app}\VTHash Libs"; Flags: ignoreversion recursesubdirs createallsubdirs touch
+Source: "D:\Git Repository\VT-Hash\Builds - virusTotal_RELEASE\Windows\VTHash\VTHash Resources\*"; DestDir: "{app}\VTHash Resources"; Flags: ignoreversion recursesubdirs createallsubdirs touch
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: "readme.txt"; DestDir: "{app}"; DestName: "readme.txt"; Flags: touch
 Source: "license.txt"; DestDir: "{app}"; DestName: "license.txt"; Flags: touch
@@ -61,4 +62,5 @@ Root: HKLM; SubKey: SOFTWARE\Boredomsoft\VTHash; ValueType: string; ValueName: R
 Root: HKCR; SubKey: *\shell\vthash\command; ValueType: string; ValueData: """{app}\VTHash.exe"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; SubKey: *\shell\vthash; ValueType: string; ValueData: """{app}\VTHash_102.ico"""; Flags: uninsdeletekey; ValueName: Icon; MinVersion: 0,6.0.6000; Languages: 
 [InstallDelete]
-Name: {app}\Libs\*; Type: filesandordirs; Languages: 
+Name: {app}\VTHash Libs\*; Type: filesandordirs; Languages: 
+Name: {app}\VTHash Resources\*; Type: filesandordirs; Languages: 

@@ -306,7 +306,7 @@ Implements FormStreamGetter
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function IsAvailable() As Boolean
+		Shared Function IsAvailable() As Boolean
 		  ' Returns True if the MIME API is available (if not then use the MultipartForm class instead.)
 		  
 		  Return libcURL.Version.IsAtLeast(7, 56, 0)
@@ -344,9 +344,9 @@ Implements FormStreamGetter
 		  If mb.Size > 0 Then buf.StringValue(0, mb.Size) = mb
 		  Return mb.Size
 		  
-		Exception Err As RuntimeException
-		  If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
-		  Return CURL_READFUNC_ABORT
+		  Exception Err As RuntimeException
+		    If Err IsA ThreadEndException Or Err IsA EndException Then Raise Err
+		    Return CURL_READFUNC_ABORT
 		End Function
 	#tag EndMethod
 
@@ -424,7 +424,7 @@ Implements FormStreamGetter
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_mime_filedata.html
 		  
-		  Dim mb As MemoryBlock = File.AbsolutePath + Chr(0)
+		  Dim mb As MemoryBlock = File.NativePath + Chr(0)
 		  mLastError = curl_mime_filedata(Part, mb)
 		  Return mLastError = 0
 		End Function
@@ -537,7 +537,7 @@ Implements FormStreamGetter
 	#tag EndProperty
 
 
-	#tag Structure, Name = curl_mime, Flags = &h21
+	#tag Structure, Name = curl_mime, Flags = &h21, Attributes = \"StructureAlignment \x3D 1"
 		Easy As Ptr
 		  Parent As Ptr
 		  FirstPart As Ptr
@@ -553,33 +553,40 @@ Implements FormStreamGetter
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
