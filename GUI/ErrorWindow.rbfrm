@@ -8,7 +8,7 @@ Begin Window ErrorWindow
    FullScreen      =   False
    HasBackColor    =   False
    HasFullScreenButton=   False
-   Height          =   171
+   Height          =   241
    ImplicitInstance=   True
    LiveResize      =   "True"
    MacProcID       =   0
@@ -24,7 +24,7 @@ Begin Window ErrorWindow
    Resizeable      =   True
    Title           =   "Error"
    Visible         =   True
-   Width           =   469
+   Width           =   597
    Begin Label BoilerPlateText
       AutoDeactivate  =   True
       Bold            =   False
@@ -58,7 +58,7 @@ Begin Window ErrorWindow
       Transparent     =   True
       Underline       =   False
       Visible         =   True
-      Width           =   387
+      Width           =   515
    End
    Begin TextArea ErrorStack
       AcceptTabs      =   True
@@ -72,7 +72,7 @@ Begin Window ErrorWindow
       DataSource      =   ""
       Enabled         =   True
       Format          =   ""
-      Height          =   85
+      Height          =   155
       HelpTag         =   ""
       HideSelection   =   True
       Index           =   -2147483648
@@ -107,7 +107,7 @@ Begin Window ErrorWindow
       UnicodeMode     =   0
       UseFocusRing    =   True
       Visible         =   True
-      Width           =   443
+      Width           =   571
    End
    Begin PushButton QuitBtn
       AutoDeactivate  =   True
@@ -122,7 +122,7 @@ Begin Window ErrorWindow
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   321
+      Left            =   449
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   False
@@ -135,7 +135,7 @@ Begin Window ErrorWindow
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   143
+      Top             =   213
       Transparent     =   True
       Underline       =   False
       Visible         =   True
@@ -167,7 +167,7 @@ Begin Window ErrorWindow
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   143
+      Top             =   213
       Transparent     =   True
       Underline       =   False
       Visible         =   True
@@ -199,7 +199,7 @@ Begin Window ErrorWindow
       TextFont        =   "System"
       TextSize        =   0.0
       TextUnit        =   0
-      Top             =   143
+      Top             =   213
       Transparent     =   True
       Underline       =   False
       Visible         =   True

@@ -62,7 +62,7 @@ Protected Module ErrorHandling
 		    end if
 		    
 		    if ubound( args ) >= 0 then
-		      sig = sig + " " + func + "( " + join( args, ", " ) + " )"
+		      sig = sig + " " + func + "(" + join( args, ", " ) + ")"
 		      
 		    else
 		      sig = sig + " " + func + "()"
@@ -141,16 +141,16 @@ Protected Module ErrorHandling
 		        mode = kObjectMode
 		        
 		      case "b"
-		        funcTypes.append( "boolean" )
+		        funcTypes.append( "Boolean" )
 		        
 		      case "s"
-		        funcTypes.append( "string" )
+		        funcTypes.append( "String" )
 		        
 		      case "f"
 		        mode = kFloatingMode
 		        
 		      case "c"
-		        funcTypes.append( "color" )
+		        funcTypes.append( "Color" )
 		        
 		      case "A"
 		        mode = kArrayMode
@@ -177,10 +177,10 @@ Protected Module ErrorHandling
 		      
 		      
 		    case kIntMode, kUIntMode
-		      dim intType as string = "int"
+		      dim intType as string = "Int"
 		      
 		      if mode = kUIntMode then _
-		      intType = "uint"
+		      intType = "UInt"
 		      
 		      funcTypes.append( intType + str( val( char ) * 8 ) )
 		      mode = kParamMode
@@ -188,10 +188,10 @@ Protected Module ErrorHandling
 		      
 		    case kFloatingMode
 		      if char = "4" then
-		        funcTypes.append( "single" )
+		        funcTypes.append( "Single" )
 		        
 		      elseif char = "8" then
-		        funcTypes.append( "double" )
+		        funcTypes.append( "Double" )
 		        
 		      end if
 		      
@@ -217,7 +217,7 @@ Protected Module ErrorHandling
 		  next
 		  
 		  for each b as integer in byrefs
-		    funcTypes( b ) = "byref " + funcTypes( b )
+		    funcTypes( b ) = "ByRef " + funcTypes( b )
 		  next
 		  
 		  return funcTypes
