@@ -734,6 +734,7 @@ End
 		        Listbox1.RowTag(Listbox1.LastIndex) = True
 		      Else
 		        Listbox1.RowTag(Listbox1.LastIndex) = False
+		        ListBox1.RowPicture(ListBox1.LastIndex) = clear
 		      End If
 		    Next
 		    
