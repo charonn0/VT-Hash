@@ -256,18 +256,6 @@ Begin Window HashWindow
       StackSize       =   0
       TabPanelIndex   =   0
    End
-   Begin VTHash.VTSession VTSocket
-      APIKey          =   ""
-      HTTPVersion     =   ""
-      Index           =   -2147483648
-      IsSSLCertOK     =   False
-      LockedInPosition=   False
-      Password        =   ""
-      Scope           =   1
-      TabPanelIndex   =   0
-      Username        =   ""
-      Yield           =   True
-   End
    Begin Timer HashGUITimer
       Index           =   -2147483648
       LockedInPosition=   False
@@ -302,6 +290,7 @@ Begin Window HashWindow
       Scope           =   0
       TabIndex        =   11
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   39
       Transparent     =   True
       Value           =   0.0
@@ -348,6 +337,39 @@ End
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub VTSocketErrorHandler(Sender As VTHash.VTSession, cURLCode As Integer)
+		  VTHash.HandleCurlError(Sender, cURLCode)
+		  Self.Close
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub VTSocketResponseHandler(Sender As VTHash.VTSession, ResponseObject As JSONItem, HTTPStatus As Integer)
+		  #pragma Unused Sender
+		  Select Case True
+		  Case HTTPStatus = 200 And ResponseObject <> Nil
+		    Dim rw As New ResultWindow
+		    Dim v As New VTHash.Results(ResponseObject, mTargetFile)
+		    v.HashValue = mHash
+		    rw.ShowResult(v)
+		    Self.Close
+		  Case HTTPStatus <> 200
+		    Select Case HTTPStatus
+		    Case 204
+		      Call MsgBox("Virus Total refused to accept your query at this time. Please try again in a few minutes.", 16, "VT Hash Check - Rate limit exceeded")
+		    Case 403
+		      Call MsgBox("Your Virus Total account is not allowed to perform that action." + Str(HTTPStatus), 16, "VT Hash Check - Access denied")
+		    Else
+		      Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "VT Hash Check - HTTP error")
+		    End Select
+		  Else
+		    Call MsgBox("Invalid response from Virus Total.", 16, "VT Hash Check - Parse error")
+		  End Select
+		  Self.Close
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h21
 		Private HashPercent As Integer
@@ -367,6 +389,10 @@ End
 
 	#tag Property, Flags = &h21
 		Private mTargetFile As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private VTSocket As VTHash.VTSession
 	#tag EndProperty
 
 
@@ -452,38 +478,6 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events VTSocket
-	#tag Event
-		Sub Response(ResponseObject As JSONItem, HTTPStatus As Integer)
-		  Select Case True
-		  Case HTTPStatus = 200 And ResponseObject <> Nil
-		    Dim rw As New ResultWindow
-		    Dim v As New VTHash.Results(ResponseObject, mTargetFile)
-		    v.HashValue = mHash
-		    rw.ShowResult(v)
-		    Self.Close
-		  Case HTTPStatus <> 200
-		    Select Case HTTPStatus
-		    Case 204
-		      Call MsgBox("Virus Total refused to accept your query at this time. Please try again in a few minutes.", 16, "VT Hash Check - Rate limit exceeded")
-		    Case 403
-		      Call MsgBox("Your Virus Total account is not allowed to perform that action." + Str(HTTPStatus), 16, "VT Hash Check - Access denied")
-		    Else
-		      Call MsgBox("Virus Total responded with HTTP " + Str(HTTPStatus), 16, "VT Hash Check - HTTP error")
-		    End Select
-		  Else
-		    Call MsgBox("Invalid response from Virus Total.", 16, "VT Hash Check - Parse error")
-		  End Select
-		  Self.Close
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub Error(cURLCode As Integer)
-		  VTHash.HandleCurlError(Me, cURLCode)
-		  Self.Close
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events HashGUITimer
 	#tag Event
 		Sub Action()
@@ -521,6 +515,9 @@ End
 #tag Events SubmitTimer
 	#tag Event
 		Sub Action()
+		  VTSocket = New VTHash.VTSession()
+		  AddHandler VTSocket.Error, WeakAddressOf VTSocketErrorHandler
+		  AddHandler VTSocket.Response, WeakAddressOf VTSocketResponseHandler
 		  VTSocket.APIKey = VTHash.GetConfig("APIKey")
 		  VTSocket.GetReport(mHash, VTHash.RequestType.FileReport)
 		End Sub
