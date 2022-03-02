@@ -260,6 +260,38 @@ End
 	#tag EndEvent
 
 
+	#tag Method, Flags = &h21
+		Private Shared Function ETA(Total As UInt64, Current As UInt64, BPS As Double) As String
+		  Dim remaining As UInt64 = Total - Current
+		  Dim secs As Double = remaining / BPS
+		  Return FormatTime(secs * 1000, True)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Shared Function FormatTime(Milliseconds As Int64, FractionalSeconds As Boolean = False) As String
+		  ' Formats the period of time denoted by Milliseconds as HH:MM:SS. If FractionalSeconds is true then fractions of a second are included.
+		  
+		  Dim hours As Integer = (Milliseconds / (1000 * 60 * 60))
+		  Dim minutes As Integer = (Milliseconds / (1000 * 60)) Mod 60
+		  Dim seconds As Integer = (Milliseconds / 1000) Mod 60
+		  Dim frac As Integer  = Milliseconds Mod 1000
+		  Dim out As String
+		  If hours > 0 Then
+		    out = Str(hours) + ":" + Format(minutes, "00") + ":"
+		  Else
+		    out = out + Format(minutes, "#0") + ":"
+		  End If
+		  If FractionalSeconds Then
+		    out = out + Format(seconds + (frac / 1000), "00.00")
+		  Else
+		    out = out + Format(seconds, "00")
+		  End If
+		  Return out
+		  
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub SubmitFile(parentWindow As Window, File As FolderItem, APIKey As String)
 		  Dim ScreenNumber As Integer = ScreenFromXY(parentWindow.Left, ParentWindow.Top)
@@ -363,7 +395,7 @@ End
 		  #pragma Unused dlTotal
 		  mPercentDone = ulNow * 100 \ ultotal
 		  Dim speed As Double = Me.GetInfo(libcURL.Info.SPEED_UPLOAD)
-		  mInfoCaption = FormatBytes(ulNow) + " of " + FormatBytes(ultotal) + " sent (" + FormatBytes(speed) + "/s)"
+		  mInfoCaption = FormatBytes(ulNow) + " of " + FormatBytes(ultotal) + " sent (" + FormatBytes(speed) + "/s) " + ETA(ulTotal, ulNow, speed) + " remaining"
 		End Function
 	#tag EndEvent
 	#tag Event
