@@ -11,9 +11,8 @@ Inherits Canvas
 		  If mLastWidth <> Me.Width Or mLastHeight <> Me.Height Then
 		    drawingBuffer = New Picture(Me.Width, Me.Height, 24)
 		    Me.Value = mvalue
-		  Else
-		    g.DrawPicture(drawingBuffer, 0, 0)
 		  End If
+		  g.DrawPicture(drawingBuffer, 0, 0)
 		  mLastWidth = Me.Width
 		  mLastHeight = Me.Height
 		End Sub
