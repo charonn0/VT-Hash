@@ -134,12 +134,12 @@ Inherits Application
 		    mIsQuitting = True
 		    Quit(1)
 		    
-		  Case IsA PlatformNotSupportedException
-		    If Instr(error.Message, "libcurl") > 0 Then
-		      Call MsgBox("libcurl could not be loaded! The program will now exit.", 16, "VT Hash Check - Fatal error: missing dependency")
-		      mIsQuitting = True
-		      Quit(2)
-		    End If
+		    ' Case IsA PlatformNotSupportedException
+		    ' If Instr(error.Message, "libcurl") > 0 Then
+		    ' Call MsgBox("libcurl could not be loaded! The program will now exit.", 16, "VT Hash Check - Fatal error: missing dependency")
+		    ' mIsQuitting = True
+		    ' Quit(2)
+		    ' End If
 		    
 		  End Select
 		  Return ErrorWindow.ShowException(error)
