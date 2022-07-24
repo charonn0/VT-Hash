@@ -1,4 +1,4 @@
-VT Hash Check 1.64
+VT Hash Check 1.65
 Copyright ©2009-22 Andrew Lambert, All Rights Reserved
 
 1. Purpose
