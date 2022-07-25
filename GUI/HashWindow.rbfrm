@@ -2,13 +2,13 @@
 Begin Window HashWindow
    BackColor       =   &cFFFFFF00
    Backdrop        =   0
-   CloseButton     =   True
+   CloseButton     =   False
    Composite       =   False
-   Frame           =   3
+   Frame           =   1
    FullScreen      =   False
    HasBackColor    =   False
    HasFullScreenButton=   False
-   Height          =   72
+   Height          =   104
    ImplicitInstance=   False
    LiveResize      =   "True"
    MacProcID       =   0
@@ -18,13 +18,13 @@ Begin Window HashWindow
    MenuBar         =   0
    MenuBarVisible  =   True
    MinHeight       =   64
-   MinimizeButton  =   True
+   MinimizeButton  =   False
    MinWidth        =   64
    Placement       =   2
    Resizeable      =   False
    Title           =   "Calculating hash..."
    Visible         =   True
-   Width           =   319
+   Width           =   473
    Begin TextField HashText
       AcceptTabs      =   False
       Alignment       =   0
@@ -38,7 +38,7 @@ Begin Window HashWindow
       DataSource      =   ""
       Enabled         =   True
       Format          =   ""
-      Height          =   18
+      Height          =   19
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -48,34 +48,34 @@ Begin Window HashWindow
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   False
+      LockRight       =   True
       LockTop         =   True
       Mask            =   ""
       Password        =   False
       ReadOnly        =   True
       Scope           =   0
-      TabIndex        =   1
+      TabIndex        =   3
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "00000000000000000000000000000000000000000000000000000000000000000000"
       TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11.0
+      TextSize        =   12.0
       TextUnit        =   0
-      Top             =   17
+      Top             =   33
       Transparent     =   True
       Underline       =   False
       UseFocusRing    =   False
       Visible         =   True
-      Width           =   262
+      Width           =   416
    End
-   Begin Label StaticText1
+   Begin Label FilePathLbl
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
-      Height          =   20
+      Height          =   28
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -89,14 +89,14 @@ Begin Window HashWindow
       Multiline       =   False
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   3
+      TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "File:"
       TextAlign       =   2
       TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11.0
+      TextSize        =   12.0
       TextUnit        =   0
       Top             =   -3
       Transparent     =   True
@@ -110,7 +110,7 @@ Begin Window HashWindow
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
-      Height          =   20
+      Height          =   26
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -124,16 +124,16 @@ Begin Window HashWindow
       Multiline       =   False
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   4
+      TabIndex        =   2
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "SHA512:"
       TextAlign       =   2
       TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11.0
+      TextSize        =   12.0
       TextUnit        =   0
-      Top             =   14
+      Top             =   29
       Transparent     =   True
       Underline       =   False
       Visible         =   True
@@ -145,7 +145,7 @@ Begin Window HashWindow
       DataField       =   ""
       DataSource      =   ""
       Enabled         =   True
-      Height          =   20
+      Height          =   28
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -154,25 +154,25 @@ Begin Window HashWindow
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   False
+      LockRight       =   True
       LockTop         =   True
       Multiline       =   False
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   2
+      TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Z:\\My Folder\\MySubFolder\\MyFile.exe"
       TextAlign       =   0
       TextColor       =   &c00000000
       TextFont        =   "System"
-      TextSize        =   11.0
+      TextSize        =   12.0
       TextUnit        =   0
       Top             =   -3
       Transparent     =   True
       Underline       =   False
       Visible         =   True
-      Width           =   262
+      Width           =   416
    End
    Begin PushButton CancelButton
       AutoDeactivate  =   True
@@ -182,25 +182,25 @@ Begin Window HashWindow
       Caption         =   "Cancel"
       Default         =   True
       Enabled         =   True
-      Height          =   18
+      Height          =   22
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   120
-      LockBottom      =   False
+      Left            =   238
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
-      LockTop         =   True
+      LockTop         =   False
       Scope           =   0
-      TabIndex        =   0
+      TabIndex        =   5
       TabPanelIndex   =   0
       TabStop         =   True
       TextFont        =   "System"
-      TextSize        =   11.0
+      TextSize        =   12.0
       TextUnit        =   0
-      Top             =   52
+      Top             =   79
       Transparent     =   True
       Underline       =   False
       Visible         =   True
@@ -223,16 +223,16 @@ Begin Window HashWindow
       InitialParent   =   ""
       Italic          =   False
       Left            =   3
-      LockBottom      =   False
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
-      LockTop         =   True
+      LockTop         =   False
       Multiline       =   False
       ResetPeriod     =   1000
       Scope           =   0
       Selectable      =   False
-      TabIndex        =   5
+      TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
       Text            =   "Version 0.86"
@@ -241,14 +241,14 @@ Begin Window HashWindow
       TextFont        =   "System"
       TextSize        =   9.0
       TextUnit        =   0
-      Top             =   52
+      Top             =   84
       Transparent     =   True
       Underline       =   False
       URL             =   ""
       Visible         =   True
       Width           =   86
    End
-   Begin Thread Hasher
+   Begin Thread HasherThread
       Index           =   -2147483648
       LockedInPosition=   False
       Priority        =   5
@@ -275,7 +275,7 @@ Begin Window HashWindow
    Begin ProgressBar HashProgress
       AutoDeactivate  =   True
       Enabled         =   True
-      Height          =   12
+      Height          =   20
       HelpTag         =   ""
       Indeterminate   =   False
       Index           =   -2147483648
@@ -286,16 +286,16 @@ Begin Window HashWindow
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Maximum         =   5
+      Maximum         =   100
       Scope           =   0
-      TabIndex        =   11
+      TabIndex        =   4
       TabPanelIndex   =   0
       TabStop         =   True
-      Top             =   39
+      Top             =   54
       Transparent     =   True
       Value           =   0.0
       Visible         =   True
-      Width           =   317
+      Width           =   469
    End
    Begin Timer ErrorTimer
       Index           =   -2147483648
@@ -313,13 +313,46 @@ Begin Window HashWindow
       Scope           =   0
       TabPanelIndex   =   0
    End
+   Begin PushButton PauseButton
+      AutoDeactivate  =   True
+      Bold            =   False
+      ButtonStyle     =   0
+      Cancel          =   True
+      Caption         =   "Pause"
+      Default         =   True
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   155
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   12.0
+      TextUnit        =   0
+      Top             =   79
+      Transparent     =   True
+      Underline       =   False
+      Visible         =   True
+      Width           =   80
+   End
 End
 #tag EndWindow
 
 #tag WindowCode
 	#tag Event
 		Sub Close()
-		  If Hasher.State <> Thread.NotRunning Then Hasher.Kill()
+		  If HasherThread.State <> Thread.NotRunning Then HasherThread.Kill()
+		  If VTSocket <> Nil And Not VTSocket.IsTransferComplete Then VTSocket.Abort()
 		  ErrorTimer.Mode = Timer.ModeOff
 		  HashGUITimer.Mode = Timer.ModeOff
 		  SubmitterGUITimer.Mode = Timer.ModeOff
@@ -327,13 +360,20 @@ End
 		End Sub
 	#tag EndEvent
 
+	#tag Event
+		Sub Open()
+		  mTaskBar = New TaskBar(Self)
+		  mTaskBar.SetProgressState(TaskBar.TaskBarStates.Normal)
+		End Sub
+	#tag EndEvent
+
 
 	#tag Method, Flags = &h0
 		Sub ProcessFile(File As FolderItem)
 		  mTargetFile = File
-		  PathText.Text = mTargetFile.NativePath.Shorten
-		  Me.Show
-		  Hasher.Run
+		  PathText.Text = mTargetFile.NativePath.Shorten(65)
+		  Me.Show()
+		  HasherThread.Run()
 		End Sub
 	#tag EndMethod
 
@@ -392,6 +432,10 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mTaskBar As TaskBar
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private VTSocket As VTHash.VTSession
 	#tag EndProperty
 
@@ -402,11 +446,6 @@ End
 	#tag Event
 		Sub Open()
 		  Me.Text = "Calculating..."
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub GotFocus()
-		  Me.SelectAll
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -427,8 +466,23 @@ End
 #tag Events CancelButton
 	#tag Event
 		Sub Action()
+		  Dim hashpaused As Boolean
+		  If HasherThread.ThreadState = Thread.ThreadStates.Running Then
+		    HasherThread.Pause()
+		    hashpaused = True
+		  End If
+		  
+		  Dim submitpaused As Boolean
+		  If VTSocket <> Nil And Not VTSocket.IsTransferComplete Then
+		    Call VTSocket.EasyHandle.Pause()
+		    submitpaused = True
+		  End If
+		  
 		  If MsgBox("Cancel this operation?", 52, "VT Hash Check - Confirmation") = 6 Then
 		    Self.Close
+		  Else
+		    If hashpaused Then HasherThread.Resume()
+		    If submitpaused Then Call VTSocket.EasyHandle.Resume()
 		  End If
 		End Sub
 	#tag EndEvent
@@ -439,8 +493,13 @@ End
 		  me.Text = "Version " + VTHash.VersionString
 		End Sub
 	#tag EndEvent
+	#tag Event
+		Sub Action()
+		  AboutWindow.Show()
+		End Sub
+	#tag EndEvent
 #tag EndEvents
-#tag Events Hasher
+#tag Events HasherThread
 	#tag Event
 		Sub Run()
 		  App.YieldToNextThread
@@ -450,11 +509,11 @@ End
 		  bs = bs.Open(mTargetFile)
 		  Dim chunksz As Integer
 		  If bs.Length > 1024 * 1024 Then chunksz = 1024 * 1024 Else chunksz = 4 * 1024
+		  HashGUITimer.Mode = Timer.ModeMultiple
 		  While Not bs.EOF
 		    App.YieldToNextThread
 		    hp.Process(bs.Read(chunksz))
 		    HashPercent = bs.Position * 100 / bs.Length
-		    HashGUITimer.Mode = Timer.ModeSingle
 		    App.YieldToNextThread
 		  Wend
 		  bs.Close
@@ -484,7 +543,7 @@ End
 		  If mHash <> "" Then HashText.Text = mHash
 		  HashText.Invalidate(False)
 		  HashProgress.Value = HashPercent
-		  
+		  mTaskBar.SetProgressValue(HashPercent, 100)
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -520,6 +579,27 @@ End
 		  AddHandler VTSocket.Response, WeakAddressOf VTSocketResponseHandler
 		  VTSocket.APIKey = VTHash.GetConfig("APIKey")
 		  VTSocket.GetReport(mHash, VTHash.RequestType.FileReport)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PauseButton
+	#tag Event
+		Sub Action()
+		  If Me.Caption = "Pause" Then
+		    If HasherThread.ThreadState = Thread.ThreadStates.Running Then
+		      HasherThread.Pause()
+		    ElseIf VTSocket <> Nil And Not VTSocket.IsTransferComplete Then
+		      Call VTSocket.EasyHandle.Pause()
+		    End If
+		    Me.Caption = "Resume"
+		  Else
+		    If HasherThread.ThreadState = Thread.ThreadStates.Paused Then
+		      HasherThread.Resume()
+		    ElseIf VTSocket <> Nil And Not VTSocket.IsTransferComplete Then
+		      Call VTSocket.EasyHandle.Resume()
+		    End If
+		    Me.Caption = "Pause"
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
