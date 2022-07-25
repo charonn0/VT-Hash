@@ -25,7 +25,7 @@ Begin Window ResultWindow
    Title           =   "Virus Total Report"
    Visible         =   True
    Width           =   496
-   Begin PrettyListBox Listbox1
+   Begin PrettyListBox MainResultsList
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
       Bold            =   False
@@ -77,7 +77,7 @@ Begin Window ResultWindow
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
-   Begin PushButton closeButton
+   Begin PushButton CloseButton
       AutoDeactivate  =   True
       Bold            =   False
       ButtonStyle     =   0
@@ -109,7 +109,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   126
    End
-   Begin PushButton PushButton2
+   Begin PushButton ShowFullResultsBtn
       AutoDeactivate  =   True
       Bold            =   False
       ButtonStyle     =   0
@@ -141,7 +141,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   126
    End
-   Begin LinkLabel saved
+   Begin LinkLabel SavedToDiskLink
       ActiveColor     =   &cFF000000
       AltText         =   ""
       AutoDeactivate  =   True
@@ -191,7 +191,7 @@ Begin Window ResultWindow
       Scope           =   0
       TabPanelIndex   =   0
    End
-   Begin GradientProgressBar ProgBar1
+   Begin GradientProgressBar DangerMeterProgressBar
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoDeactivate  =   True
@@ -235,7 +235,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   495
    End
-   Begin TextField FilePath
+   Begin TextField FilePathField
       AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
@@ -278,7 +278,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   427
    End
-   Begin Label Label1
+   Begin Label PathLbl
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
@@ -313,7 +313,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   47
    End
-   Begin TextField FileHash
+   Begin TextField FileHashField
       AcceptTabs      =   False
       Alignment       =   0
       AutoDeactivate  =   True
@@ -356,7 +356,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   427
    End
-   Begin Label HashType
+   Begin Label HashTypeLbl
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
@@ -391,7 +391,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   47
    End
-   Begin Canvas Canvas1
+   Begin Canvas ShowInExplorerBtn
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoDeactivate  =   True
@@ -418,7 +418,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   16
    End
-   Begin LinkLabel LinkLabel1
+   Begin LinkLabel AddCommentLink
       ActiveColor     =   &cFF000000
       AltText         =   ""
       AutoDeactivate  =   True
@@ -460,7 +460,7 @@ Begin Window ResultWindow
       Visible         =   True
       Width           =   109
    End
-   Begin Canvas MoreHashes
+   Begin Canvas MoreHashesBtn
       AcceptFocus     =   False
       AcceptTabs      =   False
       AutoDeactivate  =   True
@@ -534,7 +534,7 @@ End
 	#tag MenuHandler
 		Function csvmenu() As Boolean Handles csvmenu.Action
 			savedAs = saveAs(Mode_CSV)
-			saved.Visible = (savedAs <> Nil)
+			SavedToDiskLink.Visible = (savedAs <> Nil)
 			Return True
 			
 		End Function
@@ -543,7 +543,7 @@ End
 	#tag MenuHandler
 		Function jsonmenu() As Boolean Handles jsonmenu.Action
 			savedAs = saveAs(Mode_Org_JSON)
-			saved.Visible = (savedAs <> Nil)
+			SavedToDiskLink.Visible = (savedAs <> Nil)
 			Return True
 			
 		End Function
@@ -587,7 +587,7 @@ End
 	#tag MenuHandler
 		Function textmenu() As Boolean Handles textmenu.Action
 			savedAs = saveAs(Mode_Text)
-			saved.Visible = (savedAs <> Nil)
+			SavedToDiskLink.Visible = (savedAs <> Nil)
 			Return True
 			
 		End Function
@@ -611,7 +611,7 @@ End
 	#tag MenuHandler
 		Function unpackedmenu() As Boolean Handles unpackedmenu.Action
 			savedAs = saveAs(Mode_Unp_JSON)
-			saved.Visible = (savedAs <> Nil)
+			SavedToDiskLink.Visible = (savedAs <> Nil)
 			Return True
 			
 		End Function
@@ -639,7 +639,7 @@ End
 		      bs = BinaryStream.Create(f, True)
 		      bs.Close
 		      savedAs = saveAs(VTHash.GetConfig("DefaultFormat"), f)
-		      saved.Visible = True
+		      SavedToDiskLink.Visible = True
 		    Catch err
 		      If Err IsA EndException Or Err IsA ThreadEndException Then Raise Err
 		      Dim t as Introspection.TypeInfo = Introspection.GetType(err)
@@ -670,8 +670,8 @@ End
 		  'If Not f.Exists Then f.CreateAsFolder
 		  If f = Nil Then Return Nil
 		  If f.Directory Then
-		    Me.saved.Text = "Invalid Save Path"
-		    Me.saved.TextColor = &cFF0000
+		    Me.SavedToDiskLink.Text = "Invalid Save Path"
+		    Me.SavedToDiskLink.TextColor = &cFF0000
 		    Return Nil
 		  End If
 		  
@@ -684,8 +684,8 @@ End
 		    tos.WriteLine("Report retrieved: " + d.ShortDate + "; " + d.ShortTime + " " + Format(d.GMTOffset, "+-#0.##"))
 		    tos.WriteLine("Report Date: " + VTResult.ScanDate.SQLDateTime)
 		    tos.WriteLine("")
-		    For i As Integer = 0 To Me.ListBox1.LastIndex
-		      tos.WriteLine(Me.ListBox1.Cell(i, 0) + " " + Me.ListBox1.Cell(i, 1) + ": " + Chr(9) + Me.ListBox1.Cell(i, 2))
+		    For i As Integer = 0 To MainResultsList.LastIndex
+		      tos.WriteLine(MainResultsList.Cell(i, 0) + " " + MainResultsList.Cell(i, 1) + ": " + Chr(9) + MainResultsList.Cell(i, 2))
 		    Next
 		  Case Mode_Org_JSON
 		    tos = tos.Create(f)
@@ -698,8 +698,8 @@ End
 		    tos.Write(tmp)
 		  Case Mode_CSV
 		    tos = tos.Create(f)
-		    For i As Integer = 0 To Me.ListBox1.LastIndex
-		      tos.WriteLine(Me.ListBox1.Cell(i, 0) + "," + Me.ListBox1.Cell(i, 1) + "," + Me.ListBox1.Cell(i, 2))
+		    For i As Integer = 0 To MainResultsList.LastIndex
+		      tos.WriteLine(MainResultsList.Cell(i, 0) + "," + MainResultsList.Cell(i, 1) + "," + MainResultsList.Cell(i, 2))
 		    Next
 		  End Select
 		  tos.Close
@@ -727,14 +727,14 @@ End
 		    names.SortWith(values, versions)
 		    
 		    For i As Integer = 0 To UBound(names)
-		      ListBox1.AddRow(names(i), versions(i), values(i))
+		      MainResultsList.AddRow(names(i), versions(i), values(i))
 		      If values(i).Trim <> "" Then
-		        ListBox1.RowPicture(ListBox1.LastIndex) = warn
-		        Listbox1.CellBold(ListBox1.LastIndex, 2) = True
-		        Listbox1.RowTag(Listbox1.LastIndex) = True
+		        MainResultsList.RowPicture(MainResultsList.LastIndex) = warn
+		        MainResultsList.CellBold(MainResultsList.LastIndex, 2) = True
+		        MainResultsList.RowTag(MainResultsList.LastIndex) = True
 		      Else
-		        Listbox1.RowTag(Listbox1.LastIndex) = False
-		        ListBox1.RowPicture(ListBox1.LastIndex) = clear
+		        MainResultsList.RowTag(MainResultsList.LastIndex) = False
+		        MainResultsList.RowPicture(MainResultsList.LastIndex) = clear
 		      End If
 		    Next
 		    
@@ -743,39 +743,39 @@ End
 		      Dim sortdirection As Integer
 		      sorttype = GetConfig("SortType")
 		      If HasConfig("SortDirection") Then
-		        sortdirection = GetConfig("SortType")
+		        sortdirection = GetConfig("SortDirection")
 		      Else
 		        sortdirection = Listbox.SortAscending
 		      End If
-		      Listbox1.SortedColumn = sorttype
-		      Listbox1.ColumnSortDirection(sorttype) = sortdirection
-		      Listbox1.Sort
+		      MainResultsList.SortedColumn = sorttype
+		      MainResultsList.ColumnSortDirection(sorttype) = sortdirection
+		      MainResultsList.Sort
 		    End If
 		    
 		    
-		    ProgBar1.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
+		    DangerMeterProgressBar.Text = Str(VTResult.ThreatCount) + " of " + Str(VTResult.ResultCount) + " found threats; Last Scan: " _
 		    + VTResult.ScanDate.ShortDate + " " + VTResult.ScanDate.ShortTime
-		    ProgBar1.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
-		    ProgBar1.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
+		    DangerMeterProgressBar.value = VTResult.ThreatCount * 100 / VTResult.ResultCount
+		    DangerMeterProgressBar.HelpTag = Format(VTResult.ThreatCount * 100 / VTResult.ResultCount, "##0.00") + "% dangerous"
 		    
-		    FileHash.Text = VTResult.HashValue
+		    FileHashField.Text = VTResult.HashValue
 		    If VTResult.TargetFile <> Nil Then
-		      FilePath.Text = VTResult.TargetFile.NativePath
+		      FilePathField.Text = VTResult.TargetFile.NativePath
 		    Else
-		      FilePath.Text = ""
-		      Canvas1.Enabled = False
-		      MoreHashes.Enabled = False
+		      FilePathField.Text = ""
+		      ShowInExplorerBtn.Enabled = False
+		      MoreHashesBtn.Enabled = False
 		    End If
 		    
 		    Select Case VTResult.Algorithm
 		    Case Win32.Crypto.CALG_MD5
-		      HashType.Text = "MD5:"
+		      HashTypeLbl.Text = "MD5:"
 		    Case Win32.Crypto.CALG_SHA1
-		      HashType.Text = "SHA1:"
+		      HashTypeLbl.Text = "SHA1:"
 		    Case Win32.Crypto.CALG_SHA256
-		      HashType.Text = "SHA256:"
+		      HashTypeLbl.Text = "SHA256:"
 		    End Select
-		    FileHash.Text = VTResult.HashValue
+		    FileHashField.Text = VTResult.HashValue
 		    If Not App.ViewMode Then DoAutosave()
 		    
 		    If App.ViewMode Then Me.ShowModal Else Me.Show
@@ -830,7 +830,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events Listbox1
+#tag Events MainResultsList
 	#tag Event
 		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
 		  #pragma Unused column
@@ -856,7 +856,7 @@ End
 		  Dim row As Integer = Me.RowFromXY(X, Y)
 		  If row < 0 Then row = Me.ListIndex
 		  Dim infection As String = Me.Cell(row, 2).Trim
-		  Dim engine As String = Me.Cell(row, 0).Trim
+		  ' Dim engine As String = Me.Cell(row, 0).Trim
 		  Dim searchname As String = VTHash.GetConfig("SearchEngineName")
 		  If infection <> "" Then
 		    Dim cp As New MenuItem("Copy to clipboard")
@@ -870,10 +870,10 @@ End
 		    base.Append(New MenuItem(base.TextSeparator))
 		  End If
 		  
-		  Dim ignore As New MenuItem("Ignore this engine")
-		  ignore.Tag = engine:row
-		  base.Append(ignore)
-		  base.Tag = row
+		  ' Dim ignore As New MenuItem("Ignore this engine")
+		  ' ignore.Tag = engine:row
+		  ' base.Append(ignore)
+		  ' base.Tag = row
 		  Return True
 		End Function
 	#tag EndEvent
@@ -891,7 +891,7 @@ End
 		  Case "Ignor"
 		    Dim tag As Pair = hitItem.Tag
 		    Dim engine As String = tag.Left
-		    VTHash.SetConfig("Ignored/Engines/" + engine, True)
+		    VTHash.SetConfig("Ignored.Engines." + engine, True)
 		    Dim row As Integer = tag.Right
 		    Me.RemoveRow(row)
 		    Return True
@@ -929,14 +929,14 @@ End
 		End Function
 	#tag EndEvent
 #tag EndEvents
-#tag Events closeButton
+#tag Events CloseButton
 	#tag Event
 		Sub Action()
 		  Self.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events PushButton2
+#tag Events ShowFullResultsBtn
 	#tag Event
 		Sub Action()
 		  ShowURL(VTResult.Permalink)
@@ -944,7 +944,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events saved
+#tag Events SavedToDiskLink
 	#tag Event
 		Sub MouseEnter()
 		  If Me.Visible Then
@@ -978,7 +978,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Canvas1
+#tag Events ShowInExplorerBtn
 	#tag Event
 		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
 		  #pragma Unused areas
@@ -1004,7 +1004,7 @@ End
 		End Function
 	#tag EndEvent
 #tag EndEvents
-#tag Events LinkLabel1
+#tag Events AddCommentLink
 	#tag Event
 		Sub MouseEnter()
 		  If Me.Visible Then
@@ -1034,7 +1034,7 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events MoreHashes
+#tag Events MoreHashesBtn
 	#tag Event
 		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
 		  #pragma Unused areas
