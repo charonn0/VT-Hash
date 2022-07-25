@@ -193,6 +193,7 @@ Protected Module VTHash
 		  Else
 		    mConfig = PrefStore.Create(f)
 		    mConfig.SetValue("UseSSL") = True
+		    mConfig.Flush()
 		  End If
 		End Sub
 	#tag EndMethod
