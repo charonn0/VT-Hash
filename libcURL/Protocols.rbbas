@@ -66,6 +66,12 @@ Protected Module Protocols
 	#tag Constant, Name = SFTP, Type = Double, Dynamic = False, Default = \"&h20", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = SMB, Type = Double, Dynamic = False, Default = \"67108864", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SMBS, Type = Double, Dynamic = False, Default = \"134217728", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = SMTP, Type = Double, Dynamic = False, Default = \"&h10000", Scope = Protected
 	#tag EndConstant
 

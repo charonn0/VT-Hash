@@ -2,18 +2,24 @@
 Protected Class ShareHandle
 Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h0
-		Function AddItem(Item As libcURL.EasyHandle) As Boolean
+		Attributes( deprecated = "libcURL.ShareHandle.AddTransfer" )  Function AddItem(Item As libcURL.EasyHandle) As Boolean
+		  Return AddTransfer(Item)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function AddTransfer(Transfer As libcURL.EasyHandle) As Boolean
 		  ' Add an easy handle to share handle
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/CURLOPT_SHARE.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ShareHandle.AddItem
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ShareHandle.AddTransfer
 		  
-		  If Not Me.HasItem(Item) And Item.SetOption(libcURL.Opts.SHARE, Me) Then
-		    SharedHandles.Value(Item.Handle) = Item
+		  If Not Me.HasTransfer(Transfer) And Transfer.SetOption(libcURL.Opts.SHARE, Me) Then
+		    SharedHandles.Value(Transfer.Handle) = Transfer
 		    Return True
 		  Else
-		    mLastError = Item.LastError
+		    mLastError = Transfer.LastError
 		    Return False
 		  End If
 		End Function
@@ -28,7 +34,7 @@ Inherits libcURL.cURLHandle
 		  
 		  If SharedHandles <> Nil Then
 		    For Each h As Integer In SharedHandles.Keys
-		      Call Me.RemoveItem(SharedHandles.Value(h))
+		      Call Me.RemoveTransfer(SharedHandles.Value(h))
 		    Next
 		  End If
 		  
@@ -43,8 +49,9 @@ Inherits libcURL.cURLHandle
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ShareHandle.Constructor
 		  
 		  // Calling the overridden superclass constructor.
-		  // Constructor(GlobalInitFlags As Integer) -- From libcURL.cURLHandle
-		  Super.Constructor(GlobalInitFlags)
+		  // Constructor() -- From libcURL.cURLHandle
+		  #pragma Unused GlobalInitFlags
+		  Super.Constructor()
 		  mHandle = curl_share_init()
 		  If mHandle = 0 Then
 		    mLastError = libcURL.Errors.INIT_FAILED
@@ -73,8 +80,14 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function HasItem(EasyItem As libcURL.EasyHandle) As Boolean
-		  Return SharedHandles.HasKey(EasyItem.Handle)
+		Attributes( deprecated = "libcURL.ShareHandle.HasTransfer" )  Function HasItem(EasyItem As libcURL.EasyHandle) As Boolean
+		  Return HasTransfer(EasyItem)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function HasTransfer(Transfer As libcURL.EasyHandle) As Boolean
+		  Return SharedHandles.HasKey(Transfer.Handle)
 		End Function
 	#tag EndMethod
 
@@ -93,15 +106,22 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function RemoveItem(Item As libcURL.EasyHandle) As Boolean
+		Attributes( deprecated = "libcURL.ShareHandle.RemoveTransfer" )  Function RemoveItem(Item As libcURL.EasyHandle) As Boolean
+		  Return RemoveTransfer(Item)
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function RemoveTransfer(Transfer As libcURL.EasyHandle) As Boolean
 		  ' Remove an easy handle from share handle.
 		  '
-		  ' See:
+		  ' See: 
 		  ' http://curl.haxx.se/libcurl/c/CURLOPT_SHARE.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ShareHandle.RemoveItem
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ShareHandle.RemoveTransfer
 		  
-		  If SharedHandles.HasKey(Item.Handle) And Item.SetOption(libcURL.Opts.SHARE, Nil) Then
-		    SharedHandles.Remove(Item.Handle)
+		  If SharedHandles.HasKey(Transfer.Handle) And Transfer.SetOption(libcURL.Opts.SHARE, Nil) Then
+		    SharedHandles.Remove(Transfer.Handle)
 		    Return True
 		  End If
 		  
@@ -163,7 +183,7 @@ Inherits libcURL.cURLHandle
 		      Return Me.SetOptionPtr(OptionNumber, NewValue.PtrValue)
 		      
 		    Case IsA FolderItem
-		      Return Me.SetOption(OptionNumber, FolderItem(NewValue).NativePath)
+		      Return Me.SetOption(OptionNumber, FolderItem(NewValue).AbsolutePath_)
 		      
 		    Case IsA cURLLock
 		      Dim p As cURLLock = NewValue
@@ -205,6 +225,7 @@ Inherits libcURL.cURLHandle
 		This class wraps the curl_share API. EasyHandles that are added to a ShareHandle instance may share SSL session data, 
 		DNS caches, connection pools, and/or HTTP cookies. By default nothing is shared. You must enable the share options 
 		you want before adding any EasyHandles to the share. Doing so after will raise an error (CURLSHE_IN_USE (2))
+		
 	#tag EndNote
 
 
@@ -390,14 +411,6 @@ Inherits libcURL.cURLHandle
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="ShareConnections"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="ShareCookies"
 			Visible=false
 			Group="Behavior"
@@ -435,6 +448,14 @@ Inherits libcURL.cURLHandle
 			Group="Position"
 			InitialValue="0"
 			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ShareConnections"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior

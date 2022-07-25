@@ -13,7 +13,7 @@ Inherits libcURL.EasyHandle
 		  
 		  If Instances = Nil Then Return CURL_CHUNK_BGN_FUNC_FAIL
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
-		  If curl <> Nil And curl.Value <> Nil And curl.Value IsA FTPWildCard And TransferInfo <> Nil Then
+		  If curl <> Nil And curl.Value IsA FTPWildCard And TransferInfo <> Nil Then
 		    Return FTPWildCard(curl.Value).curlChunkBegin(TransferInfo.FileInfo, Remaining)
 		  End If
 		  
@@ -37,7 +37,7 @@ Inherits libcURL.EasyHandle
 		  #pragma X86CallingConvention CDecl
 		  If Instances = Nil Then Return 0
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
-		  If curl <> Nil And curl.Value <> Nil And curl.Value IsA FTPWildCard Then
+		  If curl <> Nil And curl.Value IsA FTPWildCard Then
 		    Return FTPWildCard(curl.Value).curlChunkEnd()
 		  End If
 		  
@@ -72,7 +72,7 @@ Inherits libcURL.EasyHandle
 		  Dim mb As MemoryBlock = Info.FileName
 		  Dim filename As String = mb.CString(0)
 		  If filename = "." Or filename = ".." Then Return CURL_CHUNK_BGN_FUNC_SKIP ' skip parent and self references
-		  Dim file As FolderItem
+		  Dim file As FolderItem 
 		  If LocalRoot <> Nil Then file = LocalRoot.Child(filename)
 		  
 		  Dim p As New Permissions(Info.Perm)
@@ -142,7 +142,7 @@ Inherits libcURL.EasyHandle
 		  
 		  If Instances = Nil Then Return 0
 		  Dim curl As WeakRef = Instances.Lookup(UserData, Nil)
-		  If curl <> Nil And curl.Value <> Nil And curl.Value IsA FTPWildCard Then
+		  If curl <> Nil And curl.Value IsA FTPWildCard Then
 		    Return FTPWildCard(curl.Value).curlFNMatch(Pattern, FileName)
 		  End If
 		  
@@ -191,7 +191,7 @@ Inherits libcURL.EasyHandle
 
 	#tag Method, Flags = &h0
 		Function SetOption(OptionNumber As Integer, NewValue As Variant) As Boolean
-		  ' Call this method with a curl option number and a value that is acceptable for that option.
+		  ' Call this method with a curl option number and a value that is acceptable for that option. 
 		  ' Refer to the EasyHandle.SetOption method for additional info.
 		  
 		  ' See:
@@ -200,12 +200,15 @@ Inherits libcURL.EasyHandle
 		  
 		  Select Case True
 		  Case NewValue IsA cURLChunkBegin
+		    mOptions.Value(OptionNumber) = NewValue
 		    Dim p As cURLChunkBegin = NewValue
 		    Return Me.SetOptionPtr(OptionNumber, p)
 		  Case NewValue IsA cURLChunkEnd
+		    mOptions.Value(OptionNumber) = NewValue
 		    Dim p As cURLChunkEnd = NewValue
 		    Return Me.SetOptionPtr(OptionNumber, p)
 		  Case NewValue IsA cURLFNMatch
+		    mOptions.Value(OptionNumber) = NewValue
 		    Dim p As cURLFNMatch = NewValue
 		    Return Me.SetOptionPtr(OptionNumber, p)
 		  End Select
@@ -236,7 +239,7 @@ Inherits libcURL.EasyHandle
 		  Dim w As New FTPWildCard
 		  w.LocalRoot = outputdir
 		
-		  Dim c As New cURLClient(w) ' pass the FTPWildCard to cURLManager.Constructor(EasyHandle)
+		  Dim c As New cURLClient(w) ' pass the FTPWildCard to cURLSession.Constructor(EasyHandle)
 		
 		  If Not c.Get("ftp://ftp.example.com/pub/*.htm*") Then ' use a pattern in the URL
 		    MsgBox("Error: " + Str(c.LastError))
@@ -388,6 +391,198 @@ Inherits libcURL.EasyHandle
 
 	#tag ViewBehavior
 		#tag ViewProperty
+			Name="AutoDisconnect"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="AutoReferer"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="BufferSize"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ConnectionTimeout"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="FailOnServerError"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="FollowRedirects"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HTTPCompression"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="HTTPPreserveMethod"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LocalPort"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="MaxRedirects"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Password"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="PipeWait"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Port"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="RemoteIP"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Secure"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TimeOut"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UploadMode"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="URL"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UseErrorBuffer"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UseProgressEvent"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UserAgent"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Username"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Verbose"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="BufferSizeUpload"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="ConnectionType"
 			Visible=false
 			Group="Behavior"
@@ -458,82 +653,16 @@ Inherits libcURL.EasyHandle
 				"4 - TLSv1_0"
 				"5 - TLSv1_1"
 				"6 - TLSv1_2"
+				"7 - TLSv1_3"
+				"65536 - Max_TLSv1_0"
+				"327680 - Max_TLSv1_1"
+				"393216 - Max_TLSv1_2"
+				"458752 - Max_TLSv1_3"
+				"458753 - Max_Default"
 			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="AutoDisconnect"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="AutoReferer"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BufferSize"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BufferSizeUpload"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ConnectionTimeout"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="CustomMatch"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="FailOnServerError"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="FollowRedirects"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HTTPCompression"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HTTPPreserveMethod"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
@@ -557,22 +686,6 @@ Inherits libcURL.EasyHandle
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="LocalPort"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="MaxRedirects"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
@@ -589,67 +702,11 @@ Inherits libcURL.EasyHandle
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Password"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="PipeWait"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Port"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Remaining"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="RemoteIP"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Secure"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
 			InitialValue=""
 			Type="String"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TimeOut"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
@@ -661,59 +718,11 @@ Inherits libcURL.EasyHandle
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="UploadMode"
+			Name="Remaining"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="URL"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="UseErrorBuffer"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="UseProgressEvent"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="UserAgent"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Username"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Verbose"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
+			Type="Integer"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior

@@ -356,9 +356,9 @@ End
 		  'End If
 		  'Self.Close
 		  If Not Socket.IsTransferComplete Then
-		    Call Socket.EasyItem.Pause
+		    Call Socket.EasyHandle.Pause
 		    If MsgBox("Are you sure you want to cancel the upload?", 48 + 4, "Please confirm") <> 6 Then
-		      Call Socket.EasyItem.Resume
+		      Call Socket.EasyHandle.Resume
 		      Return
 		    End If
 		  End If
@@ -431,13 +431,13 @@ End
 	#tag Event
 		Sub Action()
 		  If Me.Caption = "Pause" Then
-		    Call Socket.EasyItem.Pause
+		    Call Socket.EasyHandle.Pause
 		    Me.Caption = "Resume"
 		    Self.Title = "Submitting '" + TargetFile.Name + "' - Paused"
 		    GUITimer.Mode = Timer.ModeOff
 		    mTaskBar.SetProgressState(TaskBar.TaskBarStates.Paused)
 		  Else
-		    Call Socket.EasyItem.Resume
+		    Call Socket.EasyHandle.Resume
 		    Me.Caption = "Pause"
 		    Self.Title = "Submitting '" + TargetFile.Name + "'"
 		    GUITimer.Mode = Timer.ModeMultiple

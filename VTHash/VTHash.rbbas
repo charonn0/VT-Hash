@@ -122,10 +122,10 @@ Protected Module VTHash
 	#tag Method, Flags = &h1
 		Protected Sub HandleCurlError(Sender As cURLClient, cURLCode As Integer)
 		  Dim msg, caption As String
-		  Dim server As URI = Sender.EasyItem.URL
-		  msg = "The server claiming to be " + server.Host + " (" + Sender.EasyItem.RemoteIP + ") presented an "
+		  Dim server As URI = Sender.EasyHandle.URL
+		  msg = "The server claiming to be " + server.Host + " (" + Sender.EasyHandle.RemoteIP + ") presented an "
 		  Select Case cURLCode
-		  Case libcURL.Errors.SSL_CA_CERT
+		  Case libcURL.Errors.SSL_CACERT
 		    caption = "Untrusted SSL Certificate"
 		    msg = msg + "untrusted SSL certificate. The operation has been aborted."
 		    
@@ -147,14 +147,14 @@ Protected Module VTHash
 		      caption = "Access denied"
 		    Else
 		      msg = "Virus Total responded with HTTP status code " + Str(status)
-		      If Sender.EasyItem.ErrorBuffer.Trim <> "" Then msg = msg + EndOfLine + Sender.EasyItem.ErrorBuffer
+		      If Sender.EasyHandle.ErrorBuffer.Trim <> "" Then msg = msg + EndOfLine + Sender.EasyHandle.ErrorBuffer
 		      caption = "HTTP error"
 		    End Select
 		    
 		  Else
 		    msg = "Connection error " + Str(cURLCode) + ": " + libcURL.FormatError(cURLCode)
 		    caption = "Unable to connect to Virus Total"
-		    If Sender.EasyItem.ErrorBuffer.Trim <> "" Then msg = msg + EndOfLine + Sender.EasyItem.ErrorBuffer
+		    If Sender.EasyHandle.ErrorBuffer.Trim <> "" Then msg = msg + EndOfLine + Sender.EasyHandle.ErrorBuffer
 		  End Select
 		  Call MsgBox(msg.Trim, 16, "VT Hash Check - " + caption)
 		End Sub

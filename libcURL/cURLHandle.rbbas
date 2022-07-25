@@ -2,10 +2,8 @@
 Protected Class cURLHandle
 Implements ErrorSetter
 	#tag Method, Flags = &h1
-		Protected Sub Constructor(GlobalInitFlags As Integer)
-		  ' Initializes libcURL if necessary. GlobalInitFlags is one of the CURL_GLOBAL_* constants.
-		  ' This class keeps track of which flags have already been initialized, and only initializes
-		  ' libcURL if GlobalInitFlags is not among them.
+		Protected Sub Constructor()
+		  ' Initializes libcURL if necessary. 
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_global_init.html
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLHandle.Constructor
@@ -14,32 +12,26 @@ Implements ErrorSetter
 		  If Not available Then
 		    Dim err As New PlatformNotSupportedException
 		    err.Message = "libcURL is not available or is an unsupported version."
+		    ' We can't find the libcurl binary or one of its dependencies (OpenSSL, zlib, etc.) Verify
+		    ' that all neccesary dll/solib/dylib files are located in the expected directory for your
+		    ' environment. The easiest way to avoid this problem is to add a build step to your project
+		    ' that copies the necessary files automatically.
+		    ' See: http://docs.xojo.com/UserGuide:Build_Automation#Copy_Files
 		    Raise err
 		  End If
 		  
 		  mLastError = 0 ' clears the NOT_INITIALIZED default value
 		  
-		  If InitFlagsLock = Nil Then InitFlagsLock = New Semaphore
-		  Do Until InitFlagsLock.TrySignal
-		    #If TargetHasGUI Then
-		      App.YieldToNextThread
-		    #else
-		      If App.CurrentThread <> Nil Then App.YieldToNextThread Else App.DoEvents(100)
-		    #endif
-		  Loop
-		  
-		  Try
-		    If InitFlags = Nil Then InitFlags = New Dictionary
-		    If Not InitFlags.HasKey(GlobalInitFlags) Then
-		      mLastError = curl_global_init(GlobalInitFlags)
-		      If mLastError <> 0 Then Raise New cURLException(Me)
+		  If InitFlag = libcURL.Errors.INIT_FAILED Then
+		    mLastError = curl_global_init(CURL_GLOBAL_DEFAULT)
+		    If mLastError <> 0 Then
+		      ' We were not able to initialize libcurl (or a dependency) even though the binary was
+		      ' successfully loaded.
+		      Raise New cURLException(Me)
 		    End If
-		    InitFlags.Value(GlobalInitFlags) = InitFlags.Lookup(GlobalInitFlags, 0) + 1
-		    mFlags = GlobalInitFlags
-		  Finally
-		    InitFlagsLock.Release
-		  End Try
-		  
+		  End If
+		  mFlags = CURL_GLOBAL_DEFAULT
+		  InitFlag = CURL_GLOBAL_DEFAULT
 		End Sub
 	#tag EndMethod
 
@@ -53,7 +45,11 @@ Implements ErrorSetter
 		  
 		  If InitFlags = Nil Then Return
 		  Do Until InitFlagsLock.TrySignal
-		    App.YieldToNextThread
+		    #If RBVersion < 2020 Then
+		      App.YieldToNextThread
+		    #Else
+		      Thread.YieldToNext
+		    #EndIf
 		  Loop
 		  Try
 		    InitFlags.Value(mFlags) = InitFlags.Value(mFlags) - 1
@@ -70,7 +66,7 @@ Implements ErrorSetter
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Flags() As Integer
+		Attributes( deprecated )  Function Flags() As Integer
 		  ' The global initialization flags that were passed to the instance Constructor
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLHandle.Flags
@@ -108,10 +104,14 @@ Implements ErrorSetter
 	#tag Method, Flags = &h1
 		Protected Function Operator_Compare(OtherHandle As libcURL.cURLHandle) As Integer
 		  If OtherHandle Is Nil Then Return 1
-		  Return Sign(Me.Flags - OtherHandle.Flags)
+		  Return Sign(mFlags - OtherHandle.mFlags)
 		End Function
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h21
+		Private Shared InitFlag As Integer = libcURL.Errors.INIT_FAILED
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private Shared InitFlags As Dictionary

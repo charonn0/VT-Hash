@@ -39,6 +39,9 @@ Protected Module Info
 	#tag Constant, Name = COOKIELIST, Type = Double, Dynamic = False, Default = \"4194332", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = EFFECTIVE_METHOD, Type = Double, Dynamic = False, Default = \"1048634", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = EFFECTIVE_URL, Type = Double, Dynamic = False, Default = \"1048577", Scope = Protected
 	#tag EndConstant
 
@@ -105,6 +108,9 @@ Protected Module Info
 	#tag Constant, Name = PROXYAUTH_AVAIL, Type = Double, Dynamic = False, Default = \"2097176", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = PROXY_ERROR, Type = Double, Dynamic = False, Default = \"2097211", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = PROXY_SSL_VERIFYRESULT, Type = Double, Dynamic = False, Default = \"2097199", Scope = Protected
 	#tag EndConstant
 
@@ -120,10 +126,16 @@ Protected Module Info
 	#tag Constant, Name = REDIRECT_URL, Type = Double, Dynamic = False, Default = \"1048607", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = REFERER, Type = Double, Dynamic = False, Default = \"1048636", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = REQUEST_SIZE, Type = Double, Dynamic = False, Default = \"2097164", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = RESPONSE_CODE, Type = Double, Dynamic = False, Default = \"2097154", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = RETRY_AFTER, Type = Double, Dynamic = False, Default = \"6291513", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = RTSP_CLIENT_CSEQ, Type = Double, Dynamic = False, Default = \"2097189", Scope = Protected

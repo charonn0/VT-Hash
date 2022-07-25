@@ -34,6 +34,12 @@ Protected Class HTTPAuthMethods
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Operator_Convert(FromEnum As libcURL.CURLAUTH)
+		  SetOnly(FromEnum)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub SetAll()
 		  SetSafe()
 		  Basic = True

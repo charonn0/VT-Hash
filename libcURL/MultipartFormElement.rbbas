@@ -1,9 +1,9 @@
 #tag Class
 Protected Class MultipartFormElement
-	#tag Method, Flags = &h0
-		Sub Constructor(ItemStruct As Ptr, Owner As libcURL.MultipartForm)
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(ItemStruct As Ptr, Owner As libcURL.MultipartForm)
 		  ' Constructs a new MultipartFormElement. Generally, you should not construct instances
-		  ' of this class. Use the value returned from MultipartForm.GetElement, MultipartFormElement.NextElement,
+		  ' of this class. Use the value returned from MultipartForm.GetElement, MultipartFormElement.NextElement, 
 		  ' or MultipartFormElement.MoreFiles instead.
 		  '
 		  ' See:
@@ -70,7 +70,7 @@ Protected Class MultipartFormElement
 			  
 			  If mContentHeaders = Nil Then
 			    Dim p As Ptr = Struct.ContentHeader
-			    If p <> Nil Then mContentHeaders = New ListPtr(p, mOwner.Flags)
+			    If p <> Nil Then mContentHeaders = New ListPtr(p)
 			  End If
 			  Return mContentHeaders
 			End Get
@@ -107,6 +107,8 @@ Protected Class MultipartFormElement
 			  If mb <> Nil Then
 			    If Struct.ContentsLen > 0 Then
 			      Return mb.StringValue(0, Struct.ContentsLen)
+			    ElseIf Struct.BufferLen > 0 Then
+			      If Struct.BufferLen > 0 Then Return mb.StringValue(0, Struct.BufferLen)
 			    Else
 			      Return mb.CString(0)
 			    End If
@@ -423,7 +425,14 @@ Protected Class MultipartFormElement
 			Group="Behavior"
 			InitialValue=""
 			Type="libcURL.FormElementType"
-			EditorType=""
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - MemoryBlock"
+				"1 - Stream"
+				"2 - String"
+				"3 - File"
+				"4 - FileArray"
+			#tag EndEnumValues
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

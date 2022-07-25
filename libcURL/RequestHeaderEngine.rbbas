@@ -1,7 +1,7 @@
 #tag Class
 Protected Class RequestHeaderEngine
-	#tag Method, Flags = &h0
-		Sub Constructor(Owner As libcURL.EasyHandle)
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(Owner As libcURL.EasyHandle)
 		  ' Creates a new instance of RequestHeaderEngine for the EasyHandle whose request headers are to be manipulated
 		  '
 		  ' See:
@@ -145,33 +145,40 @@ Protected Class RequestHeaderEngine
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

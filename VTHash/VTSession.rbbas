@@ -77,9 +77,9 @@ Inherits libcURL.cURLClient
 
 	#tag Method, Flags = &h0
 		Sub SendRequest(Type As RequestType, Request As libcURL.MultipartForm)
-		  Me.EasyItem.UseErrorBuffer = True
-		  Me.EasyItem.Secure = App.Secure
-		  Me.EasyItem.CA_ListFile = libcURL.Default_CA_File
+		  Me.EasyHandle.UseErrorBuffer = True
+		  Me.EasyHandle.Secure = App.Secure
+		  Me.EasyHandle.CA_ListFile = libcURL.Default_CA_File
 		  If VTHash.HasConfig("ProxyAddress") Then
 		    Me.Proxy.Address = VTHash.GetConfig("ProxyAddress")
 		    Me.Proxy.Port = VTHash.GetConfig("ProxyPort")
@@ -99,7 +99,7 @@ Inherits libcURL.cURLClient
 		  'n = Nil
 		  'End If
 		  'Next
-		  'If n <> Nil Then Me.EasyItem.NetworkInterface = n
+		  'If n <> Nil Then Me.EasyHandle.NetworkInterface = n
 		  'End If
 		  
 		  
@@ -111,7 +111,7 @@ Inherits libcURL.cURLClient
 		  End If
 		  
 		  Dim HTTPVerb As String = "POST"
-		  Me.EasyItem.UserAgent = VTHash.UserAgent
+		  Me.EasyHandle.UserAgent = VTHash.UserAgent
 		  Select Case Type
 		  Case RequestType.Comment
 		    APIURL = APIURL + VT_Put_Comment
@@ -136,7 +136,7 @@ Inherits libcURL.cURLClient
 		  If HTTPVerb = "POST" Then
 		    Me.Post(APIURL, Request)
 		  ElseIf HTTPVerb = "GET" Then
-		    Me.EasyItem.SetFormData(Request)
+		    Me.EasyHandle.SetFormData(Request)
 		    Me.Get(APIURL)
 		  End If
 		End Sub
@@ -165,6 +165,38 @@ Inherits libcURL.cURLClient
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="IsTransferComplete"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastError"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Integer"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastErrorMessage"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LastStatusCode"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Int32"
+			EditorType=""
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="HTTPVersion"
 			Visible=false

@@ -2,22 +2,28 @@
 Protected Class MultiHandle
 Inherits libcURL.cURLHandle
 	#tag Method, Flags = &h0
-		Function AddItem(Item As libcURL.EasyHandle) As Boolean
+		Attributes( deprecated = "libcURL.MultiHandle.AddTransfer" )  Function AddItem(Item As libcURL.EasyHandle) As Boolean
+		  Return AddTransfer(Item)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function AddTransfer(Transfer As libcURL.EasyHandle) As Boolean
 		  ' Add a EasyHandle to the multistack. The EasyHandle should have all of its options already set and ready to go.
 		  ' A EasyHandle may belong to only one MultiHandle object at a time. Passing an owned EasyHandle will fail.
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_multi_add_handle.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.AddItem
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.AddTransfer
 		  
-		  If Not libcURL.Version.IsAtLeast(7, 32, 1) And Instances.HasKey(Item.Handle) Then
+		  If Not libcURL.Version.IsAtLeast(7, 32, 1) And Instances.HasKey(Transfer.Handle) Then
 		    ' This error code was not defined until 7.32.1, so we fake it
 		    Const CURLM_ADDED_ALREADY = 7
 		    mLastError = CURLM_ADDED_ALREADY
 		    
 		  Else
-		    mLastError = curl_multi_add_handle(mHandle, Item.Handle)
-		    If mLastError = 0 Then Instances.Value(Item.Handle) = Item
+		    mLastError = curl_multi_add_handle(mHandle, Transfer.Handle)
+		    If mLastError = 0 Then Instances.Value(Transfer.Handle) = Transfer
 		  End If
 		  Return mLastError = 0
 		End Function
@@ -32,7 +38,7 @@ Inherits libcURL.cURLHandle
 		  
 		  If Instances <> Nil Then
 		    For Each h As Integer In Instances.Keys
-		      Call Me.RemoveItem(Instances.Value(h))
+		      Call Me.RemoveTransfer(Instances.Value(h))
 		    Next
 		  End If
 		End Sub
@@ -47,8 +53,9 @@ Inherits libcURL.cURLHandle
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.Constructor
 		  
 		  // Calling the overridden superclass constructor.
-		  // Constructor(GlobalInitFlags As Integer) -- From libcURL.cURLHandle
-		  Super.Constructor(GlobalInitFlags)
+		  // Constructor() -- From libcURL.cURLHandle
+		  #pragma Unused GlobalInitFlags
+		  Super.Constructor()
 		  
 		  mHandle = curl_multi_init()
 		  If mHandle <= 0 Then
@@ -81,8 +88,14 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function HasItem(EasyItem As libcURL.EasyHandle) As Boolean
-		  Return Instances.HasKey(EasyItem.Handle)
+		Attributes( deprecated = "libcURL.MultiHandle.HasTransfer" )  Function HasItem(EasyItem As libcURL.EasyHandle) As Boolean
+		  Return HasTransfer(EasyItem)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function HasTransfer(Transfer As libcURL.EasyHandle) As Boolean
+		  Return Instances.HasKey(Transfer.Handle)
 		End Function
 	#tag EndMethod
 
@@ -92,6 +105,20 @@ Inherits libcURL.cURLHandle
 		  If i = 0 Then i = Sign(mHandle - OtherMulti.Handle)
 		  Return i
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Pause()
+		  ' Pauses the timer that runs transfers on the main event loop. This has the effect of
+		  ' pausing all transfers withour removing them. Calling this method has no effect if you're
+		  ' using the PerformOnce() method to run transfers on a thread (just stop calling PerformOnce
+		  ' if you want to pause.)
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.Pause
+		  
+		  If PerformTimer <> Nil Then PerformTimer.Mode = Timer.ModeOff
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -143,7 +170,7 @@ Inherits libcURL.cURLHandle
 		        Dim msg As CURLMsg = ReadNextMsg(c) ' on exit, 'c' will contain the number of messages remaining
 		        If c > -1 Then
 		          Dim curl As EasyHandle = Instances.Value(msg.easy_handle)
-		          Call Me.RemoveItem(curl)
+		          Call Me.RemoveTransfer(curl)
 		          ErrorSetter(curl).LastError = Integer(msg.Data) ' msg.Data is the last error code for the easy handle
 		          RaiseEvent TransferComplete(curl)
 		          
@@ -161,7 +188,7 @@ Inherits libcURL.cURLHandle
 		Private Sub PerformTimerHandler(Sender As Timer)
 		  ' This method handles the PerformTimer.Action event. It calls PerformOnce on the main thread until PerformOnce returns False.
 		  
-		  ' this loop calls PerformOnce 3 times and then updates the Timer's period.
+		  ' this loop calls PerformOnce 4 times and then updates the Timer's period.
 		  For i As Integer = 0 To 4
 		    If Not Me.PerformOnce() Then
 		      Sender.Mode = Timer.ModeOff
@@ -216,15 +243,21 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function RemoveItem(Item As libcURL.EasyHandle) As Boolean
-		  ' Removes the passed EasyHandle from the multistack. If there no more EasyHandles then turns off the PerformTimer.
+		Attributes( deprecated = "libcURL.MultiHandle.RemoveTransfer" )  Function RemoveItem(Item As libcURL.EasyHandle) As Boolean
+		  Return RemoveTransfer(Item)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function RemoveTransfer(Transfer As libcURL.EasyHandle) As Boolean
+		  ' Removes the passed EasyHandle from the multihandle. If there no more EasyHandles then turns off the PerformTimer.
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_multi_remove_handle.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.RemoveItem
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.RemoveTransfer
 		  
-		  mLastError = curl_multi_remove_handle(mHandle, Item.Handle)
-		  If Instances.HasKey(Item.Handle) Then Instances.Remove(Item.Handle)
+		  mLastError = curl_multi_remove_handle(mHandle, Transfer.Handle)
+		  If Instances.HasKey(Transfer.Handle) Then Instances.Remove(Transfer.Handle)
 		  If Instances.Count = 0 And PerformTimer <> Nil Then PerformTimer.Mode = Timer.ModeOff
 		  Return mLastError = 0
 		End Function
@@ -323,7 +356,7 @@ Inherits libcURL.cURLHandle
 
 
 	#tag Hook, Flags = &h0
-		Event TransferComplete(easyitem As libcURL.EasyHandle)
+		Event TransferComplete(Transfer As libcURL.EasyHandle)
 	#tag EndHook
 
 
@@ -362,7 +395,7 @@ Inherits libcURL.cURLHandle
 			  ' https://curl.haxx.se/libcurl/c/CURLMOPT_PIPELINING.html
 			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MultiHandle.HTTPMultiplexing
 			  
-			  If Not libcURL.Version.IsAtLeast(7, 43, 0) Or Not libcURL.Version.HTTP2 Then
+			  If Not libcURL.Version.IsAtLeast(7, 43, 0) Or Not libcURL.IsFeatureAvailable(libcURL.FeatureType.HTTP2) Then
 			    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
 			    Return
 			  End If

@@ -132,8 +132,8 @@ Implements FormStreamGetter
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.MIMEMessage.Constructor
 		  
 		  // Calling the overridden superclass constructor.
-		  // Constructor(GlobalInitFlags As Integer) -- From libcURL.cURLHandle
-		  Super.Constructor(Owner.Flags)
+		  // Constructor() -- From libcURL.cURLHandle
+		  Super.Constructor()
 		  If Not libcURL.Version.IsAtLeast(7, 56, 0) Then
 		    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
 		    Raise New cURLException(Me)
@@ -172,8 +172,8 @@ Implements FormStreamGetter
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1000
-		Sub Constructor(MessagePtr As Ptr, ParentMessage As libcURL.MIMEMessage)
+	#tag Method, Flags = &h1001
+		Protected Sub Constructor(MessagePtr As Ptr, ParentMessage As libcURL.MIMEMessage)
 		  ' Constructs a non-freeable instance of MIMEMessage which references a sub-part of the
 		  ' ParentMessage. (Used by MIMEMessagePart.SubPart)
 		  '
@@ -182,8 +182,8 @@ Implements FormStreamGetter
 		  
 		  Dim own As EasyHandle = ParentMessage.Owner
 		  // Calling the overridden superclass constructor.
-		  // Constructor(GlobalInitFlags As Integer) -- From libcURL.cURLHandle
-		  Super.Constructor(own.Flags)
+		  // Constructor() -- From libcURL.cURLHandle
+		  Super.Constructor()
 		  If Not libcURL.Version.IsAtLeast(7, 56, 0) Then
 		    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
 		    Raise New cURLException(Me)
@@ -424,7 +424,7 @@ Implements FormStreamGetter
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/curl_mime_filedata.html
 		  
-		  Dim mb As MemoryBlock = File.NativePath + Chr(0)
+		  Dim mb As MemoryBlock = File.AbsolutePath_ + Chr(0)
 		  mLastError = curl_mime_filedata(Part, mb)
 		  Return mLastError = 0
 		End Function
@@ -451,7 +451,7 @@ Implements FormStreamGetter
 		  ' http://curl.haxx.se/libcurl/c/curl_mime_headers.html
 		  
 		  Dim own As Integer
-		  If TakeOwnerShip Then
+		  If TakeOwnerShip Then 
 		    own = 1
 		    If mOwnedLists.IndexOf(Headers) = -1 Then mOwnedLists.Append(Headers)
 		  End If
@@ -513,7 +513,7 @@ Implements FormStreamGetter
 			  Dim List As Ptr = Ptr(Me.Handle)
 			  If List <> Nil Then
 			    Dim m As curl_mime = List.curl_mime
-			    Return New MIMEMessagePart(m.FirstPart, Me)
+			    Return New MIMEMessagePartCreator(m.FirstPart, Me)
 			  End If
 			End Get
 		#tag EndGetter

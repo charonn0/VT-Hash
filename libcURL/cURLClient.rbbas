@@ -1,6 +1,6 @@
 #tag Class
 Class cURLClient
-Inherits libcURL.cURLManager
+Inherits libcURL.cURLSession
 	#tag Method, Flags = &h0
 		Sub Get(URL As String, WriteTo As Writeable = Nil)
 		  ' Asynchronously performs a retrieval using protocol-appropriate semantics (http GET, ftp RETR, etc.)
@@ -72,7 +72,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
 		  
-		  Me.EasyItem.SetFormData(FormData)
+		  Me.EasyHandle.SetFormData(FormData)
 		  Me.Perform(URL, Nil, WriteTo)
 		End Sub
 	#tag EndMethod
@@ -88,7 +88,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
 		  
-		  Me.EasyItem.SetFormData(FormData)
+		  Me.EasyHandle.SetFormData(FormData)
 		  Return Me.Perform(URL, Nil, WriteTo)
 		End Function
 	#tag EndMethod
@@ -105,7 +105,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
 		  
-		  Me.EasyItem.SetFormData(FormData)
+		  Me.EasyHandle.SetFormData(FormData)
 		  Me.Perform(URL, Nil, WriteTo)
 		End Sub
 	#tag EndMethod
@@ -122,7 +122,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
 		  
-		  Me.EasyItem.SetFormData(FormData)
+		  Me.EasyHandle.SetFormData(FormData)
 		  Return Me.Perform(URL, Nil, WriteTo)
 		End Function
 	#tag EndMethod
@@ -139,7 +139,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
 		  
-		  Me.EasyItem.SetFormData(PostFields)
+		  Me.EasyHandle.SetFormData(PostFields)
 		  Me.Perform(URL, Nil, WriteTo)
 		End Sub
 	#tag EndMethod
@@ -156,7 +156,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Post
 		  
-		  Me.EasyItem.SetFormData(PostFields)
+		  Me.EasyHandle.SetFormData(PostFields)
 		  Return Me.Perform(URL, Nil, WriteTo)
 		End Function
 	#tag EndMethod
@@ -207,7 +207,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Put
 		  
-		  Me.EasyItem.UploadMode = True
+		  Me.EasyHandle.UploadMode = True
 		  Me.Perform(URL, ReadFrom, WriteTo)
 		End Sub
 	#tag EndMethod
@@ -225,7 +225,7 @@ Inherits libcURL.cURLManager
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.cURLClient.Put
 		  
-		  Me.EasyItem.UploadMode = True
+		  Me.EasyHandle.UploadMode = True
 		  Return Me.Perform(URL, ReadFrom, WriteTo)
 		End Function
 	#tag EndMethod

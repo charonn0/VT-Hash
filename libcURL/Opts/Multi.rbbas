@@ -9,6 +9,9 @@ Protected Module Multi
 	#tag Constant, Name = MAXCONNECTS, Type = Double, Dynamic = False, Default = \"6", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = MAX_CONCURRENT_STREAMS, Type = Double, Dynamic = False, Default = \"16", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = MAX_HOST_CONNECTIONS, Type = Double, Dynamic = False, Default = \"7", Scope = Protected
 	#tag EndConstant
 

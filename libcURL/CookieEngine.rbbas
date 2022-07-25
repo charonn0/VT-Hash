@@ -1,7 +1,7 @@
 #tag Class
 Protected Class CookieEngine
-	#tag Method, Flags = &h0
-		Sub Constructor(Owner As libcURL.EasyHandle)
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(Owner As libcURL.EasyHandle)
 		  ' Creates a new instance of CookieEngine for the EasyHandle whose cookies are to be manipulated
 		  '
 		  ' See:

@@ -1,16 +1,15 @@
 #tag Class
 Protected Class ProxyEngine
-	#tag Method, Flags = &h0
-		Sub Constructor(Owner As libcURL.EasyHandle)
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(Owner As libcURL.EasyHandle)
 		  ' Creates a new instance of ProxyEngine for the EasyHandle whose proxy settings are to be manipulated
 		  '
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.Constructor
 		  
 		  mOwner = New WeakRef(Owner)
-		  mUnifiedHeaders = libcURL.Version.IsAtLeast(7, 42, 1) ' as of libcurl 7.42.1 this defaults to True
-		  
-		  
+		  mUnifiedHeaders = Not libcURL.Version.IsAtLeast(7, 42, 1) ' as of libcurl 7.42.1 this defaults to True
+		  If Owner.CA_ListFile <> Nil Then CA_ListFile = Owner.CA_ListFile
 		End Sub
 	#tag EndMethod
 
@@ -119,7 +118,7 @@ Protected Class ProxyEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function SetProxyHeader(HeaderName As String, HeaderValue As String) As Boolean
+		Function SetHeader(HeaderName As String, HeaderValue As String) As Boolean
 		  ' Sets a header to send to the proxy. Not all proxy types support this feature.
 		  ' Subsequent calls to this method will append the header to the previously set headers.
 		  ' Headers will persist from transfer to transfer. Pass an empty value to clear the named
@@ -127,7 +126,7 @@ Protected Class ProxyEngine
 		  '
 		  ' See:
 		  ' http://curl.haxx.se/libcurl/c/CURLOPT_PROXYHEADER.html
-		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.SetProxyHeader
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.SetHeader
 		  
 		  If Not libcURL.Version.IsAtLeast(7, 37, 0) Then
 		    ErrorSetter(Owner).LastError = libcURL.Errors.FEATURE_UNAVAILABLE
@@ -154,6 +153,12 @@ Protected Class ProxyEngine
 		  
 		  If Not Owner.SetOption(libcURL.Opts.PROXYHEADER, mHeaders) Then Raise New cURLException(Owner)
 		  Return (mHeaders <> Nil Or HeaderName = "")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Attributes( deprecated = "libcURL.ProxyEngine.SetHeader" )  Function SetProxyHeader(HeaderName As String, HeaderValue As String) As Boolean
+		  Return Me.SetHeader(HeaderName, HeaderValue)
 		End Function
 	#tag EndMethod
 
@@ -195,6 +200,49 @@ Protected Class ProxyEngine
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  ' Gets the PEM file (or a directory of PEM files) containing one or more certificate authorities libcURL
+			  ' will trust to verify the proxy with. If no file/folder is specified (default) then returns Nil.
+			  
+			  return mCA_ListFile
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ' Sets the PEM file (or a directory of PEM files) containing one or more certificate authorities libcURL
+			  ' should trust to verify the proxy with.
+			  ' ProxyEngine.Secure must be set to True to enable certificate verification of proxies.
+			  '
+			  ' See:
+			  ' https://curl.se/libcurl/c/CURLOPT_PROXY_CAINFO.html
+			  ' https://curl.se/libcurl/c/CURLOPT_PROXY_CAPATH.html
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.CA_ListFile
+			  
+			  Select Case True
+			  Case value = Nil
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_CAINFO, Nil) Then Raise New cURLException(Owner)
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_CAPATH, Nil) Then Raise New cURLException(Owner)
+			    
+			  Case Not value.Exists
+			    ErrorSetter(Owner).LastError = libcURL.Errors.INVALID_LOCAL_FILE
+			    Return
+			    
+			  Case value.Directory
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_CAPATH, value) Then Raise New cURLException(Owner)
+			    
+			  Else
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_CAINFO, value) Then Raise New cURLException(Owner)
+			    
+			  End Select
+			  
+			  mCA_ListFile = value
+			End Set
+		#tag EndSetter
+		CA_ListFile As FolderItem
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  return mHTTPTunnel
 			End Get
 		#tag EndGetter
@@ -221,6 +269,10 @@ Protected Class ProxyEngine
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mCA_ListFile As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mExclusions() As String
 	#tag EndProperty
 
@@ -242,6 +294,10 @@ Protected Class ProxyEngine
 
 	#tag Property, Flags = &h21
 		Private mPort As Integer = 1080
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mSecure As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -303,6 +359,43 @@ Protected Class ProxyEngine
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  Return mSecure
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ' If True, libcURL will verify SSL certificates presented by the proxy server. This does not
+			  ' tell libcURL to use SSL, only to verify certs if SSL is used. Use ProxyEngine.CA_ListFile to
+			  ' specify a list of certificate authorities to be trusted.
+			  '
+			  ' See:
+			  ' https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_VERIFYHOST.html
+			  ' https://curl.se/libcurl/c/CURLOPT_PROXY_SSL_VERIFYPEER.html
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.Secure
+			  
+			  If Not libcURL.Version.IsAtLeast(7, 52, 0) Then
+			    ErrorSetter(Owner).LastError = libcURL.Errors.FEATURE_UNAVAILABLE
+			    Return
+			  End If
+			  
+			  
+			  If value Then
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_SSL_VERIFYHOST, 2) Then Raise New cURLException(Owner) ' 2 is not a typo
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_SSL_VERIFYPEER, 1) Then Raise New cURLException(Owner)
+			  Else
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_SSL_VERIFYHOST, 0) Then Raise New cURLException(Owner)
+			    If Not Owner.SetOption(libcURL.Opts.PROXY_SSL_VERIFYPEER, 0) Then Raise New cURLException(Owner)
+			  End If
+			  
+			  mSecure = value
+			End Set
+		#tag EndSetter
+		Secure As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  return mServiceName
 			End Get
 		#tag EndGetter
@@ -353,6 +446,14 @@ Protected Class ProxyEngine
 		#tag EndGetter
 		#tag Setter
 			Set
+			  ' When set to True (the default before libcurl 7.42.1), libcurl will send the same request headers to the
+			  ' proxy as it does to the server. When set to False only those headers set with the SetProxyHeader() method
+			  ' are sent to the proxy.
+			  '
+			  ' See:
+			  ' https://curl.se/libcurl/c/CURLOPT_HEADEROPT.html
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ProxyEngine.UnifiedHeaders
+			  
 			  If libcURL.Version.IsAtLeast(7, 37, 0) Then
 			    Const CURLHEADER_UNIFIED = 0
 			    Const CURLHEADER_SEPARATE = 1
@@ -394,49 +495,65 @@ Protected Class ProxyEngine
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Address"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="HTTPTunnel"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Password"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Port"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ServiceName"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -444,25 +561,57 @@ Protected Class ProxyEngine
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="UnifiedHeaders"
-			Group="Behavior"
-			Type="Boolean"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Username"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Secure"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="UnifiedHeaders"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Type"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="libcURL.ProxyType"
+			EditorType="Enum"
+			#tag EnumValues
+				"0 - HTTP"
+				"1 - HTTP1_0"
+				"4 - SOCKS4"
+				"6 - SOCKS4A"
+				"5 - SOCKS5"
+				"7 - SOCKS5_HOSTNAME"
+			#tag EndEnumValues
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

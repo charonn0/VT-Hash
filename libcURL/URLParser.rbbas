@@ -23,8 +23,8 @@ Inherits libcURL.cURLHandle
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.URLParser.Constructor
 		  
 		  // Calling the overridden superclass constructor.
-		  // Constructor(GlobalInitFlags As Integer) -- From libcURL.cURLHandle
-		  Super.Constructor(CopyURL.Flags)
+		  // Constructor() -- From libcURL.cURLHandle
+		  Super.Constructor()
 		  Me.AnyScheme = CopyURL.AnyScheme
 		  
 		  mHandle = curl_url_dup(CopyURL.Handle)
@@ -44,8 +44,9 @@ Inherits libcURL.cURLHandle
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.URLParser.Constructor
 		  
 		  // Calling the overridden superclass constructor.
-		  // Constructor(GlobalInitFlags As Integer) -- From libcURL.cURLHandle
-		  Super.Constructor(GlobalInitFlags)
+		  // Constructor() -- From libcURL.cURLHandle
+		  #pragma Unused GlobalInitFlags
+		  Super.Constructor()
 		  
 		  If Not URLParser.IsAvailable Then
 		    mLastError = libcURL.Errors.FEATURE_UNAVAILABLE
@@ -95,7 +96,7 @@ Inherits libcURL.cURLHandle
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function IsAvailable() As Boolean
+		Shared Function IsAvailable() As Boolean
 		  Static avail As Boolean
 		  If Not avail Then avail = libcURL.Version.IsAtLeast(7, 62, 0)
 		  Return avail
@@ -169,8 +170,10 @@ Inherits libcURL.cURLHandle
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.URLParser.StringValue
 		  
 		  Dim flag As Integer
-		  If AnyScheme Then flag = CURLU_NON_SUPPORT_SCHEME
-		  If InStr(FromString, "://") = 0 Then FromString = "http://" + FromString ' assume HTTP
+		  If AnyScheme Then
+		    flag = CURLU_NON_SUPPORT_SCHEME
+		    If InStr(FromString, "://") = 0 Then FromString = "http://" + FromString ' assume HTTP
+		  End If
 		  Call Me.SetPartContent(URLPart.All, FromString, flag)
 		End Sub
 	#tag EndMethod
@@ -204,6 +207,16 @@ Inherits libcURL.cURLHandle
 			End Set
 		#tag EndSetter
 		Arguments As String
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Dim n As String = Me.Path
+			  Return NthField(n, "/", CountFields(n, "/"))
+			End Get
+		#tag EndGetter
+		Filename As String
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -396,19 +409,52 @@ Inherits libcURL.cURLHandle
 	#tag EndComputedProperty
 
 
+	#tag Constant, Name = CURLUE_BAD_FILE_URL, Type = Double, Dynamic = False, Default = \"19", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_FRAGMENT, Type = Double, Dynamic = False, Default = \"20", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CURLUE_BAD_HANDLE, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_HOSTNAME, Type = Double, Dynamic = False, Default = \"21", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_IPV6, Type = Double, Dynamic = False, Default = \"22", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_LOGIN, Type = Double, Dynamic = False, Default = \"23", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CURLUE_BAD_PARTPOINTER, Type = Double, Dynamic = False, Default = \"2", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CURLUE_BAD_PASSWORD, Type = Double, Dynamic = False, Default = \"24", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_PATH, Type = Double, Dynamic = False, Default = \"25", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CURLUE_BAD_PORT_NUMBER, Type = Double, Dynamic = False, Default = \"4", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_QUERY, Type = Double, Dynamic = False, Default = \"26", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_SCHEME, Type = Double, Dynamic = False, Default = \"27", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_SLASHES, Type = Double, Dynamic = False, Default = \"28", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLUE_BAD_USER, Type = Double, Dynamic = False, Default = \"29", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CURLUE_MALFORMED_INPUT, Type = Double, Dynamic = False, Default = \"3", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = CURLUE_NO_FRAGMENT, Type = Double, Dynamic = False, Default = \"18", Scope = Public
+	#tag Constant, Name = CURLUE_NO_FRAGMENT, Type = Double, Dynamic = False, Default = \"17", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CURLUE_NO_HOST, Type = Double, Dynamic = False, Default = \"14", Scope = Public
@@ -426,7 +472,7 @@ Inherits libcURL.cURLHandle
 	#tag Constant, Name = CURLUE_NO_PORT, Type = Double, Dynamic = False, Default = \"15", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = CURLUE_NO_QUERY, Type = Double, Dynamic = False, Default = \"17", Scope = Public
+	#tag Constant, Name = CURLUE_NO_QUERY, Type = Double, Dynamic = False, Default = \"16", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CURLUE_NO_SCHEME, Type = Double, Dynamic = False, Default = \"10", Scope = Public
@@ -435,10 +481,13 @@ Inherits libcURL.cURLHandle
 	#tag Constant, Name = CURLUE_NO_USER, Type = Double, Dynamic = False, Default = \"11", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CURLUE_NO_ZONEID, Type = Double, Dynamic = False, Default = \"18", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CURLUE_OK, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = CURLUE_OUT_OF_MEMORY, Type = Double, Dynamic = False, Default = \"19", Scope = Public
+	#tag Constant, Name = CURLUE_OUT_OF_MEMORY, Type = Double, Dynamic = False, Default = \"7", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CURLUE_RELATIVE, Type = Double, Dynamic = False, Default = \"7", Scope = Public
@@ -456,6 +505,9 @@ Inherits libcURL.cURLHandle
 	#tag Constant, Name = CURLUE_USER_NOT_ALLOWED, Type = Double, Dynamic = False, Default = \"8", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CURLU_ALLOW_SPACE, Type = Double, Dynamic = False, Default = \"2048", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CURLU_APPENDQUERY, Type = Double, Dynamic = False, Default = \"256", Scope = Public
 	#tag EndConstant
 
@@ -468,7 +520,13 @@ Inherits libcURL.cURLHandle
 	#tag Constant, Name = CURLU_DISALLOW_USER, Type = Double, Dynamic = False, Default = \"32", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CURLU_GUESS_SCHEME, Type = Double, Dynamic = False, Default = \"512", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CURLU_NON_SUPPORT_SCHEME, Type = Double, Dynamic = False, Default = \"8", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CURLU_NO_AUTHORITY, Type = Double, Dynamic = False, Default = \"1024", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CURLU_NO_DEFAULT_PORT, Type = Double, Dynamic = False, Default = \"2", Scope = Public
@@ -487,25 +545,33 @@ Inherits libcURL.cURLHandle
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="AnyScheme"
+			Visible=false
 			Group="Behavior"
 			InitialValue="True"
 			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Arguments"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Fragment"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Hostname"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -514,41 +580,54 @@ Inherits libcURL.cURLHandle
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Password"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Path"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Port"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Scheme"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
@@ -556,18 +635,31 @@ Inherits libcURL.cURLHandle
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Username"
+			Visible=false
 			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Filename"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
