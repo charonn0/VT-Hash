@@ -1,18 +1,40 @@
 #tag Class
 Protected Class ResponseHeader
 	#tag Method, Flags = &h1
-		Protected Sub Constructor(Owner As libcURL.EasyHandle, Header As curl_header)
+		Protected Sub Constructor(Header As curl_header, RequestIndex As Integer)
 		  ' Creates a new instance of ResponseHeader for the EasyHandle whose response headers are to be queried.
 		  '
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ResponseHeader.Constructor
 		  
-		  mOwner = New WeakRef(Owner)
-		  mHeader = Header
-		  Dim mb As MemoryBlock = mHeader.Name
+		  mAmount = Header.Amount
+		  mIndex = Header.Index
+		  Dim mb As MemoryBlock = Header.Name
 		  If mb <> Nil Then mName = mb.CString(0)
-		  mb = mHeader.Value
+		  Dim ori As UInt16 = CType(Header.Origin, UInt16)
+		  mOrigin = CType(ori, HeaderOriginType)
+		  mb = Header.Value
 		  If mb <> Nil Then mValue = mb.CString(0)
+		  mRequestIndex = RequestIndex
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(Header As curl_header64, RequestIndex As Integer)
+		  ' Creates a new instance of ResponseHeader for the EasyHandle whose response headers are to be queried.
+		  '
+		  ' See:
+		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ResponseHeader.Constructor
+		  
+		  mAmount = Header.Amount
+		  mIndex = Header.Index
+		  Dim mb As MemoryBlock = Header.Name
+		  If mb <> Nil Then mName = mb.CString(0)
+		  Dim ori As UInt16 = CType(Header.Origin, UInt16)
+		  mOrigin = CType(ori, HeaderOriginType)
+		  mb = Header.Value
+		  If mb <> Nil Then mValue = mb.CString(0)
+		  mRequestIndex = RequestIndex
 		End Sub
 	#tag EndMethod
 
@@ -27,14 +49,6 @@ Protected Class ResponseHeader
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Function Owner() As libcURL.EasyHandle
-		  If mOwner <> Nil And Not (mOwner.Value Is Nil) And mOwner.Value IsA libcURL.EasyHandle Then
-		    Return libcURL.EasyHandle(mOwner.Value)
-		  End If
-		End Function
-	#tag EndMethod
-
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -44,7 +58,7 @@ Protected Class ResponseHeader
 			  ' See:
 			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ResponseHeader.Amount
 			  
-			  Return mHeader.Amount
+			  Return mAmount
 			End Get
 		#tag EndGetter
 		Amount As Integer
@@ -59,14 +73,18 @@ Protected Class ResponseHeader
 			  ' See:
 			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ResponseHeader.Index
 			  
-			  Return mHeader.Index
+			  Return mIndex
 			End Get
 		#tag EndGetter
 		Index As Integer
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private mHeader As curl_header
+		Private mAmount As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mIndex As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
@@ -74,7 +92,11 @@ Protected Class ResponseHeader
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mOwner As WeakRef
+		Private mOrigin As libcURL.HeaderOriginType
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRequestIndex As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
@@ -108,11 +130,25 @@ Protected Class ResponseHeader
 			  ' See:
 			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ResponseHeader.Origin
 			  
-			  Dim t As UInt16 = CType(mHeader.Origin, UInt16)
-			  Return CType(t, HeaderOriginType)
+			  Return mOrigin
 			End Get
 		#tag EndGetter
 		Origin As libcURL.HeaderOriginType
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  ' A given transfer might involve more than one request (redirects, etc.) This property is
+			  ' the index of the request that this header is a response to, 0 or higher.
+			  '
+			  ' See:
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.ResponseHeader.RequestIndex
+			  
+			  Return mRequestIndex
+			End Get
+		#tag EndGetter
+		RequestIndex As Integer
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -188,20 +224,12 @@ Protected Class ResponseHeader
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Origin"
+			Name="RequestIndex"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="libcURL.HeaderOriginType"
-			EditorType="Enum"
-			#tag EnumValues
-				"1 - Header"
-				"2 - Trailer"
-				"4 - Connect"
-				"8 - Intermediate_1XX"
-				"16 - Pseudo"
-				"31 - Any"
-			#tag EndEnumValues
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

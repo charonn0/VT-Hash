@@ -336,6 +336,8 @@ Protected Class OptionInfo
 		    Return PROGRESSFUNCTION
 		  Case "PROTOCOLS"
 		    Return PROTOCOLS
+		  Case "PROTOCOLS_STR"
+		    Return PROTOCOLS_STR
 		  Case "PROXY"
 		    Return PROXY
 		  Case "PROXYAUTH"
@@ -416,6 +418,8 @@ Protected Class OptionInfo
 		    Return READFUNCTION
 		  Case "REDIR_PROTOCOLS"
 		    Return REDIR_PROTOCOLS
+		  Case "REDIR_PROTOCOLS_STR"
+		    Return REDIR_PROTOCOLS_STR
 		  Case "REFERER"
 		    Return REFERER
 		  Case "REQUEST_TARGET"
@@ -478,6 +482,10 @@ Protected Class OptionInfo
 		    Return SSH_HOST_PUBLIC_KEY_MD5
 		  Case "SSH_HOST_PUBLIC_KEY_SHA256"
 		    Return SSH_HOST_PUBLIC_KEY_SHA256
+		  Case "SSH_HOSTKEYDATA"
+		    Return SSH_HOSTKEYDATA
+		  Case "SSH_HOSTKEYFUNCTION"
+		    Return SSH_HOSTKEYFUNCTION
 		  Case "SSH_KEYDATA"
 		    Return SSH_KEYDATA
 		  Case "SSH_KEYFUNCTION"
@@ -610,6 +618,8 @@ Protected Class OptionInfo
 		    Return WRITEDATA
 		  Case "WRITEFUNCTION"
 		    Return WRITEFUNCTION
+		  Case "WS_OPTIONS"
+		    Return WS_OPTIONS
 		  Case "XFERINFODATA"
 		    Return XFERINFODATA
 		  Case "XFERINFOFUNCTION"
@@ -949,6 +959,8 @@ Protected Class OptionInfo
 		    Return Nil
 		  Case PROTOCOLS
 		    Return 0
+		  Case PROTOCOLS_STR
+		    Return ""
 		  Case PROXY
 		    Return Nil
 		  Case PROXYAUTH
@@ -1027,6 +1039,8 @@ Protected Class OptionInfo
 		    Return Nil
 		  Case REDIR_PROTOCOLS
 		    Return libcURL.Protocols.HTTP Or libcURL.Protocols.HTTPS Or libcURL.Protocols.FTP Or libcURL.Protocols.FTPS
+		  Case REDIR_PROTOCOLS_STR
+		    Return "http,https,ftp,ftps"
 		  Case REFERER
 		    Return Nil
 		  Case REQUEST_TARGET
@@ -1082,6 +1096,10 @@ Protected Class OptionInfo
 		  Case SSH_HOST_PUBLIC_KEY_MD5
 		    Return Nil
 		  Case SSH_HOST_PUBLIC_KEY_SHA256
+		    Return Nil
+		  Case SSH_HOSTKEYDATA
+		    Return Nil
+		  Case SSH_HOSTKEYFUNCTION
 		    Return Nil
 		  Case SSH_KEYDATA
 		    Return Nil
@@ -1213,6 +1231,8 @@ Protected Class OptionInfo
 		    Return Nil
 		  Case WRITEFUNCTION
 		    Return Nil
+		  Case WS_OPTIONS
+		    Return 0
 		  Case XFERINFODATA
 		    Return Nil
 		  Case XFERINFOFUNCTION
@@ -1543,6 +1563,8 @@ Protected Class OptionInfo
 		    tmp = "7.1"
 		  Case PROTOCOLS
 		    tmp = "7.19.4"
+		  Case PROTOCOLS_STR
+		    tmp = "7.85.0"
 		  Case PROXY
 		    tmp = "7.1"
 		  Case PROXYAUTH
@@ -1623,6 +1645,8 @@ Protected Class OptionInfo
 		    tmp = "7.1"
 		  Case REDIR_PROTOCOLS
 		    tmp = "7.19.4"
+		  Case REDIR_PROTOCOLS_STR
+		    tmp = "7.85.0"
 		  Case REFERER
 		    tmp = "7.1"
 		  Case REQUEST_TARGET
@@ -1679,6 +1703,10 @@ Protected Class OptionInfo
 		    tmp = "7.17.1"
 		  Case SSH_HOST_PUBLIC_KEY_SHA256
 		    tmp = "7.80.0"
+		  Case SSH_HOSTKEYDATA
+		    tmp = "7.84.0"
+		  Case SSH_HOSTKEYFUNCTION
+		    tmp = "7.84.0"
 		  Case SSH_KEYDATA
 		    tmp = "7.19.6"
 		  Case SSH_KEYFUNCTION
@@ -1813,6 +1841,8 @@ Protected Class OptionInfo
 		    tmp = "7.9.7"
 		  Case WRITEFUNCTION
 		    tmp = "7.1"
+		  Case WS_OPTIONS
+		    tmp = "7.86.0"
 		  Case XFERINFODATA
 		    tmp = "7.32.0"
 		  Case XFERINFOFUNCTION
@@ -1820,11 +1850,18 @@ Protected Class OptionInfo
 		  Case XOAUTH2_BEARER
 		    tmp = "7.33.0"
 		  End Select
-		  If tmp = "" Then Return False
-		  Major = Val(NthField(tmp, ".", 1))
-		  Minor = Val(NthField(tmp, ".", 2))
-		  Patch = Val(NthField(tmp, ".", 3))
-		  Return True
+		  If tmp <> "" Then
+		    Major = Val(NthField(tmp, ".", 1))
+		    Minor = Val(NthField(tmp, ".", 2))
+		    Patch = Val(NthField(tmp, ".", 3))
+		    Return True
+		  Else
+		    Major = -1
+		    Minor = -1
+		    Patch = -1
+		    Return False
+		  End If
+		  
 		  
 		  
 		End Function
@@ -2157,6 +2194,8 @@ Protected Class OptionInfo
 		    Return "XFERINFOFUNCTION"
 		  Case PROTOCOLS
 		    Return "PROTOCOLS"
+		  Case PROTOCOLS_STR
+		    Return "PROTOCOLS_STR"
 		  Case PROXY
 		    Return "PROXY"
 		  Case PROXYAUTH
@@ -2237,6 +2276,8 @@ Protected Class OptionInfo
 		    Return "READFUNCTION"
 		  Case REDIR_PROTOCOLS
 		    Return "REDIR_PROTOCOLS"
+		  Case REDIR_PROTOCOLS_STR
+		    Return "REDIR_PROTOCOLS_STR"
 		  Case REFERER
 		    Return "REFERER"
 		  Case REQUEST_TARGET
@@ -2299,6 +2340,10 @@ Protected Class OptionInfo
 		    Return "SSH_HOST_PUBLIC_KEY_MD5"
 		  Case SSH_HOST_PUBLIC_KEY_SHA256
 		    Return "SSH_HOST_PUBLIC_KEY_SHA256"
+		  Case SSH_HOSTKEYDATA
+		    Return "SSH_HOSTKEYDATA"
+		  Case SSH_HOSTKEYFUNCTION
+		    Return "SSH_HOSTKEYFUNCTION"
 		  Case SSH_KEYDATA
 		    Return "SSH_KEYDATA"
 		  Case SSH_KEYFUNCTION
@@ -2431,6 +2476,8 @@ Protected Class OptionInfo
 		    Return "WRITEDATA"
 		  Case WRITEFUNCTION
 		    Return "WRITEFUNCTION"
+		  Case WS_OPTIONS
+		    Return "WS_OPTIONS"
 		  Case XFERINFODATA
 		    Return "XFERINFODATA"
 		  Case XFERINFOFUNCTION
@@ -2778,6 +2825,8 @@ Protected Class OptionInfo
 		    Return OptionType.Subroutine
 		  Case PROTOCOLS
 		    Return OptionType.Number
+		  Case PROTOCOLS_STR
+		    Return OptionType.String
 		  Case PROXY
 		    Return OptionType.String
 		  Case PROXYAUTH
@@ -2858,6 +2907,8 @@ Protected Class OptionInfo
 		    Return OptionType.Subroutine
 		  Case REDIR_PROTOCOLS
 		    Return OptionType.Number
+		  Case REDIR_PROTOCOLS_STR
+		    Return OptionType.String
 		  Case REFERER
 		    Return OptionType.String
 		  Case REQUEST_TARGET
@@ -2918,6 +2969,10 @@ Protected Class OptionInfo
 		    Return OptionType.String
 		  Case SSH_HOST_PUBLIC_KEY_SHA256
 		    Return OptionType.String
+		  Case SSH_HOSTKEYDATA
+		    Return OptionType.Opaque
+		  Case SSH_HOSTKEYFUNCTION
+		    Return OptionType.Subroutine
 		  Case SSH_KEYDATA
 		    Return OptionType.Opaque
 		  Case SSH_KEYFUNCTION
@@ -3054,6 +3109,8 @@ Protected Class OptionInfo
 		    Return OptionType.Opaque
 		  Case WRITEFUNCTION
 		    Return OptionType.Subroutine
+		  Case WS_OPTIONS
+		    Return OptionType.Bitmask
 		  Case HEADERDATA
 		    Return OptionType.Opaque
 		  Case XFERINFODATA
@@ -3093,8 +3150,7 @@ Protected Class OptionInfo
 		  ' See:
 		  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.Opts.OptionInfo.IsSet
 		  
-		  Dim s As String = StringValue(Session)
-		  Return s = ""
+		  Return Me.Value(Session) <> Me.DefaultValue
 		End Function
 	#tag EndMethod
 
@@ -3132,11 +3188,23 @@ Protected Class OptionInfo
 		  If Not libcURL.IsAvailable Then Raise New PlatformNotSupportedException
 		  If System.IsFunctionAvailable("curl_easy_option_by_id", cURLLib) Then
 		    Dim opt As Ptr = curl_easy_option_by_id(OptionID)
-		    If opt <> Nil Then Me.Constructor(opt.curl_easyoption)
+		    If opt <> Nil Then
+		      Me.Constructor(opt.curl_easyoption)
+		    Else
+		      Dim err As New cURLException(Nil)
+		      err.ErrorNumber = -libcURL.Errors.UNKNOWN_OPTION
+		      err.Message = "Invalid option ID number."
+		      Raise err
+		    End If
 		  Else
 		    mOpt.Option = OptionID
 		    mOpt.Type = GetOptionType(OptionID)
-		    Call GetOptionFirstVersion(OptionNumber, mMinMajor, mMinMinor, mMinPatch)
+		    If Not GetOptionFirstVersion(OptionNumber, mMinMajor, mMinMinor, mMinPatch) Then
+		      Dim err As New cURLException(Nil)
+		      err.ErrorNumber = -libcURL.Errors.UNKNOWN_OPTION
+		      err.Message = "Invalid option ID number."
+		      Raise err
+		    End If
 		  End If
 		End Sub
 	#tag EndMethod
@@ -3155,11 +3223,23 @@ Protected Class OptionInfo
 		  Name = Name.Uppercase()
 		  If System.IsFunctionAvailable("curl_easy_option_by_name", cURLLib) Then
 		    Dim opt As Ptr = curl_easy_option_by_name(Name)
-		    If opt <> Nil Then Me.Constructor(opt.curl_easyoption)
+		    If opt <> Nil Then
+		      Me.Constructor(opt.curl_easyoption)
+		    Else
+		      Dim err As New cURLException(Nil)
+		      err.ErrorNumber = -libcURL.Errors.UNKNOWN_OPTION
+		      err.Message = "Invalid option name or alias."
+		      Raise err
+		    End If
 		  Else
 		    mOpt.Option = GetOptionByName(Name)
 		    mOpt.Type = GetOptionType(OptionNumber)
-		    Call GetOptionFirstVersion(OptionNumber, mMinMajor, mMinMinor, mMinPatch)
+		    If Not GetOptionFirstVersion(OptionNumber, mMinMajor, mMinMinor, mMinPatch) Then
+		      Dim err As New cURLException(Nil)
+		      err.ErrorNumber = -libcURL.Errors.UNKNOWN_OPTION
+		      err.Message = "Invalid option name or alias."
+		      Raise err
+		    End If
 		  End If
 		End Sub
 	#tag EndMethod
@@ -3323,6 +3403,7 @@ Protected Class OptionInfo
 			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.Opts.OptionInfo.IsAvailable
 			  
 			  If mMinMajor = 0 Then Return True
+			  If mMinMajor = -1 Then Return False
 			  Return libcURL.Version.IsAtLeast(mMinMajor, mMinMinor, mMinPatch)
 			End Get
 		#tag EndGetter
@@ -3562,27 +3643,6 @@ Protected Class OptionInfo
 			InitialValue=""
 			Type="Int32"
 			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Type"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="libcURL.OptionType"
-			EditorType="Enum"
-			#tag EnumValues
-				"0 - Number"
-				"1 - Bitmask"
-				"2 - LargeNumber"
-				"3 - Ptr"
-				"4 - String"
-				"5 - List"
-				"6 - Opaque"
-				"7 - Blob"
-				"8 - Subroutine"
-				"9 - Unknown"
-				"10 - Boolean"
-			#tag EndEnumValues
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

@@ -668,6 +668,7 @@ Inherits libcURL.cURLHandle
 		  mUseProgressEvent = True
 		  mUsername = ""
 		  Verbose = mVerbose
+		  mRequestHeaderEngine = Nil
 		  InitCallbacks()
 		  mLastError = 0
 		End Sub
@@ -817,7 +818,7 @@ Inherits libcURL.cURLHandle
 		    #Else
 		  Case Variant.TypeLong
 		    mLastError= curl_easy_setopt_long(mHandle, OptionNumber, NewValue)
-		    If mLastError = 0 Then 
+		    If mLastError = 0 Then
 		      mOptions.Value(OptionNumber) = NewValue
 		      Return True
 		    Else
@@ -863,7 +864,7 @@ Inherits libcURL.cURLHandle
 		      Return Me.SetOption(OptionNumber, auth.Mask)
 		      
 		    Case IsA libcURL.cURLHandle
-		      If NewValue IsA URLParser Then Return SetOption(OptionNumber, URLParser(NewValue).StringValue)
+		      If OptionNumber = libcURL.Opts.URL And NewValue IsA URLParser Then OptionNumber = libcURL.Opts.CURLU
 		      Dim cURL As libcURL.cURLHandle = NewValue
 		      If Not Me.SetOption(OptionNumber, cURL.Handle) Then Return False
 		      mOptions.Value(OptionNumber) = New WeakRef(cURL)
@@ -1600,6 +1601,10 @@ Inherits libcURL.cURLHandle
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mRequestHeaderEngine As libcURL.RequestHeaderEngine
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mResponseHeaderEngine As libcURL.ResponseHeaderEngine
 	#tag EndProperty
 
@@ -1772,6 +1777,21 @@ Inherits libcURL.cURLHandle
 			End Get
 		#tag EndGetter
 		RemoteIP As String
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  ' Returns a reference to the RequestHeaderEngine for this instance of EasyHandle.
+			  '
+			  ' See:
+			  ' https://github.com/charonn0/RB-libcURL/wiki/libcURL.EasyHandle.RequestHeaderEngine
+			  
+			  If mRequestHeaderEngine = Nil Then mRequestHeaderEngine = New RequestHeaderEngineCreator(Me)
+			  return mRequestHeaderEngine
+			End Get
+		#tag EndGetter
+		RequestHeaderEngine As libcURL.RequestHeaderEngine
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -2123,14 +2143,6 @@ Inherits libcURL.cURLHandle
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="BufferSizeUpload"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="ConnectionTimeout"
 			Visible=false
 			Group="Behavior"
@@ -2331,83 +2343,12 @@ Inherits libcURL.cURLHandle
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="ConnectionType"
+			Name="BufferSizeUpload"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="libcURL.ConnectionType"
-			EditorType="Enum"
-			#tag EnumValues
-				"0 - NoSSL"
-				"1 - AttemptSSL"
-				"2 - SSLControlConnectionOnly"
-				"3 - SSLForceAll"
-			#tag EndEnumValues
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="CWDMethod"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="libcURL.CWDMethod"
-			EditorType="Enum"
-			#tag EnumValues
-				"1 - Multi"
-				"2 - None"
-				"3 - Single"
-			#tag EndEnumValues
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HTTPVersion"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="libcURL.HTTPVersion"
-			EditorType="Enum"
-			#tag EnumValues
-				"0 - None"
-				"1 - HTTP1_0"
-				"2 - HTTP1_1"
-				"3 - HTTP2"
-				"4 - HTTP2TLS"
-				"5 - HTTP2PriorKnowledge"
-			#tag EndEnumValues
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="IPVersion"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="libcURL.IPVersion"
-			EditorType="Enum"
-			#tag EnumValues
-				"0 - Whatever"
-				"1 - V4"
-				"2 - V6"
-			#tag EndEnumValues
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="SSLVersion"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="libcURL.SSLVersion"
-			EditorType="Enum"
-			#tag EnumValues
-				"0 - Default"
-				"1 - TLSv1"
-				"2 - SSLv2"
-				"3 - SSLv3"
-				"4 - TLSv1_0"
-				"5 - TLSv1_1"
-				"6 - TLSv1_2"
-				"7 - TLSv1_3"
-				"65536 - Max_TLSv1_0"
-				"327680 - Max_TLSv1_1"
-				"393216 - Max_TLSv1_2"
-				"458752 - Max_TLSv1_3"
-				"458753 - Max_Default"
-			#tag EndEnumValues
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

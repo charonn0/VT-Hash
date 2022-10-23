@@ -2227,6 +2227,15 @@ Protected Module libcURL
 		Anchor As Ptr
 	#tag EndStructure
 
+	#tag Structure, Name = curl_header64, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
+		Name As Ptr
+		  Value As Ptr
+		  Amount As UInt64
+		  Index As UInt64
+		  Origin As UInt32
+		Anchor As Ptr
+	#tag EndStructure
+
 	#tag Structure, Name = timeval, Flags = &h21, Attributes = \"StructureAlignment \x3D 1"
 		tv_sec As Integer
 		tv_usec As Integer

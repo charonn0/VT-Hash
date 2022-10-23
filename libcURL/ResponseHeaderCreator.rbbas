@@ -2,26 +2,37 @@
 Private Class ResponseHeaderCreator
 Inherits libcURL.ResponseHeader
 	#tag Method, Flags = &h0
-		Sub Constructor(Owner As libcURL.EasyHandle, Header As curl_header)
+		Sub Constructor(Header As curl_header, RequestIndex As Integer)
 		  ' This class exists solely to protect the superclass Constructor from being called
 		  ' from outside the libcURL module.
 		  
 		  // Calling the overridden superclass constructor.
-		  // Constructor(Owner As libcURL.EasyHandle, Header As curl_header) -- From ResponseHeader
-		  Super.Constructor(Owner, Header)
+		  // Constructor(Header As curl_header, RequestIndex As Integer) -- From ResponseHeader
+		  Super.Constructor(Header, RequestIndex)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor(Header As curl_header64, RequestIndex As Integer)
+		  ' This class exists solely to protect the superclass Constructor from being called
+		  ' from outside the libcURL module.
+		  
+		  // Calling the overridden superclass constructor.
+		  // Constructor(Header As curl_header, RequestIndex As Integer) -- From ResponseHeader
+		  Super.Constructor(Header, RequestIndex)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(Owner As libcURL.EasyHandle, Name As String, Value As String, NameIndex As Integer, NameCount As Integer)
+		Sub Constructor(Name As String, Value As String, NameIndex As Integer, NameCount As Integer, RequestIndex As Integer)
 		  Dim h As curl_header
 		  h.Amount = NameCount
 		  h.Index = NameIndex
 		  h.Origin = CType(HeaderOriginType.Header, UInt32)
 		  
 		  // Calling the overridden superclass constructor.
-		  // Constructor(Owner As libcURL.EasyHandle, Header As curl_header) -- From ResponseHeader
-		  Super.Constructor(Owner, h)
+		  // Constructor(Header As curl_header, RequestIndex As Integer) -- From ResponseHeader
+		  Super.Constructor(h, RequestIndex)
 		  
 		  mName = Name
 		  mValue = Value
@@ -30,38 +41,6 @@ Inherits libcURL.ResponseHeader
 
 
 	#tag ViewBehavior
-		#tag ViewProperty
-			Name="Amount"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Value"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Origin"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="libcURL.HeaderOriginType"
-			EditorType="Enum"
-			#tag EnumValues
-				"1 - Header"
-				"2 - Trailer"
-				"4 - Connect"
-				"8 - Intermediate_1XX"
-				"16 - Pseudo"
-				"31 - Any"
-			#tag EndEnumValues
-		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true

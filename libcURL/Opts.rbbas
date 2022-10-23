@@ -563,6 +563,9 @@ Protected Module Opts
 	#tag Constant, Name = PROTOCOLS, Type = Double, Dynamic = False, Default = \"181", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = PROTOCOLS_STR, Type = Double, Dynamic = False, Default = \"10318", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = PROXY, Type = Double, Dynamic = False, Default = \"10004", Scope = Protected
 	#tag EndConstant
 
@@ -683,6 +686,9 @@ Protected Module Opts
 	#tag Constant, Name = REDIR_PROTOCOLS, Type = Double, Dynamic = False, Default = \"182", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = REDIR_PROTOCOLS_STR, Type = Double, Dynamic = False, Default = \"10319", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = REFERER, Type = Double, Dynamic = False, Default = \"10016", Scope = Protected
 	#tag EndConstant
 
@@ -768,6 +774,12 @@ Protected Module Opts
 	#tag EndConstant
 
 	#tag Constant, Name = SSH_COMPRESSION, Type = Double, Dynamic = False, Default = \"268", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SSH_HOSTKEYDATA, Type = Double, Dynamic = False, Default = \"10317", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SSH_HOSTKEYFUNCTION, Type = Double, Dynamic = False, Default = \"20316", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = SSH_HOST_PUBLIC_KEY_MD5, Type = Double, Dynamic = False, Default = \"10162", Scope = Protected
@@ -986,6 +998,9 @@ Protected Module Opts
 	#tag Constant, Name = WRITEFUNCTION, Type = Double, Dynamic = False, Default = \"20011", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = WS_OPTIONS, Type = Double, Dynamic = False, Default = \"320", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = XFERINFODATA, Type = Double, Dynamic = False, Default = \"10057", Scope = Protected
 	#tag EndConstant
 
@@ -1010,33 +1025,40 @@ Protected Module Opts
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
 			Visible=true
 			Group="ID"
-			InheritedFrom="Object"
+			InitialValue=""
+			Type="String"
+			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			InheritedFrom="Object"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Module

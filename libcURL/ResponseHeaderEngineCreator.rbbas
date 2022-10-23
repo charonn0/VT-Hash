@@ -24,17 +24,18 @@ Inherits libcURL.ResponseHeaderEngine
 		Function GetHeader(Name As String, Index As Integer = 0, Origin As libcURL.HeaderOriginType = libcURL.HeaderOriginType.Any, RequestIndex As Integer = - 1) As libcURL.ResponseHeader
 		  If mFake = Nil Then Return Super.GetHeader(Name, Index, Origin, RequestIndex)
 		  Dim vl As String = mFake.Value(Name, Index)
-		  If vl <> "" Then Return New ResponseHeaderCreator(Owner, Name, vl, Index, Me.Count(Name, Origin, RequestIndex))
+		  If vl <> "" Then Return New ResponseHeaderCreator(Name, vl, Index, Me.Count(Name, Origin, RequestIndex), RequestIndex)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function GetHeaders(Name As String = "", Origin As libcURL.HeaderOriginType = libcURL.HeaderOriginType.Any, RequestIndex As Integer = - 1) As libcURL.ResponseHeader()
 		  If mFake = Nil Then Return Super.GetHeaders(Name, Origin, RequestIndex)
+		  If RequestIndex < 0 Then RequestIndex = 0
 		  Dim h() As ResponseHeader
 		  Dim count As Integer = mFake.Count
 		  For i As Integer = 0 To count - 1
-		    If Name = "" Or Name = mFake.Name(i) Then h.Append(New ResponseHeaderCreator(Owner, mFake.Name(i), mFake.Value(i), i, count))
+		    If Name = "" Or Name = mFake.Name(i) Then h.Append(New ResponseHeaderCreator(mFake.Name(i), mFake.Value(i), i, count, RequestIndex))
 		  Next
 		  Return h
 		End Function
@@ -44,6 +45,13 @@ Inherits libcURL.ResponseHeaderEngine
 		Function Operator_Convert() As InternetHeaders
 		  If mFake = Nil Then Return Super.Operator_Convert()
 		  Return mFake
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function RequestCount() As Integer
+		  If mFake = Nil Then Return Super.RequestCount()
+		  Return 1
 		End Function
 	#tag EndMethod
 
