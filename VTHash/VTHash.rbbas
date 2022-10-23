@@ -122,8 +122,8 @@ Protected Module VTHash
 	#tag Method, Flags = &h1
 		Protected Sub HandleCurlError(Sender As cURLClient, cURLCode As Integer)
 		  Dim msg, caption As String
-		  Dim server As URI = Sender.EasyHandle.URL
-		  msg = "The server claiming to be " + server.Host + " (" + Sender.EasyHandle.RemoteIP + ") presented an "
+		  Dim server As New libcURL.URLParser(Sender.EasyHandle.URL)
+		  msg = "The server claiming to be " + server.Hostname + " (" + Sender.EasyHandle.RemoteIP + ") presented an "
 		  Select Case cURLCode
 		  Case libcURL.Errors.SSL_CACERT
 		    caption = "Untrusted SSL Certificate"
