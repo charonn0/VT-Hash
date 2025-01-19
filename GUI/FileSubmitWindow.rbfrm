@@ -372,7 +372,8 @@ End
 		  GUITimer.Mode = Timer.ModeOff
 		  If HTTPStatus = 200 And ResponseObject <> Nil Then
 		    If ResponseObject.Value("response_code") = VT_Code_OK Then
-		      PermaURL = ResponseObject.Value("permalink")
+		      Dim id As String = ResponseObject.Value("resource")
+		      PermaURL = "https://www.virustotal.com/gui/file/" + id + "/detection/" + ResponseObject.Value("permalink")
 		      Permalink.Visible = True
 		      Permalink.URL = PermaURL
 		      StatusLbl.Text = "Upload complete."
